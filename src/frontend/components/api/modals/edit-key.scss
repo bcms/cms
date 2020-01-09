@@ -1,0 +1,15 @@
+.content .title {
+  padding-bottom: 5px;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-color: #eff3f6;
+  font-size: 14pt;
+  font-weight: bold;
+}
+
+.content .options {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 20px;
+}

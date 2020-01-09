@@ -1,0 +1,237 @@
+<script>
+  import { onMount, afterUpdate } from 'svelte';
+  import WidgetInput from '../widget-input.svelte';
+
+  export let quill;
+  export let section;
+  export let events;
+
+  let id = '';
+
+  const quillOptions = {
+    HEADING_1: {
+      modules: {
+        toolbar: false,
+      },
+      placeholder: 'Heading 1',
+      theme: 'bubble',
+    },
+    HEADING_2: {
+      modules: {
+        toolbar: false,
+      },
+      placeholder: 'Heading 2',
+      theme: 'bubble',
+    },
+    HEADING_3: {
+      modules: {
+        toolbar: false,
+      },
+      placeholder: 'Heading 3',
+      theme: 'bubble',
+    },
+    PARAGRAPH: {
+      modules: {
+        toolbar: [['bold', 'italic', 'underline', 'strike']],
+      },
+      placeholder: 'Paragraph',
+      theme: 'bubble',
+    },
+    CODE: {
+      modules: {
+        syntax: true,
+        toolbar: false,
+      },
+      placeholder: 'CODE',
+      theme: 'bubble',
+    },
+    LIST: {
+      modules: {
+        toolbar: [['bold', 'italic', 'underline', 'strike']],
+      },
+      placeholder: 'List',
+      theme: 'bubble',
+    },
+  };
+
+  events.init = () => {
+    if (section.type !== 'MEDIA' && section.type !== 'WIDGET') {
+      section.quill = new quill(
+        document.getElementById(section.id),
+        quillOptions[section.type],
+      );
+      if (section.value) {
+        section.quill.setContents(section.value);
+      } else {
+        switch (section.type) {
+          case 'LIST':
+            {
+              section.quill.setContents([
+                { insert: '' },
+                {
+                  attributes: {
+                    list: 'bullet',
+                  },
+                  insert: '\n',
+                },
+              ]);
+            }
+            break;
+          case 'CODE':
+            {
+              section.quill.setContents([
+                { insert: '' },
+                {
+                  attributes: {
+                    'code-block': true,
+                  },
+                  insert: '\n',
+                },
+              ]);
+            }
+            break;
+        }
+      }
+      let shift = false;
+      section.quill.on('text-change', () => {
+        section.value = section.quill.getContents();
+        section.valueAsText = section.quill.getText();
+        if (section.type.startsWith('HEADING_') === true) {
+          let text = section.quill.getText();
+          if (text.endsWith('\n\n') === true) {
+            text = text.replace('\n\n', '\n');
+            section.quill.setText(text);
+          }
+        } else if (section.type === 'PARAGRAPH') {
+          let lastOps = section.value.ops[section.value.ops.length - 1];
+          if (lastOps.insert.endsWith('\n\n') === true && shift === false) {
+            lastOps.insert = lastOps.insert.substring(
+              0,
+              lastOps.insert.length - 1,
+            );
+            section.value.ops[section.value.ops.length - 1] = lastOps;
+            section.quill.setContents(section.value);
+          }
+        }
+      });
+      document.getElementById(section.id).addEventListener('keydown', event => {
+        if (event.key === 'Shift') {
+          shift = true;
+        }
+      });
+      document.getElementById(section.id).addEventListener('keyup', event => {
+        switch (event.key) {
+          case 'Shift':
+            {
+              shift = false;
+            }
+            break;
+          case 'Backspace':
+            {
+              if (section.value === '') {
+                editor.delete(section.id);
+              }
+              if (section.quill.getText().length === 1) {
+                section.value = '';
+              }
+            }
+            break;
+          case 'Enter':
+            {
+              if (shift === false) {
+                if (
+                  section.type.startsWith('HEADING_') === true ||
+                  section.type === 'PARAGRAPH'
+                ) {
+                  events.selectElementModalEvents.toggle();
+                  events.selectElementModalEvents.select = type => {
+                    events.addSection(type, section.order + 1);
+                  };
+                }
+              }
+            }
+            break;
+        }
+      });
+    }
+  };
+
+  onMount(() => {
+    events.init();
+    id = section.id;
+  });
+  afterUpdate(() => {
+    if (id !== section.id) {
+      if (section.value) {
+        section.quill.setContents(section.value);
+      }
+    }
+  });
+</script>
+
+<style>
+  .quill {
+    margin-top: 20px;
+  }
+
+  .quill .heading-1 {
+    font-size: 24pt;
+    font-weight: bold;
+  }
+
+  .quill .heading-2 {
+    font-size: 20pt;
+    font-weight: bold;
+  }
+
+  .quill .heading-3 {
+    font-size: 16pt;
+    font-weight: bold;
+  }
+
+  .quill .paragraph {
+    font-size: 14pt;
+    font-family: 'Aref Ruqaa';
+  }
+
+  .quill .code {
+    font-size: 10pt;
+    font-family: monospace;
+  }
+
+  .quill .code .ql-editor .ql-syntax {
+    background-color: #18202e;
+    color: #d8d8d8;
+  }
+
+  .quill .list {
+    font-size: 14pt;
+    font-family: 'Aref Ruqaa';
+  }
+</style>
+
+<div class="quill">
+  {#if section.type === 'MEDIA'}
+    <input
+      class="input"
+      placeholder="- Path to File -"
+      on:keyup={event => {
+        section.value = event.target.value;
+        section.valueAsText = section.value;
+      }} />
+  {:else if section.type === 'WIDGET'}
+    <WidgetInput
+      widget={section.value}
+      events={{ delete: () => {
+          events.delete(section.id);
+        }, move: where => {
+          if (where === 'up') {
+            events.move(section.order, section.order - 1, section.id);
+          } else {
+            events.move(section.order, section.order + 1, section.id);
+          }
+        } }} />
+  {:else}
+    <div id={section.id} class={section.class} />
+  {/if}
+</div>

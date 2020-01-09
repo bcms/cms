@@ -1,0 +1,203 @@
+<script>
+  import uuid from 'uuid';
+  import { onMount } from 'svelte';
+  import QuillElement from './quill-element.svelte';
+  import SelectElementModal from './modals/select-element.svelte';
+  import StringUtil from '../../string-util.js';
+
+  export let axios;
+  export let quill;
+  export let data;
+  export let events;
+
+  let widgets = [];
+  let selectElementModalEvents = {
+    select: (type, additional) => {
+      addSection(type, undefined, additional);
+    },
+  };
+
+  function handleTitle(event) {
+    data.title.value = event.target.value;
+    data.slug = StringUtil.toUri(data.title.value);
+  }
+  function addSection(type, position, additional) {
+    const section = {
+      id: uuid.v4(),
+      type,
+      order: data.sections.length,
+      error: '',
+      class: type.toLowerCase().replace(/_/g, '-'),
+      value: undefined,
+      valueAsText: '',
+      quill: undefined,
+      quillEvents: {
+        delete: removeSection,
+        move: moveSection,
+        addSection,
+        selectElementModalEvents,
+        validate: () => {},
+      },
+      style: '',
+    };
+    if (typeof additional === 'object') {
+      section.value = additional.value;
+    } else {
+      switch (type) {
+        case 'WIDGET':
+          {
+            section.value = widgets.find(e => e.name === additional);
+          }
+          break;
+      }
+    }
+    if (typeof position !== 'undefined' && data.sections[position]) {
+      section.order = position;
+      data.sections.forEach(e => {
+        if (e.order >= position) {
+          e.order = e.order + 1;
+        }
+      });
+    }
+    data.sections.push(section);
+    data.sections.sort((a, b) => {
+      if (a.order > b.order) {
+        return 1;
+      } else if (a.order < b.order) {
+        return -1;
+      }
+      return 0;
+    });
+    data.sections = [...data.sections];
+  }
+  function removeSection(sectionId) {
+    data.sections = data[
+      selectedLanguage.code
+    ].sections.filter(e => e.id !== sectionId);
+  }
+  function moveSection(from, to) {
+    if (to > -1 && to < data.sections.length) {
+      data.sections.forEach(section => {
+        if (section.order === to) {
+          section.order = from;
+        } else if (section.order === from) {
+          section.order = to;
+        }
+      });
+      data.sections.sort((a, b) => {
+        if (a.order > b.order) {
+          return 1;
+        } else if (a.order < b.order) {
+          return -1;
+        }
+        return 0;
+      });
+      data.sections = [...data.sections];
+      setTimeout(() => {
+        data.sections.forEach(section => {
+          section.quillEvents.init();
+        });
+      }, 10);
+    }
+  }
+
+  events.addSection = addSection;
+  events.removeSection = removeSection;
+  events.moveSection = moveSection;
+  events.selectElementModalEvents = selectElementModalEvents;
+
+  onMount(async () => {
+    let result = await axios.send({
+      url: `/widget/all`,
+      method: 'GET',
+    });
+    if (result.success === false) {
+      console.error(result.error);
+      simplePopup.error(result.error.response.data.message);
+      return;
+    }
+    widgets = JSON.parse(JSON.stringify(result.response.data.widgets));
+  });
+</script>
+
+<style>
+  .title {
+    border: none;
+    padding: 5px;
+    font-size: 30pt;
+    text-align: center;
+  }
+
+  .title .error {
+    color: red;
+    font-size: 10pt;
+  }
+
+  .title .error .icon {
+    margin-right: 10px;
+  }
+
+  .desc {
+    border: none;
+    padding: 5px;
+    resize: none;
+  }
+
+  .sections .add {
+    margin: 20px auto 0 auto;
+  }
+
+  .sections .empty {
+    margin-top: 60px;
+    text-align: center;
+  }
+
+  .sections .empty .message {
+    font-size: 16pt;
+    color: #797979;
+  }
+</style>
+
+<div class="title">
+  {#if data.title.error !== ''}
+    <div class="error">
+      <span class="fas fa-exclamation icon" />
+      <span>{data.title.error}</span>
+    </div>
+  {/if}
+  <input
+    id="title"
+    class="title"
+    placeholder="- Title -"
+    value={data.title.value}
+    on:keyup={handleTitle} />
+</div>
+<textarea class="desc" placeholder="- Description -" bind:value={data.desc} />
+<input
+  class="input"
+  placeholder="- Cover Image URI -"
+  bind:value={data.coverImageUri} />
+<div class="sections">
+  {#if data.sections.length > 0 && quill}
+    {#each data.sections as section}
+      <QuillElement {quill} {section} events={section.quillEvents} />
+    {/each}
+    <button
+      class="btn-fill btn-blue-bg add"
+      on:click={selectElementModalEvents.toggle}>
+      <div class="fas fa-plus icon" />
+      <div class="text">Add Section</div>
+    </button>
+  {:else}
+    <div class="empty">
+      <div class="message">Looks like there are no Sections...</div>
+      <button
+        class="btn-fill btn-blue-bg add"
+        on:click={selectElementModalEvents.toggle}>
+        <div class="fas fa-plus icon" />
+        <div class="text">Add Section</div>
+      </button>
+    </div>
+  {/if}
+</div>
+<SelectElementModal events={selectElementModalEvents} {widgets} />

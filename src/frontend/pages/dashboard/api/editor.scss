@@ -1,0 +1,101 @@
+.editor {
+  display: grid;
+  grid-template-columns: 400px auto;
+  height: 100%;
+}
+
+.content {
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.content .title {
+  display: flex;
+  font-size: 18pt;
+  font-weight: bold;
+}
+
+.content .title .edit {
+  margin: auto 0 auto 5px;
+}
+
+.content .title .edit button .icon {
+  color: #929292;
+}
+
+.content .desc {
+  font-size: 10pt;
+  color: #929292;
+}
+
+.content .update {
+  display: flex;
+  margin-top: 20px;
+}
+
+.content .update button {
+  margin-left: auto;
+}
+
+.content .no-props {
+  text-align: center;
+}
+
+.content .no-props .message {
+  font-size: 14pt;
+  margin-top: 30px;
+}
+
+.content .no-props .action {
+  margin: 40px auto 40px auto;
+}
+
+.data {
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 30px;
+  margin-top: 30px;
+  background-color: #fff;
+  padding: 10px 20px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+  font-size: 10pt;
+}
+
+.data .general {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 10px;
+}
+
+.data .general .key-value .icon {
+  font-size: 8pt;
+  margin: auto 10px auto 0;
+}
+
+.data .route {
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 20px;
+}
+
+.data .route .no-config {
+  text-align: center;
+  font-size: 14pt;
+  color: #929292;
+  margin-bottom: 20px;
+}
+
+.data .route .add {
+  margin: 0 auto 20px auto;
+}
+
+.content .actions {
+  display: flex;
+  margin-top: 20px;
+}
+
+.content .actions .delete {
+  margin-left: auto;
+}
