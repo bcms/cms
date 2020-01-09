@@ -48,7 +48,7 @@
   }
 </script>
 
-<style>
+<style type="text/scss">
   .overlay {
     position: fixed;
     top: 0;
@@ -58,7 +58,8 @@
     overflow-x: hidden;
     overflow-y: auto;
     background-color: rgba(0, 0, 0, 0.2);
-    transition: 0.5s;
+    transition: 0.5s opacity ease;
+    will-change: opacity;
   }
 
   .content-box {
