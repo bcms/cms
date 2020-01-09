@@ -29,23 +29,42 @@ import { FunctionController } from './function/function.controller';
 import { LanguageController } from './languages/language.controller';
 import { Rollup } from './rollup/rollup';
 
+let dbConfig: any;
+if (process.env.DB_CLUSTER) {
+  dbConfig = {
+    atlas: {
+      db: {
+        cluster: process.env.DB_CLUSTER,
+        name: process.env.DB_NAME,
+        readWrite: true,
+      },
+      user: {
+        name: process.env.DB_USER,
+        password: process.env.DB_PASS,
+      },
+    },
+  };
+} else {
+  dbConfig = {
+    selfHosted: {
+      db: {
+        host: process.env.DB_HOST,
+        port: parseInt(process.env.DB_PORT, 10),
+        name: process.env.DB_NAME,
+      },
+      user: {
+        name: process.env.DB_USER,
+        password: process.env.DB_PASS,
+      },
+    },
+  };
+}
+
 /**
  * Application Module that starts all dependencies and
  * handles HTTP requests.
  */
-@EnableMongoose({
-  selfHosted: {
-    db: {
-      host: process.env.DB_HOST,
-      port: parseInt(process.env.DB_PORT, 10),
-      name: process.env.DB_NAME,
-    },
-    user: {
-      name: process.env.DB_USER,
-      password: process.env.DB_PASS,
-    },
-  },
-})
+@EnableMongoose(dbConfig)
 @Application({
   port: parseInt(process.env.PORT, 10),
   controllers: [
@@ -112,7 +131,9 @@ export class App {
     if (process.env.DEV === 'false') {
       this.app.use(express.static(path.join(__dirname, 'frontend', 'public')));
     } else {
-      this.app.use(express.static(path.join(__dirname, '..', 'frontend', 'public')));
+      this.app.use(
+        express.static(path.join(__dirname, '..', 'frontend', 'public')),
+      );
     }
     controllers.forEach(controller => {
       this.app.use(controller.baseUri, controller.router);
