@@ -1,5 +1,7 @@
 import * as arg from 'arg';
 import * as path from 'path';
+import * as childProcess from 'child_process';
+import * as util from 'util';
 import { FunctionsConfig } from './function/config';
 import { Logger } from 'purple-cheetah';
 import { Rollup } from './rollup';
@@ -109,6 +111,17 @@ export function cli(args: any) {
 
   process.env.SVELTE_PROD = 'true';
   process.env.DEV = 'false';
+
+  util
+    .promisify(childProcess.exec)(
+      `git config --global user.email "${config.server.git.email}" && ` +
+        `git config --global user.name "${config.server.git.username}" && ` +
+        `git checkout ${config.server.git.branch}`,
+    )
+    .catch(e => {
+      // tslint:disable-next-line:no-console
+      console.error(e);
+    });
 
   if (options.dev) {
     initChangeListener();
