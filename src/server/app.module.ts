@@ -27,10 +27,9 @@ import { Config } from './config';
 import { WidgetController } from './widget/widget.controller';
 import { FunctionController } from './function/function.controller';
 import { LanguageController } from './languages/language.controller';
-import { Rollup } from './rollup/rollup';
 
 let dbConfig: any;
-if (process.env.DB_CLUSTER) {
+if (process.env.DB_CLUSTER !== 'undefined') {
   dbConfig = {
     atlas: {
       db: {
