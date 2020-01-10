@@ -209,7 +209,7 @@ export class MediaController {
         `File at path '${p}' does not exist.`,
       );
     }
-    response.sendFile(path.join(__dirname, '../../uploads', p));
+    response.sendFile(path.join(process.env.PROJECT_ROOT, '/uploads', p));
     return;
   }
 
