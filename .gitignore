@@ -23,6 +23,7 @@ lerna-debug.log*
 
 # IDEs and editors
 .env
+bcms-config.js
 build.sh
 bundle.sh
 publish.sh

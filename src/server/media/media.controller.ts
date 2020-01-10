@@ -18,6 +18,8 @@ import {
 } from 'purple-cheetah';
 import { Request, Response } from 'express';
 import * as path from 'path';
+import * as childProcess from 'child_process';
+import * as util from 'util';
 import { Media, MediaType } from './models/media.model';
 import { MediaService } from './media.service';
 import { MediaAggregate } from './interfaces/media-aggregate.interface';
@@ -338,6 +340,29 @@ export class MediaController {
     } else {
       this.logger.warn('addFile', 'No Parent');
     }
+    if (
+      process.env.GIT_USERNAME &&
+      process.env.GIT_USERNAME !== 'github-username' &&
+      process.env.GIT_PASSWORD &&
+      process.env.GIT_PASSWORD !== 'github-password' &&
+      process.env.GIT_REPO &&
+      process.env.GIT_REPO_OWNER &&
+      process.env.GIT_HOST
+    ) {
+      util
+        .promisify(childProcess.exec)(
+          `git add ${path.join(process.env.PROJECT_ROOT, 'uploads')}/. && ` +
+            `git commit -m "Adding file ${media.name} via CMS." && ` +
+            `git push https://${process.env.GIT_USERNAME}:${process.env.GIT_PASSWORD}@` +
+            `${process.env.GIT_HOST}/${process.env.GIT_REPO_OWNER}/${process.env.GIT_REPO}`,
+        )
+        .then(output => {
+          this.logger.info('git-push', `File ${media.name} added to GIT.`);
+        })
+        .catch(e => {
+          this.logger.error('git-push', e);
+        });
+    }
     return {
       media,
     };
@@ -534,6 +559,32 @@ export class MediaController {
         `Failed to delete '${rootMedia.path}' directory from FS.`,
       );
     }
+    if (
+      process.env.GIT_USERNAME &&
+      process.env.GIT_USERNAME !== 'github-username' &&
+      process.env.GIT_PASSWORD &&
+      process.env.GIT_PASSWORD !== 'github-password' &&
+      process.env.GIT_REPO &&
+      process.env.GIT_REPO_OWNER &&
+      process.env.GIT_HOST
+    ) {
+      util
+        .promisify(childProcess.exec)(
+          `git add ${path.join(process.env.PROJECT_ROOT, 'uploads')}/. && ` +
+            `git commit -m "Deleting folder ${rootMedia.name} via CMS." && ` +
+            `git push https://${process.env.GIT_USERNAME}:${process.env.GIT_PASSWORD}@` +
+            `${process.env.GIT_HOST}/${process.env.GIT_REPO_OWNER}/${process.env.GIT_REPO}`,
+        )
+        .then(output => {
+          this.logger.info(
+            'git-push',
+            `Folder ${rootMedia.name} deleted from GIT.`,
+          );
+        })
+        .catch(e => {
+          this.logger.error('git-push', e);
+        });
+    }
     return {
       message: 'Success.',
     };
@@ -591,6 +642,32 @@ export class MediaController {
         'deleteFile',
         `Failed to delete '${rootMedia.path}/${rootMedia.name}' file from FS.`,
       );
+    }
+    if (
+      process.env.GIT_USERNAME &&
+      process.env.GIT_USERNAME !== 'github-username' &&
+      process.env.GIT_PASSWORD &&
+      process.env.GIT_PASSWORD !== 'github-password' &&
+      process.env.GIT_REPO &&
+      process.env.GIT_REPO_OWNER &&
+      process.env.GIT_HOST
+    ) {
+      util
+        .promisify(childProcess.exec)(
+          `git add ${path.join(process.env.PROJECT_ROOT, 'uploads')}/. && ` +
+            `git commit -m "Deleting file ${rootMedia.name} via CMS." && ` +
+            `git push https://${process.env.GIT_USERNAME}:${process.env.GIT_PASSWORD}@` +
+            `${process.env.GIT_HOST}/${process.env.GIT_REPO_OWNER}/${process.env.GIT_REPO}`,
+        )
+        .then(output => {
+          this.logger.info(
+            'git-push',
+            `File ${rootMedia.name} deleted from GIT.`,
+          );
+        })
+        .catch(e => {
+          this.logger.error('git-push', e);
+        });
     }
     return {
       message: 'Success.',

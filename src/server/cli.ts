@@ -100,8 +100,13 @@ export function cli(args: any) {
   process.env.DB_PRFX = `${config.server.database.mongo.database.prefix}`;
   process.env.DB_CLUSTER = `${config.server.database.mongo.database.cluster}`;
   process.env.DB_TYPE = `${config.server.database.type}`;
-  process.env.GITHUB_USERNAME = `${config.server.github.username}`;
-  process.env.GITHUB_PASSWORD = `${config.server.github.password}`;
+
+  process.env.GIT_USERNAME = `${config.server.git.username}`;
+  process.env.GIT_PASSWORD = `${config.server.git.password}`;
+  process.env.GIT_HOST = `${config.server.git.host}`;
+  process.env.GIT_REPO = `${config.server.git.repo}`;
+  process.env.GIT_REPO_OWNER = `${config.server.git.repo_owner}`;
+
   process.env.SVELTE_PROD = 'true';
   process.env.DEV = 'false';
 

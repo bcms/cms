@@ -20,7 +20,7 @@ module.exports = {
         }
       }
     },
-    github: {
+    git: {
       username: 'github-username',
       password: 'github-password',
     },
