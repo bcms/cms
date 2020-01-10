@@ -88,7 +88,7 @@
 
 <div class="login">
   <div class="heading">
-    <img src="/assets/images/logo.svg" alt="NF"/>
+    <img src="/logo.svg" alt="NF"/>
   </div>
   <div class="block">
     <div class="inputs">
