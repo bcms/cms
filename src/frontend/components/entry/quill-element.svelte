@@ -169,45 +169,8 @@
   });
 </script>
 
-<style>
-  .quill {
-    margin-top: 20px;
-  }
-
-  .quill .heading-1 {
-    font-size: 24pt;
-    font-weight: bold;
-  }
-
-  .quill .heading-2 {
-    font-size: 20pt;
-    font-weight: bold;
-  }
-
-  .quill .heading-3 {
-    font-size: 16pt;
-    font-weight: bold;
-  }
-
-  .quill .paragraph {
-    font-size: 14pt;
-    font-family: 'Aref Ruqaa';
-  }
-
-  .quill .code {
-    font-size: 10pt;
-    font-family: monospace;
-  }
-
-  .quill .code .ql-editor .ql-syntax {
-    background-color: #18202e;
-    color: #d8d8d8;
-  }
-
-  .quill .list {
-    font-size: 14pt;
-    font-family: 'Aref Ruqaa';
-  }
+<style type="text/scss">
+  @import './quill-element.scss';
 </style>
 
 <div class="quill">

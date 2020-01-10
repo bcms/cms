@@ -29,7 +29,7 @@ import { FunctionController } from './function/function.controller';
 import { LanguageController } from './languages/language.controller';
 
 let dbConfig: any;
-if (process.env.DB_CLUSTER !== 'undefined') {
+if (process.env.DB_CLUSTER && process.env.DB_CLUSTER !== 'undefined') {
   dbConfig = {
     atlas: {
       db: {

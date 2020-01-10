@@ -9,8 +9,8 @@
   export let quill;
   export let data;
   export let events;
+  export let widgets;
 
-  let widgets = [];
   let selectElementModalEvents = {
     select: (type, additional) => {
       addSection(type, undefined, additional);
@@ -105,57 +105,10 @@
   events.removeSection = removeSection;
   events.moveSection = moveSection;
   events.selectElementModalEvents = selectElementModalEvents;
-
-  onMount(async () => {
-    let result = await axios.send({
-      url: `/widget/all`,
-      method: 'GET',
-    });
-    if (result.success === false) {
-      console.error(result.error);
-      simplePopup.error(result.error.response.data.message);
-      return;
-    }
-    widgets = JSON.parse(JSON.stringify(result.response.data.widgets));
-  });
 </script>
 
-<style>
-  .title {
-    border: none;
-    padding: 5px;
-    font-size: 30pt;
-    text-align: center;
-  }
-
-  .title .error {
-    color: red;
-    font-size: 10pt;
-  }
-
-  .title .error .icon {
-    margin-right: 10px;
-  }
-
-  .desc {
-    border: none;
-    padding: 5px;
-    resize: none;
-  }
-
-  .sections .add {
-    margin: 20px auto 0 auto;
-  }
-
-  .sections .empty {
-    margin-top: 60px;
-    text-align: center;
-  }
-
-  .sections .empty .message {
-    font-size: 16pt;
-    color: #797979;
-  }
+<style type="text/scss">
+  @import './quill-content.scss';
 </style>
 
 <div class="title">

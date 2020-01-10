@@ -1,0 +1,35 @@
+.title {
+  border: none;
+  padding: 5px;
+  font-size: 30pt;
+  text-align: center;
+}
+
+.title .error {
+  color: red;
+  font-size: 10pt;
+}
+
+.title .error .icon {
+  margin-right: 10px;
+}
+
+.desc {
+  border: none;
+  padding: 5px;
+  resize: none;
+}
+
+.sections .add {
+  margin: 20px auto 0 auto;
+}
+
+.sections .empty {
+  margin-top: 60px;
+  text-align: center;
+}
+
+.sections .empty .message {
+  font-size: 16pt;
+  color: #797979;
+}

@@ -332,54 +332,8 @@
   });
 </script>
 
-<style>
-  .wrapper {
-    width: 900px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-
-  .wrapper h3 {
-    margin-top: 30px;
-  }
-
-  .heading {
-    display: flex;
-  }
-
-  .heading .info .title {
-    font-size: 16pt;
-    font-weight: bold;
-  }
-
-  .heading .info .desc {
-    font-size: 10pt;
-    color: #797979;
-  }
-
-  .heading .actions {
-    margin-left: auto;
-  }
-
-  .meta {
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
-    grid-gap: 30px;
-    background-color: #fff;
-    padding: 20px;
-    margin: 10px auto 0 auto;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
-  }
-
-  .content {
-    display: flex;
-    flex-direction: column;
-    grid-column-gap: 10px;
-    background-color: #fff;
-    padding: 20px 20px 60px 20px;
-    margin: 30px auto 0 auto;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
-  }
+<style type="text/scss">
+  @import './editor.scss';
 </style>
 
 <svelte:head>
@@ -444,6 +398,7 @@
           <QuillContent
             {axios}
             {quill}
+            {widgets}
             data={data[selectedLanguage.code]}
             events={quillContentEvents} />
         {/if}
