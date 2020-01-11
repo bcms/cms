@@ -129,7 +129,7 @@
           case 'Backspace':
             {
               if (section.value === '') {
-                editor.delete(section.id);
+                events.delete(section.id);
               }
               if (section.quill.getText().length === 1) {
                 section.value = '';

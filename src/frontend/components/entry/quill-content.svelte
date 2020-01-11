@@ -45,7 +45,9 @@
       switch (type) {
         case 'WIDGET':
           {
-            section.value = widgets.find(e => e.name === additional);
+            section.value = JSON.parse(
+              JSON.stringify(widgets.find(e => e.name === additional)),
+            );
           }
           break;
       }
@@ -98,10 +100,20 @@
     }
   }
 
-  events.addSection = addSection;
+  (events.delete = removeSection), (events.addSection = addSection);
   events.removeSection = removeSection;
   events.moveSection = moveSection;
   events.selectElementModalEvents = selectElementModalEvents;
+
+  for (const i in data.sections) {
+    data.sections[i].quillEvents = {
+      delete: removeSection,
+      move: moveSection,
+      addSection,
+      selectElementModalEvents,
+      validate: () => {},
+    };
+  }
 </script>
 
 <style type="text/scss">
