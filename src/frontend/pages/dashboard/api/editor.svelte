@@ -172,6 +172,7 @@
     } else {
       k = key;
     }
+    console.log(k);
     const result = await axios.send({
       url: '/key',
       method: 'PUT',
@@ -254,7 +255,9 @@
         <div class="update">
           <button
             class="btn-border btn-blue-c btn-blue-br"
-            on:click={updateKey}>
+            on:click={() => {
+              updateKey();
+            }}>
             <div class="fas fa-trash icon" />
             <div class="text">Update</div>
           </button>

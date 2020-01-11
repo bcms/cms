@@ -194,7 +194,7 @@
                         {#if prop.value.heading.title !== ''}
                           <div class="title">{prop.value.heading.title}</div>
                           <div class="slug">
-                            /template/{template.name}/entry/{entry._id}
+                            /template/{template._id}/entry/{entry._id}
                           </div>
                           <div class="desc">
                             {prop.value.heading.desc.substring(0, 80)}...
@@ -262,6 +262,9 @@
               <div class="entry">
                 <div class="heading">{entry._id}</div>
                 <div class="info">
+                  <div class="slug">
+                    /template/{template._id}/entry/{entry._id}
+                  </div>
                   <div class="key-value date-time">
                     <div class="label">
                       <span class="fas fa-clock icon" />
@@ -362,9 +365,6 @@
   </div>
 </Layout>
 {#if template}
-  <DataModelModal
-    events={editDataModelModalEvents}
-    {template}
-    {axios} />
+  <DataModelModal events={editDataModelModalEvents} {template} {axios} />
   <DataModelModal events={addDataModalModalEvents} {template} {axios} />
 {/if}

@@ -14,7 +14,7 @@
     events.toggle();
   }
 
-  events.cacel = () => {
+  events.cancel = () => {
     events.toggle();
   };
   events.done = () => {
