@@ -5,7 +5,6 @@
   import SelectElementModal from './modals/select-element.svelte';
   import StringUtil from '../../string-util.js';
 
-  export let axios;
   export let quill;
   export let data;
   export let events;
@@ -71,9 +70,7 @@
     data.sections = [...data.sections];
   }
   function removeSection(sectionId) {
-    data.sections = data[
-      selectedLanguage.code
-    ].sections.filter(e => e.id !== sectionId);
+    data.sections = data.sections.filter(e => e.id !== sectionId);
   }
   function moveSection(from, to) {
     if (to > -1 && to < data.sections.length) {

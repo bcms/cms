@@ -1,5 +1,5 @@
 <script>
-  import { onMount, afterUpdate } from 'svelte';
+  import { onMount } from 'svelte';
   import WidgetInput from '../widget-input.svelte';
 
   export let quill;
@@ -157,15 +157,9 @@
   };
 
   onMount(() => {
+    console.log('Mount');
     events.init();
     id = section.id;
-  });
-  afterUpdate(() => {
-    if (id !== section.id) {
-      if (section.value) {
-        section.quill.setContents(section.value);
-      }
-    }
   });
 </script>
 

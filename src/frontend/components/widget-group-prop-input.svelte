@@ -82,38 +82,8 @@
   };
 </script>
 
-<style>
-  .wrapper {
-    padding: 20px 20px 0 20px;
-    display: grid;
-    grid-template-columns: auto;
-    grid-gap: 20px;
-  }
-
-  .label {
-    display: flex;
-  }
-
-  .label .icon {
-    margin: auto 20px auto 0;
-    color: var(--c-secondary);
-  }
-
-  .label .type {
-    font-weight: bold;
-    margin: auto 0 auto auto;
-    color: #d8d8d8;
-  }
-
-  .label .lock {
-    margin: auto 0 auto 10px;
-    color: #d8d8d8;
-  }
-
-  .gp-label {
-    padding: 5px;
-    border-bottom: 1px solid #d8d8d8;
-  }
+<style type="text/scss">
+  @import './widget-group-prop-input.scss';
 </style>
 
 <div class="wrapper">

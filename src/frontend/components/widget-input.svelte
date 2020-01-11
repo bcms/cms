@@ -102,70 +102,8 @@
   initErrorPaths();
 </script>
 
-<style>
-  .widget {
-    font-size: 10pt;
-    font-weight: normal;
-    margin-top: 30px;
-  }
-
-  .widget .head {
-    display: flex;
-    padding: 5px;
-    border-bottom: 1px solid #d8d8d8;
-  }
-
-  .widget .head .icon {
-    color: var(--c-primary);
-    margin: auto 0;
-  }
-
-  .widget .head .text {
-    font-weight: normal;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: auto auto auto 20px;
-  }
-
-  .widget .head .move {
-    font-size: 12pt;
-    margin: auto 0;
-  }
-
-  .widget .body {
-    display: grid;
-    grid-template-columns: auto;
-    grid-gap: 20px;
-    border-style: none solid solid solid;
-    border-color: #d8d8d8;
-    border-width: 1px;
-    padding: 20px;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-  }
-
-  .widget .label {
-    display: flex;
-  }
-
-  .widget .label .icon {
-    margin: auto 20px auto 0;
-    color: var(--c-secondary);
-  }
-
-  .widget .label .type {
-    font-weight: bold;
-    margin: auto 0 auto auto;
-    color: #d8d8d8;
-  }
-
-  .widget .label .lock {
-    margin: auto 0 auto 10px;
-    color: #d8d8d8;
-  }
-
-  .widget .gp-label {
-    padding: 5px;
-    border-bottom: 1px solid #d8d8d8;
-  }
+<style type="text/scss">
+  @import './widget-input.scss';
 </style>
 
 <div class="widget">
