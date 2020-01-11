@@ -12,8 +12,6 @@
   export let usedPropNames;
   export let selectedGroupId;
 
-  console.log(groups);
-
   const modalHeading = {
     icon: '/assets/ics/template/icon_type_ct.png',
     title: `Add new Property`,

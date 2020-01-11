@@ -34,7 +34,6 @@
       return;
     }
     medias = result.response.data.media;
-    console.log(medias);
   });
 </script>
 

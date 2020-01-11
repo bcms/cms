@@ -110,7 +110,6 @@
         .SHA256(JSON.stringify(data[content.lng].props))
         .toString();
     }
-    console.log(data);
   }
 
   events.setData = setData;
@@ -119,7 +118,6 @@
     initData();
   };
   events.done = async () => {
-    console.log(data);
     const output = {
       content: [],
     };

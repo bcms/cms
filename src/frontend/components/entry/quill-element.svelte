@@ -157,7 +157,6 @@
   };
 
   onMount(() => {
-    console.log('Mount');
     events.init();
     id = section.id;
   });

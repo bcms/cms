@@ -3,9 +3,9 @@ import * as rup from 'rollup';
 import * as svelte from 'rollup-plugin-svelte';
 import { terser } from 'rollup-plugin-terser';
 // tslint:disable-next-line:no-var-requires
-const resolve = require('rollup-plugin-node-resolve');
+const resolve = require('@rollup/plugin-node-resolve');
 // tslint:disable-next-line:no-var-requires
-const commonjs = require('rollup-plugin-commonjs');
+const commonjs = require('@rollup/plugin-commonjs');
 // tslint:disable-next-line: no-var-requires
 const sveltePreprocess = require('svelte-preprocess');
 // tslint:disable-next-line:no-var-requires

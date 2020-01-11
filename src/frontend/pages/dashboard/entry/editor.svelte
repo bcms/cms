@@ -325,7 +325,6 @@
         };
       });
     }
-    console.log(data);
     template = t;
     dataHash = hashData();
     loadTimer = setInterval(getHighlight, 50);

@@ -194,7 +194,6 @@
   }
 
   folderTreeActions.setActive = item => {
-    console.log(item);
     let path = '';
     if (item.type === 'DIR') {
       path = item.path;

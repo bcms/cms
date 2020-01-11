@@ -22,7 +22,6 @@
   };
 
   if (!Store.get('user')) {
-    console.log(Store.get('user'));
     document.location = `/login?error=You are not logged in.`;
   }
 

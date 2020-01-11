@@ -118,7 +118,6 @@
     }
   }
   async function deleteFile(item) {
-    console.log(item);
     if (
       confirm(
         `Are you sure you want to delete '${item.name}'?\n\n` +
