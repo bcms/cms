@@ -171,6 +171,7 @@
     <input
       class="input"
       placeholder="- Path to File -"
+      value={section.value}
       on:keyup={event => {
         section.value = event.target.value;
         section.valueAsText = section.value;

@@ -229,16 +229,27 @@ export class PropUtil {
                       `Expected 'string' but got '${typeof content.valueAsText}'.`,
                   );
                 }
-                if (typeof content.value !== 'object') {
-                  throw new Error(
-                    `Invalid type of 'props[${i}].value.content[${j}].value'. ` +
-                      `Expected 'object' but got '${typeof content.value}'.`,
-                  );
+                if (content.type === 'MEDIA') {
+                  if (typeof content.value !== 'string') {
+                    throw new Error(
+                      `Invalid type of 'props[${i}].value.content[${j}].value'. ` +
+                        `Expected 'string' but got '${typeof content.value}'.`,
+                    );
+                  }
+                } else {
+                  if (typeof content.value !== 'object') {
+                    throw new Error(
+                      `Invalid type of 'props[${i}].value.content[${j}].value'. ` +
+                        `Expected 'object' but got '${typeof content.value}'.`,
+                    );
+                  }
                 }
-                if (!(content.value.ops instanceof Array)) {
-                  throw new Error(
-                    `Expected an array for 'props[${i}].value.content[${j}].value.ops'`,
-                  );
+                if (content.type !== 'MEDIA' && content.type !== 'WIDGET') {
+                  if (!(content.value.ops instanceof Array)) {
+                    throw new Error(
+                      `Expected an array for 'props[${i}].value.content[${j}].value.ops'`,
+                    );
+                  }
                 }
               }
             }
