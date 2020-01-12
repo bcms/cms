@@ -141,8 +141,8 @@
   bind:value={data.coverImageUri} />
 <div class="sections">
   {#if data.sections.length > 0 && quill}
-    {#each data.sections as section}
-      <QuillElement {quill} {section} events={section.quillEvents} />
+    {#each data.sections as section, i}
+      <QuillElement {quill} {section} events={section.quillEvents} inFocus={false} />
     {/each}
     <button
       class="btn-fill btn-blue-bg add"

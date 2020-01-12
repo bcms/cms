@@ -157,7 +157,7 @@ export class EntryController {
     );
     return {
       entries: entries.map(e => {
-        return PropUtil.contentToMarkdown(e.content, {
+        return PropUtil.contentToPrettyJSON(e.content, {
           _id: e._id.toHexString(),
           createdAt: e.createdAt,
           updatedAt: e.updatedAt,
@@ -307,7 +307,7 @@ export class EntryController {
       );
     }
     return {
-      entry: PropUtil.contentToMarkdown(entry.content, {
+      entry: PropUtil.contentToPrettyJSON(entry.content, {
         _id: entry._id.toHexString(),
         createdAt: entry.createdAt,
         updatedAt: entry.updatedAt,

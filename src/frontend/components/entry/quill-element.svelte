@@ -5,6 +5,7 @@
   export let quill;
   export let section;
   export let events;
+  export let inFocus;
 
   let id = '';
 
@@ -144,9 +145,6 @@
                   section.type === 'PARAGRAPH'
                 ) {
                   events.selectElementModalEvents.toggle();
-                  events.selectElementModalEvents.select = type => {
-                    events.addSection(type, section.order + 1);
-                  };
                 }
               }
             }
@@ -168,14 +166,26 @@
 
 <div class="quill">
   {#if section.type === 'MEDIA'}
-    <input
-      class="input"
-      placeholder="- Path to File -"
-      value={section.value}
-      on:keyup={event => {
-        section.value = event.target.value;
-        section.valueAsText = section.value;
-      }} />
+    {#if inFocus === true}
+      <input
+        id={section.id}
+        class="input"
+        placeholder="- Path to File -"
+        value={section.value}
+        on:keyup={event => {
+          section.value = event.target.value;
+          section.valueAsText = section.value;
+        }} />
+    {:else}
+      <input
+        class="input"
+        placeholder="- Path to File -"
+        value={section.value}
+        on:keyup={event => {
+          section.value = event.target.value;
+          section.valueAsText = section.value;
+        }} />
+    {/if}
   {:else if section.type === 'WIDGET'}
     <WidgetInput
       widget={section.value}

@@ -64,20 +64,31 @@ export interface PropQuill {
 export interface PropQuillContent {
   id: string;
   type: PropQuillContentType;
-  value: {
-    ops: Array<{
-      insert: string;
-      attributes?: {
-        bold?: boolean;
-        italic?: boolean;
-        underline?: boolean;
-        strike?: boolean;
-        list?: string;
-        indent?: number;
-      };
-    }>;
-  };
+  value: PropQuillContentValueGeneric | PropQuillContentValueWidget;
   valueAsText: string;
+}
+
+export interface PropQuillContentValueGeneric {
+  ops: Array<{
+    insert: string;
+    attributes?: {
+      bold?: boolean;
+      italic?: boolean;
+      underline?: boolean;
+      strike?: boolean;
+      list?: string;
+      indent?: number;
+    };
+  }>;
+}
+
+export interface PropQuillContentValueWidget {
+  _id: string;
+  createdAt: number;
+  updatedAt: number;
+  name: string;
+  desc: string;
+  props: Prop[];
 }
 
 export interface PropGroupPointer {

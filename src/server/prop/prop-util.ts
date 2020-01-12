@@ -6,6 +6,8 @@ import {
   PropQuill,
   PropQuillContent,
   PropQuillContentType,
+  PropQuillContentValueGeneric,
+  PropQuillContentValueWidget,
 } from './interfaces/prop.interface';
 import { StringUtility } from 'purple-cheetah';
 import { GroupService } from '../group/group.service';
@@ -527,48 +529,60 @@ export class PropUtil {
     },
   ): {
     meta: any;
-    content: string;
+    content: Array<{
+      type: string;
+      name?: string;
+      value: any;
+    }>;
   } {
     const meta = PropUtil.propsToJSONObject(props, init);
-    let content: string = '';
+    const content: Array<{
+      type: string;
+      name?: string;
+      value: any;
+    }> = [];
     const quillProp = props.find(e => e.type === PropType.QUILL);
     if (quillProp) {
       quillProp.value = quillProp.value as PropQuill;
       for (const i in quillProp.value.content) {
+        let value: any;
+        let name: string;
         const prop = quillProp.value.content[i] as PropQuillContent;
         switch (prop.type) {
           case PropQuillContentType.HEADING_1:
             {
-              content += `## ${prop.valueAsText}\n`;
+              value = `## ${prop.valueAsText}\n`;
             }
             break;
           case PropQuillContentType.HEADING_2:
             {
-              content += `### ${prop.valueAsText}\n`;
+              value = `### ${prop.valueAsText}\n`;
             }
             break;
           case PropQuillContentType.HEADING_3:
             {
-              content += `#### ${prop.valueAsText}\n`;
+              value = `#### ${prop.valueAsText}\n`;
             }
             break;
           case PropQuillContentType.HEADING_4:
             {
-              content += `##### ${prop.valueAsText}\n`;
+              value = `##### ${prop.valueAsText}\n`;
             }
             break;
           case PropQuillContentType.HEADING_5:
             {
-              content += `###### ${prop.valueAsText}\n`;
+              value = `###### ${prop.valueAsText}\n`;
             }
             break;
           case PropQuillContentType.CODE:
             {
-              content += `\`\`\`\n${prop.valueAsText}\`\`\`\n\n`;
+              value = `\`\`\`\n${prop.valueAsText}\`\`\`\n\n`;
             }
             break;
           case PropQuillContentType.PARAGRAPH:
             {
+              value = '';
+              prop.value = prop.value as PropQuillContentValueGeneric;
               for (const j in prop.value.ops) {
                 const op = prop.value.ops[j];
                 let insert: string = '@';
@@ -586,14 +600,16 @@ export class PropUtil {
                     insert = `~~${insert}~~`;
                   }
                 }
-                content += insert.replace('@', op.insert);
+                value += insert.replace('@', op.insert);
               }
-              content += '\n';
+              value += '\n';
             }
             break;
           case PropQuillContentType.LIST:
             {
               let listItem: string = '';
+              value = '';
+              prop.value = prop.value as PropQuillContentValueGeneric;
               for (const j in prop.value.ops) {
                 const op = prop.value.ops[j];
                 let insert: string = '@';
@@ -605,7 +621,7 @@ export class PropUtil {
                         tabs += '  ';
                       }
                     }
-                    content += `${tabs}- ${listItem}\n`;
+                    value += `${tabs}- ${listItem}\n`;
                     listItem = '';
                   } else {
                     if (op.attributes.bold === true) {
@@ -626,10 +642,27 @@ export class PropUtil {
                   listItem += insert.replace('@', op.insert);
                 }
               }
-              content += '\n';
+              value += '\n';
+            }
+            break;
+          case PropQuillContentType.WIDGET:
+            {
+              prop.value = prop.value as PropQuillContentValueWidget;
+              name = prop.value.name;
+              value = PropUtil.propsToJSONObject(prop.value.props);
+            }
+            break;
+          case PropQuillContentType.MEDIA:
+            {
+              value = prop.value;
             }
             break;
         }
+        content.push({
+          type: prop.type,
+          name,
+          value,
+        });
       }
     }
     return {
@@ -655,8 +688,30 @@ export class PropUtil {
       const lngData = PropUtil.propsToMarkdown(entryContent[i].props, init);
       data[entryContent[i].lng] = {
         meta: lngData.meta,
-        content: lngData.meta,
+        content: lngData.content,
       };
+    }
+    return data;
+  }
+
+  public static contentToPrettyJSON(
+    entryContent: EntryContent[],
+    init?: {
+      _id?: string;
+      createdAt?: number;
+      updatedAt?: number;
+      user?: {
+        _id?: string;
+        name?: string;
+      };
+    },
+  ) {
+    const data: any = {};
+    for (const i in entryContent) {
+      data[entryContent[i].lng] = PropUtil.propsToMarkdown(
+        entryContent[i].props,
+        init,
+      );
     }
     return data;
   }
