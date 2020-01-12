@@ -27,6 +27,7 @@ import { GroupService } from '../group/group.service';
 import { EntryService } from '../entry/entry.service';
 import { APISecurity } from '../api/api-security';
 import { TemplateLite } from './interfaces/template-lite.interface';
+import { TemplateChanges } from './interfaces/changes.interface';
 
 /**
  * Controller that provides CRUD for Template object.
@@ -296,6 +297,39 @@ export class TemplateController {
             __type: 'string',
             __required: false,
           },
+          // changes: {
+          //   __type: 'object',
+          //   __required: false,
+          //   __child: {
+          //     props: {
+          //       __type: 'array',
+          //       __required: true,
+          //       __child: {
+          //         __type: 'object',
+          //         __content: {
+          //           name: {
+          //             __type: 'object',
+          //             __required: true,
+          //             __child: {
+          //               old: {
+          //                 __type: 'string',
+          //                 __required: true,
+          //               },
+          //               new: {
+          //                 __type: 'string',
+          //                 __required: true,
+          //               },
+          //             },
+          //           },
+          //           required: {
+          //             __type: 'boolean',
+          //             __required: true,
+          //           },
+          //         },
+          //       },
+          //     },
+          //   },
+          // },
         },
         'body',
       );
@@ -354,6 +388,12 @@ export class TemplateController {
       template.desc = request.body.desc;
     }
     if (typeof request.body.entryTemplate !== 'undefined') {
+      // if (typeof request.body.changes === 'undefined') {
+      //   throw error.occurred(
+      //     HttpStatus.FORBIDDEN,
+      //     'When updating entryTemplate, changes must be provided.',
+      //   );
+      // }
       changeDetected = true;
       try {
         template.entryTemplate = await PropUtil.getPropsFromUntrustedObject(
@@ -374,6 +414,32 @@ export class TemplateController {
         'Failed to update the Template in database.',
       );
     }
+    // if (typeof request.body.changes !== 'undefined') {
+    //   const changes = request.body.changes as TemplateChanges;
+    //   if (changes.props.length > 0) {
+    //     const entries = await this.entryService.findAllById(template.entryIds);
+    //     for (const i in entries) {
+    //       const entry = entries[i];
+    //       entry.content.forEach(content => {
+    //         content.props.forEach(prop => {
+    //           changes.props.forEach(change => {
+    //             if (prop.name === change.name.old) {
+    //               prop.name = change.name.new;
+    //               prop.required = change.required;
+    //             }
+    //           });
+    //         });
+    //       });
+    //       const updateEntryResult = await this.entryService.update(entry);
+    //       if (updateEntryResult === false) {
+    //         this.logger.error(
+    //           'update',
+    //           `Failed to update Entry '${entry._id.toHexString()}'.`,
+    //         );
+    //       }
+    //     }
+    //   }
+    // }
     return {
       template,
     };
