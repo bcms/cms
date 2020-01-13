@@ -708,9 +708,8 @@ export class PropUtil {
   ) {
     const data: any = {};
     for (const i in entryContent) {
-      data[entryContent[i].lng] = PropUtil.propsToMarkdown(
-        entryContent[i].props,
-        init,
+      data[entryContent[i].lng] = JSON.parse(
+        JSON.stringify(PropUtil.propsToMarkdown(entryContent[i].props, init)),
       );
     }
     return data;

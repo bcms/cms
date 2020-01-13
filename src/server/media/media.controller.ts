@@ -14,19 +14,16 @@ import {
   StringUtility,
   Post,
   Delete,
-  ObjectUtility,
 } from 'purple-cheetah';
 import { Request, Response } from 'express';
 import * as path from 'path';
-import * as childProcess from 'child_process';
-import * as util from 'util';
 import { Media, MediaType } from './models/media.model';
 import { MediaService } from './media.service';
 import { MediaAggregate } from './interfaces/media-aggregate.interface';
 import { MediaFactory } from './factories/media.factory';
 import { FSUtil } from './fs-util';
-import { FolderTree } from './interfaces/folder-tree.interface';
 import { MediaUtil } from './media-util';
+import { GitUtil } from './git-util';
 
 @Controller('/media')
 export class MediaController {
@@ -340,29 +337,7 @@ export class MediaController {
     } else {
       this.logger.warn('addFile', 'No Parent');
     }
-    if (
-      process.env.GIT_USERNAME &&
-      process.env.GIT_USERNAME !== 'github-username' &&
-      process.env.GIT_PASSWORD &&
-      process.env.GIT_PASSWORD !== 'github-password' &&
-      process.env.GIT_REPO &&
-      process.env.GIT_REPO_OWNER &&
-      process.env.GIT_HOST
-    ) {
-      util
-        .promisify(childProcess.exec)(
-          `git add ${path.join(process.env.PROJECT_ROOT, 'uploads')}/. && ` +
-            `git commit -m "Adding file ${media.name} via CMS." && ` +
-            `git push https://${process.env.GIT_USERNAME}:${process.env.GIT_PASSWORD}@` +
-            `${process.env.GIT_HOST}/${process.env.GIT_REPO_OWNER}/${process.env.GIT_REPO}`,
-        )
-        .then(output => {
-          this.logger.info('git-push', `File ${media.name} added to GIT.`);
-        })
-        .catch(e => {
-          this.logger.error('git-push', e);
-        });
-    }
+    GitUtil.updateUploads(media);
     return {
       media,
     };
@@ -452,57 +427,60 @@ export class MediaController {
     };
   }
 
-  // @Put('/rename')
-  // async rename(request: Request): Promise<{ media: Media }> {
-  //   const error = HttpErrorFactory.simple('rename', this.logger);
-  //   try {
-  //     ObjectUtility.compareWithSchema(
-  //       request.body,
-  //       {
-  //         _id: {
-  //           __type: 'string',
-  //           __required: true,
-  //         },
-  //         name: {
-  //           __type: 'string',
-  //           __required: true,
-  //         },
-  //       },
-  //       'body',
-  //     );
-  //   } catch (e) {
-  //     throw error.occurred(HttpStatus.BAD_REQUEST, e.message);
-  //   }
-  //   if (StringUtility.isIdValid(request.body._id) === false) {
-  //     throw error.occurred(
-  //       HttpStatus.FORBIDDEN,
-  //       `Invalid ID '${request.body._id}' was provided.`,
-  //     );
-  //   }
-  //   const jwt = JWTEncoding.decode(request.headers.authorization);
-  //   if (jwt instanceof Error) {
-  //     throw error.occurred(HttpStatus.UNAUTHORIZED, jwt.message);
-  //   } else {
-  //     const jwtValid = JWTSecurity.validateAndCheckTokenPermissions(
-  //       jwt,
-  //       [RoleName.ADMIN, RoleName.USER],
-  //       PermissionName.WRITE,
-  //       JWTConfigService.get('user-token-config'),
-  //     );
-  //     if (jwtValid instanceof Error) {
-  //       throw error.occurred(HttpStatus.UNAUTHORIZED, jwtValid.message);
-  //     }
-  //   }
-  //   const media = await this.mediaService.findById(request.body._id);
-  //   if (media === null) {
-  //     throw error.occurred(
-  //       HttpStatus.NOT_FOUNT,
-  //       `Media with ID '${request.body._id}' does not exist.`,
-  //     );
-  //   }
-  //   {
-  //   }
-  // }
+  /*
+  @Put('/file/rename')
+  async rename(request: Request): Promise<{ media: Media }> {
+    const error = HttpErrorFactory.simple('rename', this.logger);
+    try {
+      ObjectUtility.compareWithSchema(
+        request.body,
+        {
+          _id: {
+            __type: 'string',
+            __required: true,
+          },
+          name: {
+            __type: 'string',
+            __required: true,
+          },
+        },
+        'body',
+      );
+    } catch (e) {
+      throw error.occurred(HttpStatus.BAD_REQUEST, e.message);
+    }
+    if (StringUtility.isIdValid(request.body._id) === false) {
+      throw error.occurred(
+        HttpStatus.FORBIDDEN,
+        `Invalid ID '${request.body._id}' was provided.`,
+      );
+    }
+    const jwt = JWTEncoding.decode(request.headers.authorization);
+    if (jwt instanceof Error) {
+      throw error.occurred(HttpStatus.UNAUTHORIZED, jwt.message);
+    } else {
+      const jwtValid = JWTSecurity.validateAndCheckTokenPermissions(
+        jwt,
+        [RoleName.ADMIN, RoleName.USER],
+        PermissionName.WRITE,
+        JWTConfigService.get('user-token-config'),
+      );
+      if (jwtValid instanceof Error) {
+        throw error.occurred(HttpStatus.UNAUTHORIZED, jwtValid.message);
+      }
+    }
+    const media = await this.mediaService.findById(request.body._id);
+    if (media === null) {
+      throw error.occurred(
+        HttpStatus.NOT_FOUNT,
+        `Media with ID '${request.body._id}' does not exist.`,
+      );
+    }
+    {
+
+    }
+  }
+  */
 
   @Delete('/folder/:id')
   async deleteFolder(request: Request): Promise<{ message: string }> {
@@ -559,32 +537,7 @@ export class MediaController {
         `Failed to delete '${rootMedia.path}' directory from FS.`,
       );
     }
-    if (
-      process.env.GIT_USERNAME &&
-      process.env.GIT_USERNAME !== 'github-username' &&
-      process.env.GIT_PASSWORD &&
-      process.env.GIT_PASSWORD !== 'github-password' &&
-      process.env.GIT_REPO &&
-      process.env.GIT_REPO_OWNER &&
-      process.env.GIT_HOST
-    ) {
-      util
-        .promisify(childProcess.exec)(
-          `git add ${path.join(process.env.PROJECT_ROOT, 'uploads')}/. && ` +
-            `git commit -m "Deleting folder ${rootMedia.name} via CMS." && ` +
-            `git push https://${process.env.GIT_USERNAME}:${process.env.GIT_PASSWORD}@` +
-            `${process.env.GIT_HOST}/${process.env.GIT_REPO_OWNER}/${process.env.GIT_REPO}`,
-        )
-        .then(output => {
-          this.logger.info(
-            'git-push',
-            `Folder ${rootMedia.name} deleted from GIT.`,
-          );
-        })
-        .catch(e => {
-          this.logger.error('git-push', e);
-        });
-    }
+    GitUtil.updateUploads(rootMedia);
     return {
       message: 'Success.',
     };
@@ -643,32 +596,7 @@ export class MediaController {
         `Failed to delete '${rootMedia.path}/${rootMedia.name}' file from FS.`,
       );
     }
-    if (
-      process.env.GIT_USERNAME &&
-      process.env.GIT_USERNAME !== 'github-username' &&
-      process.env.GIT_PASSWORD &&
-      process.env.GIT_PASSWORD !== 'github-password' &&
-      process.env.GIT_REPO &&
-      process.env.GIT_REPO_OWNER &&
-      process.env.GIT_HOST
-    ) {
-      util
-        .promisify(childProcess.exec)(
-          `git add ${path.join(process.env.PROJECT_ROOT, 'uploads')}/. && ` +
-            `git commit -m "Deleting file ${rootMedia.name} via CMS." && ` +
-            `git push https://${process.env.GIT_USERNAME}:${process.env.GIT_PASSWORD}@` +
-            `${process.env.GIT_HOST}/${process.env.GIT_REPO_OWNER}/${process.env.GIT_REPO}`,
-        )
-        .then(output => {
-          this.logger.info(
-            'git-push',
-            `File ${rootMedia.name} deleted from GIT.`,
-          );
-        })
-        .catch(e => {
-          this.logger.error('git-push', e);
-        });
-    }
+    GitUtil.updateUploads(rootMedia);
     return {
       message: 'Success.',
     };

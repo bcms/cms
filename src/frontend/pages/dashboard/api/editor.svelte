@@ -182,14 +182,15 @@
       simplePopup.error(result.error.response.data.message);
       return;
     }
-    keys.forEach(key => {
+    keys = keys.map(key => {
       if (key._id === k._id) {
-        key = k;
+        return k;
       }
+      return key;
     });
     keySelected = result.response.data.key;
     menu.config.itemSelected = keySelected;
-    menu.config.items = keys;
+    menu.config.items = JSON.parse(JSON.stringify(keys));
     simplePopup.success('Key updated successfully.');
   }
 

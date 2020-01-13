@@ -93,18 +93,32 @@
     }
   }
   async function editProp(originalName, prop) {
+    let oldProp;
     templateSelected.entryTemplate = templateSelected.entryTemplate.map(e => {
       if (e.name === originalName) {
+        oldProp = e;
         return prop;
       }
       return e;
     });
+    const changes = {
+      props: [
+        {
+          name: {
+            old: oldProp.name,
+            new: prop.name,
+          },
+          required: prop.required,
+        },
+      ],
+    };
     const result = await axios.send({
       url: '/template',
       method: 'PUT',
       data: {
         _id: templateSelected._id,
         entryTemplate: templateSelected.entryTemplate,
+        changes,
       },
     });
     if (result.success === false) {
@@ -206,11 +220,15 @@
           </div>
           <div class="key-value">
             <div class="label">Created At</div>
-            <div class="value">{new Date(templateSelected.createdAt).toLocaleString()}</div>
+            <div class="value">
+              {new Date(templateSelected.createdAt).toLocaleString()}
+            </div>
           </div>
           <div class="key-value">
             <div class="label">Updated At</div>
-            <div class="value">{new Date(templateSelected.updatedAt).toLocaleString()}</div>
+            <div class="value">
+              {new Date(templateSelected.updatedAt).toLocaleString()}
+            </div>
           </div>
         </div>
         <div class="props">
