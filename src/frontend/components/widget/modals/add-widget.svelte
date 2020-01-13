@@ -67,22 +67,8 @@
   };
 </script>
 
-<style>
-  .content .title {
-    padding-bottom: 5px;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-bottom-color: #eff3f6;
-    font-size: 14pt;
-    font-weight: bold;
-  }
-
-  .content .options {
-    margin-top: 20px;
-    display: grid;
-    grid-template-columns: auto;
-    grid-gap: 20px;
-  }
+<style type="text/scss">
+  @import './add-widget.scss';
 </style>
 
 <Modal heading={modalHeading} {events}>
@@ -104,7 +90,7 @@
             class="input"
             on:keyup={handleNameInput}
             value={data.name.value}
-            placeholder="Group Name..." />
+            placeholder="- Wideget Name -" />
         </div>
       </div>
       <div class="key-value">
@@ -113,7 +99,7 @@
           <textarea
             class="input"
             bind:value={data.desc.value}
-            placeholder="Group description" />
+            placeholder="- Widget description -" />
         </div>
       </div>
     </div>

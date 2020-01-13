@@ -15,6 +15,10 @@
   let options = {
     sections: [
       {
+        name: 'WEBHOOKS',
+        menus: [],
+      },
+      {
         name: 'TEMPLATES',
         menus: [],
       },
@@ -76,7 +80,7 @@
   };
 
   onMount(async () => {
-    const result = await axios.send({
+    let result = await axios.send({
       url: '/template/all',
       method: 'GET',
     });
@@ -84,6 +88,16 @@
       console.error(result.error);
       return;
     }
+    const templates = JSON.parse(JSON.stringify(result.response.data.templates));
+    result = await axios.send({
+      url: '/webhook/all',
+      method: 'GET',
+    });
+    if (result.success === false) {
+      console.error(result.error);
+      return;
+    }
+    const webhooks = JSON.parse(JSON.stringify(result.response.data.webhooks))
     if (Store.get('user').roles[0].name === 'ADMIN') {
       options.sections = [
         {
@@ -144,7 +158,7 @@
     }
     for (const i in options.sections) {
       if (options.sections[i].name === 'TEMPLATES') {
-        options.sections[i].menus = result.response.data.templates.map(
+        options.sections[i].menus = templates.map(
           template => {
             return {
               type: 'link',
@@ -161,7 +175,24 @@
             };
           },
         );
-        break;
+      } else if (options.sections[i].name === 'WEBHOOKS') {
+        options.sections[i].menus = webhooks.map(
+          webhook => {
+            return {
+              type: 'link',
+              name: webhook.name
+                .split('-')
+                .map(e => {
+                  const f = e.substring(0, 1).toUpperCase();
+                  const r = e.substring(1, e.length);
+                  return f + r;
+                })
+                .join(' '),
+              link: `/dashboard/webhook/trigger/view?&wid=${webhook._id}`,
+              faClass: 'fas fa-link',
+            };
+          },
+        );
       }
     }
   });
