@@ -27,6 +27,7 @@ import { Config } from './config';
 import { WidgetController } from './widget/widget.controller';
 import { FunctionController } from './function/function.controller';
 import { LanguageController } from './languages/language.controller';
+import { WebhookController } from './webhook/webhook.controller';
 
 let dbConfig: any;
 if (process.env.DB_CLUSTER && process.env.DB_CLUSTER !== 'undefined') {
@@ -78,6 +79,7 @@ if (process.env.DB_CLUSTER && process.env.DB_CLUSTER !== 'undefined') {
     new WidgetController(),
     new FunctionController(),
     new LanguageController(),
+    new WebhookController(),
   ],
   middleware: [
     new CorsMiddleware(),

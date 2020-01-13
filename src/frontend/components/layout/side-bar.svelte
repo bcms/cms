@@ -131,6 +131,12 @@
               link: '/dashboard/api/editor',
               faClass: 'fas fa-key',
             },
+            {
+              type: 'link',
+              name: 'Webhook Manager',
+              link: '/dashboard/webhook/editor',
+              faClass: 'fas fa-link',
+            },
           ],
         },
         ...options.sections,

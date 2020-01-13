@@ -16,6 +16,7 @@
   import EntryEditor from './pages/dashboard/entry/editor.svelte';
   import UsersEditor from './pages/dashboard/users/editor.svelte';
   import ApiEditor from './pages/dashboard/api/editor.svelte';
+  import WebhookEditor from './pages/dashboard/webhook/editor.svelte';
   import MediaOverview from './pages/dashboard/media/overview.svelte';
   import LanguageEditor from './pages/dashboard/language/editor.svelte';
 
@@ -66,6 +67,9 @@
       </Route>
       <Route path="/dashboard/api/editor">
         <ApiEditor {Store} {axios} />
+      </Route>
+      <Route path="/dashboard/webhook/editor">
+        <WebhookEditor {Store} {axios} />
       </Route>
 
       <Route path="/dashboard/language/editor">
