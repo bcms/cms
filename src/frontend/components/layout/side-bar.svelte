@@ -2,6 +2,7 @@
   export const sideBarOptions = {
     addTemplate: () => {},
     updateTemplates: () => {},
+    updateWebhooks: () => {},
   };
 </script>
 
@@ -56,26 +57,54 @@
           })
           .join(' '),
         link:
-          `/dashboard/template/entries/view?` + `page=1&cid=${template._id}&lng=en`,
+          `/dashboard/template/entries/view?` +
+          `page=1&cid=${template._id}&lng=en`,
         faClass: 'fas fa-pencil-alt',
       },
     ];
   };
   sideBarOptions.updateTemplates = templates => {
-    options.sections[1].menus = templates.map(template => {
-      return {
-        type: 'link',
-        name: template.name
-          .split('-')
-          .map(e => {
-            const f = e.substring(0, 1).toUpperCase();
-            const r = e.substring(1, e.length);
-            return f + r;
-          })
-          .join(' '),
-        link: `/dashboard/template/entries/view?page=1&cid=${template._id}&lng=en`,
-        faClass: 'fas fa-pencil-alt',
-      };
+    options.sections = options.sections.map(section => {
+      if (section.name === 'TEMPLATES') {
+        section.menus = templates.map(template => {
+          return {
+            type: 'link',
+            name: template.name
+              .split('-')
+              .map(e => {
+                const f = e.substring(0, 1).toUpperCase();
+                const r = e.substring(1, e.length);
+                return f + r;
+              })
+              .join(' '),
+            link: `/dashboard/template/entries/view?page=1&cid=${template._id}&lng=en`,
+            faClass: 'fas fa-pencil-alt',
+          };
+        });
+      }
+      return section;
+    });
+  };
+  sideBarOptions.updateWebhooks = webhooks => {
+    options.sections = options.sections.map(section => {
+      if (section.name === 'WEBHOOKS') {
+        section.menus = webhooks.map(webhook => {
+          return {
+            type: 'link',
+            name: webhook.name
+              .split('-')
+              .map(e => {
+                const f = e.substring(0, 1).toUpperCase();
+                const r = e.substring(1, e.length);
+                return f + r;
+              })
+              .join(' '),
+            link: `/dashboard/webhook/trigger/view?wid=${webhook._id}`,
+            faClass: 'fas fa-link',
+          };
+        });
+      }
+      return section;
     });
   };
 
@@ -88,7 +117,9 @@
       console.error(result.error);
       return;
     }
-    const templates = JSON.parse(JSON.stringify(result.response.data.templates));
+    const templates = JSON.parse(
+      JSON.stringify(result.response.data.templates),
+    );
     result = await axios.send({
       url: '/webhook/all',
       method: 'GET',
@@ -97,7 +128,7 @@
       console.error(result.error);
       return;
     }
-    const webhooks = JSON.parse(JSON.stringify(result.response.data.webhooks))
+    const webhooks = JSON.parse(JSON.stringify(result.response.data.webhooks));
     if (Store.get('user').roles[0].name === 'ADMIN') {
       options.sections = [
         {
@@ -158,93 +189,44 @@
     }
     for (const i in options.sections) {
       if (options.sections[i].name === 'TEMPLATES') {
-        options.sections[i].menus = templates.map(
-          template => {
-            return {
-              type: 'link',
-              name: template.name
-                .split('-')
-                .map(e => {
-                  const f = e.substring(0, 1).toUpperCase();
-                  const r = e.substring(1, e.length);
-                  return f + r;
-                })
-                .join(' '),
-              link: `/dashboard/template/entries/view?page=1&cid=${template._id}&lng=en`,
-              faClass: 'fas fa-pencil-alt',
-            };
-          },
-        );
+        options.sections[i].menus = templates.map(template => {
+          return {
+            type: 'link',
+            name: template.name
+              .split('-')
+              .map(e => {
+                const f = e.substring(0, 1).toUpperCase();
+                const r = e.substring(1, e.length);
+                return f + r;
+              })
+              .join(' '),
+            link: `/dashboard/template/entries/view?page=1&cid=${template._id}&lng=en`,
+            faClass: 'fas fa-pencil-alt',
+          };
+        });
       } else if (options.sections[i].name === 'WEBHOOKS') {
-        options.sections[i].menus = webhooks.map(
-          webhook => {
-            return {
-              type: 'link',
-              name: webhook.name
-                .split('-')
-                .map(e => {
-                  const f = e.substring(0, 1).toUpperCase();
-                  const r = e.substring(1, e.length);
-                  return f + r;
-                })
-                .join(' '),
-              link: `/dashboard/webhook/trigger/view?&wid=${webhook._id}`,
-              faClass: 'fas fa-link',
-            };
-          },
-        );
+        options.sections[i].menus = webhooks.map(webhook => {
+          return {
+            type: 'link',
+            name: webhook.name
+              .split('-')
+              .map(e => {
+                const f = e.substring(0, 1).toUpperCase();
+                const r = e.substring(1, e.length);
+                return f + r;
+              })
+              .join(' '),
+            link: `/dashboard/webhook/trigger/view?wid=${webhook._id}`,
+            faClass: 'fas fa-link',
+          };
+        });
       }
     }
   });
 </script>
 
-<style>
-  .side-bar {
-    font-size: 10pt;
-    position: fixed;
-    top: 60px;
-    bottom: 0;
-    width: 250px;
-    background-color: #18202e;
-    z-index: 1;
-    overflow-x: hidden;
-    overflow-y: auto;
-  }
-
-  .section .name {
-    color: #5b626f;
-    font-size: 10pt;
-    font-weight: bold;
-    margin: 30px 10px 20px 20px;
-  }
-
-  .menus .menu {
-    padding-left: 20px;
-  }
-
-  .menus .menu:hover {
-    background-color: #232e41;
-  }
-
-  .menus .menu .perent {
-    display: grid;
-    grid-template-columns: 12px auto 20px;
-    grid-gap: 10px;
-    padding: 10px 0;
-  }
-
-  .menus .menu .perent .name {
-    margin: 0;
-    font-weight: normal;
-    color: #5b626f;
-  }
-
-  .menus .menu .perent .icon {
-    margin: auto 0;
-    font-size: 10pt;
-    color: var(--c-neutral);
-    color: #5b626f;
-  }
+<style type="text/scss">
+  @import './side-bar.scss';
 </style>
 
 <div class="side-bar">
@@ -266,5 +248,6 @@
         </div>
       </div>
     {/each}
+    <br />
   </div>
 </div>

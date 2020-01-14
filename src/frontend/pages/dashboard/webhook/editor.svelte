@@ -1,9 +1,11 @@
 <script>
   import { onMount } from 'svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
+  import { sideBarOptions } from '../../../components/layout/side-bar.svelte';
   import Layout from '../../../components/layout/layout.svelte';
   import Menu from '../../../components/menu.svelte';
   import AddWebhookModal from '../../../components/webhook/modals/add-webhook.svelte';
+  import EditWebhookModal from '../../../components/webhook/modals/edit-webhook.svelte';
   import StringUtil from '../../../string-util.js';
 
   export let axios;
@@ -29,7 +31,7 @@
     },
   };
   let addWebhookModalEvents = { callback: addWebhook };
-  let editWebhookModalEvents = { callbask: updateWebhook };
+  let editWebhookModalEvents = { callback: updateWebhook };
 
   async function addWebhook(data) {
     const result = await axios.send({
@@ -45,6 +47,7 @@
     webhookSelected = result.response.data.webhook;
     menu.config.itemSelected = webhookSelected;
     menu.config.items = webhooks;
+    sideBarOptions.updateWebhooks(webhooks);
   }
   async function updateWebhook(data) {
     let d;
@@ -79,7 +82,29 @@
     webhookSelected = result.response.data.webhook;
     menu.config.itemSelected = webhookSelected;
     menu.config.items = webhooks;
+    sideBarOptions.updateWebhooks(webhooks);
     simplePopup.success('Webhook updated successfully!');
+  }
+  async function deleteWebhook() {
+    if (confirm('Are you sure you want to delete this webhook?')) {
+      const result = await axios.send({
+        url: `/webhook/${webhookSelected._id}`,
+        method: 'DELETE',
+      });
+      if (result.success === false) {
+        simplePopup.error(result.error.response.data.message);
+        return;
+      }
+      webhooks = webhooks.filter(e => e._id !== webhookSelected._id);
+      if (webhooks.length === 0) {
+        webhookSelected = undefined;
+      } else {
+        webhookSelected = webhooks[0];
+      }
+      menu.config.itemSelected = webhookSelected;
+      menu.config.items = webhooks;
+      sideBarOptions.updateWebhooks(webhooks);
+    }
   }
 
   onMount(async () => {
@@ -164,6 +189,12 @@
             </div>
           </div>
         </div>
+        <button
+          class="btn-border btn-red-c btn-red-br delete"
+          on:click={deleteWebhook}>
+          <div class="fa fa-trash icon" />
+          <div class="text">Delete</div>
+        </button>
       {:else}
         <div class="props">
           <div class="no-props">
@@ -182,3 +213,6 @@
   </div>
 </Layout>
 <AddWebhookModal events={addWebhookModalEvents} />
+{#if webhookSelected}
+  <EditWebhookModal events={editWebhookModalEvents} webhook={webhookSelected} />
+{/if}

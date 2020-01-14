@@ -1,0 +1,28 @@
+.content {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 20px;
+  padding: 20px;
+}
+
+.info .name {
+  font-size: 16pt;
+  font-weight: bold;
+}
+
+.info .desc {
+  font-size: 10pt;
+  color: #929292;
+}
+
+.info .body,
+.trigger .body {
+  margin-top: 40px;
+  font-size: 10pt;
+  font-family: monospace;
+  border-radius: 5px;
+  border-style: solid;
+  border-color: #929292;
+  border-width: 1px;
+  padding: 10px;
+}

@@ -6,18 +6,8 @@
   export let axios;
 </script>
 
-<style>
-  .content {
-    position: absolute;
-    top: 60px;
-    left: 250px;
-    right: 0;
-    bottom: 0;
-    color: var(--c-black);
-    overflow-x: hidden;
-    overflow-y: auto;
-    z-index: 0;
-  }
+<style type='text/scss'>
+  @import './layout.scss';
 </style>
 
 <div class="layout">

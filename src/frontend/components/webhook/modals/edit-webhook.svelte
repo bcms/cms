@@ -3,18 +3,19 @@
   import { simplePopup } from '../../simple-popup.svelte';
 
   export let events;
+  export let webhook;
 
   const modalHeading = {
     icon: '/assets/ics/template/icon_type_ct.png',
-    title: 'Create New Webhook',
+    title: 'Update Webhook',
   };
   let data = {
     name: {
-      value: '',
+      value: webhook.name,
       error: '',
     },
-    desc: '',
-    body: '{}',
+    desc: webhook.desc,
+    body: webhook.body,
   };
 
   events.cancel = () => {
@@ -36,9 +37,10 @@
     data.name.error = '';
     events.toggle();
     events.callback({
+      _id: webhook._id,
       name: data.name.value,
       desc: data.desc,
-      body: btoa(data.body),
+      body: data.body,
     });
     data = {
       name: {

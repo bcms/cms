@@ -32,7 +32,7 @@
   function templateAdded(template) {
     templates = [...templates, template];
     templateSelected = template;
-    sideBarOptions.addTemplate(template);
+    sideBarOptions.updateTemplates(templates);
   }
   function templateEdit(template) {
     templateSelected = template;
@@ -42,6 +42,7 @@
       }
       return e;
     });
+    sideBarOptions.updateTemplates(templates);
   }
   async function addProp(data) {
     if (data.name === 'content') {

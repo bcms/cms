@@ -1,0 +1,46 @@
+.side-bar {
+  font-size: 10pt;
+  position: fixed;
+  top: 60px;
+  bottom: 0;
+  width: 250px;
+  background-color: #18202e;
+  z-index: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.section .name {
+  color: #5b626f;
+  font-size: 10pt;
+  font-weight: bold;
+  margin: 30px 10px 20px 20px;
+}
+
+.menus .menu {
+  padding-left: 20px;
+}
+
+.menus .menu:hover {
+  background-color: #232e41;
+}
+
+.menus .menu .perent {
+  display: grid;
+  grid-template-columns: 12px auto 20px;
+  grid-gap: 10px;
+  padding: 10px 0;
+}
+
+.menus .menu .perent .name {
+  margin: 0;
+  font-weight: normal;
+  color: #5b626f;
+}
+
+.menus .menu .perent .icon {
+  margin: auto 0;
+  font-size: 10pt;
+  color: var(--c-neutral);
+  color: #5b626f;
+}
