@@ -57,6 +57,9 @@
       data: {
         _id: templateSelected._id,
         entryTemplate: [...templateSelected.entryTemplate, data],
+        changes: {
+          props: [],
+        },
       },
     });
     if (result.success === false) {

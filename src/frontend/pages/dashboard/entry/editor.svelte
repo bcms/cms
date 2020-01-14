@@ -309,6 +309,11 @@
             };
           });
         }
+        t.entryTemplate.forEach(e => {
+          if (!data[lng.code].meta.find(m => m.name === e.name)) {
+            data[lng.code].meta.push(e);
+          }
+        });
       }
     } else {
       languages.forEach(e => {
