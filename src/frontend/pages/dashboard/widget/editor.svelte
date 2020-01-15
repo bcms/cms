@@ -55,6 +55,9 @@
     menu.config.itemSelected = widgetSelected;
   }
   async function editWidget(data) {
+    data.changes = {
+      props: [],
+    };
     const result = await axios.send({
       url: '/widget',
       method: 'PUT',
