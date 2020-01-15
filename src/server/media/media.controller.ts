@@ -109,12 +109,6 @@ export class MediaController {
   @Get('/all')
   async getAll(request: Request): Promise<{ media: Media[] }> {
     const error = HttpErrorFactory.simple('getAll', this.logger);
-    if (!request.query.access_token) {
-      throw error.occurred(
-        HttpStatus.BAD_REQUEST,
-        `Missing query 'access_token'.`,
-      );
-    }
     if (request.query.signature) {
       try {
         APISecurity.verify(
