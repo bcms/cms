@@ -109,18 +109,38 @@ export class MediaController {
   @Get('/all')
   async getAll(request: Request): Promise<{ media: Media[] }> {
     const error = HttpErrorFactory.simple('getAll', this.logger);
-    const jwt = JWTEncoding.decode(request.headers.authorization);
-    if (jwt instanceof Error) {
-      throw error.occurred(HttpStatus.UNAUTHORIZED, jwt.message);
-    } else {
-      const jwtValid = JWTSecurity.validateAndCheckTokenPermissions(
-        jwt,
-        [RoleName.ADMIN, RoleName.USER, RoleName.SERVICE],
-        PermissionName.READ,
-        JWTConfigService.get('user-token-config'),
+    if (!request.query.access_token) {
+      throw error.occurred(
+        HttpStatus.BAD_REQUEST,
+        `Missing query 'access_token'.`,
       );
-      if (jwtValid instanceof Error) {
-        throw error.occurred(HttpStatus.UNAUTHORIZED, jwtValid.message);
+    }
+    if (request.query.signature) {
+      try {
+        APISecurity.verify(
+          request.query,
+          request.body,
+          request.method.toUpperCase(),
+          request.originalUrl,
+          true,
+        );
+      } catch (e) {
+        throw error.occurred(HttpStatus.UNAUTHORIZED, e.message);
+      }
+    } else {
+      const jwt = JWTEncoding.decode(request.headers.authorization);
+      if (jwt instanceof Error) {
+        throw error.occurred(HttpStatus.UNAUTHORIZED, jwt.message);
+      } else {
+        const jwtValid = JWTSecurity.validateAndCheckTokenPermissions(
+          jwt,
+          [RoleName.ADMIN, RoleName.USER],
+          PermissionName.READ,
+          JWTConfigService.get('user-token-config'),
+        );
+        if (jwtValid instanceof Error) {
+          throw error.occurred(HttpStatus.UNAUTHORIZED, jwtValid.message);
+        }
       }
     }
     let media: Media[];
