@@ -9,11 +9,42 @@ import {
   PropQuillContentValueGeneric,
   PropQuillContentValueWidget,
 } from './interfaces/prop.interface';
-import { StringUtility } from 'purple-cheetah';
+import { StringUtility, Logger } from 'purple-cheetah';
 import { GroupService } from '../group/group.service';
-import { EntryContent } from '../entry/models/entry.model';
+import { EntryContent, Entry } from '../entry/models/entry.model';
 
 export class PropUtil {
+  public static get changesSchema(): any {
+    return {
+      name: {
+        __type: 'object',
+        __required: true,
+        __child: {
+          old: {
+            __type: 'string',
+            __required: true,
+          },
+          new: {
+            __type: 'string',
+            __required: true,
+          },
+        },
+      },
+      required: {
+        __type: 'boolean',
+        __required: true,
+      },
+      remove: {
+        __type: 'boolean',
+        __required: false,
+      },
+      add: {
+        __type: 'boolean',
+        __required: false,
+      },
+    };
+  }
+
   public static async getPropsFromUntrustedObject(
     object: any,
     groupService: GroupService,
@@ -713,5 +744,30 @@ export class PropUtil {
       );
     }
     return data;
+  }
+
+  public static updateGroupName(
+    entries: Entry[],
+    oldName: string,
+    newName: string,
+  ) {
+    const recursive = (props: Prop[], on: string, nn: string) => {
+      props.forEach(prop => {
+        if (prop.type === PropType.GROUP_POINTER) {
+          prop.value = prop.value as PropGroupPointer;
+          if (prop.name === on) {
+            prop.name = nn;
+          } else {
+            prop.value.props = recursive(prop.value.props, on, nn);
+          }
+        }
+      });
+      return props;
+    };
+    entries.forEach(entry => {
+      entry.content.forEach(content => {
+        content.props = recursive(content.props, oldName, newName);
+      });
+    });
   }
 }

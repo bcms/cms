@@ -306,26 +306,7 @@ export class TemplateController {
                 __required: true,
                 __child: {
                   __type: 'object',
-                  __content: {
-                    name: {
-                      __type: 'object',
-                      __required: true,
-                      __child: {
-                        old: {
-                          __type: 'string',
-                          __required: true,
-                        },
-                        new: {
-                          __type: 'string',
-                          __required: true,
-                        },
-                      },
-                    },
-                    required: {
-                      __type: 'boolean',
-                      __required: true,
-                    },
-                  },
+                  __content: PropUtil.changesSchema,
                 },
               },
             },

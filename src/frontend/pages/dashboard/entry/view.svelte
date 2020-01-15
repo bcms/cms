@@ -14,11 +14,16 @@
   const allowedEntriesPerPage = [10, 20, 30];
   const addDataModalModalEvents = { callback: addNewDataModelEntry };
   const editDataModelModalEvents = { callback: updateDataModalEntry };
+  let languages = [];
+  let languageSelected = {
+    code: 'en',
+  };
   let entriesPerPage = 10;
   let entries = [];
   let editEntry;
   let template;
   let page = 1;
+  let filters = [];
 
   if (Store.get('entriesPerPage')) {
     entriesPerPage = Store.get(entriesPerPage);
@@ -50,7 +55,7 @@
     } else {
       window.location =
         `/dashboard/template/entry/rc` +
-        `?tid=${template._id}&lng=${queries.lng}`;
+        `?tid=${template._id}&lng=${languageSelected.code}`;
     }
   }
   async function addNewDataModelEntry(data) {
@@ -130,6 +135,57 @@
       .join('":')
       .replace(/":/g, ':');
   }
+  function sortEntries() {}
+  function filterEntry(entry) {
+    const content = entry.content.find(e => e.lng === languageSelected.code);
+    if (content) {
+      for (const i in filters) {
+        const filter = filters[i];
+        switch (filter.type) {
+          case 'ENUMERATION':
+            {
+              const prop = content.props.find(e => e.name === filter.name);
+              if (prop && prop.value.selected !== filter.selected) {
+                return false;
+              }
+            }
+            break;
+        }
+      }
+    }
+    return true;
+  }
+  function setFilter(prop, options) {
+    const filter = filters.find(e => e.name === prop.name);
+    if (filter) {
+      switch (prop.type) {
+        case 'ENUMERATION':
+          {
+            if (options.selected === '') {
+              filters = filters.filter(e => e.name !== filter.name);
+            } else {
+              filter.selected = options.selected;
+            }
+          }
+          break;
+      }
+    } else {
+      switch (prop.type) {
+        case 'ENUMERATION':
+          {
+            if (options.selected !== '') {
+              filters.push({
+                name: prop.name,
+                type: prop.type,
+                selected: options.selected,
+              });
+            }
+          }
+          break;
+      }
+    }
+    entries = [...entries];
+  }
 
   onMount(async () => {
     if (!queries.cid) {
@@ -156,6 +212,18 @@
       return;
     }
     entries = result.response.data.entries;
+    // Get Languages
+    result = await axios.send({
+      url: `/language/all`,
+      method: 'GET',
+    });
+    if (result.success === false) {
+      console.error(result.error);
+      simplePopup.error(result.error.response.data.message);
+      return;
+    }
+    languages = result.response.data.languages;
+    languageSelected = languages.find(e => e.code === queries.lng);
   });
 </script>
 
@@ -180,148 +248,200 @@
           </button>
         </div>
       </div>
-      <div class="filters" />
+      <div class="filters">
+        <div class="key-value">
+          <div class="label">Languages</div>
+          <div class="value">
+            <select
+              class="select"
+              on:change={event => {
+                languageSelected = languages.find(e => e.code === event.target.value);
+              }}>
+              {#each languages as lng}
+                {#if lng.code === languageSelected.code}
+                  <option value={lng.code} selected>
+                    {lng.name} | {lng.nativeName}
+                  </option>
+                {:else}
+                  <option value={lng.code}>
+                    {lng.name} | {lng.nativeName}
+                  </option>
+                {/if}
+              {/each}
+            </select>
+          </div>
+        </div>
+        <h3>Filters</h3>
+        <div class="prop-filters">
+          {#each template.entryTemplate as prop}
+            {#if prop.type === 'ENUMERATION' || prop.type === 'STRING'}
+              <div class="key-value prop">
+                <div class="label">{StringUtil.prettyName(prop.name)}</div>
+                <div class="value">
+                  {#if prop.type === 'ENUMERATION'}
+                    <select
+                      class="select"
+                      on:change={event => {
+                        setFilter(prop, { selected: event.target.value });
+                      }}>
+                      <option value="" selected>- Unselected -</option>
+                      {#each prop.value.items as item}
+                        <option value={item}>
+                          {StringUtil.prettyName(item)}
+                        </option>
+                      {/each}
+                    </select>
+                  {/if}
+                </div>
+              </div>
+            {/if}
+          {/each}
+        </div>
+      </div>
       {#if entries.length > 0}
         <div class="entries">
           {#each entries as entry}
-            {#if template.type === 'RICH_CONTENT'}
-              <div class="entry">
-                <div class="heading">{entry._id}</div>
-                <div class="info">
-                  {#if entry.content.find(e => e.lng === queries.lng)}
-                    {#each entry.content.find(e => e.lng === queries.lng).props as prop}
-                      {#if prop.type === 'QUILL'}
-                        {#if prop.value.heading.title !== ''}
-                          <div class="title">{prop.value.heading.title}</div>
-                          <div class="slug">
-                            /template/{template._id}/entry/{entry._id}
-                          </div>
-                          <div class="desc">
-                            {prop.value.heading.desc.substring(0, 80)}...
-                          </div>
-                        {:else}
-                          <div class="not-available">
-                            This Entry is not available in '{queries.lng}'
-                            language.
-                          </div>
+            {#if filterEntry(entry) === true}
+              {#if template.type === 'RICH_CONTENT'}
+                <div class="entry">
+                  <div class="heading">{entry._id}</div>
+                  <div class="info">
+                    {#if entry.content.find(e => e.lng === languageSelected.code)}
+                      {#each entry.content.find(e => e.lng === languageSelected.code).props as prop}
+                        {#if prop.type === 'QUILL'}
+                          {#if prop.value.heading.title !== ''}
+                            <div class="title">{prop.value.heading.title}</div>
+                            <div class="slug">
+                              /template/{template._id}/entry/{entry._id}
+                            </div>
+                            <div class="desc">
+                              {prop.value.heading.desc.substring(0, 80)}...
+                            </div>
+                          {:else}
+                            <div class="not-available">
+                              This Entry is not available in '{languageSelected.code}'
+                              language.
+                            </div>
+                          {/if}
                         {/if}
-                      {/if}
-                    {/each}
-                  {:else}
-                    <div class="not-available">
-                      This Entry is not available in '{queries.lng}' language.
+                      {/each}
+                    {:else}
+                      <div class="not-available">
+                        This Entry is not available in '{languageSelected.code}'
+                        language.
+                      </div>
+                    {/if}
+                    <div class="key-value date-time">
+                      <div class="label">
+                        <span class="fas fa-clock icon" />
+                        <span>Created At</span>
+                      </div>
+                      <div class="text">
+                        <span class="date">
+                          {new Date(entry.createdAt).toLocaleDateString()}
+                        </span>
+                        <span class="time">
+                          {new Date(entry.createdAt).toLocaleTimeString()}
+                        </span>
+                      </div>
                     </div>
-                  {/if}
-                  <div class="key-value date-time">
-                    <div class="label">
-                      <span class="fas fa-clock icon" />
-                      <span>Created At</span>
+                    <div class="key-value date-time">
+                      <div class="label">
+                        <span class="fas fa-clock icon" />
+                        <span>Update At</span>
+                      </div>
+                      <div class="text">
+                        <span class="date">
+                          {new Date(entry.updatedAt).toLocaleDateString()}
+                        </span>
+                        <span class="time">
+                          {new Date(entry.updatedAt).toLocaleTimeString()}
+                        </span>
+                      </div>
                     </div>
-                    <div class="text">
-                      <span class="date">
-                        {new Date(entry.createdAt).toLocaleDateString()}
-                      </span>
-                      <span class="time">
-                        {new Date(entry.createdAt).toLocaleTimeString()}
-                      </span>
+                    <div class="actions">
+                      <button
+                        class="btn-border btn-red-br btn-red-c delete"
+                        on:click={() => {
+                          deleteEntry(entry);
+                        }}>
+                        <div class="fa fa-edit icon" />
+                        <div class="text">Delete Entry</div>
+                      </button>
+                      <a
+                        class="btn-fill btn-blue-bg edit"
+                        href="/dashboard/template/entry/rc?tid={template._id}&eid={entry._id}&lng={languageSelected.code}">
+                        <div class="fa fa-edit icon" />
+                        <div class="text">Edit Entry</div>
+                      </a>
                     </div>
-                  </div>
-                  <div class="key-value date-time">
-                    <div class="label">
-                      <span class="fas fa-clock icon" />
-                      <span>Update At</span>
-                    </div>
-                    <div class="text">
-                      <span class="date">
-                        {new Date(entry.updatedAt).toLocaleDateString()}
-                      </span>
-                      <span class="time">
-                        {new Date(entry.updatedAt).toLocaleTimeString()}
-                      </span>
-                    </div>
-                  </div>
-                  <div class="actions">
-                    <button
-                      class="btn-border btn-red-br btn-red-c delete"
-                      on:click={() => {
-                        deleteEntry(entry);
-                      }}>
-                      <div class="fa fa-edit icon" />
-                      <div class="text">Delete Entry</div>
-                    </button>
-                    <a
-                      class="btn-fill btn-blue-bg edit"
-                      href="/dashboard/template/entry/rc?tid={template._id}&eid={entry._id}&lng={queries.lng}">
-                      <div class="fa fa-edit icon" />
-                      <div class="text">Edit Entry</div>
-                    </a>
                   </div>
                 </div>
-              </div>
-            {:else}
-              <div class="entry">
-                <div class="heading">{entry._id}</div>
-                <div class="info">
-                  <div class="slug">
-                    /template/{template._id}/entry/{entry._id}
-                  </div>
-                  <div class="key-value date-time">
-                    <div class="label">
-                      <span class="fas fa-clock icon" />
-                      <span>Created At</span>
+              {:else}
+                <div class="entry">
+                  <div class="heading">{entry._id}</div>
+                  <div class="info">
+                    <div class="slug">
+                      /template/{template._id}/entry/{entry._id}
                     </div>
-                    <div class="text">
-                      <span class="date">
-                        {new Date(entry.createdAt).toLocaleDateString()}
-                      </span>
-                      <span class="time">
-                        {new Date(entry.createdAt).toLocaleTimeString()}
-                      </span>
+                    <div class="key-value date-time">
+                      <div class="label">
+                        <span class="fas fa-clock icon" />
+                        <span>Created At</span>
+                      </div>
+                      <div class="text">
+                        <span class="date">
+                          {new Date(entry.createdAt).toLocaleDateString()}
+                        </span>
+                        <span class="time">
+                          {new Date(entry.createdAt).toLocaleTimeString()}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                  <div class="key-value date-time">
-                    <div class="label">
-                      <span class="fas fa-clock icon" />
-                      <span>Updated At</span>
+                    <div class="key-value date-time">
+                      <div class="label">
+                        <span class="fas fa-clock icon" />
+                        <span>Updated At</span>
+                      </div>
+                      <div class="text">
+                        <span class="date">
+                          {new Date(entry.updatedAt).toLocaleDateString()}
+                        </span>
+                        <span class="time">
+                          {new Date(entry.updatedAt).toLocaleTimeString()}
+                        </span>
+                      </div>
                     </div>
-                    <div class="text">
-                      <span class="date">
-                        {new Date(entry.updatedAt).toLocaleDateString()}
-                      </span>
-                      <span class="time">
-                        {new Date(entry.updatedAt).toLocaleTimeString()}
-                      </span>
+                    <div class="schema">
+                      <pre>
+                        <code>
+                          {compileSchema(contentToSchema(entry.content))}
+                        </code>
+                      </pre>
                     </div>
-                  </div>
-                  <div class="schema">
-                    <pre>
-                      <code>
-                        {compileSchema(contentToSchema(entry.content))}
-                      </code>
-                    </pre>
-                  </div>
-                  <div class="actions">
-                    <button
-                      class="btn-border btn-red-br btn-red-c delete"
-                      on:click={() => {
-                        deleteEntry(entry);
-                      }}>
-                      <div class="fas fa-trash icon" />
-                      <div class="text">Delete Entry</div>
-                    </button>
-                    <button
-                      on:click={() => {
-                        editEntry = entry;
-                        editDataModelModalEvents.setData(entry);
-                        editDataModelModalEvents.toggle();
-                      }}
-                      class="btn-fill btn-blue-bg edit">
-                      <div class="fas fa-edit icon" />
-                      <div class="text">Edit Entry</div>
-                    </button>
+                    <div class="actions">
+                      <button
+                        class="btn-border btn-red-br btn-red-c delete"
+                        on:click={() => {
+                          deleteEntry(entry);
+                        }}>
+                        <div class="fas fa-trash icon" />
+                        <div class="text">Delete Entry</div>
+                      </button>
+                      <button
+                        on:click={() => {
+                          editEntry = entry;
+                          editDataModelModalEvents.setData(entry);
+                          editDataModelModalEvents.toggle();
+                        }}
+                        class="btn-fill btn-blue-bg edit">
+                        <div class="fas fa-edit icon" />
+                        <div class="text">Edit Entry</div>
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
+              {/if}
             {/if}
           {/each}
         </div>

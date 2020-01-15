@@ -26,6 +26,7 @@ import { GroupUtil } from './group-util';
 import { TemplateService } from '../template/template.service';
 import { PropType, PropGroupPointer } from '../prop/interfaces/prop.interface';
 import { WidgetService } from '../widget/widget.service';
+import { EntryService } from '../entry';
 
 @Controller('/group')
 export class GroupController {
@@ -37,6 +38,8 @@ export class GroupController {
   private templateService: TemplateService;
   @Service(WidgetService)
   private widgetService: WidgetService;
+  @Service(EntryService)
+  private entryService: EntryService;
 
   @Get('/all')
   async getAll(request: Request): Promise<{ groups: Group[] }> {
@@ -193,6 +196,20 @@ export class GroupController {
             __type: 'string',
             __required: false,
           },
+          changes: {
+            __type: 'object',
+            __required: false,
+            __child: {
+              props: {
+                __type: 'array',
+                __required: true,
+                __child: {
+                  __type: 'object',
+                  __content: PropUtil.changesSchema,
+                },
+              },
+            },
+          },
         },
         'body',
       );
@@ -249,6 +266,12 @@ export class GroupController {
       group.desc = request.body.desc;
     }
     if (typeof request.body.props !== 'undefined') {
+      if (typeof request.body.changes === 'undefined') {
+        throw error.occurred(
+          HttpStatus.FORBIDDEN,
+          'When updating Props, changes must be provided.',
+        );
+      }
       changeDetected = true;
       try {
         group.props = await PropUtil.getPropsFromUntrustedObject(
@@ -325,6 +348,14 @@ export class GroupController {
           );
         }
       }
+    }
+    if (typeof request.body.changes !== 'undefined') {
+      await GroupUtil.updateEntriesWithNewGroupData(
+        this.entryService,
+        this.logger,
+        request.body.changes.props,
+        group._id.toHexString(),
+      );
     }
     return {
       group,

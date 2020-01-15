@@ -16,6 +16,7 @@
   let entryId;
   let template;
   let widgets = [];
+  let groups = [];
   let languages = [];
   let selectedLanguage = {
     code: 'en',
@@ -80,6 +81,7 @@
       data: {
         _id: queries.eid,
         content,
+        onlyLng: selectedLanguage.code,
       },
     });
     if (result.success === false) {
@@ -223,6 +225,17 @@
       return;
     }
     widgets = JSON.parse(JSON.stringify(result.response.data.widgets));
+    //Get GROUPS
+    result = await axios.send({
+      url: `/group/all`,
+      method: 'GET',
+    });
+    if (result.success === false) {
+      console.error(result.error);
+      simplePopup.error(result.error.response.data.message);
+      return;
+    }
+    groups = JSON.parse(JSON.stringify(result.response.data.groups));
     // Get TEMPLATE
     result = await axios.send({
       url: `/template/${queries.tid}`,
@@ -393,6 +406,7 @@
       <h3>Meta</h3>
       <div class="meta">
         <PropsInput
+          {groups}
           events={propsInputEvents}
           props={data[selectedLanguage.code].meta} />
       </div>

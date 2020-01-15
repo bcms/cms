@@ -103,6 +103,9 @@
       data: {
         _id: widgetSelected._id,
         props: [...widgetSelected.props, data],
+        changes: {
+          props: [],
+        },
       },
     });
     if (result.success === false) {
@@ -119,6 +122,17 @@
     });
   }
   async function editProp(originalName, data) {
+    const changes = {
+      props: [
+        {
+          name: {
+            old: originalName,
+            new: data.name,
+          },
+          required: data.required,
+        },
+      ],
+    };
     const result = await axios.send({
       url: '/widget',
       method: 'PUT',
@@ -130,6 +144,7 @@
           }
           return e;
         }),
+        changes,
       },
     });
     if (result.success === false) {
@@ -152,6 +167,18 @@
       data: {
         _id: widgetSelected._id,
         props: [...widgetSelected.props.filter(p => p.name !== prop.name)],
+        changes: {
+          props: [
+            {
+              name: {
+                new: '',
+                old: prop.name,
+              },
+              required: prop.required,
+              remove: true,
+            },
+          ],
+        },
       },
     });
     if (result.success === false) {

@@ -28,6 +28,9 @@
     groupSelected = group;
   }
   async function addGroup(data) {
+    data.changes = {
+      props: [],
+    };
     const result = await axios.send({
       url: '/group',
       method: 'POST',
@@ -41,6 +44,9 @@
     groupSelected = result.response.data.group;
   }
   async function editGroup(data) {
+    data.changes = {
+      props: [],
+    };
     const result = await axios.send({
       url: '/group',
       method: 'PUT',
@@ -89,6 +95,9 @@
       data: {
         _id: groupSelected._id,
         props: [...groupSelected.props, data],
+        changes: {
+          props: [],
+        },
       },
     });
     if (result.success === false) {
@@ -104,6 +113,17 @@
     });
   }
   async function editProp(originalName, data) {
+    const changes = {
+      props: [
+        {
+          name: {
+            old: originalName,
+            new: data.name,
+          },
+          required: data.required,
+        },
+      ],
+    };
     const result = await axios.send({
       url: '/group',
       method: 'PUT',
@@ -115,6 +135,7 @@
           }
           return e;
         }),
+        changes
       },
     });
     if (result.success === false) {
@@ -170,161 +191,16 @@
   });
 </script>
 
-<style>
-  .editor {
-    display: grid;
-    grid-template-columns: 400px auto;
-    height: 100%;
-  }
-
-  .content {
-    height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
-    padding: 20px;
-  }
-
-  .content .heading {
-    display: flex;
-  }
-
-  .content .heading .title {
-    font-size: 18pt;
-    font-weight: bold;
-  }
-
-  .content .heading .edit {
-    color: #929292;
-  }
-
-  .content .heading .edit:hover {
-    color: var(--c-primary);
-  }
-
-  .content .desc {
-    font-size: 10pt;
-    color: #929292;
-  }
-
-  .content .no-props {
-    text-align: center;
-  }
-
-  .content .no-props .message {
-    font-size: 14pt;
-    margin-top: 30px;
-  }
-
-  .content .no-props .action {
-    margin: 40px auto 40px auto;
-  }
-
-  .content .delete {
-    margin: 40px 0 20px auto;
-  }
-
-  .content .props {
-    margin-top: 30px;
-    background-color: #fff;
-    padding: 10px 20px;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
-    font-size: 10pt;
-  }
-
-  .content .props .values {
-    margin-top: 30px;
-  }
-
-  .content .props .heading {
-    font-size: 14pt;
-    display: flex;
-    margin: auto 0;
-  }
-
-  .content .props .heading .add {
-    margin-left: auto;
-  }
-
-  .content .props .action {
-    margin: 30px auto 0 auto;
-  }
-
-  .content .props .prop {
-    display: grid;
-    grid-template-columns: 30px 300px auto 50px 30px 30px;
-    margin: auto 0;
-    padding: 5px 0;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-bottom-color: #eeeeee;
-  }
-
-  .content .props .prop .img {
-    margin: auto 0;
-  }
-
-  .content .props .prop .img img {
-    width: 100%;
-  }
-
-  .content .props .prop .name {
-    margin: auto 0 auto 20px;
-  }
-
-  .content .props .prop .type {
-    display: flex;
-  }
-
-  .content .props .prop .type .value {
-    margin: auto 0;
-  }
-
-  .content .props .prop .type .group-pointer {
-    margin: auto 20px;
-    color: #c2c2c2;
-  }
-
-  .content .props .prop .required {
-    color: #c2c2c2;
-  }
-
-  .content .props .prop .action {
-    display: flex;
-    margin: auto 0;
-    border: none;
-    background-color: #00000000;
-  }
-
-  .content .props .prop .action button {
-    margin-bottom: 6px;
-    border: none;
-    background-color: #00000000;
-  }
-
-  .content .props .prop .action button:hover {
-    color: var(--c-primary);
-  }
-
-  .content .no-props {
-    text-align: center;
-  }
-
-  .content .no-props .message {
-    font-size: 14pt;
-    margin-top: 30px;
-  }
-
-  .content .no-props .action {
-    margin: 40px auto 40px auto;
-  }
+<style type="text/scss">
+  @import './editor.scss';
 </style>
 
 <Layout {Store} {axios}>
   <div class="editor">
     <Menu
       events={{ clicked: openGroup, addNewItem: () => {
-        addGroupModalEvents.toggle();
-      } }}
+          addGroupModalEvents.toggle();
+        } }}
       config={{ heading: 'GROUPS', buttonLabel: 'Add New Group', items: groups, itemSelected: groupSelected }} />
     <div class="content">
       {#if groupSelected}

@@ -1,6 +1,5 @@
 <script context="module">
   export const sideBarOptions = {
-    addTemplate: () => {},
     updateTemplates: () => {},
     updateWebhooks: () => {},
   };
@@ -9,6 +8,7 @@
 <script>
   import { onMount } from 'svelte';
   import Base64 from '../../base64.js';
+  import StringUtil from '../../string-util.js';
 
   export let Store;
   export let axios;
@@ -43,40 +43,13 @@
     });
   }
 
-  sideBarOptions.addTemplate = template => {
-    options.sections[1].menus = [
-      ...options.sections[1].menus,
-      {
-        type: 'link',
-        name: template.name
-          .split('-')
-          .map(e => {
-            const f = e.substring(0, 1).toUpperCase();
-            const r = e.substring(1, e.length);
-            return f + r;
-          })
-          .join(' '),
-        link:
-          `/dashboard/template/entries/view?` +
-          `page=1&cid=${template._id}&lng=en`,
-        faClass: 'fas fa-pencil-alt',
-      },
-    ];
-  };
   sideBarOptions.updateTemplates = templates => {
     options.sections = options.sections.map(section => {
       if (section.name === 'TEMPLATES') {
         section.menus = templates.map(template => {
           return {
             type: 'link',
-            name: template.name
-              .split('-')
-              .map(e => {
-                const f = e.substring(0, 1).toUpperCase();
-                const r = e.substring(1, e.length);
-                return f + r;
-              })
-              .join(' '),
+            name: StringUtil.prettyName(template.name),
             link: `/dashboard/template/entries/view?page=1&cid=${template._id}&lng=en`,
             faClass: 'fas fa-pencil-alt',
           };
@@ -91,7 +64,7 @@
         section.menus = webhooks.map(webhook => {
           return {
             type: 'link',
-            name: webhook.name
+            name: StringUtil.prettyName(webhook.name)
               .split('-')
               .map(e => {
                 const f = e.substring(0, 1).toUpperCase();
@@ -192,14 +165,7 @@
         options.sections[i].menus = templates.map(template => {
           return {
             type: 'link',
-            name: template.name
-              .split('-')
-              .map(e => {
-                const f = e.substring(0, 1).toUpperCase();
-                const r = e.substring(1, e.length);
-                return f + r;
-              })
-              .join(' '),
+            name: StringUtil.prettyName(template.name),
             link: `/dashboard/template/entries/view?page=1&cid=${template._id}&lng=en`,
             faClass: 'fas fa-pencil-alt',
           };
@@ -208,14 +174,7 @@
         options.sections[i].menus = webhooks.map(webhook => {
           return {
             type: 'link',
-            name: webhook.name
-              .split('-')
-              .map(e => {
-                const f = e.substring(0, 1).toUpperCase();
-                const r = e.substring(1, e.length);
-                return f + r;
-              })
-              .join(' '),
+            name: StringUtil.prettyName(webhook.name),
             link: `/dashboard/webhook/trigger/view?wid=${webhook._id}`,
             faClass: 'fas fa-link',
           };

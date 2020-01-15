@@ -3,12 +3,26 @@
   import WidgetGroupPropInput from './widget-group-prop-input.svelte';
   import StringUtil from '../string-util.js';
 
+  export let widgets;
   export let widget;
   export let events;
 
   let errors = {};
   let groupPropEvents = {};
 
+  function init() {
+    const w = widgets.find(e => e.name === widget.name);
+    if (w) {
+      for(const i in w.props) {
+        const prop = w.props[i];
+        if (!widget.props.find(e => e.name === prop.name)) {
+          widget.props.push(prop);
+        }
+      }
+    }
+    initGroupPropEvents();
+    initErrorPaths();
+  }
   function initErrorPaths() {
     for (const i in widget.props) {
       const prop = widget.props[i];
@@ -98,8 +112,7 @@
     }
     return JSON.parse(JSON.stringify(props));
   };
-  initGroupPropEvents();
-  initErrorPaths();
+  init();
 </script>
 
 <style type="text/scss">
@@ -154,8 +167,8 @@
         {/if}
         <div class="value">
           {#if prop.type === 'STRING'}
-            <input
-              class="input"
+            <textarea
+              class="textarea"
               placeholder="- {StringUtil.prettyName(prop.name)} -"
               bind:value={prop.value} />
           {:else if prop.type === 'NUMBER'}

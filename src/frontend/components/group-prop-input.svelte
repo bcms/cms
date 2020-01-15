@@ -3,17 +3,30 @@
   import OnOff from './on-off.svelte';
   import StringUtil from '../string-util.js';
 
+  export let groups;
   export let parentProp;
   export let errors;
   export let events;
 
   let groupPropEvents = {};
 
-  function initGroupPropEvents() {
-    for (const i in parentProp.value.props) {
-      const prop = parentProp.value.props[i];
-      if (prop.type === 'GROUP_POINTER') {
-        groupPropEvents[prop.name] = { init: true };
+  function init() {
+    // const g = groups.find(e => e._id === widget.name);
+    // if (w) {
+    //   for(const i in w.props) {
+    //     const prop = w.props[i];
+    //     if (!widget.props.find(e => e.name === prop.name)) {
+    //       widget.props.push(prop);
+    //     }
+    //   }
+    // }
+    const g = groups.find(e => e._id === parentProp.value._id);
+    if (g) {
+      for (const i in g.props) {
+        const prop = g.props[i];
+        if (!parentProp.value.props.find(e => e.name === prop.name)) {
+          parentProp.value.props.push(prop);
+        }
       }
     }
   }
@@ -42,7 +55,7 @@
   if (!errors) {
     errors = {};
   }
-  
+
   events.checkProps = () => {
     for (const i in parentProp.value.props) {
       const prop = parentProp.value.props[i];
@@ -60,7 +73,8 @@
           case 'DATE':
             {
               if (prop.value === 0) {
-                errors[prop.name] = 'Property is required, please select time and date.';
+                errors[prop.name] =
+                  'Property is required, please select time and date.';
                 return;
               }
               errors[prop.name] = '';
@@ -87,74 +101,11 @@
     }
     return true;
   };
-  // initGroupPropEvents();
+  init();
 </script>
 
-<style>
-  .wrapper {
-    padding: 10px;
-  }
-
-  .group {
-    padding: 20px;
-    background-color: var(--c-white);
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-  }
-
-  .pointer {
-    border-radius: 5px;
-    padding: 5px;
-    background-color: var(--c-neutral);
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-  }
-
-  .flex-label {
-    display: flex;
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    border-bottom-color: #eee;
-    padding-bottom: 5px;
-  }
-
-  .flex-label .icon {
-    margin-left: 20px;
-    width: 30px;
-  }
-
-  .flex-label .icon img {
-    width: 100%;
-  }
-
-  .flex-label .type {
-    margin-left: auto;
-  }
-
-  .flex-label .name {
-    font-size: 12pt;
-  }
-
-  .flex-label .lock {
-    margin: auto 0 auto 10px;
-    color: #afafaf;
-  }
-
-  .flex-label .error {
-    margin: auto 0 auto 20px;
-    color: red;
-    display: flex;
-  }
-
-  .flex-label .error .icon {
-    margin: auto 0;
-  }
-
-  .flex-label .error .text {
-    margin: auto 0;
-  }
-
-  .break {
-    margin-bottom: 30px;
-  }
+<style type="text/scss">
+  @import './group-prop-input.scss';
 </style>
 
 <div class="wrapper">

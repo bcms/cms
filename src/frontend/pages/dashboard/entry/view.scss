@@ -23,6 +23,32 @@
   margin-left: auto;
 }
 
+.filters {
+  background-color: var(--c-white);
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.filters h3 {
+  margin-top: 20px;
+}
+
+.filters .prop-filters {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 20px;
+  margin-top: 10px;
+}
+
+.filters .prop-filters .prop {
+  padding: 10px;
+  border-radius: 5px;
+  border-color: var(--c-placeholder);
+  border-width: 1px;
+  border-style: solid;
+}
+
 .no-entries {
   font-size: 18pt;
   text-align: center;

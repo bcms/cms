@@ -19,12 +19,12 @@ import {
 } from 'purple-cheetah';
 import { GroupService } from '../group/group.service';
 import { WidgetService } from './widget.service';
-import { TemplateService } from '../template/template.service';
 import { Request } from 'express';
 import { Widget } from './models/widget.model';
 import { WidgetFactory } from './factories/widget.factory';
 import { WidgetUtil } from './widget-util';
 import { PropUtil } from '../prop/prop-util';
+import { EntryService } from '../entry';
 
 @Controller('/widget')
 export class WidgetController {
@@ -34,8 +34,8 @@ export class WidgetController {
   private groupService: GroupService;
   @Service(WidgetService)
   private widgetService: WidgetService;
-  @Service(TemplateService)
-  private templateService: TemplateService;
+  @Service(EntryService)
+  private entryService: EntryService;
 
   @Get('/all')
   async getAll(request: Request): Promise<{ widgets: Widget[] }> {
@@ -192,6 +192,20 @@ export class WidgetController {
             __type: 'string',
             __required: false,
           },
+          changes: {
+            __type: 'object',
+            __required: false,
+            __child: {
+              props: {
+                __type: 'array',
+                __required: true,
+                __child: {
+                  __type: 'object',
+                  __content: PropUtil.changesSchema,
+                },
+              },
+            },
+          },
         },
         'body',
       );
@@ -226,11 +240,15 @@ export class WidgetController {
       );
     }
     let changeDetected: boolean = false;
+    let updateName: boolean = false;
+    let oldWidgetName: string = '';
     if (
       typeof request.body.name !== 'undefined' &&
       request.body.name !== widget.name
     ) {
       changeDetected = true;
+      updateName = true;
+      oldWidgetName = `${widget.name}`;
       widget.name = WidgetUtil.nameEncode(request.body.name);
       const widgetWithSameName = await this.widgetService.findByName(
         widget.name,
@@ -250,6 +268,12 @@ export class WidgetController {
       widget.desc = request.body.desc;
     }
     if (typeof request.body.props !== 'undefined') {
+      if (typeof request.body.changes === 'undefined') {
+        throw error.occurred(
+          HttpStatus.FORBIDDEN,
+          'When updating Props, changes must be provided.',
+        );
+      }
       changeDetected = true;
       try {
         widget.props = await PropUtil.getPropsFromUntrustedObject(
@@ -268,6 +292,15 @@ export class WidgetController {
       throw error.occurred(
         HttpStatus.INTERNAL_SERVER_ERROR,
         `Failed to update Widget in database.`,
+      );
+    }
+    if (updateName === true || request.body.changes) {
+      await WidgetUtil.updateEntriesWithNewWidgetData(
+        this.entryService,
+        this.logger,
+        updateName === true ? oldWidgetName : widget.name,
+        updateName === true ? widget.name : undefined,
+        request.body.changes.props,
       );
     }
     return {

@@ -5,6 +5,7 @@
   import GroupPropInput from './group-prop-input.svelte';
   import StringUtil from '../string-util.js';
 
+  export let groups;
   export let events;
   export let props;
 
@@ -127,72 +128,8 @@
   initErrorPaths();
 </script>
 
-<style>
-  .flex-label {
-    display: flex;
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-    border-bottom-color: #eee;
-    padding-bottom: 5px;
-  }
-
-  .flex-label .icon {
-    margin-left: 20px;
-    width: 30px;
-  }
-
-  .flex-label .icon img {
-    width: 100%;
-  }
-
-  .flex-label .type {
-    margin-left: auto;
-  }
-
-  .flex-label .name {
-    font-size: 12pt;
-  }
-
-  .flex-label .lock {
-    margin: auto 0 auto 10px;
-    color: #afafaf;
-  }
-
-  .flex-label .error {
-    margin: auto 0 auto 20px;
-    color: red;
-    display: flex;
-  }
-
-  .flex-label .error .icon {
-    margin: auto 0;
-  }
-
-  .flex-label .error .text {
-    margin: auto 0;
-  }
-
-  .pointer {
-    border-radius: 5px;
-    padding: 5px;
-    background-color: var(--c-neutral);
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
-  }
-
-  .content {
-    display: grid;
-    grid-gap: 20px;
-  }
-
-  .content .prop .date {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 20px;
-  }
-
-  .break {
-    margin-bottom: 30px;
-  }
+<style type="text/scss">
+  @import './props-input.scss';
 </style>
 
 <div class="content">
@@ -269,6 +206,7 @@
             </select>
           {:else if prop.type === 'GROUP_POINTER'}
             <GroupPropInput
+              {groups}
               parentProp={prop}
               errors={errors[prop.name]}
               events={groupPropEvents[prop.name]} />

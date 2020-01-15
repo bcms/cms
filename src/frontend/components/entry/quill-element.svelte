@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import WidgetInput from '../widget-input.svelte';
 
+  export let widgets;
   export let quill;
   export let section;
   export let events;
@@ -188,6 +189,7 @@
     {/if}
   {:else if section.type === 'WIDGET'}
     <WidgetInput
+      {widgets}
       widget={section.value}
       events={{ delete: () => {
           events.delete(section.id);

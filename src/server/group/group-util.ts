@@ -4,6 +4,9 @@ import {
   PropType,
   PropGroupPointer,
 } from '../prop/interfaces/prop.interface';
+import { EntryService } from '../entry';
+import { Logger } from 'purple-cheetah';
+import { PropChanges } from '../prop/interfaces/prop-changes.interface';
 
 export class GroupUtil {
   public static updateGroupPointer(
@@ -59,5 +62,57 @@ export class GroupUtil {
       .replace(/ /g, '_')
       .replace(/-/g, '_')
       .replace(/[^0-9a-z_-_]+/g, '');
+  }
+
+  public static async updateEntriesWithNewGroupData(
+    service: EntryService,
+    logger: Logger,
+    changes: PropChanges[],
+    groupId: string,
+  ) {
+    const recursive = (props: Prop[]) => {
+      let forUpdate: boolean = false;
+      props.forEach(prop => {
+        if (prop.type === PropType.GROUP_POINTER) {
+          prop.value = prop.value as PropGroupPointer;
+          if (prop.value._id === groupId) {
+            changes.forEach(change => {
+              prop.value = prop.value as PropGroupPointer;
+              if (change.remove === true) {
+                prop.value.props = prop.value.props.filter(
+                  p => p.name !== change.name.old,
+                );
+              } else {
+                prop.value.props.forEach(p => {
+                  if (p.name === change.name.old) {
+                    p.name = change.name.new;
+                    p.required = change.required;
+                    forUpdate = true;
+                  }
+                });
+              }
+            });
+          } else {
+            forUpdate = recursive(prop.value.props);
+          }
+        }
+      });
+      return forUpdate;
+    };
+    const entries = await service.findAll();
+    entries.forEach(async entry => {
+      entry.content.forEach(async content => {
+        const forUpdate = recursive(content.props);
+        if (forUpdate === true) {
+          const updateEntryResult = await service.update(entry);
+          if (updateEntryResult === false) {
+            logger.error('updateEntriesWithNewGroupData', {
+              msg: `Failed to update Entry '${entry._id.toHexString()}' with Group change.`,
+              changes,
+            });
+          }
+        }
+      });
+    });
   }
 }

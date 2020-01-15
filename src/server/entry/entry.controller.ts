@@ -19,7 +19,7 @@ import {
 } from 'purple-cheetah';
 import { EntryService } from './entry.service';
 import { Request } from 'express';
-import { Entry } from './models/entry.model';
+import { Entry, EntryContent } from './models/entry.model';
 import { TemplateService } from '../template/template.service';
 import { EntryFactory } from './factories/entry.factory';
 import { PropUtil } from '../prop/prop-util';
@@ -29,6 +29,7 @@ import { Template, TemplateType } from '../template/models/template.model';
 import { PropType, PropQuill } from '../prop/interfaces/prop.interface';
 import { LanguageService } from '../languages/language.service';
 import { KeyCashService } from '../api/key-cash.service';
+import { Language } from '../languages';
 
 /**
  * Controller that provides CRUD for Entry object.
@@ -488,6 +489,10 @@ export class EntryController {
           __type: 'string',
           __required: true,
         },
+        onlyLng: {
+          __type: 'string',
+          __required: false,
+        },
       });
     } catch (e) {
       throw error.occurred(HttpStatus.BAD_REQUEST, {
@@ -555,15 +560,7 @@ export class EntryController {
     let changeDetected: boolean = false;
     if (typeof request.body.content !== 'undefined') {
       changeDetected = true;
-      for (const i in request.body.content) {
-        const content = request.body.content[i];
-        const language = await this.languageService.findByCode(content.lng);
-        if (language === null) {
-          throw error.occurred(
-            HttpStatus.FORBIDDEN,
-            `Language '${content.lng}' is not added to selection. Error found in 'body.content[${i}]'.`,
-          );
-        }
+      const updateEntry = async (content: EntryContent, language: Language, i: number) => {
         try {
           const props = await PropUtil.getPropsFromUntrustedObject(
             content.props,
@@ -617,6 +614,29 @@ export class EntryController {
               }
             }
           }
+        }
+      };
+      if (typeof request.body.onlyLng !== 'undefined') {
+        const content = request.body.content.find(e => e.lng === request.body.onlyLng);
+        const language = await this.languageService.findByCode(request.body.onlyLng);
+        if (language === null) {
+          throw error.occurred(
+            HttpStatus.FORBIDDEN,
+            `Language '${request.body.onlyLng}' is not added to selection.`,
+          );
+        }
+        await updateEntry(content, language, 0);
+      } else {
+        for (const i in request.body.content) {
+          const content = request.body.content[i];
+          const language = await this.languageService.findByCode(content.lng);
+          if (language === null) {
+            throw error.occurred(
+              HttpStatus.FORBIDDEN,
+              `Language '${content.lng}' is not added to selection. Error found in 'body.content[${i}]'.`,
+            );
+          }
+          await updateEntry(content, language, parseInt(i, 10));
         }
       }
     }
