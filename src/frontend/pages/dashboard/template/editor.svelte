@@ -145,7 +145,24 @@
       const result = await axios.send({
         url: '/template',
         method: 'PUT',
-        data: templateSelected,
+        data: {
+          _id: templateSelected._id,
+          name: templateSelected.name,
+          desc: templateSelected.desc,
+          entryTemplate: templateSelected.entryTemplate,
+          changes: {
+            props: [
+              {
+                name: {
+                  new: '',
+                  old: prop.name,
+                },
+                required: prop.required,
+                remove: true,
+              },
+            ],
+          },
+        },
       });
       if (result.success === false) {
         simplePopup.error(result.error.response.data.message);

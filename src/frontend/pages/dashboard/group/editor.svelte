@@ -135,7 +135,7 @@
           }
           return e;
         }),
-        changes
+        changes,
       },
     });
     if (result.success === false) {
@@ -157,6 +157,18 @@
       data: {
         _id: groupSelected._id,
         props: [...groupSelected.props.filter(p => p.name !== prop.name)],
+        changes: {
+          props: [
+            {
+              name: {
+                new: '',
+                old: prop.name,
+              },
+              required: prop.required,
+              remove: true,
+            },
+          ],
+        },
       },
     });
     if (result.success === false) {
