@@ -57,6 +57,7 @@ export class APISecurity {
     payload: any,
     requestMethod: string,
     path: string,
+    skipAccess?: boolean,
   ): void {
     path = path.split('?')[0];
     if (typeof data.key === 'undefined') {
@@ -103,7 +104,11 @@ export class APISecurity {
     if (signature !== data.signature) {
       throw new Error('Invalid signature.');
     }
-    if (APISecurity.verifyAccess(key, requestMethod, path) === false) {
+    if (
+      !skipAccess &&
+      skipAccess === true &&
+      APISecurity.verifyAccess(key, requestMethod, path) === false
+    ) {
       throw new Error(`Key is not allowed to access this resource.`);
     }
   }

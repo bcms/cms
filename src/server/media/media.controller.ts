@@ -24,6 +24,7 @@ import { MediaFactory } from './factories/media.factory';
 import { FSUtil } from './fs-util';
 import { MediaUtil } from './media-util';
 import { GitUtil } from './git-util';
+import { APISecurity } from '../api';
 
 @Controller('/media')
 export class MediaController {
@@ -147,18 +148,32 @@ export class MediaController {
     request: Request,
   ): Promise<{ media: MediaAggregate[] }> {
     const error = HttpErrorFactory.simple('getAllAggregate', this.logger);
-    const jwt = JWTEncoding.decode(request.headers.authorization);
-    if (jwt instanceof Error) {
-      throw error.occurred(HttpStatus.UNAUTHORIZED, jwt.message);
+    if (request.query.signature) {
+      try {
+        APISecurity.verify(
+          request.query,
+          request.body,
+          request.method.toUpperCase(),
+          request.originalUrl,
+          true,
+        );
+      } catch (e) {
+        throw error.occurred(HttpStatus.UNAUTHORIZED, e.message);
+      }
     } else {
-      const jwtValid = JWTSecurity.validateAndCheckTokenPermissions(
-        jwt,
-        [RoleName.ADMIN, RoleName.USER, RoleName.SERVICE],
-        PermissionName.READ,
-        JWTConfigService.get('user-token-config'),
-      );
-      if (jwtValid instanceof Error) {
-        throw error.occurred(HttpStatus.UNAUTHORIZED, jwtValid.message);
+      const jwt = JWTEncoding.decode(request.headers.authorization);
+      if (jwt instanceof Error) {
+        throw error.occurred(HttpStatus.UNAUTHORIZED, jwt.message);
+      } else {
+        const jwtValid = JWTSecurity.validateAndCheckTokenPermissions(
+          jwt,
+          [RoleName.ADMIN, RoleName.USER],
+          PermissionName.READ,
+          JWTConfigService.get('user-token-config'),
+        );
+        if (jwtValid instanceof Error) {
+          throw error.occurred(HttpStatus.UNAUTHORIZED, jwtValid.message);
+        }
       }
     }
     const rootMedia: Media[] = await this.mediaService.findByIsInRoot(true);
@@ -184,18 +199,32 @@ export class MediaController {
         `Missing query 'access_token'.`,
       );
     }
-    const jwt = JWTEncoding.decode(request.query.access_token);
-    if (jwt instanceof Error) {
-      throw error.occurred(HttpStatus.UNAUTHORIZED, jwt.message);
+    if (request.query.signature) {
+      try {
+        APISecurity.verify(
+          request.query,
+          request.body,
+          request.method.toUpperCase(),
+          request.originalUrl,
+          true,
+        );
+      } catch (e) {
+        throw error.occurred(HttpStatus.UNAUTHORIZED, e.message);
+      }
     } else {
-      const jwtValid = JWTSecurity.validateAndCheckTokenPermissions(
-        jwt,
-        [RoleName.ADMIN, RoleName.USER, RoleName.SERVICE],
-        PermissionName.READ,
-        JWTConfigService.get('user-token-config'),
-      );
-      if (jwtValid instanceof Error) {
-        throw error.occurred(HttpStatus.UNAUTHORIZED, jwtValid.message);
+      const jwt = JWTEncoding.decode(request.headers.authorization);
+      if (jwt instanceof Error) {
+        throw error.occurred(HttpStatus.UNAUTHORIZED, jwt.message);
+      } else {
+        const jwtValid = JWTSecurity.validateAndCheckTokenPermissions(
+          jwt,
+          [RoleName.ADMIN, RoleName.USER],
+          PermissionName.READ,
+          JWTConfigService.get('user-token-config'),
+        );
+        if (jwtValid instanceof Error) {
+          throw error.occurred(HttpStatus.UNAUTHORIZED, jwtValid.message);
+        }
       }
     }
     const p = request.query.path.replace(/\.\./g, '').replace(/\/\//g, '/');
