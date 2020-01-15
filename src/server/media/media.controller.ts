@@ -226,7 +226,7 @@ export class MediaController {
         throw error.occurred(HttpStatus.UNAUTHORIZED, e.message);
       }
     } else {
-      const jwt = JWTEncoding.decode(request.headers.authorization);
+      const jwt = JWTEncoding.decode(request.query.access_token);
       if (jwt instanceof Error) {
         throw error.occurred(HttpStatus.UNAUTHORIZED, jwt.message);
       } else {
