@@ -207,12 +207,6 @@ export class MediaController {
     if (!request.query.path) {
       throw error.occurred(HttpStatus.BAD_REQUEST, `Missing query 'path'.`);
     }
-    if (!request.query.access_token) {
-      throw error.occurred(
-        HttpStatus.BAD_REQUEST,
-        `Missing query 'access_token'.`,
-      );
-    }
     if (request.query.signature) {
       try {
         APISecurity.verify(
@@ -226,6 +220,12 @@ export class MediaController {
         throw error.occurred(HttpStatus.UNAUTHORIZED, e.message);
       }
     } else {
+      if (!request.query.access_token) {
+        throw error.occurred(
+          HttpStatus.BAD_REQUEST,
+          `Missing query 'access_token'.`,
+        );
+      }
       const jwt = JWTEncoding.decode(request.query.access_token);
       if (jwt instanceof Error) {
         throw error.occurred(HttpStatus.UNAUTHORIZED, jwt.message);
