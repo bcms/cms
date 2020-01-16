@@ -136,7 +136,12 @@
       .replace(/":/g, ':');
   }
   function sortEntries() {}
-  function filterEntry(entry) {
+  function filterEntry(entry, i) {
+    const max = (page * entriesPerPage);
+    const min = max - entriesPerPage;
+    if (i < min || i > max) {
+      return false;
+    }
     const content = entry.content.find(e => e.lng === languageSelected.code);
     if (content) {
       for (const i in filters) {
@@ -225,9 +230,6 @@
     languages = result.response.data.languages;
     languageSelected = languages.find(e => e.code === queries.lng);
   });
-  afterUpdate(() => {
-    console.log('HERE');
-  })
 </script>
 
 <style type="text/scss">
@@ -275,7 +277,7 @@
           </div>
         </div>
         <h3>Filters</h3>
-        <div class="prop-filters">
+        <!-- <div class="prop-filters">
           {#each template.entryTemplate as prop}
             {#if prop.type === 'ENUMERATION' || prop.type === 'STRING'}
               <div class="key-value prop">
@@ -294,17 +296,24 @@
                         </option>
                       {/each}
                     </select>
+                  {:else}
+                    <div class="string">
+                      <textarea id="filter-{prop.name}" class="input" />
+                      <div class="actions">
+
+                      </div>
+                    </div>
                   {/if}
                 </div>
               </div>
             {/if}
           {/each}
-        </div>
+        </div> -->
       </div>
       {#if entries.length > 0}
         <div class="entries">
-          {#each entries as entry}
-            {#if filterEntry(entry) === true}
+          {#each entries as entry, i}
+            {#if filterEntry(entry, i) === true}
               {#if template.type === 'RICH_CONTENT'}
                 <div class="entry">
                   <div class="heading">{entry._id}</div>
@@ -387,6 +396,12 @@
                     <div class="slug">
                       /template/{template._id}/entry/{entry._id}
                     </div>
+                    {#if !entry.content.find(e => e.lng === languageSelected.code)}
+                      <div class="not-available">
+                        This Entry is not available in '{languageSelected.code}'
+                        language.
+                      </div>
+                    {/if}
                     <div class="key-value date-time">
                       <div class="label">
                         <span class="fas fa-clock icon" />
@@ -473,7 +488,7 @@
                 <button class="fa fa-angle-left btn" />
               {/if}
               <div class="current">{page}</div>
-              {#if page + entriesPerPage >= entries.length}
+              {#if page * entriesPerPage >= entries.length}
                 <div class="fa fa-angle-right btn dis" />
               {:else}
                 <button class="fa fa-angle-right btn" />
