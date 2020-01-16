@@ -62,7 +62,7 @@
       return;
     }
     window.location =
-      `/dashboard/template/entries/view?` +
+      `/dashboard/template/entries/view/c/${template._id}?` +
       `cid=${template._id}&lng=${selectedLanguage.code}`;
   }
   async function updateEnrty() {

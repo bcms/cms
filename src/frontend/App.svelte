@@ -46,7 +46,7 @@
         <Login {Store} {axios} />
       </Route>
       {#if window.location.pathname.startsWith('/dashboard')}
-        <Route path="/dashboard">
+        <Route path="/dashboard/overview">
           <Overview {Store} {axios} />
         </Route>
         <Route path="/dashboard/template/editor">
