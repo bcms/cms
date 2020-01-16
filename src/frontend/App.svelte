@@ -58,7 +58,7 @@
         <Route path="/dashboard/widget/editor">
           <WidgetEditor {Store} {axios} />
         </Route>
-        <Route path="/dashboard/template/entries/view">
+        <Route path="/dashboard/template/entries/view/c/:cid">
           <EntriesView {Store} {axios} />
         </Route>
         <Route path="/dashboard/template/entry/rc">
@@ -78,7 +78,7 @@
         <Route path="/dashboard/webhook/editor">
           <WebhookEditor {Store} {axios} />
         </Route>
-        <Route path="/dashboard/webhook/trigger/view">
+        <Route path="/dashboard/webhook/trigger/view/w/:wid">
           <WebhookView {Store} {axios} />
         </Route>
 

@@ -7,7 +7,6 @@
 
 <script>
   import { onMount } from 'svelte';
-  import { Link } from 'svelte-routing';
   import Base64 from '../../base64.js';
   import StringUtil from '../../string-util.js';
 
@@ -51,7 +50,7 @@
           return {
             type: 'link',
             name: StringUtil.prettyName(template.name),
-            link: `/dashboard/template/entries/view?page=1&cid=${template._id}&lng=en`,
+            link: `/dashboard/template/entries/view/c/${template._id}?page=1&cid=${template._id}&lng=en`,
             faClass: 'fas fa-pencil-alt',
           };
         });
@@ -73,7 +72,7 @@
                 return f + r;
               })
               .join(' '),
-            link: `/dashboard/webhook/trigger/view?wid=${webhook._id}`,
+            link: `/dashboard/webhook/trigger/view/w/${webhook._id}?wid=${webhook._id}`,
             faClass: 'fas fa-link',
           };
         });
@@ -167,7 +166,7 @@
           return {
             type: 'link',
             name: StringUtil.prettyName(template.name),
-            link: `/dashboard/template/entries/view?page=1&cid=${template._id}&lng=en`,
+            link: `/dashboard/template/entries/view/c/${template._id}?page=1&cid=${template._id}&lng=en`,
             faClass: 'fas fa-pencil-alt',
           };
         });
@@ -176,7 +175,7 @@
           return {
             type: 'link',
             name: StringUtil.prettyName(webhook.name),
-            link: `/dashboard/webhook/trigger/view?wid=${webhook._id}`,
+            link: `/dashboard/webhook/trigger/view/w/${webhook._id}?wid=${webhook._id}`,
             faClass: 'fas fa-link',
           };
         });
@@ -196,14 +195,15 @@
         <div class="name">{section.name}</div>
         <div class="menus">
           {#each section.menus as menu}
-            <div class="menu">
+            <div
+              class="menu {menu.link.startsWith(window.location.pathname) ? 'active' : ''}">
               {#if menu.type === 'link'}
-                <Link to={menu.link}>
+                <a href={menu.link}>
                   <div class="parent link">
                     <div class="{menu.faClass} icon" />
                     <div class="text">{menu.name}</div>
                   </div>
-                </Link>
+                </a>
               {/if}
             </div>
           {/each}

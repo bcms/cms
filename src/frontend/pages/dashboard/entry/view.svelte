@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from 'svelte';
+  import { onMount, afterUpdate } from 'svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import UrlQueries from '../../../url-queries.js';
   import Base64 from '../../../base64.js';
@@ -225,6 +225,9 @@
     languages = result.response.data.languages;
     languageSelected = languages.find(e => e.code === queries.lng);
   });
+  afterUpdate(() => {
+    console.log('HERE');
+  })
 </script>
 
 <style type="text/scss">
