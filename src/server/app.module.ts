@@ -158,9 +158,9 @@ export class App {
           );
         } else {
           response.status(404);
-          response.json({
-            message: 'Page not found.',
-          });
+          response.sendFile(
+            path.join(process.env.PROJECT_ROOT, 'public', 'index.html'),
+          );
         }
       },
     );

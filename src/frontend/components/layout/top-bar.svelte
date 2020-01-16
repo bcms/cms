@@ -25,12 +25,12 @@
     </div>
   </a>
   <div class="content">
-    <a class="user" href="/dashboard/profile">
+    <div class="user" href="/dashboard/profile">
       {#if user}
         <span class="name">{user.username}</span>
         |
         <span class="role">{user.roles[0].name}</span>
       {/if}
-    </a>
+    </div>
   </div>
 </div>

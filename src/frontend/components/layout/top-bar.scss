@@ -18,13 +18,19 @@
 }
 
 .heading {
-  width: 250px;
-  height: 60px;
+  width: 240px;
+  height: 50px;
+  margin: 5px;
 }
 
 .heading .logo {
   text-align: center;
-  margin: 5px 0;
+  height: 100%;
+}
+
+.heading .logo img {
+  height: 50px;
+  margin: auto 0;
 }
 
 .content {

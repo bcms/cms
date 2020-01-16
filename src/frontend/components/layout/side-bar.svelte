@@ -7,6 +7,7 @@
 
 <script>
   import { onMount } from 'svelte';
+  import { Link } from 'svelte-routing';
   import Base64 from '../../base64.js';
   import StringUtil from '../../string-util.js';
 
@@ -197,10 +198,12 @@
           {#each section.menus as menu}
             <div class="menu">
               {#if menu.type === 'link'}
-                <a class="perent link" href={menu.link}>
-                  <div class="{menu.faClass} icon" />
-                  <div class="name">{menu.name}</div>
-                </a>
+                <Link to={menu.link}>
+                  <div class="parent link">
+                    <div class="{menu.faClass} icon" />
+                    <div class="text">{menu.name}</div>
+                  </div>
+                </Link>
               {/if}
             </div>
           {/each}

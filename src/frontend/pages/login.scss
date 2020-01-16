@@ -1,0 +1,34 @@
+.login {
+  max-width: 300px;
+  margin: 100px auto auto auto;
+}
+
+.heading {
+  text-align: center;
+}
+
+.heading img {
+  width: 200px;
+}
+
+.block {
+  border-radius: 2px;
+  border-top-style: solid;
+  border-top-width: 2px;
+  border-top-color: var(--c-primary);
+  margin-top: 20px;
+  background-color: var(--c-white);
+  padding: 20px;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+}
+
+.inputs {
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 30px;
+}
+
+.actions {
+  margin-top: 30px;
+  text-align: right;
+}
