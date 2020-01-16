@@ -137,11 +137,11 @@
   }
   function sortEntries() {}
   function filterEntry(entry, i) {
-    const max = (page * entriesPerPage);
-    const min = max - entriesPerPage;
-    if (i < min || i > max) {
-      return false;
-    }
+    // const max = (page * entriesPerPage);
+    // const min = max - entriesPerPage;
+    // if (i < min || i > max) {
+    //   return false;
+    // }
     const content = entry.content.find(e => e.lng === languageSelected.code);
     if (content) {
       for (const i in filters) {
