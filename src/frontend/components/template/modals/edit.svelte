@@ -80,6 +80,7 @@
       value: false,
       message: '',
     };
+    options.changes = { props: [] };
     const result = await axios.send({
       url: '/template',
       method: 'PUT',

@@ -15,7 +15,7 @@
       heading: 'USERS',
       buttonLabel: 'Add New User',
       items: [],
-      itemSelected: userSelected,
+      itemSelected: undefined,
     },
     events: {
       clicked: item => {
@@ -33,7 +33,7 @@
     const result = await axios.send({
       url: `/user`,
       method: 'POST',
-      data
+      data,
     });
     if (result.success === false) {
       simplePopup.error(result.error.response.data.message);
@@ -41,8 +41,69 @@
     }
     users = [...users, result.response.data.user];
     userSelected = result.response.data.user;
-    menu.config.items = users;
+    menu.config.items = users.map(e => {
+      e.name = e.username;
+      return e;
+    });
     menu.config.itemSelected = userSelected;
+  }
+  async function deleteUser() {
+    if (confirm('Are you sure you want to delete a User?')) {
+      const result = await axios.send({
+        url: `/user/${userSelected._id}`,
+        method: 'DELETE',
+      });
+      if (result.success === false) {
+        simplePopup.error(result.error.response.data.message);
+        return;
+      }
+      users = users.filter(e => e._id !== userSelected._id);
+      userSelected = users[0];
+      menu.config.items = users.map(e => {
+        e.name = e.username;
+        return e;
+      });
+      menu.config.itemSelected = userSelected;
+    }
+  }
+  async function updateUser() {
+    if (confirm('Are you sure you want to update a User?')) {
+      const data = {
+        _id: userSelected._id,
+        email: userSelected.email,
+        customPool: {
+          personal: {
+            firstName: userSelected.customPool.personal.firstName,
+            lastName: userSelected.customPool.personal.lastName,
+          },
+        },
+      };
+      if (userSelected.password && userSelected.password.replace(/ /g, '') !== '') {
+        data.password = userSelected.password;
+      }
+      const result = await axios.send({
+        url: `/user`,
+        method: 'PUT',
+        data,
+      });
+      if (result.success === false) {
+        simplePopup.error(result.error.response.data.message);
+        return;
+      }
+      users = users.map(e => {
+        if (e._id === userSelected._id) {
+          return result.response.data.user;
+        }
+        return e;
+      });
+      userSelected = result.response.data.user;
+      menu.config.items = users.map(e => {
+        e.name = e.username;
+        return e;
+      });
+      menu.config.itemSelected = userSelected;
+      simplePopup.success('User updated successfully.');
+    }
   }
 
   onMount(async () => {
@@ -66,58 +127,8 @@
   });
 </script>
 
-<style>
-  .editor {
-    display: grid;
-    grid-template-columns: 400px auto;
-    height: 100%;
-  }
-
-  .content {
-    height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
-    padding: 20px;
-  }
-
-  .content .heading {
-    display: flex;
-    font-size: 18pt;
-  }
-
-  .content .heading .username {
-    font-weight: bold;
-    margin-right: 10px;
-  }
-
-  .content .heading .role {
-    font-weight: lighter;
-    margin-left: 10px;
-  }
-
-  .content .edit {
-    display: grid;
-    grid-template-columns: auto;
-    grid-gap: 20px;
-    margin-top: 30px;
-    background-color: #fff;
-    padding: 10px 20px;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
-    font-size: 10pt;
-  }
-
-  .content .edit .key-value .icon {
-    color: #acacac;
-  }
-
-  .content .edit .actions {
-    display: flex;
-    margin-top: 30px;
-  }
-
-  .content .edit .actions .edit-btn {
-    margin-left: auto;
-  }
+<style type="text/scss">
+  @import './editor.scss';
 </style>
 
 <Layout {Store} {axios}>
@@ -180,11 +191,13 @@
             </div>
           </div>
           <div class="actions">
-            <button class="btn-border btn-red-br btn-red-c delete">
+            <button
+              class="btn-border btn-red-br btn-red-c delete"
+              on:click={deleteUser}>
               <div class="fas fa-trash icon" />
               <div class="text">Delete</div>
             </button>
-            <button class="btn-fill btn-blue-bg edit-btn">
+            <button class="btn-fill btn-blue-bg edit-btn" on:click={updateUser}>
               <div class="fas fa-trash icon" />
               <div class="text">Update</div>
             </button>

@@ -16,6 +16,7 @@ import {
   ObjectUtility,
   Put,
   StringUtility,
+  Delete,
 } from 'purple-cheetah';
 import { UserService } from './user.service';
 import { Request } from 'express';
@@ -545,7 +546,7 @@ export class UserController {
 
   @Put()
   async updateUser(request: Request): Promise<{ user: User }> {
-    const error = HttpErrorFactory.simple('add', this.logger);
+    const error = HttpErrorFactory.simple('updateUser', this.logger);
     try {
       ObjectUtility.compareWithSchema(
         request.body,
@@ -677,6 +678,53 @@ export class UserController {
     }
     return {
       user: UserFactory.removeProtected(user),
+    };
+  }
+
+  @Delete('/:id')
+  async deleteById(request: Request): Promise<{ message: string }> {
+    const error = HttpErrorFactory.simple('deleteById', this.logger);
+    if (StringUtility.isIdValid(request.params.id) === false) {
+      throw error.occurred(
+        HttpStatus.FORBIDDEN,
+        `Invalid ID '${request.params.id}' was provided.`,
+      );
+    }
+    const jwt = JWTEncoding.decode(request.headers.authorization);
+    if (jwt instanceof Error) {
+      throw error.occurred(HttpStatus.UNAUTHORIZED, jwt.message);
+    } else {
+      const jwtValid = JWTSecurity.validateAndCheckTokenPermissions(
+        jwt,
+        [RoleName.ADMIN],
+        PermissionName.DELETE,
+        JWTConfigService.get('user-token-config'),
+      );
+      if (jwtValid instanceof Error) {
+        throw error.occurred(HttpStatus.UNAUTHORIZED, jwtValid.message);
+      }
+    }
+    if (jwt.payload.userId === request.params.id) {
+      throw error.occurred(HttpStatus.FORBIDDEN, `You cannot delete yourself.`);
+    }
+    const user = await this.userService.findById(request.params.id);
+    if (user === null) {
+      throw error.occurred(
+        HttpStatus.NOT_FOUNT,
+        `User with ID '${request.params.id}' does not exist.`,
+      );
+    }
+    const deleteUserResult = await this.userService.deleteById(
+      request.params.id,
+    );
+    if (deleteUserResult === false) {
+      throw error.occurred(
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        `Failed to remove User from database.`,
+      );
+    }
+    return {
+      message: 'Success.',
     };
   }
 }
