@@ -64,58 +64,8 @@
   });
 </script>
 
-<style>
-  .wrapper {
-    padding: 20px;
-  }
-
-  .title {
-    font-size: 16pt;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-
-  .desc {
-    color: #797979;
-    font-size: 10pt;
-  }
-
-  .actions {
-    display: flex;
-    margin-top: 20px;
-  }
-
-  .actions .add {
-    margin-left: auto;
-  }
-
-  .lngs {
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    grid-gap: 20px;
-    margin-top: 50px;
-  }
-
-  .lng {
-    background-color: var(--c-white);
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-    padding: 10px;
-    margin-bottom: auto;
-  }
-
-  .lng .name {
-    font-size: 12pt;
-    font-weight: bold;
-  }
-
-  .lng .native-name {
-    font-size: 10pt;
-    color: #797979;
-  }
-
-  .lng .actions {
-    margin-top: 20px;
-  }
+<style type="text/scss">
+  @import './editor.scss';
 </style>
 
 <Layout {Store} {axios}>

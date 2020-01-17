@@ -50,7 +50,7 @@
       return;
     }
     Store.set('user', result.response.data.user);
-    window.location = '/dashboard';
+    window.location = '/dashboard/overview';
   }
 </script>
 

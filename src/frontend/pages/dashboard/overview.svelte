@@ -5,7 +5,5 @@
   export let Store;
 </script>
 
-<style></style>
-
 <Layout {Store} {axios}>
 </Layout>

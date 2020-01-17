@@ -41,6 +41,17 @@
       name: '',
       type: 'DATA_MODEL',
       desc: '',
+      entryTemplate: [],
+    };
+    errors = {
+      name: {
+        value: false,
+        message: '',
+      },
+      type: {
+        value: false,
+        message: '',
+      },
     };
     events.toggle();
   };
@@ -88,6 +99,22 @@
     if (events.callback) {
       events.callback(result.response.data.template);
     }
+    options = {
+      name: '',
+      type: 'DATA_MODEL',
+      desc: '',
+      entryTemplate: [],
+    };
+    errors = {
+      name: {
+        value: false,
+        message: '',
+      },
+      type: {
+        value: false,
+        message: '',
+      },
+    };
   };
 </script>
 

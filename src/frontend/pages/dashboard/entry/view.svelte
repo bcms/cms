@@ -48,7 +48,10 @@
       entries = entries.filter(e => e._id !== entry._id);
     }
   }
-  function setEntriesPerPage(event) {}
+  function setEntriesPerPage(event) {
+    entriesPerPage = parseInt(event.target.value, 10);
+    entries = [...entries];
+  }
   function addEntry() {
     if (template.type === 'DATA_MODEL') {
       addDataModalModalEvents.toggle();
@@ -137,28 +140,28 @@
   }
   function sortEntries() {}
   function filterEntry(entry, i) {
-    // const max = (page * entriesPerPage);
-    // const min = max - entriesPerPage;
-    // if (i < min || i > max) {
-    //   return false;
-    // }
-    const content = entry.content.find(e => e.lng === languageSelected.code);
-    if (content) {
-      for (const i in filters) {
-        const filter = filters[i];
-        switch (filter.type) {
-          case 'ENUMERATION':
-            {
-              const prop = content.props.find(e => e.name === filter.name);
-              if (prop && prop.value.selected !== filter.selected) {
-                return false;
+    const max = page * entriesPerPage;
+    const min = max - entriesPerPage;
+    if (i >= min && i < max) {
+      const content = entry.content.find(e => e.lng === languageSelected.code);
+      if (content) {
+        for (const i in filters) {
+          const filter = filters[i];
+          switch (filter.type) {
+            case 'ENUMERATION':
+              {
+                const prop = content.props.find(e => e.name === filter.name);
+                if (prop && prop.value.selected !== filter.selected) {
+                  return false;
+                }
               }
-            }
-            break;
+              break;
+          }
         }
       }
+      return true;
     }
-    return true;
+    return false;
   }
   function setFilter(prop, options) {
     const filter = filters.find(e => e.name === prop.name);
@@ -485,13 +488,19 @@
               {#if page === 1}
                 <div class="fa fa-angle-left btn dis" />
               {:else}
-                <button class="fa fa-angle-left btn" />
+                <button class="fa fa-angle-left btn" on:click={() => {
+                  page = page - 1;
+                  entries = [...entries];
+                }}/>
               {/if}
               <div class="current">{page}</div>
               {#if page * entriesPerPage >= entries.length}
                 <div class="fa fa-angle-right btn dis" />
               {:else}
-                <button class="fa fa-angle-right btn" />
+                <button class="fa fa-angle-right btn" on:click={() => {
+                  page = page + 1;
+                  entries = [...entries];
+                }}/>
               {/if}
             </div>
           {/if}
