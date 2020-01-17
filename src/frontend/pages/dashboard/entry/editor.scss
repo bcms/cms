@@ -19,7 +19,7 @@
 
 .heading .info .desc {
   font-size: 10pt;
-  color: #797979;
+  color: var(--c-gray-cold);
 }
 
 .heading .actions {
@@ -30,7 +30,7 @@
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   grid-gap: 30px;
-  background-color: #fff;
+  background-color: var(--c-white);
   padding: 20px;
   margin: 10px auto 0 auto;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
@@ -40,7 +40,7 @@
   display: flex;
   flex-direction: column;
   grid-column-gap: 10px;
-  background-color: #fff;
+  background-color: var(--c-white);
   padding: 20px 20px 60px 20px;
   margin: 30px auto 0 auto;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);

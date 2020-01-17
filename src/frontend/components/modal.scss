@@ -23,7 +23,7 @@
 .heading {
   display: flex;
   align-content: center;
-  background-color: #fafafa;
+  background-color: var(--c-neutral);
   padding: 20px;
 }
 
@@ -52,8 +52,8 @@
   font-size: 8pt;
   font-weight: bold;
   border: none;
-  background-color: #fafafa;
-  color: #c3c5c8;
+  background-color: var(--c-neutral);
+  color: var(--c-gray);
 }
 
 .heading .close button:hover {
@@ -68,7 +68,7 @@
 .footer {
   display: flex;
   margin-top: auto;
-  background-color: #eff3f6;
+  background-color: var(--c-white-dark);
   padding: 20px;
   width: 100%;
 }

@@ -17,15 +17,15 @@
 .label .type {
   font-weight: bold;
   margin: auto 0 auto auto;
-  color: #d8d8d8;
+  color: var(--c-gray-cold);
 }
 
 .label .lock {
   margin: auto 0 auto 10px;
-  color: #d8d8d8;
+  color: var(--c-gray-cold);
 }
 
 .gp-label {
   padding: 5px;
-  border-bottom: 1px solid #d8d8d8;
+  border-bottom: 1px solid var(--c-gray-cold);
 }

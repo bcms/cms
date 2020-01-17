@@ -7,7 +7,7 @@
 .widget .head {
   display: flex;
   padding: 5px;
-  border-bottom: 1px solid #d8d8d8;
+  border-bottom: 1px solid var(--c-gray-cold);
 }
 
 .widget .head .icon {
@@ -31,7 +31,7 @@
   grid-template-columns: auto;
   grid-gap: 20px;
   border-style: none solid solid solid;
-  border-color: #d8d8d8;
+  border-color: var(--c-gray-cold);
   border-width: 1px;
   padding: 20px;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.2);
@@ -49,15 +49,15 @@
 .widget .label .type {
   font-weight: bold;
   margin: auto 0 auto auto;
-  color: #d8d8d8;
+  color: var(--c-gray-cold);
 }
 
 .widget .label .lock {
   margin: auto 0 auto 10px;
-  color: #d8d8d8;
+  color: var(--c-gray-cold);
 }
 
 .widget .gp-label {
   padding: 5px;
-  border-bottom: 1px solid #d8d8d8;
+  border-bottom: 1px solid var(--c-gray-cold);
 }

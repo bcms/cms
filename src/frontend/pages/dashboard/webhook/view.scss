@@ -12,7 +12,7 @@
 
 .info .desc {
   font-size: 10pt;
-  color: #929292;
+  color: var(--c-gray-dark);
 }
 
 .info .body,
@@ -22,7 +22,7 @@
   font-family: monospace;
   border-radius: 5px;
   border-style: solid;
-  border-color: #929292;
+  border-color: var(--c-gray-dark);
   border-width: 1px;
   padding: 10px;
 }

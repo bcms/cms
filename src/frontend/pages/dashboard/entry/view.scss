@@ -16,7 +16,7 @@
 
 .heading .text .entry-count {
   font-size: 10pt;
-  color: #787e8f;
+  color: var(--c-gray-cold);
 }
 
 .heading .action {
@@ -53,7 +53,7 @@
   font-size: 18pt;
   text-align: center;
   margin-top: 100px;
-  color: #787e8f;
+  color: var(--c-gray-cold);
 }
 
 .entries {
@@ -76,8 +76,8 @@
 
 .entry .heading {
   padding: 3px 20px;
-  background-color: #d4d4d4;
-  color: #787e8f;
+  background-color: var(--c-gray-light);
+  color: var(--c-gray-cold);
   font-weight: bold;
 }
 
@@ -101,7 +101,7 @@
 
 .entry .info .slug {
   font-size: 8pt;
-  color: #787e8f;
+  color: var(--c-gray-cold);
 }
 
 .entry .info .desc {
@@ -116,7 +116,7 @@
 .entry .info .date-time .icon {
   font-size: 8pt;
   margin-right: 10px;
-  color: #787e8f;
+  color: var(--c-gray-cold);
 }
 
 .entry .info .date-time .text {
@@ -157,7 +157,7 @@
 
 .page-scroll .entry-count span {
   font-size: 10px;
-  color: #787e8f;
+  color: var(--c-gray-cold);
 }
 
 .page-scroll .nav {
@@ -171,7 +171,7 @@
 .page-scroll .nav .btn {
   border-style: solid;
   border-width: 1px;
-  border-color: #d4d4d4;
+  border-color: var(--c-gray-light);
   border-radius: 0;
   width: 100%;
   height: 100%;
@@ -184,17 +184,17 @@
 }
 
 .page-scroll .nav .dis {
-  color: #787e8f;
+  color: var(--c-gray-cold);
 }
 
 .page-scroll .nav .dis:hover {
-  color: #787e8f;
+  color: var(--c-gray-cold);
 }
 
 .page-scroll .nav .current {
   border-style: solid none solid none;
   border-width: 1px;
-  border-color: #d4d4d4;
+  border-color: var(--c-gray-light);
   border-bottom-color: var(--c-primary);
   width: 100%;
   text-align: center;

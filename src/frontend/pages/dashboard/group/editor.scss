@@ -21,7 +21,7 @@
 }
 
 .content .heading .edit {
-  color: #929292;
+  color: var(--c-gray-dark);
 }
 
 .content .heading .edit:hover {
@@ -30,7 +30,7 @@
 
 .content .desc {
   font-size: 10pt;
-  color: #929292;
+  color: var(--c-gray-dark);
 }
 
 .content .no-props {
@@ -52,7 +52,7 @@
 
 .content .props {
   margin-top: 30px;
-  background-color: #fff;
+  background-color: var(--c-white);
   padding: 10px 20px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
   font-size: 10pt;
@@ -83,7 +83,7 @@
   padding: 5px 0;
   border-bottom-style: solid;
   border-bottom-width: 1px;
-  border-bottom-color: #eeeeee;
+  border-bottom-color: var(--c-white-dark);
 }
 
 .content .props .prop .img {
@@ -108,24 +108,24 @@
 
 .content .props .prop .type .group-pointer {
   margin: auto 20px;
-  color: #c2c2c2;
+  color: var(--c-gray-light);
 }
 
 .content .props .prop .required {
-  color: #c2c2c2;
+  color: var(--c-gray-light);
 }
 
 .content .props .prop .action {
   display: flex;
   margin: auto 0;
   border: none;
-  background-color: #00000000;
+  background-color: var(--c-transparent);
 }
 
 .content .props .prop .action button {
   margin-bottom: 6px;
   border: none;
-  background-color: #00000000;
+  background-color: var(--c-transparent);
 }
 
 .content .props .prop .action button:hover {

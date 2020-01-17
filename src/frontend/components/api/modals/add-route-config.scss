@@ -5,11 +5,11 @@
 }
 
 .content button {
-  background-color: #00000000;
+  background-color: var(--c-transparent);
   border: none;
   border-radius: 5px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-  color: #fff;
+  color: var(--c-white);
   padding: 20px;
 }
 

@@ -70,7 +70,7 @@
 
 <div class="multi-add">
   {#if error !== ''}
-    <div style="font-size: 8pt; color: red; margin-top: 5px;">
+    <div style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
       <span class="fa fa-exclamation" />
       <span style="margin-left: 5px;">{error}</span>
     </div>

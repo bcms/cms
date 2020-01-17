@@ -38,7 +38,7 @@
 }
 
 .editor .heading .edit {
-  color: #929292;
+  color: var(--c-gray-dark);
 }
 
 .editor .heading .edit:hover {
@@ -47,7 +47,7 @@
 
 .editor .desc {
   font-size: 10pt;
-  color: #929292;
+  color: var(--c-gray-dark);
 }
 
 .editor .basic-info {
@@ -55,7 +55,7 @@
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 20px;
   margin-top: 30px;
-  background-color: #fff;
+  background-color: var(--c-white);
   padding: 10px 20px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
   font-size: 10pt;
@@ -63,7 +63,7 @@
 
 .editor .props {
   margin-top: 30px;
-  background-color: #fff;
+  background-color: var(--c-white);
   padding: 10px 20px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
   font-size: 10pt;
@@ -94,7 +94,7 @@
   padding: 5px 0;
   border-bottom-style: solid;
   border-bottom-width: 1px;
-  border-bottom-color: #eeeeee;
+  border-bottom-color: var(--c-white-dark);
 }
 
 .editor .props .prop .img {
@@ -119,26 +119,26 @@
 
 .editor .props .prop .type .group-pointer {
   margin: auto 20px;
-  color: #c2c2c2;
+  color: var(--c-gray-light);
 }
 
 .editor .props .prop .required {
   margin: auto 0;
-  color: #c2c2c2;
+  color: var(--c-gray-light);
 }
 
 .editor .props .prop .action {
   display: flex;
   margin: auto 0;
   border: none;
-  background-color: #00000000;
+  background-color: var(--c-transparent);
 }
 
 .editor .props .prop .action button {
   margin: auto 0;
   border: none;
-  background-color: #00000000;
-  color: #929292;
+  background-color: var(--c-transparent);
+  color: var(--c-gray-dark);
 }
 
 .editor .props .prop .action button:hover {

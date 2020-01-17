@@ -2,7 +2,7 @@
   display: flex;
   border-bottom-width: 1px;
   border-bottom-style: solid;
-  border-bottom-color: #eee;
+  border-bottom-color: var(--c-white-dark);
   padding-bottom: 5px;
 }
 
@@ -25,12 +25,12 @@
 
 .flex-label .lock {
   margin: auto 0 auto 10px;
-  color: #afafaf;
+  color: --c-gray;
 }
 
 .flex-label .error {
   margin: auto 0 auto 20px;
-  color: red;
+  color: var(--c-error);
   display: flex;
 }
 

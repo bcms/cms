@@ -108,7 +108,7 @@
     padding-bottom: 5px;
     border-bottom-style: solid;
     border-bottom-width: 1px;
-    border-bottom-color: #eff3f6;
+    border-bottom-color: var(--c-white-dark);
     font-size: 14pt;
     font-weight: bold;
   }
@@ -122,7 +122,7 @@
 
   .content .options .icon {
     font-size: 8pt;
-    color: #8d8d8d;
+    color: var(--c-gray-dark);
   }
 </style>
 
@@ -136,7 +136,7 @@
           &nbsp;
           <span>Email</span>
           {#if data.email.error !== ''}
-            <div style="font-size: 8pt; color: red; margin-top: 5px;">
+            <div style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
               <span class="fa fa-exclamation" />
               <span style="margin-left: 5px;">{data.email.error}</span>
             </div>
@@ -155,7 +155,7 @@
           &nbsp;
           <span>First Name</span>
           {#if data.firstName.error !== ''}
-            <div style="font-size: 8pt; color: red; margin-top: 5px;">
+            <div style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
               <span class="fa fa-exclamation" />
               <span style="margin-left: 5px;">{data.firstName.error}</span>
             </div>
@@ -174,7 +174,7 @@
           &nbsp;
           <span>Last Name</span>
           {#if data.lastName.error !== ''}
-            <div style="font-size: 8pt; color: red; margin-top: 5px;">
+            <div style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
               <span class="fa fa-exclamation" />
               <span style="margin-left: 5px;">{data.lastName.error}</span>
             </div>
@@ -193,7 +193,7 @@
           &nbsp;
           <span>Password</span>
           {#if data.password.error !== ''}
-            <div style="font-size: 8pt; color: red; margin-top: 5px;">
+            <div style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
               <span class="fa fa-exclamation" />
               <span style="margin-left: 5px;">{data.password.error}</span>
             </div>

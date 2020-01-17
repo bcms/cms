@@ -65,7 +65,7 @@
         <div class="label">
           Name
           {#if data.name.error !== ''}
-            <div style="font-size: 8pt; color: red; margin-top: 5px;">
+            <div style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
               <span class="fa fa-exclamation" />
               <span style="margin-left: 5px;">{data.name.error}</span>
             </div>

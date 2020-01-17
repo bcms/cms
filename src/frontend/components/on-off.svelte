@@ -45,7 +45,7 @@
   .status {
     font-size: 10pt;
     margin: auto 0 auto 20px;
-    color: #a3a3a3;
+    color: var(--c-gray);
   }
 </style>
 

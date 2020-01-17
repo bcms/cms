@@ -140,7 +140,7 @@
     padding-bottom: 5px;
     border-bottom-style: solid;
     border-bottom-width: 1px;
-    border-bottom-color: #eff3f6;
+    border-bottom-color: var(--c-white-dark);
     font-size: 14pt;
     font-weight: bold;
   }
@@ -162,7 +162,7 @@
           <div class="label">
             <span>Name</span>
             {#if data.name.error !== ''}
-              <div style="font-size: 8pt; color: red; margin-top: 5px;">
+              <div style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
                 <span class="fa fa-exclamation" />
                 <span style="margin-left: 5px;">{data.name.error}</span>
               </div>

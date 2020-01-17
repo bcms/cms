@@ -23,7 +23,7 @@
 
 .viewer .heading .path {
   font-size: 10pt;
-  color: #929292;
+  color: var(--c-gray-dark);
 }
 
 .dir-actions {
@@ -100,5 +100,5 @@
 .view .no-items {
   text-align: center;
   font-size: 16pt;
-  color: #929292;
+  color: var(--c-gray-dark);
 }

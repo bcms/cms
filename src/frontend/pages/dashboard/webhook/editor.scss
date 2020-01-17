@@ -21,7 +21,7 @@
 }
 
 .content .heading .edit {
-  color: #929292;
+  color: var(--c-gray-dark);
 }
 
 .content .heading .edit:hover {
@@ -30,7 +30,7 @@
 
 .content .desc {
   font-size: 10pt;
-  color: #929292;
+  color: var(--c-gray-dark);
 }
 
 .content .update {
@@ -61,7 +61,7 @@
 
 .content .props {
   margin-top: 30px;
-  background-color: #fff;
+  background-color: var(--c-white);
   padding: 10px 20px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
   font-size: 10pt;
@@ -72,7 +72,7 @@
   grid-template-columns: repeat(3, 1fr);
   grid-gap: 20px;
   margin-top: 30px;
-  background-color: #fff;
+  background-color: var(--c-white);
   padding: 10px 20px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
   font-size: 10pt;

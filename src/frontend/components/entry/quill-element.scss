@@ -28,8 +28,8 @@
 }
 
 .quill .code .ql-editor .ql-syntax {
-  background-color: #18202e;
-  color: #d8d8d8;
+  background-color: var(--c-primary-dark);
+  color: var(--c-gray-cold);
 }
 
 .quill .list {

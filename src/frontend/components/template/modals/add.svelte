@@ -123,7 +123,7 @@
     padding-bottom: 5px;
     border-bottom-style: solid;
     border-bottom-width: 1px;
-    border-bottom-color: #eff3f6;
+    border-bottom-color: var(--c-white-dark);
     font-size: 14pt;
     font-weight: bold;
   }
@@ -144,7 +144,7 @@
         <div class="label">
           Name
           {#if errors.name.value === true}
-            <div style="font-size: 8pt; color: red; margin-top: 5px;">
+            <div style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
               <span class="fa fa-exclamation" />
               <span style="margin-left: 5px;">{errors.name.message}</span>
             </div>
@@ -162,7 +162,7 @@
         <div class="label">
           Type
           {#if errors.type.value === true}
-            <div style="font-size: 8pt; color: red; margin-top: 5px;">
+            <div style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
               <span class="fa fa-exclamation" />
               <span style="margin-left: 5px;">{errors.type.message}</span>
             </div>

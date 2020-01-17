@@ -242,12 +242,12 @@
     border-style: solid;
     border-width: 1px;
     border-color: var(--c-placeholder);
-    background-color: #00000000;
+    background-color: var(--c-transparent);
     font-size: 10pt;
   }
 
   .type-btn:hover {
-    background-color: #f3f3f3;
+    background-color: var(--c-white-normal);
   }
 
   .type-btn .icon {
@@ -266,7 +266,7 @@
 
   .type-btn .desc {
     margin: auto 0 auto 10px;
-    color: #919bae;
+    color: var(--c-gray-cold);
   }
 
   .type-btn .edit {
@@ -287,7 +287,7 @@
 <Modal heading={modalHeading} {events}>
   {#if view === 1}
     {#if data.type.error !== ''}
-      <div style="font-size: 8pt; color: red; margin: 5px 0;">
+      <div style="font-size: 8pt; color: var(--c-error); margin: 5px 0;">
         <span class="fa fa-exclamation" />
         <span style="margin-left: 5px;">{data.type.error}</span>
       </div>
@@ -335,7 +335,7 @@
         <div class="label">
           Name
           {#if data.name.error !== ''}
-            <div style="font-size: 8pt; color: red; margin-top: 5px;">
+            <div style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
               <span class="fa fa-exclamation" />
               <span style="margin-left: 5px;">{data.name.error}</span>
             </div>
@@ -385,7 +385,7 @@
             <div class="label">
               Select Group
               {#if data.value.error !== ''}
-                <div style="font-size: 8pt; color: red; margin-top: 5px;">
+                <div style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
                   <span class="fa fa-exclamation" />
                   <span style="margin-left: 5px;">{data.value.error}</span>
                 </div>

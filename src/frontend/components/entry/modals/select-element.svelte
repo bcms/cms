@@ -57,8 +57,8 @@
 
 <style>
   .primary .title {
-    color: #919bae;
-    background-color: #f2f3f4;
+    color: var(--c-gray-cold);
+    background-color: var(--c-white-normal);
     font-size: 10pt;
     font-weight: bold;
     padding: 3px 10px;
@@ -77,12 +77,12 @@
     grid-template-columns: auto;
     width: 100%;
     border: none;
-    background-color: #00000000;
+    background-color: var(--c-transparent);
     transition: 0.3s;
   }
 
   .action:hover {
-    background-color: #eeeeee;
+    background-color: var(--c-white-dark);
     transition: 0.3s;
   }
 
@@ -103,13 +103,13 @@
 
   .action .text {
     font-size: 8pt;
-    color: #919bae;
+    color: var(--c-gray-cold);
   }
 
   .embed .title {
     margin-top: 20px;
-    color: #919bae;
-    background-color: #f2f3f4;
+    color: var(--c-gray-cold);
+    background-color: var(--c-white-normal);
     font-size: 10pt;
     font-weight: bold;
     padding: 3px 10px;

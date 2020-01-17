@@ -31,14 +31,14 @@
   grid-template-columns: auto;
   grid-gap: 20px;
   margin-top: 30px;
-  background-color: #fff;
+  background-color: var(--c-white);
   padding: 10px 20px;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
   font-size: 10pt;
 }
 
 .content .edit .key-value .icon {
-  color: #acacac;
+  color: var(--c-gray);
 }
 
 .content .edit .actions {

@@ -6,7 +6,7 @@
 }
 
 .title .error {
-  color: red;
+  color: var(--c-error);
   font-size: 10pt;
 }
 
@@ -31,5 +31,5 @@
 
 .sections .empty .message {
   font-size: 16pt;
-  color: #797979;
+  color: var(--c-gray-cold);
 }
