@@ -152,7 +152,7 @@ export function cli(args: any) {
     process.env.SVELTE_PROD = 'false';
     initChangeListener();
   }
-  if (config.frontend.build === 'true') {
+  if (config.frontend.build === true) {
     buildSvelte();
   }
   const { App } = require(`${packageName}/app.module.js`);
