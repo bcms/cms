@@ -135,22 +135,26 @@ export function cli(args: any) {
     )}`;
   }
 
-  util
-    .promisify(childProcess.exec)(
-      `git config --global user.email "${config.server.git.email}" && ` +
-        `git config --global user.name "${config.server.git.username}" && ` +
-        `git checkout ${config.server.git.branch}`,
-    )
-    .catch(e => {
-      // tslint:disable-next-line:no-console
-      console.error(e);
-    });
+  if (config.server.git.install === true) {
+    util
+      .promisify(childProcess.exec)(
+        `git config --global user.email "${config.server.git.email}" && ` +
+          `git config --global user.name "${config.server.git.username}" && ` +
+          `git checkout ${config.server.git.branch}`,
+      )
+      .catch(e => {
+        // tslint:disable-next-line:no-console
+        console.error(e);
+      });
+  }
 
   if (options.dev) {
     process.env.SVELTE_PROD = 'false';
     initChangeListener();
   }
-  buildSvelte();
+  if (config.frontend.build === true) {
+    buildSvelte();
+  }
   const { App } = require(`${packageName}/app.module.js`);
   const app = new App();
   app.listen();
