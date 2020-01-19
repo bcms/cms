@@ -21,8 +21,8 @@ export class GitUtil {
         .promisify(childProcess.exec)(
           `git add ${path.join(process.env.PROJECT_ROOT, 'uploads')}/. && ` +
             `git commit -m "Adding file ${media.name} via CMS." && ` +
-            `git push https://${process.env.GIT_USERNAME}:${process.env.GIT_PASSWORD}@` +
-            `${process.env.GIT_HOST}/${process.env.GIT_REPO_OWNER}/${process.env.GIT_REPO}`,
+            `git push "https://${process.env.GIT_USERNAME}:${process.env.GIT_PASSWORD}@` +
+            `${process.env.GIT_HOST}/${process.env.GIT_REPO_OWNER}/${process.env.GIT_REPO}"`,
         )
         .then(output => {
           GitUtil.logger.info('git-push', `File ${media.name} added to GIT.`);
