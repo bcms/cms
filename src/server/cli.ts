@@ -106,13 +106,13 @@ export function cli(args: any) {
       process.env[key] = `${config.env[key]}`;
     }
   }
-  process.env.PORT = `${config.server.port}`;
+  if (typeof config.server.port !== 'undefined') {
+    process.env.PORT = `${config.server.port}`;
+  }
   process.env.USER_TOKEN_SECRET = `${config.server.security.jwt.secret}`;
   process.env.USER_TOKEN_ISSUER = `${config.server.security.jwt.issuer}`;
   process.env.DB_HOST = `${config.server.database.mongo.database.host}`;
-  if (typeof config.server.database.mongo.database.port !== 'undefined') {
-    process.env.DB_PORT = `${config.server.database.mongo.database.port}`;
-  }
+  process.env.DB_PORT = `${config.server.database.mongo.database.port}`;
   process.env.DB_NAME = `${config.server.database.mongo.database.name}`;
   process.env.DB_USER = `${config.server.database.mongo.database.user}`;
   process.env.DB_PASS = `${config.server.database.mongo.database.pass}`;
