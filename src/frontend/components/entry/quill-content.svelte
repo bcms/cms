@@ -99,7 +99,10 @@
         }
         return 0;
       });
-      data.sections = [...data.sections];
+      data.sections = data.sections.map(e => {
+        e.quill = undefined;
+        return e;
+      });
       setTimeout(() => {
         data.sections.forEach(section => {
           section.quillEvents.init();
