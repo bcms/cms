@@ -1,6 +1,6 @@
 # Becomes CMS
 
-This is a small CMS developed by company [Becomes](https://becomes.co) that is specialized in for [JAMstack](). It was created because of project needs in our company and we decided to make it Open-Source since it solved a lot of problems that we had with other CMS solutions. We thing that you will find it useful in your next project.
+This is a small CMS developed by company [Becomes](https://becomes.co) that is specialized in for [JAMstack](https://jamstack.org/). It was created because of project needs in our company and we decided to make it Open-Source since it solved a lot of problems that we had with other CMS solutions. We thing that you will find it useful in your next project.
 
 - **What Becomes CMS is not?**
   - It is not replacement for [WordPress](https://wordpress.com/) - WordPress is used for creating websites while Becomes CMS is used for creating API that will be consumed when generating static site. In this regard, they are completely different.

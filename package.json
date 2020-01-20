@@ -25,6 +25,7 @@
     "autoprefixer": "^9.7.1",
     "axios": "^0.19.1",
     "bcrypt": "^3.0.7",
+    "carbon-components-svelte": "^0.2.1",
     "chokidar": "^3.3.1",
     "crypto-js": "^3.1.9-1",
     "esm": "^3.2.25",
