@@ -11,8 +11,8 @@
   export let widgets;
 
   let selectElementModalEvents = {
-    select: (type, additional) => {
-      addSection(type, undefined, additional);
+    select: (type, position, additional) => {
+      addSection(type, position, additional);
     },
   };
 
@@ -69,10 +69,18 @@
       }
       return 0;
     });
-    data.sections = [...data.sections];
+    data.sections = data.sections.map(e => {
+      e.quill = undefined;
+      return e;
+    });
   }
   function removeSection(sectionId) {
-    data.sections = data.sections.filter(e => e.id !== sectionId);
+    data.sections = data.sections
+      .filter(e => e.id !== sectionId)
+      .map(e => {
+        e.quill = undefined;
+        return e;
+      });
   }
   function moveSection(from, to) {
     if (to > -1 && to < data.sections.length) {
@@ -142,7 +150,12 @@
 <div class="sections">
   {#if data.sections.length > 0 && quill}
     {#each data.sections as section, i}
-      <QuillElement {widgets} {quill} {section} events={section.quillEvents} inFocus={false} />
+      <QuillElement
+        {widgets}
+        {quill}
+        {section}
+        events={section.quillEvents}
+        inFocus={false} />
     {/each}
     <button
       class="btn-fill btn-blue-bg add"

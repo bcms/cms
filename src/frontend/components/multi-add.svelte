@@ -59,12 +59,10 @@
 
 <style>
   .list {
-    display: flex;
     margin-top: 10px;
-  }
-
-  .list .item {
-    margin-right: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
   }
 </style>
 

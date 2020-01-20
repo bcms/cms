@@ -6,6 +6,8 @@
   export let events;
   export let widgets;
 
+  let position;
+
   const modalHeading = {
     icon: '/assets/ics/template/icon_type_ct.png',
     title: 'Add Section',
@@ -42,11 +44,15 @@
     if (events) {
       events.toggle();
       if (events.select) {
-        events.select(type, additional);
+        events.select(type, position, additional);
+        position = undefined;
       }
     }
   }
 
+  events.setPosition = (p) => {
+    position = p;
+  }
   events.cancel = () => {
     events.toggle();
   };

@@ -1,5 +1,5 @@
 <script>
-  import { onMount } from 'svelte';
+  import { onMount, afterUpdate } from 'svelte';
   import WidgetInput from '../widget-input.svelte';
 
   export let widgets;
@@ -9,6 +9,7 @@
   export let inFocus;
 
   let id = '';
+  let shift = false;
 
   const quillOptions = {
     HEADING_1: {
@@ -56,12 +57,14 @@
     },
   };
 
-  events.init = () => {
+  function init() {
     if (section.type !== 'MEDIA' && section.type !== 'WIDGET') {
-      section.quill = new quill(
-        document.getElementById(section.id),
-        quillOptions[section.type],
-      );
+      if (typeof section.quill === 'undefined') {
+        section.quill = new quill(
+          document.getElementById(section.id),
+          quillOptions[section.type],
+        );
+      }
       if (section.value) {
         section.quill.setContents(section.value);
       } else {
@@ -92,72 +95,110 @@
               ]);
             }
             break;
+          default: {
+            section.quill.setContents([]);
+          }
         }
       }
-      let shift = false;
       section.quill.on('text-change', () => {
-        section.value = section.quill.getContents();
-        section.valueAsText = section.quill.getText();
-        if (section.type.startsWith('HEADING_') === true) {
-          let text = section.quill.getText();
-          if (text.endsWith('\n\n') === true) {
-            text = text.replace('\n\n', '\n');
-            section.quill.setText(text);
+        if (section.quill) {
+          section.value = section.quill.getContents();
+          section.valueAsText = section.quill.getText();
+          if (section.type.startsWith('HEADING_') === true) {
+            let text = section.quill.getText();
+            if (text.endsWith('\n\n') === true) {
+              text = text.replace('\n\n', '\n');
+              section.quill.setText(text);
+            }
+          } else if (section.type === 'PARAGRAPH') {
+            let lastOps = section.value.ops[section.value.ops.length - 1];
+            if (lastOps.insert.endsWith('\n\n') === true && shift === false) {
+              lastOps.insert = lastOps.insert.substring(
+                0,
+                lastOps.insert.length - 1,
+              );
+              section.value.ops[section.value.ops.length - 1] = lastOps;
+              section.quill.setContents(section.value);
+            }
           }
-        } else if (section.type === 'PARAGRAPH') {
-          let lastOps = section.value.ops[section.value.ops.length - 1];
-          if (lastOps.insert.endsWith('\n\n') === true && shift === false) {
-            lastOps.insert = lastOps.insert.substring(
-              0,
-              lastOps.insert.length - 1,
-            );
-            section.value.ops[section.value.ops.length - 1] = lastOps;
-            section.quill.setContents(section.value);
-          }
+        } else {
+          console.log('No quill', section.type);
         }
       });
-      document.getElementById(section.id).addEventListener('keydown', event => {
-        if (event.key === 'Shift') {
-          shift = true;
-        }
-      });
-      document.getElementById(section.id).addEventListener('keyup', event => {
-        switch (event.key) {
-          case 'Shift':
-            {
-              shift = false;
-            }
-            break;
-          case 'Backspace':
-            {
-              if (section.value === '') {
-                events.delete(section.id);
-              }
-              if (section.quill.getText().length === 1) {
-                section.value = '';
-              }
-            }
-            break;
-          case 'Enter':
-            {
-              if (shift === false) {
-                if (
-                  section.type.startsWith('HEADING_') === true ||
-                  section.type === 'PARAGRAPH'
-                ) {
-                  events.selectElementModalEvents.toggle();
-                }
-              }
-            }
-            break;
-        }
-      });
+      document
+        .getElementById(section.id)
+        .removeEventListener('keydown', keyDownListener);
+      document
+        .getElementById(section.id)
+        .addEventListener('keydown', keyDownListener);
+      document
+        .getElementById(section.id)
+        .removeEventListener('keyup', keyUpListener);
+      document
+        .getElementById(section.id)
+        .addEventListener('keyup', keyUpListener);
     }
-  };
+  }
+  function keyDownListener(event) {
+    if (event.key === 'Shift') {
+      shift = true;
+    }
+  }
+  function keyUpListener(event) {
+    switch (event.key) {
+      case 'Shift':
+        {
+          shift = false;
+        }
+        break;
+      case 'Backspace':
+        {
+          if (section.value === '') {
+            document
+              .getElementById(section.id)
+              .removeEventListener('keyup', keyUpListener);
+            document
+              .getElementById(section.id)
+              .removeEventListener('keyup', keyUpListener);
+            events.delete(section.id);
+          }
+          if (section.quill.getText().length === 1) {
+            section.value = '';
+          }
+        }
+        break;
+      case 'Enter':
+        {
+          if (shift === false) {
+            if (
+              section.type.startsWith('HEADING_') === true ||
+              section.type === 'PARAGRAPH'
+            ) {
+              events.selectElementModalEvents.setPosition(section.order + 1);
+              events.selectElementModalEvents.toggle();
+            }
+          } else {
+            if (section.type === 'LIST' || section.type === 'CODE') {
+              events.selectElementModalEvents.setPosition(section.order + 1);
+              events.selectElementModalEvents.toggle();
+            }
+          }
+        }
+        break;
+    }
+  }
+
+  events.init = init;
 
   onMount(() => {
     events.init();
     id = section.id;
+  });
+  afterUpdate(() => {
+    if (!section.quill) {
+      events.init = init;
+      events.init();
+    }
   });
 </script>
 
