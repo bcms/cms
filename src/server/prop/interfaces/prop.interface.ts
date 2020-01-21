@@ -42,7 +42,6 @@ export interface Prop {
     | PropEnum
     | PropQuill
     | PropGroupPointer
-    | PropGroupPointer[]
     | PropGroupPointerArray;
 }
 
@@ -99,5 +98,7 @@ export interface PropGroupPointer {
 export interface PropGroupPointerArray {
   _id: string;
   props: Prop[];
-  array: PropGroupPointer[];
+  array: Array<{
+    value: PropGroupPointer;
+  }>;
 }

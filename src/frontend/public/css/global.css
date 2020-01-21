@@ -129,52 +129,6 @@ button:focus {
 	margin-top: 10px;
 }
 
-.button {
-	background-color: var(--c-primary);
-	color: var(--c-white);
-	text-decoration: none;
-	font-size: 10pt;
-	padding: 7px 13px;
-	margin: auto auto;
-	border: none;
-	border-radius: 2px;
-	transition: 0.4s;
-	box-shadow: 0 5px 5px rgba(0, 0, 0, 0.15);
-}
-
-.button:hover {
-	background-color: var(--c-primary-hover);
-	cursor: pointer;
-	box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
-}
-
-.button:visited {
-	color: var(--c-white);
-}
-
-.button-light {
-	background-color: var(--c-secondary);
-	color: var(--c-white);
-	text-decoration: none;
-	padding: 2px 7px;
-	margin: auto auto;
-	border: none;
-	border-radius: 3px;
-	transition: 0.4s;
-	font-weight: bold;
-	box-shadow: 0 5px 5px rgba(0, 0, 0, 0.15);
-}
-
-.button-light:hover {
-	background-color: var(--c-secondary-hover);
-	cursor: pointer;
-	box-shadow: 0 5px 5px rgba(0, 0, 0, 0.3);
-}
-
-.button-light:visited {
-	color: var(--c-white);
-}
-
 .box {
 	overflow-y: hidden;
 	background-color: var(--c-white);

@@ -8,6 +8,7 @@ import {
   PropQuillContentType,
   PropQuillContentValueGeneric,
   PropQuillContentValueWidget,
+  PropGroupPointerArray,
 } from './interfaces/prop.interface';
 import { StringUtility, Logger } from 'purple-cheetah';
 import { GroupService } from '../group/group.service';
@@ -379,11 +380,11 @@ export class PropUtil {
               groupService,
               `props[${i}].value`,
             );
-            verifiedProp.value = verifiedProp.value as PropGroupPointer;
+            verifiedProp.value = verifiedProp.value as PropGroupPointerArray;
             p.value = {
               _id: verifiedProp.value._id,
               props: verifiedProp.value.props,
-              array: [],
+              array: prop.value.array,
             };
           }
           break;

@@ -1,6 +1,16 @@
 <script>
   import { onMount } from 'svelte';
   import { simplePopup } from './simple-popup.svelte';
+  import { Toggle } from 'carbon-components-svelte';
+  import PropString from './prop/string.svelte';
+  import PropStringArray from './prop/string-array.svelte';
+  import PropBoolean from './prop/boolean.svelte';
+  import PropBooleanArray from './prop/boolean-array.svelte';
+  import PropNumber from './prop/number.svelte';
+  import PropNumberArray from './prop/number-array.svelte';
+  import PropEnum from './prop/enum.svelte';
+  import PropGroupPointer from './prop/group-pointer.svelte';
+  import PropGroupPointerArray from './prop/group-pointer-array.svelte';
   import OnOff from './on-off.svelte';
   import GroupPropInput from './group-prop-input.svelte';
   import StringUtil from '../string-util.js';
@@ -36,6 +46,8 @@
       const prop = props[i];
       if (prop.type === 'GROUP_POINTER') {
         errors[prop.name] = createErrorPathForGroupPointer(prop);
+      } else if (prop.type === 'GROUP_POINTER_ARRAY') {
+        errors[prop.name] = [];
       } else {
         errors[prop.name] = '';
       }
@@ -58,6 +70,8 @@
       const prop = props[i];
       if (prop.type === 'GROUP_POINTER') {
         groupPropEvents[prop.name] = { init: true };
+      } else if (prop.type === 'GROUP_POINTER_ARRAY') {
+        groupPropEvents[prop.name] = [];
       }
     }
   }
@@ -135,7 +149,60 @@
 <div class="content">
   {#each props as prop, i}
     <div class="prop">
-      <div class="key-value {prop.type === 'GROUP_POINTER' ? 'pointer' : ''}">
+      {#if prop.type === 'STRING'}
+        <PropString {prop} error={''} />
+      {:else if prop.type === 'STRING_ARRAY'}
+        <PropStringArray
+          {prop}
+          error={''}
+          on:add={event => {
+            if (event.eventPhase === 0) {
+              prop.value.push('');
+              props = [...props];
+            }
+          }} />
+      {:else if prop.type === 'BOOLEAN'}
+        <PropBoolean {prop} error={''} />
+      {:else if prop.type === 'BOOLEAN_ARRAY'}
+        <PropBooleanArray
+          {prop}
+          error={''}
+          on:add={event => {
+            if (event.eventPhase === 0) {
+              prop.value.push(false);
+              props = [...props];
+            }
+          }} />
+      {:else if prop.type === 'NUMBER'}
+        <PropNumber {prop} error={''} />
+      {:else if prop.type === 'NUMBER_ARRAY'}
+        <PropNumberArray
+          {prop}
+          error={''}
+          on:add={event => {
+            if (event.eventPhase === 0) {
+              prop.value.push(0);
+              props = [...props];
+            }
+          }} />
+      {:else if prop.type === 'ENUMERATION'}
+        <PropEnum {prop} error={''} />
+      {:else if prop.type === 'GROUP_POINTER'}
+        <PropGroupPointer {prop} error={''} />
+      {:else if prop.type === 'GROUP_POINTER_ARRAY'}
+        <PropGroupPointerArray
+          {prop}
+          error={''}
+          on:add={event => {
+            if (event.eventPhase === 0) {
+              prop.value.array.push({
+                value: JSON.parse(JSON.stringify(prop.value.props)),
+              });
+              props = [...props];
+            }
+          }} />
+      {/if}
+      <!-- <div class="key-value {prop.type === 'GROUP_POINTER' ? 'pointer' : ''}">
         <div class="label flex-label">
           <div class="name">{StringUtil.prettyName(prop.name)}</div>
           {#if prop.required === true}
@@ -186,11 +253,10 @@
               </div>
             </div>
           {:else if prop.type === 'BOOLEAN'}
-            <OnOff
-              init={prop.value}
-              events={{ set: value => {
-                  prop.value = value;
-                } }} />
+            <Toggle
+              on:change={event => {
+                prop.value = event.target.checked;
+              }} />
           {:else if prop.type === 'NUMBER'}
             <input
               id="date"
@@ -210,10 +276,51 @@
               parentProp={prop}
               errors={errors[prop.name]}
               events={groupPropEvents[prop.name]} />
+          {:else if prop.type.indexOf('_ARRAY') !== -1}
+            <div class="array">
+              {#if prop.value.length > 0}
+                {#each prop.value as vl, i}
+                  {#if prop.type === 'STRING_ARRAY'}
+                    <textarea
+                      class="input"
+                      style="font-family: monospace; font-size: 10pt;"
+                      bind:value={vl} />
+                  {:else if prop.type === 'BOOLEAN_ARRAY'}
+                    <Toggle
+                      on:change={event => {
+                        prop.value[i] = event.target.checked;
+                      }} />
+                  {:else if prop.type === 'NUMBER_ARRAY'}
+                    <input
+                      id="date"
+                      class="input"
+                      type="number"
+                      bind:value={vl} />
+                  {/if}
+                {/each}
+              {/if}
+              {#if prop.type === 'GROUP_POINTER_ARRAY' && prop.value.array && prop.value.array.length > 0}
+                {#each prop.value.array as vl, i}
+                  <GroupPropInput
+                    {groups}
+                    parentProp={vl}
+                    errors={errors[prop.name][i]}
+                    events={groupPropEvents[prop.name][i]} />
+                {/each}
+              {/if}
+              <button
+                class="btn btn-blue-c"
+                on:click={() => {
+                  addArrayElement(prop);
+                }}>
+                <div class="fas fa-plus icon" />
+                <div class="text">Add Element</div>
+              </button>
+            </div>
           {/if}
           <div class="break" />
         </div>
-      </div>
+      </div> -->
     </div>
   {/each}
 </div>

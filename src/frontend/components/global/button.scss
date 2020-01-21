@@ -1,0 +1,28 @@
+.button {
+  display: flex;
+  font-size: 10pt;
+  padding: 3px 5px;
+  color: var(--c-neutral);
+  border: none;
+  border-radius: 3px;
+  margin: auto 0;
+}
+
+.button .blue {
+  background-color: #1c8fe5;
+  color: var(--c-white);
+  transition: 0.2s;
+}
+
+.button:hover {
+  transition: 0.3s;
+}
+
+.button .icon {
+  margin: auto 0;
+  margin-right: 10px;
+}
+
+.button .text {
+  font-weight: normal;
+}

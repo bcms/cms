@@ -5,6 +5,7 @@
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Leyout from '../../../components/layout/layout.svelte';
   import PropsInput from '../../../components/props-input.svelte';
+  import Props from '../../../components/prop/props.svelte';
   import QuillContent from '../../../components/entry/quill-content.svelte';
   import StringUtil from '../../../string-util.js';
   import UrlQueries from '../../../url-queries.js';
@@ -39,9 +40,10 @@
   let dataHash;
   let quillContentEvents = {};
   let propsInputEvents = {};
+  let propsEvents = {};
 
   async function addEntry() {
-    const metaProps = propsInputEvents.validateAndGetProps();
+    const metaProps = propsEvents.validateAndGetProps();
     if (!metaProps) {
       return;
     }
@@ -360,8 +362,6 @@
   <script src="/js/quill.js">
 
   </script>
-  <link rel="stylesheet" href="/css/quill.css" />
-  <link rel="stylesheet" href="/css/highlight.css" />
 </svelte:head>
 <Leyout {Store} {axios}>
   {#if template}
@@ -405,10 +405,7 @@
       </div>
       <h3>Meta</h3>
       <div class="meta">
-        <PropsInput
-          {groups}
-          events={propsInputEvents}
-          props={data[selectedLanguage.code].meta} />
+        <Props props={data[selectedLanguage.code].meta} events={propsEvents} />
       </div>
       <h3>Content</h3>
       <div class="content">

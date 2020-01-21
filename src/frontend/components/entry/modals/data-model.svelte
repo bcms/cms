@@ -111,6 +111,15 @@
         .toString();
     }
   }
+  function addArrayElement(prop) {
+    switch (prop.type) {
+      case 'STRING_ARRAY':
+        {
+          prop.value = [...prop.value, ''];
+        }
+        break;
+    }
+  }
 
   events.setData = setData;
   events.cancel = () => {
@@ -373,6 +382,33 @@
                   parentProp={prop}
                   errors={data[selectedLanguage].errors[prop.name]}
                   events={data[selectedLanguage].groupPropEvents[prop.name]} />
+              {:else if prop.type.indexOf('_ARRAY') !== -1}
+                <div class="array">
+                  {#if prop.value.length > 0}
+                    <pre>
+                      <code>{JSON.stringify(prop.value, null, '  ')}</code>
+                    </pre>
+                    {#each prop.value as v}
+                      <pre>
+                        <code>{JSON.stringify(v, null, '  ')}</code>
+                      </pre>
+                      <!-- {#if prop.type === 'STRING_ARRAY'}
+                        <textarea
+                          class="input"
+                          style="font-family: monospace; font-size: 10pt;"
+                          bind:value={v} />
+                      {/if} -->
+                    {/each}
+                  {/if}
+                  <button
+                    class="btn btn-blue-c"
+                    on:click={() => {
+                      addArrayElement(prop);
+                    }}>
+                    <div class="fas fa-plus icon" />
+                    <div class="text">Add Element</div>
+                  </button>
+                </div>
               {/if}
               <div class="break" />
             </div>

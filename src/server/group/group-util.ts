@@ -3,6 +3,7 @@ import {
   Prop,
   PropType,
   PropGroupPointer,
+  PropGroupPointerArray,
 } from '../prop/interfaces/prop.interface';
 import { EntryService } from '../entry';
 import { Logger } from 'purple-cheetah';
@@ -32,7 +33,7 @@ export class GroupUtil {
           }
         }
       } else if (prop.type === PropType.GROUP_POINTER_ARRAY) {
-        prop.value = prop.value as PropGroupPointer[];
+        prop.value = prop.value as PropGroupPointerArray;
         for (const j in prop.value) {
           if (prop.value[j]._id === group._id.toHexString()) {
             prop.value[j].props = group.props;

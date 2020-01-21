@@ -51,6 +51,11 @@
       );
       return;
     }
+    templateSelected.entryTemplate.forEach(e => {
+      if (e.type === 'GROUP_POINTER_ARRAY' && !e.value.array) {
+        e.value.array = [];
+      }
+    })
     const result = await axios.send({
       url: '/template',
       method: 'PUT',

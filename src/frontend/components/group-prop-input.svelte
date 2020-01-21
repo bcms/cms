@@ -8,6 +8,9 @@
   export let errors;
   export let events;
 
+  console.log('Errors', parentProp.name, errors);
+  console.log('Prop', parentProp);
+
   let groupPropEvents = {};
 
   function init() {
