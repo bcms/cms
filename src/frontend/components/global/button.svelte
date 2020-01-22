@@ -1,65 +1,24 @@
-<script context="module">
-  export const ButtonType = {
-    primary: 'primary',
-    dangure: 'dangure',
-    accept: 'accept',
-  };
-  export const ButtonSize = {
-    small: {
-      icon: '8',
-      text: '10',
-    },
-    medium: {
-      icon: '10',
-      text: '14',
-    },
-    large: {
-      icon: '12',
-      text: '18',
-    },
-  };
-</script>
-
 <script>
-  export let faClass = undefined;
-  export let type = 'primary';
-  export let backgroun = true;
-  export let iconOnly = false;
-  export let size = ButtonSize.small;
-  export let click = () => {};
+  import { Button } from 'carbon-components-svelte';
 
-  let color;
-  let bg;
-  switch(ButtonType[type]) {
-    case 'primary': {
+  export { className as class };
+  export let icon;
+  export let onlyIcon = false;
+  export let kind = 'primary';
 
-    }break;
-    default: {
-      color: 'primary';
-      
-    }
-  }
-  if (!ButtonType[type]) {
-    type = ButtonType.primary;
-  }
-  const buttonClass = 'button ' + type;
+  let className;
 </script>
 
 <style type="text/scss">
   @import './button.scss';
 </style>
 
-<button class={buttonClass} on:click={click}>
-  <div class=""
-  {#if faClass}
-    <span class={`${faClass} icon`} style="font-size: {size.icon}pt;" />
-    {#if iconOnly === false}&nbsp;{/if}
+<Button class={className} {kind} on:click>
+  {#if icon}
+    <span class="{icon} icon" />
+    {#if onlyIcon === false}&nbsp;{/if}
   {/if}
-  {#if iconOnly === false}
-    <span class="text" style="font-size: {size.text}pt;">
-      <slot>
-        <button />
-      </slot>
-    </span>
-  {/if}
-</button>
+  <slot>
+    <button />
+  </slot>
+</Button>

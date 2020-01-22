@@ -9,14 +9,8 @@
     "start": "node dist/main.js",
     "ts-build": "tsc -p .",
     "dev": "env-cmd nodemon src/server/main.ts",
-    "front-dev": "run-p front-start:dev front-autobuild",
-    "front-build": "rollup -c",
-    "front-autobuild": "rollup -c -w",
-    "front-start": "sirv public --single",
-    "front-start:dev": "sirv public --single --dev",
-    "generate-doc": "typedoc --theme minimal server",
-    "bin": "node bin/bcms.js",
-    "bin-dev": "bcms --dev"
+    "front-build": "env-cmd nodemon src/server/build-front.ts",
+    "generate-doc": "typedoc --theme minimal server"
   },
   "dependencies": {
     "@rollup/plugin-commonjs": "^11.0.1",

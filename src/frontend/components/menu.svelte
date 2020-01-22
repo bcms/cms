@@ -1,4 +1,5 @@
 <script>
+  import Button from './global/button.svelte';
   import StringUtil from '../string-util.js';
 
   export let config;
@@ -25,7 +26,9 @@
             <div class="type">[ {StringUtil.prettyName(item.type)} ]</div>
           {/if}
           {#if item.roles}
-            <div class="role">[ {StringUtil.prettyName(item.roles[0].name)} ]</div>
+            <div class="role">
+              [ {StringUtil.prettyName(item.roles[0].name)} ]
+            </div>
           {/if}
         </div>
       {:else}
@@ -40,16 +43,17 @@
             <div class="type">[ {StringUtil.prettyName(item.type)} ]</div>
           {/if}
           {#if item.roles}
-            <div class="role">[ {StringUtil.prettyName(item.roles[0].name)} ]</div>
+            <div class="role">
+              [ {StringUtil.prettyName(item.roles[0].name)} ]
+            </div>
           {/if}
         </button>
       {/if}
     {/each}
   </div>
   <div class="create-new">
-    <button class="btn btn-blue-c" on:click={events.addNewItem}>
-      <div class="fa fa-plus icon" />
-      <div class="text">{config.buttonLabel}</div>
-    </button>
+    <Button icon="fas fa-plus" kind="ghost" on:click={events.addNewItem}>
+      {config.buttonLabel}
+    </Button>
   </div>
 </div>

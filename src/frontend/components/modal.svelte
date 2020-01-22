@@ -1,4 +1,6 @@
 <script>
+  import Button from './global/button.svelte';
+
   export let heading;
   export let footer;
   export let events;
@@ -44,7 +46,7 @@
   if (!footer) {
     footer = {
       greenBtnLabel: 'Done',
-    }
+    };
   }
 </script>
 
@@ -63,7 +65,12 @@
         </div>
         <div class="name">{heading.title}</div>
         <div class="close">
-          <button class="fa fa-times" on:click={events.cancel} />
+          <Button
+            icon="fas fa-times"
+            iconOnly={true}
+            kind="ghost"
+            on:click={events.cancel} />
+          <!-- <button class="fa fa-times" on:click={events.cancel} /> -->
         </div>
       </div>
       <div class="settings">
@@ -72,7 +79,11 @@
         </slot>
       </div>
       <div class="footer">
-        <button
+        <Button kind="danger" on:click={events.cancel}>Cancel</Button>
+        <div class="done">
+          <Button icon="fas fa-check" on:click={events.done}>Done</Button>
+        </div>
+        <!-- <button
           class="btn-border btn-l-padding btn-red-c btn-red-br"
           on:click={events.cancel}>
           <div class="text">Cancel</div>
@@ -82,7 +93,7 @@
           on:click={events.done}>
           <div class="icon fa fa-check" />
           <div class="text">{footer.greenBtnLabel}</div>
-        </button>
+        </button> -->
       </div>
     </div>
   </div>

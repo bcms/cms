@@ -9,6 +9,7 @@
   import EditModal from '../../../components/template/modals/edit.svelte';
   import PropsList from '../../../components/prop/props-list.svelte';
   import Menu from '../../../components/menu.svelte';
+  import Button from '../../../components/global/button.svelte';
   import UrlQueries from '../../../url-queries.js';
   import StringUtil from '../../../string-util.js';
 
@@ -318,12 +319,15 @@
           <div class="no-props">
             <div class="message">No Templates in Database yet</div>
             <div class="desc">Add your first Template</div>
-            <button
-              class="btn-fill btn-blue-bg action"
-              on:click={addModalEvents.toggle}>
-              <div class="fa fa-plus icon" />
-              <div class="text">Add new Template</div>
-            </button>
+            <div class="action">
+              <Button
+                icon="fas fa-plus"
+                on:click={() => {
+                  addModalEvents.toggle();
+                }}>
+                Add new Template
+              </Button>
+            </div>
           </div>
         </div>
       {/if}
