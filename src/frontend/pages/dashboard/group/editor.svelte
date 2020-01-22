@@ -7,6 +7,7 @@
   import EditGroupModal from '../../../components/group/modals/edit-group.svelte';
   import AddPropModal from '../../../components/modals/add-prop.svelte';
   import EditPropModal from '../../../components/modals/edit-prop.svelte';
+  import PropsList from '../../../components/prop/props-list.svelte';
   import StringUtil from '../../../string-util.js';
   import UrlQueries from '../../../url-queries.js';
 
@@ -245,52 +246,20 @@
               </button>
             </div>
             <div class="values">
-              {#each groupSelected.props as prop, i}
-                <div class="prop">
-                  <div class="img">
-                    <img
-                      src="/assets/ics/template/types/{prop.type}.png"
-                      alt="NF" />
-                  </div>
-                  <div class="name">{StringUtil.prettyName(prop.name)}</div>
-                  <div class="type">
-                    <div class="value">{StringUtil.prettyName(prop.type)}</div>
-                    {#if prop.type === 'GROUP_POINTER'}
-                      <div class="fas fa-long-arrow-alt-right group-pointer" />
-                      <button
-                        class="btn btn-green-c"
-                        on:click={() => {
-                          groupSelected = groups.find(e => e._id === prop.value._id);
-                        }}>
-                        <div class="fas fa-link icon" />
-                        <div class="text">
-                          {StringUtil.prettyName(groups.find(e => e._id === prop.value._id).name)}
-                        </div>
-                      </button>
-                    {/if}
-                  </div>
-                  {#if prop.required === true}
-                    <div class="fa fa-lock required" />
-                  {:else}
-                    <div class="fa fa-unlock required" />
-                  {/if}
-                  <div class="action">
-                    <button
-                      class="fa fa-edit"
-                      on:click={() => {
-                        editPropModalEvents.setProp(prop, i);
-                        editPropModalEvents.toggle();
-                      }} />
-                  </div>
-                  <div class="action">
-                    <button
-                      class="fa fa-trash"
-                      on:click={() => {
-                        deleteProp(prop, i);
-                      }} />
-                  </div>
-                </div>
-              {/each}
+              <PropsList
+                props={groupSelected.props}
+                {groups}
+                on:remove={event => {
+                  if (event.eventPhase === 0) {
+                    deleteProp(event.detail.prop, event.detail.i);
+                  }
+                }}
+                on:edit={event => {
+                  if (event.eventPhase === 0) {
+                    editPropModalEvents.setProp(event.detail.prop, event.detail.i);
+                    editPropModalEvents.toggle();
+                  }
+                }} />
             </div>
             <button
               class="btn-border btn-blue-c btn-blue-br action"

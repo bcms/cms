@@ -43,6 +43,9 @@
       section.value = additional.value;
     } else {
       switch (type) {
+        case 'MEDIA': {
+          section.value = '';
+        }break;
         case 'WIDGET':
           {
             section.value = JSON.parse(

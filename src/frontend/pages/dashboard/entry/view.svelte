@@ -5,7 +5,7 @@
   import Base64 from '../../../base64.js';
   import StringUtil from '../../../string-util.js';
   import Layout from '../../../components/layout/layout.svelte';
-  import DataModelModal from '../../../components/entry/modals/data-model.svelte';
+  import DataModelModal from '../../../components/entry/modals/add-data-model.svelte';
 
   export let axios;
   export let Store;
@@ -232,6 +232,7 @@
     }
     languages = result.response.data.languages;
     languageSelected = languages.find(e => e.code === queries.lng);
+    // addDataModalModalEvents.init();
   });
 </script>
 
@@ -488,19 +489,23 @@
               {#if page === 1}
                 <div class="fa fa-angle-left btn dis" />
               {:else}
-                <button class="fa fa-angle-left btn" on:click={() => {
-                  page = page - 1;
-                  entries = [...entries];
-                }}/>
+                <button
+                  class="fa fa-angle-left btn"
+                  on:click={() => {
+                    page = page - 1;
+                    entries = [...entries];
+                  }} />
               {/if}
               <div class="current">{page}</div>
               {#if page * entriesPerPage >= entries.length}
                 <div class="fa fa-angle-right btn dis" />
               {:else}
-                <button class="fa fa-angle-right btn" on:click={() => {
-                  page = page + 1;
-                  entries = [...entries];
-                }}/>
+                <button
+                  class="fa fa-angle-right btn"
+                  on:click={() => {
+                    page = page + 1;
+                    entries = [...entries];
+                  }} />
               {/if}
             </div>
           {/if}
@@ -511,7 +516,7 @@
     {/if}
   </div>
 </Layout>
-{#if template}
-  <DataModelModal events={editDataModelModalEvents} {template} {axios} />
-  <DataModelModal events={addDataModalModalEvents} {template} {axios} />
+{#if template && languages.length > 0}
+  <DataModelModal events={editDataModelModalEvents} {template} {languages} />
+  <DataModelModal events={addDataModalModalEvents} {template} {languages} />
 {/if}

@@ -5,106 +5,99 @@
     error: () => {},
     hide: () => {},
   };
+  export const MessageType = {
+    error: 'error',
+    success: 'success',
+  };
 </script>
 
 <script>
-  const data = {
-    color: 'var(--c-primary)',
-    position: '-350px',
-  };
+  import uuid from 'uuid';
 
-  let timer;
+  let messages = [];
+  const timeout = 8000;
 
-  simplePopup.hide = () => {
-    clearTimeout(timer);
-    data.position = '-350px';
-  };
-
-  simplePopup.info = (message) => {
-    message = styleContent(message);
-    document.getElementById('simple-popup-info').innerHTML = message;
-    data.color = 'var(--c-primary);';
-    data.position = '20px';
-  }
-
-  simplePopup.error = (message) => {
-    document.getElementById('simple-popup-info').innerHTML = message;
-    data.color = 'var(--c-error)';
-    data.position = '20px';
-    setTimeout(simplePopup.hide, 8000);
-  }
-
-  simplePopup.success = (message) => {
-    document.getElementById('simple-popup-info').innerHTML = message;
-    data.color = 'var(--c-success)';
-    data.position = '20px';
-    setTimeout(simplePopup.hide, 8000);
-  }
-
-  const contentStyle = {
-    h1: `
-      margin: 0;
-      padding: 0;
-    `,
-    h2: `
-      margin: 0;
-      padding: 0;
-    `,
-    h3: `
-      margin: 0;
-      padding: 0;
-    `,
-    h4: `
-      margin: 0;
-      padding: 0;
-    `,
-    h5: `
-      margin: 0;
-      padding: 0;
-    `,
-  }
-
-  function styleContent(content) {
-    for(const key in contentStyle) {
-      content = content.replace(new RegExp(`<${key}>`, 'g'), `<${key} style='${contentStyle[key]}'>`);
+  simplePopup.remove = messageId => {
+    if (messages.find(e => e.id === messageId)) {
+      messages = messages.map(message => {
+        if (message.id === messageId) {
+          message.position = 0;
+        }
+        return message;
+      });
+      setTimeout(() => {
+        messages = messages.filter(message => message.id !== messageId);
+      }, 800);
     }
-    return content;
-  }
+  };
+
+  simplePopup.error = content => {
+    simplePopup.push(MessageType.error, content);
+  };
+
+  simplePopup.success = content => {
+    simplePopup.push(MessageType.success, content);
+  };
+
+  simplePopup.push = (type, content) => {
+    switch (type) {
+      case MessageType.error:
+        {
+          const message = {
+            id: uuid.v4(),
+            position: 0,
+            type,
+            content,
+          };
+          messages = [...messages, message];
+          setTimeout(() => {
+            message.position = 320;
+            messages = [...messages];
+          }, 100);
+          setTimeout(() => {
+            simplePopup.remove(message.id);
+          }, timeout);
+        }
+        break;
+      case MessageType.success:
+        {
+          const message = {
+            id: uuid.v4(),
+            position: 0,
+            type,
+            content,
+          };
+          messages = [...messages, message];
+          setTimeout(() => {
+            message.position = 320;
+            messages = [...messages];
+          }, 100);
+          setTimeout(() => {
+            simplePopup.remove(message.id);
+          }, timeout);
+        }
+        break;
+      default: {
+        throw new Error(`Message of type '${type}' does not exist.`);
+      }
+    }
+  };
 </script>
 
-<style>
-  .simple-popup {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    width: 300px;
-    font-size: 11pt;
-    border: none;
-    border-radius: 5px;
-    box-shadow: -5px 5px 10px rgba(0, 0, 0, 0.2);
-    transition: 0.8s;
-    overflow: hidden;
-    z-index: 100;
-  }
-
-  .simple-popup .simple-popup-info {
-    padding: 5px 7px;
-    transition: 0.4s;
-    color: var(--c-white);
-  }
-
-  .simple-popup .simple-popup-info:hover {
-    background-color: var(--light-gray-shadow);
-    cursor: pointer;
-  }
+<style type="text/scss" global>
+  @import './simple-popup.scss';
 </style>
 
-<div id="simple-popup" class="simple-popup" style="right: {data.position};">
-  <div
-    id="simple-popup-info"
-    class="simple-popup-info"
-    style="background-color: {data.color};"
-    on:click={simplePopup.hide}>
-    Some Message
-  </div>
+<div class="simple-popup">
+  {#each messages as message}
+    <div
+      id={message.id}
+      class="message {message.type}"
+      style="right: {message.position}px;"
+      on:click={() => {
+        simplePopup.remove(message.id);
+      }}>
+      {@html message.content}
+    </div>
+  {/each}
 </div>

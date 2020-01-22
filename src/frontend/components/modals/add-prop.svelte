@@ -107,7 +107,10 @@
       case 'ARRAY':
         {
           data.type.value = 'STRING_ARRAY';
-          data.value = [];
+          data.value = {
+            error: '',
+            value: [],
+          };
         }
         break;
     }
@@ -137,8 +140,8 @@
     };
   }
   function handleArray(event) {
-    const parts = data.type.value.split('_');
-    data.type.value = `${event.target.value}${parts[parts.length - 1]}`;
+    // const parts = data.type.value.split('_');
+    data.type.value = event.target.value;
     if (data.type.value === 'GROUP_POINTER_ARRAY') {
       data.value = {
         error: '',
@@ -227,7 +230,7 @@
   };
 </script>
 
-<style type='text/scss'>
+<style type="text/scss">
   @import './add-prop.scss';
 </style>
 
@@ -282,7 +285,8 @@
         <div class="label">
           Name
           {#if data.name.error !== ''}
-            <div style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
+            <div
+              style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
               <span class="fa fa-exclamation" />
               <span style="margin-left: 5px;">{data.name.error}</span>
             </div>
@@ -320,10 +324,10 @@
           <div class="label">Select Array Type</div>
           <div class="value">
             <select class="select" on:change={handleArray}>
-              <option value="STRING_" selected>String</option>
-              <option value="NUMBER_">Number</option>
-              <option value="BOOLEAN_">Boolean</option>
-              <option value="GROUP_POINTER_">Group Pointer</option>
+              <option value="STRING_ARRAY" selected>String</option>
+              <option value="NUMBER_ARRAY">Number</option>
+              <option value="BOOLEAN_ARRAY">Boolean</option>
+              <option value="GROUP_POINTER_ARRAY">Group Pointer</option>
             </select>
           </div>
         </div>
@@ -332,7 +336,8 @@
             <div class="label">
               Select Group
               {#if data.value.error !== ''}
-                <div style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
+                <div
+                  style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
                   <span class="fa fa-exclamation" />
                   <span style="margin-left: 5px;">{data.value.error}</span>
                 </div>

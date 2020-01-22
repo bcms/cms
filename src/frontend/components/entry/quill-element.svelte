@@ -1,8 +1,7 @@
 <script>
   import { onMount, afterUpdate } from 'svelte';
-  import WidgetInput from '../widget-input.svelte';
+  import Widget from '../widget/widget.svelte';
 
-  export let widgets;
   export let quill;
   export let section;
   export let events;
@@ -202,7 +201,7 @@
   });
 </script>
 
-<style type="text/scss">
+<style type="text/scss" global>
   @import './quill-element.scss';
 </style>
 
@@ -229,18 +228,19 @@
         }} />
     {/if}
   {:else if section.type === 'WIDGET'}
-    <WidgetInput
-      {widgets}
+    <Widget
       widget={section.value}
-      events={{ delete: () => {
-          events.delete(section.id);
-        }, move: where => {
-          if (where === 'up') {
-            events.move(section.order, section.order - 1, section.id);
-          } else {
-            events.move(section.order, section.order + 1, section.id);
-          }
-        } }} />
+      {events}
+      on:delete={() => {
+        events.delete(section.id);
+      }}
+      on:move={where => {
+        if (where === 'up') {
+          events.move(section.order, section.order - 1, section.id);
+        } else {
+          events.move(section.order, section.order + 1, section.id);
+        }
+      }} />
   {:else}
     <div id={section.id} class={section.class} />
   {/if}

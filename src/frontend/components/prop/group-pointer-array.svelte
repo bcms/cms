@@ -9,8 +9,6 @@
   export let error = '';
   export let events;
 
-  console.log(prop);
-
   const dispatch = createEventDispatcher();
 
   function init() {

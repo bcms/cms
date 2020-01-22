@@ -1,0 +1,31 @@
+.simple-popup {
+  position: fixed;
+  bottom: 20px;
+  right: -350px;
+  width: 350px;
+  font-size: 10pt;
+  border: none;
+}
+
+.simple-popup .error {
+  background-color: var(--c-error);
+}
+
+.simple-popup .success {
+  background-color: var(--c-success);
+}
+
+.simple-popup .message {
+  padding: 10px 15px;
+  transition: 0.4s;
+  color: var(--c-white);
+  max-width: 300px;
+  margin-top: 10px;
+  border-radius: 3px;
+  position: relative;
+  right: 320px;
+}
+
+.simple-popup .message:hover {
+  cursor: pointer;
+}

@@ -76,62 +76,6 @@
   margin: 30px auto 0 auto;
 }
 
-.content .props .prop {
-  display: grid;
-  grid-template-columns: 30px 300px auto 50px 30px 30px;
-  margin: auto 0;
-  padding: 5px 0;
-  border-bottom-style: solid;
-  border-bottom-width: 1px;
-  border-bottom-color: var(--c-white-dark);
-}
-
-.content .props .prop .img {
-  margin: auto 0;
-}
-
-.content .props .prop .img img {
-  width: 100%;
-}
-
-.content .props .prop .name {
-  margin: auto 0 auto 20px;
-}
-
-.content .props .prop .type {
-  display: flex;
-}
-
-.content .props .prop .type .value {
-  margin: auto 0;
-}
-
-.content .props .prop .type .group-pointer {
-  margin: auto 20px;
-  color: var(--c-gray-light);
-}
-
-.content .props .prop .required {
-  color: var(--c-gray-light);
-}
-
-.content .props .prop .action {
-  display: flex;
-  margin: auto 0;
-  border: none;
-  background-color: var(--c-transparent);
-}
-
-.content .props .prop .action button {
-  margin-bottom: 6px;
-  border: none;
-  background-color: var(--c-transparent);
-}
-
-.content .props .prop .action button:hover {
-  color: var(--c-primary);
-}
-
 .content .no-props {
   text-align: center;
 }

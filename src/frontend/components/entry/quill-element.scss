@@ -36,3 +36,13 @@
   font-size: 14pt;
   font-family: 'Aref Ruqaa';
 }
+
+.ql-editor,
+.ql-editor * {
+  font-size: inherit !important;
+  font-weight: inherit !important;
+}
+
+.ql-editor p strong {
+  font-weight: bold !important;
+}

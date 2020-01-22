@@ -4,7 +4,6 @@
   import { onMount } from 'svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Leyout from '../../../components/layout/layout.svelte';
-  import PropsInput from '../../../components/props-input.svelte';
   import Props from '../../../components/prop/props.svelte';
   import QuillContent from '../../../components/entry/quill-content.svelte';
   import StringUtil from '../../../string-util.js';
@@ -151,6 +150,15 @@
       return false;
     }
     data[selectedLanguage.code].title.error = '';
+    for (const i in data[selectedLanguage.code].sections) {
+      const section = data[selectedLanguage.code].sections[i];
+      if (section.type === 'WIDGET') {
+        const props = section.quillEvents.validateAndGetProps();
+        if (!props) {
+          return false;
+        }
+      }
+    }
     return true;
   }
   function changeLanguage(event) {
