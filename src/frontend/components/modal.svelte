@@ -67,8 +67,9 @@
         <div class="close">
           <Button
             icon="fas fa-times"
-            iconOnly={true}
+            onlyIcon={true}
             kind="ghost"
+            size={'small'}
             on:click={events.cancel} />
           <!-- <button class="fa fa-times" on:click={events.cancel} /> -->
         </div>

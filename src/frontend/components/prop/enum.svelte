@@ -7,8 +7,10 @@
   export let error = '';
 </script>
 
-<Prop name={prop.name} required={prop.required} type={prop.type} {error}>
+<Prop name={prop.name} required={prop.required} type={prop.type}>
   <Select
+    invalid={error !== '' ? true : false}
+    invalidText={error}
     on:change={event => {
       if (event.eventPhase === 0) {
         prop.value.selected = event.detail;

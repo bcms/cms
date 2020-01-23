@@ -3,12 +3,12 @@
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import { sideBarOptions } from '../../../components/layout/side-bar.svelte';
   import Layout from '../../../components/layout/layout.svelte';
+  import ManagerLayout from '../../../components/layout/manager-content.svelte';
   import AddPropModal from '../../../components/modals/add-prop.svelte';
   import EditPropModal from '../../../components/modals/edit-prop.svelte';
   import AddModal from '../../../components/template/modals/add.svelte';
   import EditModal from '../../../components/template/modals/edit.svelte';
   import PropsList from '../../../components/prop/props-list.svelte';
-  import Menu from '../../../components/menu.svelte';
   import Button from '../../../components/global/button.svelte';
   import UrlQueries from '../../../url-queries.js';
   import StringUtil from '../../../string-util.js';
@@ -23,10 +23,6 @@
   let editPropModalEvents = { callback: editProp };
   let editModalEvents = { callback: templateEdit };
   let addModalEvents = { callback: templateAdded, toggle: () => {} };
-  let menuEvents = {
-    showTemplate,
-    addModalEvents,
-  };
 
   function showTemplate(template) {
     templateSelected = template;
@@ -215,124 +211,60 @@
 </style>
 
 <Layout {Store} {axios}>
-  <div class="template-editor">
-    <Menu
-      events={{ clicked: showTemplate, addNewItem: () => {
-          addModalEvents.toggle();
-        } }}
-      config={{ heading: 'TEMPLATES', buttonLabel: 'Add New Template', items: templates, itemSelected: templateSelected }} />
-    <div class="editor">
-      {#if templateSelected}
-        <div class="heading">
-          <div class="title">
-            {StringUtil.prettyName(templateSelected.name)}
-          </div>
-          <button
-            class="btn edit"
-            on:click={() => {
-              editModalEvents.setTemplate(templateSelected);
-              editModalEvents.toggle();
-            }}>
-            <div class="fa fa-edit icon" />
-          </button>
+  <ManagerLayout
+    items={templates}
+    itemSelected={templateSelected}
+    menuConfig={{ heading: 'TEMPLATES', buttonLabel: 'Add new Template' }}
+    on:addNewItem={event => {
+      if (event.eventPhase === 0) {
+        addModalEvents.toggle();
+      }
+    }}
+    on:itemClicked={event => {
+      if (event.eventPhase === 0) {
+        showTemplate(event.detail);
+      }
+    }}
+    on:addProp={event => {
+      if (event.eventPhase === 0) {
+        addPropModalEvents.toggle();
+      }
+    }}
+    on:delete={event => {
+      if (event.eventPhase === 0) {
+        deleteTemplate();
+      }
+    }}>
+    {#if templateSelected && templateSelected.entryTemplate.length > 0}
+      <PropsList
+        props={templateSelected.entryTemplate}
+        {groups}
+        on:remove={event => {
+          if (event.eventPhase === 0) {
+            deleteProp(event.detail.prop, event.detail.i);
+          }
+        }}
+        on:edit={event => {
+          if (event.eventPhase === 0) {
+            editPropModalEvents.setProp(event.detail.prop, event.detail.i);
+            editPropModalEvents.toggle();
+          }
+        }} />
+    {:else}
+      <div class="no-props">
+        <div class="message">There are no properties yet</div>
+        <div class="desc">Add your first to this Template</div>
+        <div class="action">
+          <Button
+            icon={'fas fa-plus'}
+            size={'small'}
+            on:click={addPropModalEvents.toggle}>
+            Add Property
+          </Button>
         </div>
-        <div class="desc">
-          {#if templateSelected.desc === ''}
-            This Template does not have description.
-          {:else}{templateSelected.desc}{/if}
-        </div>
-        <div class="basic-info">
-          <div class="key-value">
-            <div class="label">ID</div>
-            <div class="value">{templateSelected._id}</div>
-          </div>
-          <div class="key-value">
-            <div class="label">Created At</div>
-            <div class="value">
-              {new Date(templateSelected.createdAt).toLocaleString()}
-            </div>
-          </div>
-          <div class="key-value">
-            <div class="label">Updated At</div>
-            <div class="value">
-              {new Date(templateSelected.updatedAt).toLocaleString()}
-            </div>
-          </div>
-        </div>
-        <div class="props">
-          {#if templateSelected.entryTemplate.length > 0}
-            <div class="heading">
-              <div class="prop-count">
-                {templateSelected.entryTemplate.length} properties in this
-                Template
-              </div>
-              <button
-                class="btn-border btn-blue-br btn-blue-c add"
-                on:click={addPropModalEvents.toggle}>
-                <div class="fa fa-plus icon" />
-                <div class="text">Add Property</div>
-              </button>
-            </div>
-            <div class="values">
-              <PropsList
-                props={templateSelected.entryTemplate}
-                {groups}
-                on:remove={event => {
-                  if (event.eventPhase === 0) {
-                    deleteProp(event.detail.prop, event.detail.i);
-                  }
-                }}
-                on:edit={event => {
-                  if (event.eventPhase === 0) {
-                    editPropModalEvents.setProp(event.detail.prop, event.detail.i);
-                    editPropModalEvents.toggle();
-                  }
-                }} />
-            </div>
-            <button
-              class="btn-border btn-blue-c btn-blue-br action"
-              on:click={addPropModalEvents.toggle}>
-              <div class="fa fa-plus icon" />
-              <div class="text">Add Property</div>
-            </button>
-          {:else}
-            <div class="no-props">
-              <div class="message">There are no properties yet</div>
-              <div class="desc">Add your first to this Template</div>
-              <button
-                class="btn-fill btn-blue-bg action"
-                on:click={addPropModalEvents.toggle}>
-                <div class="fa fa-plus icon" />
-                <div class="text">Add Property</div>
-              </button>
-            </div>
-          {/if}
-        </div>
-        <button
-          class="btn-border btn-red-c btn-red-br delete"
-          on:click={deleteTemplate}>
-          <div class="fa fa-trash icon" />
-          <div class="text">Delete</div>
-        </button>
-      {:else}
-        <div class="props">
-          <div class="no-props">
-            <div class="message">No Templates in Database yet</div>
-            <div class="desc">Add your first Template</div>
-            <div class="action">
-              <Button
-                icon="fas fa-plus"
-                on:click={() => {
-                  addModalEvents.toggle();
-                }}>
-                Add new Template
-              </Button>
-            </div>
-          </div>
-        </div>
-      {/if}
-    </div>
-  </div>
+      </div>
+    {/if}
+  </ManagerLayout>
 </Layout>
 <AddModal {axios} events={addModalEvents} />
 <EditModal {axios} events={editModalEvents} />

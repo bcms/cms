@@ -7,6 +7,7 @@
   import PropNumber from './number.svelte';
   import PropNumberArray from './number-array.svelte';
   import PropEnum from './enum.svelte';
+  import PropDate from './prop-date.svelte';
   import PropGroupPointer from './group-pointer.svelte';
   import PropGroupPointerArray from './group-pointer-array.svelte';
   import StringUtil from '../../string-util.js';
@@ -144,6 +145,8 @@
         }} />
     {:else if prop.type === 'ENUMERATION'}
       <PropEnum {prop} error={errors[prop.name]} />
+    {:else if prop.type === 'DATE'}
+      <PropDate {prop} error={errors[prop.name]} />
     {:else if prop.type === 'GROUP_POINTER'}
       <PropGroupPointer
         {prop}

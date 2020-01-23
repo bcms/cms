@@ -1,7 +1,8 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import Prop from './prop.svelte';
   import { NumberInput } from 'carbon-components-svelte';
+  import Prop from './prop.svelte';
+  import Button from '../global/button.svelte';
   import StringUtil from '../../string-util.js';
 
   export let prop;
@@ -23,13 +24,16 @@
           prop.value[i] = event.detail;
         }} />
     {/each}
-    <button
-      class="btn btn-blue-c"
-      on:click={() => {
-        dispatch('add', prop);
-      }}>
-      <div class="fas fa-plus icon" />
-      <div class="text">Add Element</div>
-    </button>
+    <div class="action">
+      <Button
+        icon="fas fa-plus"
+        size="small"
+        kind="ghost"
+        on:click={() => {
+          dispatch('add', prop);
+        }}>
+        Add Item
+      </Button>
+    </div>
   </div>
 </Prop>

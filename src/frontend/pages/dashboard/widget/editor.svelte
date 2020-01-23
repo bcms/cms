@@ -2,12 +2,13 @@
   import { onMount } from 'svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/layout/layout.svelte';
-  import Menu from '../../../components/menu.svelte';
+  import ManagerLayout from '../../../components/layout/manager-content.svelte';
   import AddPropModal from '../../../components/modals/add-prop.svelte';
   import EditPropModal from '../../../components/modals/edit-prop.svelte';
   import AddWidgetModal from '../../../components/widget/modals/add-widget.svelte';
   import EditWidgetModal from '../../../components/widget/modals/edit-widget.svelte';
   import PropsList from '../../../components/prop/props-list.svelte';
+  import Button from '../../../components/global/button.svelte';
   import StringUtil from '../../../string-util.js';
   import UrlQueries from '../../../url-queries.js';
 
@@ -21,23 +22,6 @@
   let editWidgetModalEvents = { callback: editWidget };
   let addPropModalEvents = { callback: addProp };
   let editPropModalEvents = { callback: editProp };
-  let menu = {
-    config: {
-      heading: 'WIDGETS',
-      buttonLabel: 'Add New Widget',
-      items: widgets,
-      itemSelected: widgetSelected,
-    },
-    events: {
-      clicked: item => {
-        widgetSelected = item;
-        menu.config.itemSelected = item;
-      },
-      addNewItem: () => {
-        addWidgetModalEvents.toggle();
-      },
-    },
-  };
 
   async function addWidget(data) {
     const result = await axios.send({
@@ -52,8 +36,6 @@
     simplePopup.success('Widget added successfully!');
     widgets = [...widgets, result.response.data.widget];
     widgetSelected = result.response.data.widget;
-    menu.config.items = widgets;
-    menu.config.itemSelected = widgetSelected;
   }
   async function editWidget(data) {
     data.changes = {
@@ -76,8 +58,6 @@
       }
       return widget;
     });
-    menu.config.items = widgets;
-    menu.config.itemSelected = widgetSelected;
   }
   async function deleteWidget() {
     if (confirm('Are you sure you want to delete the Widget?\n\n')) {
@@ -96,8 +76,6 @@
       } else {
         widgetSelected = undefined;
       }
-      menu.config.items = widgets;
-      menu.config.itemSelected = widgetSelected;
     }
   }
   async function addProp(data) {
@@ -226,8 +204,6 @@
     if (!widgetSelected && widgets.length > 0) {
       widgetSelected = widgets[0];
     }
-    menu.config.items = widgets;
-    menu.config.itemSelected = widgetSelected;
   });
 </script>
 
@@ -236,95 +212,60 @@
 </style>
 
 <Layout {Store} {axios}>
-  <div class="editor">
-    <Menu events={menu.events} config={menu.config} />
-    <div class="content">
-      {#if widgetSelected}
-        <div class="heading">
-          <div class="title">{StringUtil.prettyName(widgetSelected.name)}</div>
-          <button
-            class="btn edit"
-            on:click={() => {
-              editWidgetModalEvents.toggle();
-            }}>
-            <div class="fa fa-edit icon" />
-          </button>
+  <ManagerLayout
+    items={widgets}
+    itemSelected={widgetSelected}
+    menuConfig={{ heading: 'WIDGETS', buttonLabel: 'Add new Widget' }}
+    on:addNewItem={event => {
+      if (event.eventPhase === 0) {
+        addWidgetModalEvents.toggle();
+      }
+    }}
+    on:itemClicked={event => {
+      if (event.eventPhase === 0) {
+        widgetSelected = event.detail;
+      }
+    }}
+    on:addProp={event => {
+      if (event.eventPhase === 0) {
+        addPropModalEvents.toggle();
+      }
+    }}
+    on:delete={event => {
+      if (event.eventPhase === 0) {
+        deleteWidget();
+      }
+    }}>
+    {#if widgetSelected && widgetSelected.props.length > 0}
+      <PropsList
+        props={widgetSelected.props}
+        {groups}
+        on:remove={event => {
+          if (event.eventPhase === 0) {
+            deleteProp(event.detail.prop, event.detail.i);
+          }
+        }}
+        on:edit={event => {
+          if (event.eventPhase === 0) {
+            editPropModalEvents.setProp(event.detail.prop, event.detail.i);
+            editPropModalEvents.toggle();
+          }
+        }} />
+    {:else}
+      <div class="no-props">
+        <div class="message">There are no properties yet</div>
+        <div class="desc">Add your first to this Template</div>
+        <div class="action">
+          <Button
+            icon={'fas fa-plus'}
+            size={'small'}
+            on:click={addPropModalEvents.toggle}>
+            Add Property
+          </Button>
         </div>
-        <div class="desc">
-          {#if widgetSelected.desc === ''}
-            This Widget does not have description.
-          {:else}{widgetSelected.desc}{/if}
-        </div>
-        <div class="props">
-          {#if widgetSelected.props.length > 0}
-            <div class="heading">
-              <div class="prop-count">
-                {widgetSelected.props.length} properties in this Group
-              </div>
-              <button
-                class="btn-border btn-blue-br btn-blue-c add"
-                on:click={addPropModalEvents.toggle}>
-                <div class="fa fa-plus icon" />
-                <div class="text">Add Property</div>
-              </button>
-            </div>
-            <div class="values">
-              <PropsList
-                props={widgetSelected.props}
-                {groups}
-                on:remove={event => {
-                  if (event.eventPhase === 0) {
-                    deleteProp(event.detail.prop, event.detail.i);
-                  }
-                }}
-                on:edit={event => {
-                  if (event.eventPhase === 0) {
-                    editPropModalEvents.setProp(event.detail.prop, event.detail.i);
-                    editPropModalEvents.toggle();
-                  }
-                }} />
-            </div>
-            <button
-              class="btn-border btn-blue-c btn-blue-br action"
-              on:click={addPropModalEvents.toggle}>
-              <div class="fa fa-plus icon" />
-              <div class="text">Add Property</div>
-            </button>
-          {:else}
-            <div class="no-props">
-              <div class="message">There are no properties yet</div>
-              <div class="desc">Add your first to this Group</div>
-              <button
-                class="btn-fill btn-blue-bg action"
-                on:click={addPropModalEvents.toggle}>
-                <div class="fa fa-plus icon" />
-                <div class="text">Add Property</div>
-              </button>
-            </div>
-          {/if}
-        </div>
-        <button
-          class="btn-border btn-red-c btn-red-br delete"
-          on:click={deleteWidget}>
-          <div class="fa fa-trash icon" />
-          <div class="text">Delete</div>
-        </button>
-      {:else}
-        <div class="props">
-          <div class="no-props">
-            <div class="message">No Widgets in Database yet</div>
-            <div class="desc">Add your first Widget</div>
-            <button
-              class="btn-fill btn-blue-bg action"
-              on:click={addWidgetModalEvents.toggle}>
-              <div class="fa fa-plus icon" />
-              <div class="text">Add new Widget</div>
-            </button>
-          </div>
-        </div>
-      {/if}
-    </div>
-  </div>
+      </div>
+    {/if}
+  </ManagerLayout>
 </Layout>
 
 <AddWidgetModal events={addWidgetModalEvents} />

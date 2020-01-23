@@ -2,10 +2,12 @@
   import uuid from 'uuid';
   import crypto from 'crypto-js';
   import { onMount } from 'svelte';
+  import { Select, SelectItem } from 'carbon-components-svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Leyout from '../../../components/layout/layout.svelte';
   import Props from '../../../components/prop/props.svelte';
   import QuillContent from '../../../components/entry/quill-content.svelte';
+  import Button from '../../../components/global/button.svelte';
   import StringUtil from '../../../string-util.js';
   import UrlQueries from '../../../url-queries.js';
 
@@ -38,7 +40,6 @@
   };
   let dataHash;
   let quillContentEvents = {};
-  let propsInputEvents = {};
   let propsEvents = {};
 
   async function addEntry() {
@@ -67,7 +68,7 @@
       `cid=${template._id}&lng=${selectedLanguage.code}`;
   }
   async function updateEnrty() {
-    const metaProps = propsInputEvents.validateAndGetProps();
+    const metaProps = propsEvents.validateAndGetProps();
     if (!metaProps) {
       return;
     }
@@ -161,10 +162,10 @@
     }
     return true;
   }
-  function changeLanguage(event) {
+  function changeLanguage(lng) {
     let path =
       `/dashboard/template/entry/` +
-      `rc?tid=${template._id}&lng=${event.target.value}`;
+      `rc?tid=${template._id}&lng=${lng}`;
     if (queries.eid) {
       path += `&eid=${queries.eid}`;
     }
@@ -178,7 +179,7 @@
       ) {
         window.location = path;
       } else {
-        event.target.value = queries.lng;
+        lng = queries.lng;
       }
     } else {
       window.location = path;
@@ -385,31 +386,25 @@
         </div>
         <div class="actions">
           {#if queries.eid}
-            <button class="btn-fill btn-blue-bg" on:click={updateEnrty}>
-              <div class="fa fa-plus icon" />
-              <div class="text">Update</div>
-            </button>
+            <Button icon="fas fa-check" on:click={updateEnrty}>Update</Button>
           {:else}
-            <button class="btn-fill btn-blue-bg" on:click={addEntry}>
-              <div class="fa fa-plus icon" />
-              <div class="text">Save</div>
-            </button>
+            <Button icon="fas fa-plus" on:click={addEntry}>Save</Button>
           {/if}
         </div>
       </div>
       <h3>Change Language</h3>
       <div class="lng">
-        <select class="select" on:change={changeLanguage}>
+        <Select
+          selected={selectedLanguage.code}
+          on:change={event => {
+            if (event.eventPhase === 0) {
+              changeLanguage(event.detail);
+            }
+          }}>
           {#each languages as lng}
-            {#if lng.code === selectedLanguage.code}
-              <option value={lng.code} selected>
-                {lng.name} | {lng.nativeName}
-              </option>
-            {:else}
-              <option value={lng.code}>{lng.name} | {lng.nativeName}</option>
-            {/if}
+            <SelectItem text="{lng.name} | {lng.nativeName}" value={lng.code} />
           {/each}
-        </select>
+        </Select>
       </div>
       <h3>Meta</h3>
       <div class="meta">

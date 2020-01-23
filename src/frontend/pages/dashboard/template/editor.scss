@@ -1,92 +1,98 @@
-.template-editor {
-  display: grid;
-  grid-template-columns: 400px auto;
-  height: 100%;
-}
+// .template-editor {
+//   display: grid;
+//   grid-template-columns: 350px auto;
+//   height: 100%;
+// }
 
-.editor {
-  height: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-  padding: 20px;
-}
+// .editor {
+//   height: 100%;
+//   overflow-x: hidden;
+//   overflow-y: auto;
+//   padding: 20px;
+// }
 
-.editor .no-props {
-  text-align: center;
-}
+// .editor .no-props {
+//   text-align: center;
+// }
 
-.editor .no-props .message {
-  font-size: 14pt;
-  margin-top: 30px;
-}
+// .editor .no-props .message {
+//   font-size: 14pt;
+//   margin-top: 30px;
+// }
 
-.editor .no-props .desc {
-  margin-top: 10px;
-}
+// .editor .no-props .desc {
+//   margin-top: 10px;
+// }
 
-.editor .no-props .action {
-  margin: 40px auto 40px auto;
-}
+// .editor .no-props .action {
+//   margin: 40px auto 40px auto;
+// }
 
-.editor .delete {
-  margin: 40px 0 20px auto;
-}
+// .editor .delete {
+//   margin: 40px 0 20px auto;
+// }
 
-.editor .heading {
-  display: flex;
-}
+// .editor .heading {
+//   display: flex;
+// }
 
-.editor .heading .title {
-  font-size: 18pt;
-  font-weight: bold;
-}
+// .editor .heading .title {
+//   font-size: 18pt;
+//   font-weight: bold;
+//   margin: auto 0;
+// }
 
-.editor .heading .edit {
-  color: var(--c-gray-dark);
-}
+// .editor .heading .edit {
+//   margin-left: 20px;
+//   color: var(--c-gray-dark);
+// }
 
-.editor .heading .edit:hover {
-  color: var(--c-primary);
-}
+// .editor .heading .edit:hover {
+//   color: var(--c-primary);
+// }
 
-.editor .desc {
-  font-size: 10pt;
-  color: var(--c-gray-dark);
-}
+// .editor .desc {
+//   font-size: 10pt;
+//   color: var(--c-gray-dark);
+// }
 
-.editor .basic-info {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 20px;
-  margin-top: 30px;
-  background-color: var(--c-white);
-  padding: 10px 20px;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
-  font-size: 10pt;
-}
+// .editor .basic-info {
+//   display: grid;
+//   grid-template-columns: repeat(3, 1fr);
+//   grid-gap: 20px;
+//   margin-top: 30px;
+//   background-color: var(--c-white);
+//   padding: 10px 20px;
+//   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+//   font-size: 10pt;
+// }
 
-.editor .props {
-  margin-top: 30px;
-  background-color: var(--c-white);
-  padding: 10px 20px;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
-  font-size: 10pt;
-}
+// .editor .props {
+//   margin-top: 30px;
+//   background-color: var(--c-white);
+//   padding: 10px 20px;
+//   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+//   font-size: 10pt;
+// }
 
-.editor .props .values {
-  margin-top: 30px;
-}
+// .editor .props .values {
+//   margin-top: 30px;
+// }
 
-.editor .props .heading {
-  font-size: 14pt;
-  display: flex;
-  margin: auto 0;
-}
+// .editor .props .heading {
+//   font-size: 14pt;
+//   display: flex;
+//   margin: auto 0;
+// }
 
-.editor .props .heading .add {
-  margin-left: auto;
-}
+// .editor .props .heading .add {
+//   margin-left: auto;
+// }
 
-.editor .props .action {
-  margin: 30px auto 0 auto;
-}
+// .editor .props .action {
+//   margin: 30px auto 0 auto;
+// }
+
+// .editor .delete {
+
+// }

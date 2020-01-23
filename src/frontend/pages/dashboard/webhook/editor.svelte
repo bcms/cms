@@ -1,9 +1,12 @@
 <script>
   import { onMount } from 'svelte';
+  import { TextArea } from 'carbon-components-svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import { sideBarOptions } from '../../../components/layout/side-bar.svelte';
   import Layout from '../../../components/layout/layout.svelte';
-  import Menu from '../../../components/menu.svelte';
+  import ManagerLayout from '../../../components/layout/manager-content.svelte';
+  import PropsList from '../../../components/prop/props-list.svelte';
+  import Button from '../../../components/global/button.svelte';
   import AddWebhookModal from '../../../components/webhook/modals/add-webhook.svelte';
   import EditWebhookModal from '../../../components/webhook/modals/edit-webhook.svelte';
   import StringUtil from '../../../string-util.js';
@@ -11,6 +14,7 @@
   export let axios;
   export let Store;
 
+  let groups = [];
   let webhooks = [];
   let webhookSelected;
   let menu = {
@@ -32,6 +36,7 @@
   };
   let addWebhookModalEvents = { callback: addWebhook };
   let editWebhookModalEvents = { callback: updateWebhook };
+  let invalidJSONObject = false;
 
   async function addWebhook(data) {
     const result = await axios.send({
@@ -50,40 +55,40 @@
     sideBarOptions.updateWebhooks(webhooks);
   }
   async function updateWebhook(data) {
+    console.log('WOHO');
     let d;
     if (data) {
       d = data;
     } else {
       d = webhookSelected;
       try {
-        JSON.parse(document.getElementById(d._id).value);
+        JSON.parse(atob(d.body));
       } catch (error) {
-        simplePopup.error('Invalid JSON format.');
-        document.getElementById(d._id).style.borderColor = 'red';
+        invalidJSONObject = true;
         return;
       }
-      d.body = btoa(document.getElementById(d._id).value);
+      invalidJSONObject = false;
     }
-    const result = await axios.send({
-      url: '/webhook',
-      method: 'PUT',
-      data: d,
-    });
-    if (result.success === false) {
-      simplePopup.error(result.error.response.data.message);
-      return;
-    }
-    webhooks = webhooks.map(e => {
-      if (e._id === d._id) {
-        return result.response.data.webhook;
-      }
-      return e;
-    });
-    webhookSelected = result.response.data.webhook;
-    menu.config.itemSelected = webhookSelected;
-    menu.config.items = webhooks;
-    sideBarOptions.updateWebhooks(webhooks);
-    simplePopup.success('Webhook updated successfully!');
+    // const result = await axios.send({
+    //   url: '/webhook',
+    //   method: 'PUT',
+    //   data: d,
+    // });
+    // if (result.success === false) {
+    //   simplePopup.error(result.error.response.data.message);
+    //   return;
+    // }
+    // webhooks = webhooks.map(e => {
+    //   if (e._id === d._id) {
+    //     return result.response.data.webhook;
+    //   }
+    //   return e;
+    // });
+    // webhookSelected = result.response.data.webhook;
+    // menu.config.itemSelected = webhookSelected;
+    // menu.config.items = webhooks;
+    // sideBarOptions.updateWebhooks(webhooks);
+    // simplePopup.success('Webhook updated successfully!');
   }
   async function deleteWebhook() {
     if (confirm('Are you sure you want to delete this webhook?')) {
@@ -108,7 +113,7 @@
   }
 
   onMount(async () => {
-    const result = await axios.send({
+    let result = await axios.send({
       url: `/webhook/all`,
       method: 'GET',
     });
@@ -130,7 +135,7 @@
 </style>
 
 <Layout {Store} {axios}>
-  <div class="editor">
+  <!-- <div class="editor">
     <Menu events={menu.events} config={menu.config} />
     <div class="content">
       {#if webhookSelected}
@@ -210,7 +215,49 @@
         </div>
       {/if}
     </div>
-  </div>
+  </div> -->
+  <ManagerLayout
+    items={webhooks}
+    itemSelected={webhookSelected}
+    onlySlot={true}
+    menuConfig={{ heading: 'GROUPS', buttonLabel: 'Add new Group' }}
+    on:addNewItem={event => {
+      if (event.eventPhase === 0) {
+        addWebhookModalEvents.toggle();
+      }
+    }}
+    on:itemClicked={event => {
+      if (event.eventPhase === 0) {
+        webhookSelected = event.detail;
+        menu.config.itemSelected = event.detail;
+      }
+    }}
+    on:delete={event => {
+      if (event.eventPhase === 0) {
+        deleteWebhook();
+      }
+    }}>
+    <div class="update">
+      <Button
+        icon="fas fa-check"
+        size="small"
+        on:click={event => {
+          updateWebhook();
+        }}>
+        Update
+      </Button>
+    </div>
+    <TextArea
+      invalid={invalidJSONObject}
+      invalidText={'Valid JSON Object must be provided.'}
+      labelText={'Webhook body'}
+      helperText={'Valid JSON object string is required.'}
+      cols="500"
+      value={atob(webhookSelected.body)}
+      on:input={event => {
+        webhookSelected.body = btoa(event.target.value);
+      }} />
+  </ManagerLayout>
 </Layout>
 <AddWebhookModal events={addWebhookModalEvents} />
 {#if webhookSelected}

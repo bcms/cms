@@ -1,4 +1,7 @@
 <script context="module">
+  import { ToastNotification } from 'carbon-components-svelte';
+  import StringUtil from '../string-util.js';
+
   export const simplePopup = {
     info: () => {},
     success: () => {},
@@ -90,14 +93,12 @@
 
 <div class="simple-popup">
   {#each messages as message}
-    <div
-      id={message.id}
-      class="message {message.type}"
-      style="right: {message.position}px;"
-      on:click={() => {
-        simplePopup.remove(message.id);
-      }}>
-      {@html message.content}
+    <div id={message.id} class="message" style="right: {message.position}px;">
+      <ToastNotification
+        title={StringUtil.prettyName(message.type)}
+        kind={message.type}
+        lowContrast={true}
+        caption={message.content} />
     </div>
   {/each}
 </div>

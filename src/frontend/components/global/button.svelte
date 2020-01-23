@@ -5,6 +5,7 @@
   export let icon;
   export let onlyIcon = false;
   export let kind = 'primary';
+  export let size;
 
   let className;
 </script>
@@ -13,12 +14,14 @@
   @import './button.scss';
 </style>
 
-<Button class={className} {kind} on:click>
+<Button class={className} {kind} {size} on:click>
   {#if icon}
     <span class="{icon} icon" />
     {#if onlyIcon === false}&nbsp;{/if}
   {/if}
-  <slot>
-    <button />
-  </slot>
+  {#if onlyIcon === false}
+    <slot>
+      <button />
+    </slot>
+  {/if}
 </Button>

@@ -3,6 +3,7 @@
   import { onMount } from 'svelte';
   import QuillElement from './quill-element.svelte';
   import SelectElementModal from './modals/select-element.svelte';
+  import Button from '../global/button.svelte';
   import StringUtil from '../../string-util.js';
 
   export let quill;
@@ -43,9 +44,11 @@
       section.value = additional.value;
     } else {
       switch (type) {
-        case 'MEDIA': {
-          section.value = '';
-        }break;
+        case 'MEDIA':
+          {
+            section.value = '';
+          }
+          break;
         case 'WIDGET':
           {
             section.value = JSON.parse(
@@ -163,21 +166,27 @@
         events={section.quillEvents}
         inFocus={false} />
     {/each}
-    <button
-      class="btn-fill btn-blue-bg add"
-      on:click={selectElementModalEvents.toggle}>
-      <div class="fas fa-plus icon" />
-      <div class="text">Add Section</div>
-    </button>
+    <div class="actions">
+      <Button
+        icon="fas fa-plus"
+        on:click={() => {
+          selectElementModalEvents.toggle();
+        }}>
+        Add Section
+      </Button>
+    </div>
   {:else}
     <div class="empty">
       <div class="message">Looks like there are no Sections...</div>
-      <button
-        class="btn-fill btn-blue-bg add"
-        on:click={selectElementModalEvents.toggle}>
-        <div class="fas fa-plus icon" />
-        <div class="text">Add Section</div>
-      </button>
+      <div class="actions">
+        <Button
+          icon="fas fa-plus"
+          on:click={() => {
+            selectElementModalEvents.toggle();
+          }}>
+          Add Section
+        </Button>
+      </div>
     </div>
   {/if}
 </div>

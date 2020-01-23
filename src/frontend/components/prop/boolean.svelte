@@ -7,8 +7,17 @@
 </script>
 
 <Prop name={prop.name} required={prop.required} type={prop.type} {error}>
-  <Toggle
-    on:change={event => {
-      prop.value = event.target.checked;
-    }} />
+  {#if prop.value === true}
+    <Toggle
+      toggled={true}
+      on:change={event => {
+        prop.value = event.target.checked;
+      }} />
+  {:else}
+    <Toggle
+      toggled={false}
+      on:change={event => {
+        prop.value = event.target.checked;
+      }} />
+  {/if}
 </Prop>

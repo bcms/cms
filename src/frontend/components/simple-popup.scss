@@ -7,16 +7,7 @@
   border: none;
 }
 
-.simple-popup .error {
-  background-color: var(--c-error);
-}
-
-.simple-popup .success {
-  background-color: var(--c-success);
-}
-
 .simple-popup .message {
-  padding: 10px 15px;
   transition: 0.4s;
   color: var(--c-white);
   max-width: 300px;

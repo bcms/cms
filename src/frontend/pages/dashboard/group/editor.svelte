@@ -2,12 +2,13 @@
   import { onMount } from 'svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/layout/layout.svelte';
-  import Menu from '../../../components/menu.svelte';
+  import ManagerLayout from '../../../components/layout/manager-content.svelte';
   import AddGroupModal from '../../../components/group/modals/add-group.svelte';
   import EditGroupModal from '../../../components/group/modals/edit-group.svelte';
   import AddPropModal from '../../../components/modals/add-prop.svelte';
   import EditPropModal from '../../../components/modals/edit-prop.svelte';
   import PropsList from '../../../components/prop/props-list.svelte';
+  import Button from '../../../components/global/button.svelte';
   import StringUtil from '../../../string-util.js';
   import UrlQueries from '../../../url-queries.js';
 
@@ -23,7 +24,6 @@
   let editGroupModalEvents = { callback: editGroup };
   let addPropModalEvents = { callback: addProp };
   let editPropModalEvents = { callback: editProp };
-  let menuEvents = { openGroup, addGroupModalEvents };
 
   function openGroup(group) {
     groupSelected = group;
@@ -209,99 +209,60 @@
 </style>
 
 <Layout {Store} {axios}>
-  <div class="editor">
-    <Menu
-      events={{ clicked: openGroup, addNewItem: () => {
-          addGroupModalEvents.toggle();
-        } }}
-      config={{ heading: 'GROUPS', buttonLabel: 'Add New Group', items: groups, itemSelected: groupSelected }} />
-    <div class="content">
-      {#if groupSelected}
-        <div class="heading">
-          <div class="title">{StringUtil.prettyName(groupSelected.name)}</div>
-          <button
-            class="btn edit"
-            on:click={() => {
-              editGroupModalEvents.toggle();
-            }}>
-            <div class="fa fa-edit icon" />
-          </button>
+  <ManagerLayout
+    items={groups}
+    itemSelected={groupSelected}
+    menuConfig={{ heading: 'GROUPS', buttonLabel: 'Add new Group' }}
+    on:addNewItem={event => {
+      if (event.eventPhase === 0) {
+        addGroupModalEvents.toggle();
+      }
+    }}
+    on:itemClicked={event => {
+      if (event.eventPhase === 0) {
+        openGroup(event.detail);
+      }
+    }}
+    on:addProp={event => {
+      if (event.eventPhase === 0) {
+        addPropModalEvents.toggle();
+      }
+    }}
+    on:delete={event => {
+      if (event.eventPhase === 0) {
+        deleteGroup();
+      }
+    }}>
+    {#if groupSelected && groupSelected.props.length > 0}
+      <PropsList
+        props={groupSelected.props}
+        {groups}
+        on:remove={event => {
+          if (event.eventPhase === 0) {
+            deleteProp(event.detail.prop, event.detail.i);
+          }
+        }}
+        on:edit={event => {
+          if (event.eventPhase === 0) {
+            editPropModalEvents.setProp(event.detail.prop, event.detail.i);
+            editPropModalEvents.toggle();
+          }
+        }} />
+    {:else}
+      <div class="no-props">
+        <div class="message">There are no properties yet</div>
+        <div class="desc">Add your first to this Template</div>
+        <div class="action">
+          <Button
+            icon={'fas fa-plus'}
+            size={'small'}
+            on:click={addPropModalEvents.toggle}>
+            Add Property
+          </Button>
         </div>
-        <div class="desc">
-          {#if groupSelected.desc === ''}
-            This Group does not have description.
-          {:else}{groupSelected.desc}{/if}
-        </div>
-        <div class="props">
-          {#if groupSelected.props.length > 0}
-            <div class="heading">
-              <div class="prop-count">
-                {groupSelected.props.length} properties in this Group
-              </div>
-              <button
-                class="btn-border btn-blue-br btn-blue-c add"
-                on:click={addPropModalEvents.toggle}>
-                <div class="fa fa-plus icon" />
-                <div class="text">Add Property</div>
-              </button>
-            </div>
-            <div class="values">
-              <PropsList
-                props={groupSelected.props}
-                {groups}
-                on:remove={event => {
-                  if (event.eventPhase === 0) {
-                    deleteProp(event.detail.prop, event.detail.i);
-                  }
-                }}
-                on:edit={event => {
-                  if (event.eventPhase === 0) {
-                    editPropModalEvents.setProp(event.detail.prop, event.detail.i);
-                    editPropModalEvents.toggle();
-                  }
-                }} />
-            </div>
-            <button
-              class="btn-border btn-blue-c btn-blue-br action"
-              on:click={addPropModalEvents.toggle}>
-              <div class="fa fa-plus icon" />
-              <div class="text">Add Property</div>
-            </button>
-          {:else}
-            <div class="no-props">
-              <div class="message">There are no properties yet</div>
-              <div class="desc">Add your first to this Group</div>
-              <button
-                class="btn-fill btn-blue-bg action"
-                on:click={addPropModalEvents.toggle}>
-                <div class="fa fa-plus icon" />
-                <div class="text">Add Property</div>
-              </button>
-            </div>
-          {/if}
-        </div>
-        <button
-          class="btn-border btn-red-c btn-red-br delete"
-          on:click={deleteGroup}>
-          <div class="fa fa-trash icon" />
-          <div class="text">Delete</div>
-        </button>
-      {:else}
-        <div class="props">
-          <div class="no-props">
-            <div class="message">No Groups in Database yet</div>
-            <div class="desc">Add your first Group</div>
-            <button
-              class="btn-fill btn-blue-bg action"
-              on:click={addGroupModalEvents.toggle}>
-              <div class="fa fa-plus icon" />
-              <div class="text">Add new Group</div>
-            </button>
-          </div>
-        </div>
-      {/if}
-    </div>
-  </div>
+      </div>
+    {/if}
+  </ManagerLayout>
 </Layout>
 <AddGroupModal events={addGroupModalEvents} />
 {#if groupSelected}
