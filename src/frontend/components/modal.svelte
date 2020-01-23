@@ -6,8 +6,7 @@
   export let events;
 
   let style = {
-    blur: 4,
-    opacity: 0,
+    right: -600,
   };
   let show = false;
 
@@ -19,18 +18,16 @@
       show = true;
       setTimeout(() => {
         style = {
-          blur: 0,
-          opacity: 1,
+          right: 0,
         };
       }, 100);
     } else {
       style = {
-        blur: 4,
-        opacity: 0,
+        right: -600,
       };
       setTimeout(() => {
         show = false;
-      }, 600);
+      }, 400);
     }
   };
   if (!events.done) {
@@ -55,7 +52,7 @@
 </style>
 
 {#if show === true}
-  <div
+  <!-- <div
     class="overlay"
     style="opacity: {style.opacity}; filter: blur({style.blur}px);">
     <div class="content-box">
@@ -71,7 +68,6 @@
             kind="ghost"
             size={'small'}
             on:click={events.cancel} />
-          <!-- <button class="fa fa-times" on:click={events.cancel} /> -->
         </div>
       </div>
       <div class="settings">
@@ -84,17 +80,37 @@
         <div class="done">
           <Button icon="fas fa-check" on:click={events.done}>Done</Button>
         </div>
-        <!-- <button
-          class="btn-border btn-l-padding btn-red-c btn-red-br"
-          on:click={events.cancel}>
-          <div class="text">Cancel</div>
-        </button>
-        <button
-          class="btn-border btn-l-padding btn-green-c btn-green-br done"
-          on:click={events.done}>
-          <div class="icon fa fa-check" />
-          <div class="text">{footer.greenBtnLabel}</div>
-        </button> -->
+      </div>
+    </div>
+  </div> -->
+  <div class="overlay">
+    <div class="modal" style="right: {style.right}px;">
+      <div class="heading">
+        <div class="title">{heading.title}</div>
+        <div class="close">
+          <Button
+            icon="fas fa-times"
+            onlyIcon={true}
+            kind="ghost"
+            size={'field'}
+            on:click={events.cancel} />
+        </div>
+      </div>
+      <div class="content">
+        <slot />
+      </div>
+      <div class="footer">
+        <div class="cancel">
+          <Button
+            style="width: 100%;"
+            kind="secondary"
+            on:click={events.cancel}>
+            Cancel
+          </Button>
+        </div>
+        <div class="done">
+          <Button style="width: 100%;" on:click={events.done}>Done</Button>
+        </div>
       </div>
     </div>
   </div>

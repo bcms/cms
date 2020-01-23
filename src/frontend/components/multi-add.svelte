@@ -1,8 +1,13 @@
 <script>
   import uuid from 'uuid';
+  import { onMount } from 'svelte';
+  import { TextInput } from 'carbon-components-svelte';
+  import Button from './global/button.svelte';
 
   export let options;
+  export let label;
 
+  const id = uuid.v4();
   let list = [];
   let value = '';
   let error = '';
@@ -55,13 +60,17 @@
     value = '';
     error = '';
   };
+
+  onMount(() => {
+    document.getElementById(id).addEventListener('keyup', handleInput);
+  });
 </script>
 
 <style>
   .list {
     margin-top: 10px;
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(1, 1fr);
     grid-gap: 10px;
   }
 </style>
@@ -74,21 +83,24 @@
     </div>
   {/if}
   <div class="in">
-    <input
-      class="input"
-      placeholder="Type and press Enter..."
-      on:keyup={handleInput} />
+    <TextInput
+      {id}
+      labelText={label}
+      helperText="Type some string and press Enter key." />
   </div>
   <div class="list">
     {#each list as item}
-      <button
-        class="btn-fill btn-blue-bg item"
-        on:click={() => {
-          removeItem(item.id);
-        }}>
-        <div class="fa fa-times icon" />
-        <div class="text">{item.value}</div>
-      </button>
+      <div>
+        <Button
+          kind="ghost"
+          size="small"
+          icon="fas fa-times"
+          on:click={event => {
+            removeItem(item.id);
+          }}>
+          {item.value}
+        </Button>
+      </div>
     {/each}
   </div>
 </div>

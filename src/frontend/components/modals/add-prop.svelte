@@ -1,5 +1,11 @@
 <script>
   import { onMount } from 'svelte';
+  import {
+    TextInput,
+    ToggleSmall,
+    Select,
+    SelectItem,
+  } from 'carbon-components-svelte';
   import { simplePopup } from '../simple-popup.svelte';
   import Modal from '../modal.svelte';
   import MultiAdd from '../multi-add.svelte';
@@ -10,7 +16,6 @@
   export let events;
   export let groups;
   export let usedPropNames;
-  export let selectedGroupId;
 
   const modalHeading = {
     icon: '/assets/ics/template/icon_type_ct.png',
@@ -81,6 +86,10 @@
           data.value = {
             _id: '',
             props: [],
+            selected: {
+              value: '',
+              error: '',
+            },
           };
         }
         break;
@@ -116,23 +125,27 @@
     }
   }
   function handleNameInput(event) {
-    const value = event.currentTarget.value
+    const value = event.value
       .toLowerCase()
       .replace(/ /g, '_')
       .replace(/-/g, '_')
       .replace(/[^0-9a-z_-_]+/g, '');
     data.name.value = value;
-    event.currentTarget.value = value;
+    event.value = value;
   }
   function handleGroupPointer(event) {
-    const group = groups.find(e => e._id === event.target.value);
+    const group = groups.find(e => e._id === event.detail);
     data.value = {
       _id: group._id,
       props: group.props,
+      selected: {
+        error: '',
+        selected: event.detail,
+      },
     };
   }
   function handleGroupPointerForArray(event) {
-    const group = groups.find(e => e._id === event.target.value);
+    const group = groups.find(e => e._id === event.detail);
     data.value.value = {
       _id: group._id,
       props: group.props,
@@ -141,7 +154,7 @@
   }
   function handleArray(event) {
     // const parts = data.type.value.split('_');
-    data.type.value = event.target.value;
+    data.type.value = event.detail;
     if (data.type.value === 'GROUP_POINTER_ARRAY') {
       data.value = {
         error: '',
@@ -184,6 +197,14 @@
     if (data.name.value === '') {
       data.name.error = 'Input cannot be empty.';
       return;
+    }
+    data.name.error = '';
+    if (data.type.value === 'GROUP_POINTER') {
+      if (data.value.selected.value === '') {
+        data.value.selected.error = 'You need to select a Group.';
+        return;
+      }
+      data.value.selected.error = '';
     }
     const propWithSameName = usedPropNames.find(e => e === data.name.value);
     if (propWithSameName) {
@@ -280,94 +301,77 @@
       {/each}
     </div>
   {:else if view === 2}
-    <div class="v2">
-      <div class="key-value">
-        <div class="label">
-          Name
-          {#if data.name.error !== ''}
-            <div
-              style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
-              <span class="fa fa-exclamation" />
-              <span style="margin-left: 5px;">{data.name.error}</span>
-            </div>
-          {/if}
-        </div>
-        <div class="value">
-          <input class="input" on:keyup={handleNameInput} />
-        </div>
-      </div>
-      {#if data.type.value === 'ENUMERATION'}
-        <div class="key-value">
-          <div class="label">Options</div>
-          <div class="value">
-            <MultiAdd options={enumInputOptions} />
-          </div>
-        </div>
-      {:else if data.type.value === 'GROUP_POINTER'}
-        <div class="key-value">
-          <div class="label">Select Group</div>
-          <div class="value">
-            <select class="select" on:change={handleGroupPointer}>
-              {#each groups as group}
-                {#if !selectedGroupId || selectedGroupId !== group._id}
-                  <option value={group._id}>
-                    {StringUtil.prettyName(group.name)}
-                  </option>
-                {/if}
-              {/each}
-              <option value="" selected>- Unspecified -</option>
-            </select>
-          </div>
-        </div>
-      {:else if data.type.value.indexOf('_ARRAY') !== -1}
-        <div class="key-value">
-          <div class="label">Select Array Type</div>
-          <div class="value">
-            <select class="select" on:change={handleArray}>
-              <option value="STRING_ARRAY" selected>String</option>
-              <option value="NUMBER_ARRAY">Number</option>
-              <option value="BOOLEAN_ARRAY">Boolean</option>
-              <option value="GROUP_POINTER_ARRAY">Group Pointer</option>
-            </select>
-          </div>
-        </div>
-        {#if data.type.value === 'GROUP_POINTER_ARRAY'}
-          <div class="key-value">
-            <div class="label">
-              Select Group
-              {#if data.value.error !== ''}
-                <div
-                  style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
-                  <span class="fa fa-exclamation" />
-                  <span style="margin-left: 5px;">{data.value.error}</span>
-                </div>
-              {/if}
-            </div>
-            <div class="value">
-              <select class="select" on:change={handleGroupPointerForArray}>
-                {#each groups as group}
-                  {#if !selectedGroupId || selectedGroupId !== group._id}
-                    <option value={group._id}>
-                      {StringUtil.prettyName(group.name)}
-                    </option>
-                  {/if}
-                {/each}
-                <option value="" selected>- Unspecified -</option>
-              </select>
-            </div>
-          </div>
+    <TextInput
+      labelText="Name"
+      invalid={data.name.error !== '' ? true : false}
+      invalidText={data.name.error}
+      value={data.name.value}
+      on:input={event => {
+        handleNameInput(event.explicitOriginalTarget);
+      }} />
+    {#if data.type.value === 'ENUMERATION'}
+      <MultiAdd label="Enumaretions" options={enumInputOptions} />
+    {:else if data.type.value === 'GROUP_POINTER'}
+      <Select
+        labelText="Select a Group"
+        selected=""
+        invalid={data.value.selected.error !== '' ? true : false}
+        invalidText={data.value.selected.error}
+        on:change={event => {
+          if (event.eventPhase === 0) {
+            handleGroupPointer(event);
+          }
+        }}>
+        <SelectItem value="" text="- Unspecified -" />
+        {#each groups as group}
+          <SelectItem
+            value={group._id}
+            text={StringUtil.prettyName(group.name)} />
+        {/each}
+      </Select>
+    {:else if data.type.value.indexOf('_ARRAY') !== -1}
+      <Select
+        labelText="Select an Array Type"
+        selected="STRING_ARRAY"
+        on:change={event => {
+          if (event.eventPhase === 0) {
+            handleArray(event);
+          }
+        }}>
+        <SelectItem value="STRING_ARRAY" text="String Array" />
+        <SelectItem value="NUMBER_ARRAY" text="Number Array" />
+        <SelectItem value="BOOLEAN_ARRAY" text="Boolean Array" />
+        {#if groups.length > 0}
+          <SelectItem value="GROUP_POINTER_ARRAY" text="Group Pointer Array" />
         {/if}
+      </Select>
+      {#if data.type.value === 'GROUP_POINTER_ARRAY'}
+        <Select
+          labelText="Select a Group"
+          selected=""
+          invalid={data.value.error !== '' ? true : false}
+          invalidText={data.value.error}
+          on:change={event => {
+            if (event.eventPhase === 0) {
+              handleGroupPointerForArray(event);
+            }
+          }}>
+          <SelectItem value="" text="- Unspecified -" />
+          {#each groups as group}
+            <SelectItem
+              value={group._id}
+              text={StringUtil.prettyName(group.name)} />
+          {/each}
+        </Select>
       {/if}
-      <div class="key-value">
-        <div class="label">Required</div>
-        <div class="value">
-          <OnOff
-            init={false}
-            events={{ set: value => {
-                data.required = value;
-              } }} />
-        </div>
-      </div>
-    </div>
+    {/if}
+    <ToggleSmall
+      labelText="Required"
+      labelA="No"
+      labelB="Yes"
+      toggled={false}
+      on:change={event => {
+        data.required = event.target.checked;
+      }} />
   {/if}
 </Modal>

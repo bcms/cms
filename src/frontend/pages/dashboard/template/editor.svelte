@@ -27,9 +27,19 @@
   function showTemplate(template) {
     templateSelected = template;
   }
-  function templateAdded(template) {
-    templates = [...templates, template];
-    templateSelected = template;
+  async function templateAdded(data) {
+    const result = await axios.send({
+      url: '/template',
+      method: 'POST',
+      data,
+    });
+    if (result.success === false) {
+      simplePopup.push('error', result.error.response.data.message);
+      return;
+    }
+
+    templates = [...templates, result.response.data.template];
+    templateSelected = result.response.data.template;
     sideBarOptions.updateTemplates(templates);
   }
   function templateEdit(template) {

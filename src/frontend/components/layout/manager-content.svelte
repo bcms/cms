@@ -43,7 +43,8 @@
   <div class="content">
     {#if itemSelected}
       <div class="heading">
-        <div class="title">{StringUtil.prettyName(itemSelected.name)}</div>
+        <h3>{StringUtil.prettyName(itemSelected.name)}</h3>
+        <!-- <div class="title">{StringUtil.prettyName(itemSelected.name)}</div> -->
         <div class="edit">
           <Button
             icon={'fas fa-edit'}
@@ -51,7 +52,7 @@
             kind={'ghost'}
             size={'small'}
             on:click={() => {
-              events.edit();
+              dispatch('edit', 'none');
             }} />
         </div>
       </div>

@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import { TextInput, ToggleSmall } from 'carbon-components-svelte';
   import { simplePopup } from '../simple-popup.svelte';
   import Modal from '../modal.svelte';
   import MultiAdd from '../multi-add.svelte';
@@ -38,13 +39,13 @@
   };
 
   function handleNameInput(event) {
-    const value = event.currentTarget.value
+    const value = event.value
       .toLowerCase()
       .replace(/ /g, '_')
       .replace(/-/g, '_')
       .replace(/[^0-9a-z_-_]+/g, '');
     prop.name.value = value;
-    event.currentTarget.value = value;
+    event.value = value;
   }
 
   events.cancel = () => {
@@ -108,71 +109,35 @@
   };
 </script>
 
-<style>
-  .v2 {
-    display: grid;
-    grid-template-columns: auto;
-    grid-gap: 10px;
-  }
-</style>
-
 <Modal heading={modalHeading} {events}>
-  <div class="v2">
-    <div class="key-value">
-      <div class="label">
-        Name
-        {#if prop.name.error !== ''}
-          <div style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
-            <span class="fa fa-exclamation" />
-            <span style="margin-left: 5px;">{prop.name.error}</span>
-          </div>
-        {/if}
-      </div>
-      <div class="value">
-        <input
-          class="input"
-          on:keyup={handleNameInput}
-          value={prop.name.value} />
-      </div>
-    </div>
-    {#if prop.type === 'ENUMERATION'}
-      <div class="key-value">
-        <div class="label">Options</div>
-        <div class="value">
-          <MultiAdd options={enumInputOptions} />
-        </div>
-      </div>
-    {:else if prop.type === 'GROUP_POINTER'}
-      <div class="key-value">
-        <div class="label">Select Group</div>
-        <div class="value">
-          <select class="select" bind:value={prop.value}>
-            {#each groups as group}
-              {#if !selectedGroupId || selectedGroupId !== group._id}
-                {#if prop.value === group._id}
-                  <option value={group._id} selected>
-                    {StringUtil.prettyName(group.name)}
-                  </option>
-                {:else}
-                  <option value={group._id}>
-                    {StringUtil.prettyName(group.name)}
-                  </option>
-                {/if}
-              {/if}
-            {/each}
-          </select>
-        </div>
-      </div>
-    {/if}
-    <div class="key-value">
-      <div class="label">Required</div>
-      <div class="value">
-        <OnOff
-          init={prop.required}
-          events={{ set: value => {
-              prop.required = value;
-            } }} />
-      </div>
-    </div>
-  </div>
+  <TextInput
+    labelText="Name"
+    invalid={prop.name.error !== '' ? true : false}
+    invalidText={prop.name.error}
+    value={prop.name.value}
+    on:input={event => {
+      handleNameInput(event.explicitOriginalTarget);
+    }} />
+  {#if prop.type === 'ENUMERATION'}
+    <MultiAdd label="Enumaretions" options={enumInputOptions} />
+  {/if}
+  {#if prop.required === true}
+    <ToggleSmall
+      labelText="Required"
+      labelA="No"
+      labelB="Yes"
+      toggled={true}
+      on:change={event => {
+        prop.required = event.target.checked;
+      }} />
+  {:else}
+    <ToggleSmall
+      labelText="Required"
+      labelA="No"
+      labelB="Yes"
+      toggled={false}
+      on:change={event => {
+        prop.required = event.target.checked;
+      }} />
+  {/if}
 </Modal>

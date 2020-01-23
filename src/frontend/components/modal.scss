@@ -4,75 +4,49 @@
   left: 0;
   right: 0;
   bottom: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  background-color: rgba(0, 0, 0, 0.2);
-  transition: 0.5s opacity ease;
-  will-change: opacity;
+  background-color: rgba(0, 0, 0, 0);
 }
 
-.content-box {
+.modal {
   display: flex;
   flex-direction: column;
-  width: 900px;
-  margin: 100px auto 30px auto;
+  width: 450px;
   background-color: var(--c-white);
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  transition: 0.4s;
 }
 
 .heading {
   display: flex;
   align-content: center;
-  background-color: var(--c-neutral);
-  padding: 20px;
 }
 
-.heading .img {
-  display: flex;
-  margin: auto 0;
-}
-
-.heading .img img {
-  width: 30px;
-}
-
-.heading .name {
+.heading .title {
   margin: auto 0 auto 20px;
-  font-size: 10pt;
+  font-size: 12pt;
+  font-weight: bold;
 }
 
 .heading .close {
   margin-left: auto;
-  // width: 30px;
 }
 
-.heading .close button {
-  width: 100%;
-  height: 100%;
-  font-size: 8pt;
-  font-weight: bold;
-  border: none;
-  background-color: var(--c-neutral);
-  color: var(--c-gray);
-}
-
-.heading .close button:hover {
-  color: var(--c-primary);
-  transition: 0.2s;
-}
-
-.settings {
+.content {
+  display: grid;
+  grid-template-columns: auto;
+  grid-gap: 20px;
   padding: 20px;
+  overflow-y: auto;
+  width: 100%;
+  margin-bottom: 20px;
 }
 
 .footer {
-  display: flex;
   margin-top: auto;
-  background-color: var(--c-white-dark);
-  padding: 20px;
-  width: 100%;
-}
-
-.footer .done {
-  margin-left: auto;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
 }

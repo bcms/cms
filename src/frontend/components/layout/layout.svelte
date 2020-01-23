@@ -11,11 +11,11 @@
 </style>
 
 <div class="layout">
-  <SideBar {Store} {axios}/>
-  <TopBar {Store} />
   <div class="content">
     <slot>
       <layout />
     </slot>
   </div>
+  <SideBar {Store} {axios}/>
+  <TopBar {Store} />
 </div>
