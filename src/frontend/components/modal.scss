@@ -4,7 +4,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .modal {
@@ -12,7 +12,7 @@
   flex-direction: column;
   width: 450px;
   background-color: var(--c-white);
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
   position: fixed;
   top: 0;
   bottom: 0;
@@ -25,10 +25,8 @@
   align-content: center;
 }
 
-.heading .title {
+.heading h3 {
   margin: auto 0 auto 20px;
-  font-size: 12pt;
-  font-weight: bold;
 }
 
 .heading .close {

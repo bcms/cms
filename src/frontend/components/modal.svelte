@@ -52,41 +52,10 @@
 </style>
 
 {#if show === true}
-  <!-- <div
-    class="overlay"
-    style="opacity: {style.opacity}; filter: blur({style.blur}px);">
-    <div class="content-box">
-      <div class="heading">
-        <div class="img">
-          <img src={heading.icon} alt="NF" />
-        </div>
-        <div class="name">{heading.title}</div>
-        <div class="close">
-          <Button
-            icon="fas fa-times"
-            onlyIcon={true}
-            kind="ghost"
-            size={'small'}
-            on:click={events.cancel} />
-        </div>
-      </div>
-      <div class="settings">
-        <slot>
-          <modal />
-        </slot>
-      </div>
-      <div class="footer">
-        <Button kind="danger" on:click={events.cancel}>Cancel</Button>
-        <div class="done">
-          <Button icon="fas fa-check" on:click={events.done}>Done</Button>
-        </div>
-      </div>
-    </div>
-  </div> -->
   <div class="overlay">
     <div class="modal" style="right: {style.right}px;">
       <div class="heading">
-        <div class="title">{heading.title}</div>
+        <h3>{heading.title}</h3>
         <div class="close">
           <Button
             icon="fas fa-times"

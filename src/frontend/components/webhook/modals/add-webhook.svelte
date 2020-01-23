@@ -1,6 +1,7 @@
 <script>
   import Modal from '../../modal.svelte';
   import { simplePopup } from '../../simple-popup.svelte';
+  import Base64 from '../../../base64.js';
 
   export let events;
 
@@ -38,7 +39,7 @@
     events.callback({
       name: data.name.value,
       desc: data.desc,
-      body: btoa(data.body),
+      body: Base64.encode(data.body),
     });
     data = {
       name: {

@@ -98,7 +98,10 @@
         title={StringUtil.prettyName(message.type)}
         kind={message.type}
         lowContrast={true}
-        caption={message.content} />
+        caption={message.content}
+        on:click={() => {
+          simplePopup.remove(message.id);
+        }} />
     </div>
   {/each}
 </div>

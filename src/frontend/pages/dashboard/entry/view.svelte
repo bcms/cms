@@ -1,11 +1,13 @@
 <script>
   import { onMount, afterUpdate } from 'svelte';
+  import { Select, SelectItem } from 'carbon-components-svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
+  import Layout from '../../../components/layout/layout.svelte';
+  import Button from '../../../components/global/button.svelte';
+  import DataModelModal from '../../../components/entry/modals/add-data-model.svelte';
   import UrlQueries from '../../../url-queries.js';
   import Base64 from '../../../base64.js';
   import StringUtil from '../../../string-util.js';
-  import Layout from '../../../components/layout/layout.svelte';
-  import DataModelModal from '../../../components/entry/modals/add-data-model.svelte';
 
   export let axios;
   export let Store;
@@ -234,6 +236,10 @@
     languageSelected = languages.find(e => e.code === queries.lng);
     // addDataModalModalEvents.init();
   });
+
+  afterUpdate(() => {
+    console.log('HERE')
+  })
 </script>
 
 <style type="text/scss">
@@ -245,19 +251,26 @@
     {#if template}
       <div class="heading">
         <div class="text">
-          <div class="title">{StringUtil.prettyName(template.name)}</div>
+          <h2>{StringUtil.prettyName(template.name)}</h2>
           <div class="entry-count">
             {template.entryIds.length} Entries found
           </div>
         </div>
         <div class="action">
-          <button class="btn-fill btn-blue-bg" on:click={addEntry}>
-            <div class="fa fa-plus icon" />
-            <div class="text">Add New Entry</div>
-          </button>
+          <Button icon="fas fa-plus" on:click={addEntry}>Add new Entry</Button>
         </div>
       </div>
-      <div class="filters">
+      <div class="options">
+        <Select
+          labelText="View language"
+          helperText="Entry result will be shown in selected language."
+          selected={languageSelected.code}>
+          {#each languages as lng}
+            <SelectItem value={lng.code} text="{lng.name} | {lng.nativeName}" />
+          {/each}
+        </Select>
+      </div>
+      <!-- <div class="filters">
         <div class="key-value">
           <div class="label">Languages</div>
           <div class="value">
@@ -281,7 +294,7 @@
           </div>
         </div>
         <h3>Filters</h3>
-        <!-- <div class="prop-filters">
+        <div class="prop-filters">
           {#each template.entryTemplate as prop}
             {#if prop.type === 'ENUMERATION' || prop.type === 'STRING'}
               <div class="key-value prop">
@@ -312,8 +325,8 @@
               </div>
             {/if}
           {/each}
-        </div> -->
-      </div>
+        </div>
+      </div> -->
       {#if entries.length > 0}
         <div class="entries">
           {#each entries as entry, i}

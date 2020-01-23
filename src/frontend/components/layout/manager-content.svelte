@@ -44,7 +44,6 @@
     {#if itemSelected}
       <div class="heading">
         <h3>{StringUtil.prettyName(itemSelected.name)}</h3>
-        <!-- <div class="title">{StringUtil.prettyName(itemSelected.name)}</div> -->
         <div class="edit">
           <Button
             icon={'fas fa-edit'}
@@ -90,7 +89,7 @@
               <div class="prop-count">
                 {props.length} properties in this Template
               </div>
-              <div class="add">
+              <div class="action">
                 <Button
                   icon={'fas fa-plus'}
                   size={'small'}
@@ -155,7 +154,7 @@
               on:click={() => {
                 dispatch('addNewItem', 'none');
               }}>
-              Add new Template
+              {menuConfig.buttonLabel}
             </Button>
           </div>
         </div>

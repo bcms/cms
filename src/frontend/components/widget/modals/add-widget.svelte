@@ -1,4 +1,5 @@
 <script>
+  import { TextInput, TextArea } from 'carbon-components-svelte';
   import Modal from '../../modal.svelte';
   import { simplePopup } from '../../simple-popup.svelte';
 
@@ -13,20 +14,17 @@
       value: '',
       error: '',
     },
-    desc: {
-      value: '',
-      error: '',
-    },
+    desc: '',
   };
 
   function handleNameInput(event) {
-    const value = event.currentTarget.value
+    const value = event.value
       .toLowerCase()
       .replace(/ /g, '_')
       .replace(/-/g, '_')
       .replace(/[^0-9a-z_-_]+/g, '');
     data.name.value = value;
-    event.currentTarget.value = value;
+    event.value = value;
   }
 
   events.cancel = () => {
@@ -67,12 +65,24 @@
   };
 </script>
 
-<style type="text/scss">
-  @import './add-widget.scss';
-</style>
-
 <Modal heading={modalHeading} {events}>
-  <div class="content">
+  <TextInput
+    labelText="Name"
+    invalid={data.name.error !== '' ? true : false}
+    invalidText={data.name.error}
+    value={data.name.value}
+    placeholder="- Name -"
+    on:input={event => {
+      handleNameInput(event.explicitOriginalTarget);
+    }} />
+  <TextArea
+    cols="500"
+    labelText="Description"
+    placeholder="- Description -"
+    on:input={event => {
+      data.desc = event.target.value;
+    }} />
+  <!-- <div class="content">
     <div class="title">Settings</div>
     <div class="options">
       <div class="key-value">
@@ -103,5 +113,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </Modal>

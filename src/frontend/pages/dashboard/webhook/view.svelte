@@ -4,6 +4,7 @@
   import Layout from '../../../components/layout/layout.svelte';
   import UrlQueries from '../../../url-queries.js';
   import StringUtil from '../../../string-util.js';
+  import Base64 from '../../../base64.js';
 
   export let axios;
   export let Store;
@@ -70,7 +71,7 @@
           {:else}{webhook.desc}{/if}
         </div>
         <div class="body">
-          {JSON.stringify(JSON.parse(atob(webhook.body)), null, '  ')}
+          {JSON.stringify(JSON.parse(Base64.decode(webhook.body)), null, '  ')}
         </div>
       </div>
       <div class="trigger">
@@ -79,7 +80,9 @@
           <div class="text">Invoke</div>
         </button>
         <div class="body">
-        <pre><code id="response"></code></pre>
+          <pre>
+            <code id="response" />
+          </pre>
         </div>
       </div>
     </div>

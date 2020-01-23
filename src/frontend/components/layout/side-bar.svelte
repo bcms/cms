@@ -7,6 +7,7 @@
 
 <script>
   import { onMount } from 'svelte';
+  import { Link } from 'svelte-routing';
   import Base64 from '../../base64.js';
   import StringUtil from '../../string-util.js';
 
@@ -198,12 +199,12 @@
             <div
               class="menu {menu.link.startsWith(window.location.pathname) ? 'active' : ''}">
               {#if menu.type === 'link'}
-                <a href={menu.link}>
+                <Link to={menu.link}>
                   <div class="parent link">
                     <div class="{menu.faClass} icon" />
                     <div class="text">{menu.name}</div>
                   </div>
-                </a>
+                </Link>
               {/if}
             </div>
           {/each}
