@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import { TextInput } from 'carbon-components-svelte';
   import Modal from '../../modal.svelte';
   import OnOff from '../../on-off.svelte';
   import StringUtil from '../../../string-util.js';
@@ -21,13 +22,13 @@
   };
 
   function handleNameInput(event) {
-    const value = event.currentTarget.value
+    const value = event.value
       .toLowerCase()
       .replace(/ /g, '-')
       .replace(/_/g, '-')
       .replace(/[^0-9a-z---]+/g, '');
     data.name.value = value;
-    event.currentTarget.value = value;
+    event.value = value;
   }
   async function containsErrors() {
     if (data.name.value === '') {
@@ -53,7 +54,7 @@
 
   events.setRootPath = rootPath => {
     root = '' + rootPath;
-  }
+  };
   events.cancel = () => {
     events.toggle();
   };
@@ -70,23 +71,14 @@
   onMount(() => {});
 </script>
 
-<style>
-
-</style>
-
 <Modal heading={modalHeading} {events}>
-  <div class="content">
-    <div class="key-value">
-      <div class="label">Name</div>
-      {#if data.name.error !== ''}
-        <div class="btn btn-red-c error">
-          <div class="fas fa-exclamation icon" />
-          <div class="text">{data.name.error}</div>
-        </div>
-      {/if}
-      <div class="value">
-        <input class="input" on:keyup={handleNameInput} />
-      </div>
-    </div>
-  </div>
+  <TextInput
+    labelText="File name"
+    value={data.name.value}
+    invalid={data.name.error !== '' ? true : false}
+    invalidText={data.name.error}
+    placeholder="- File Name -"
+    on:input={event => {
+      handleNameInput(event.explicitOriginalTarget);
+    }} />
 </Modal>

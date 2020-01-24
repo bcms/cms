@@ -1,6 +1,6 @@
 .content-layout {
   display: grid;
-  grid-template-columns: 400px auto;
+  grid-template-columns: 300px auto;
   height: 100%;
 }
 
@@ -47,7 +47,7 @@
 
 .view .items {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   grid-gap: 20px;
 }
 
@@ -78,19 +78,11 @@
 }
 
 .view .items .item .actions {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   margin: auto 0;
   margin-top: 10px;
-  opacity: 0;
-  max-height: 0;
-  transition: 0.4s;
   overflow: hidden;
-}
-
-.view .items .item:hover .actions {
-  opacity: 1;
-  max-height: 100px;
-  transition: 0.4s;
 }
 
 .view .items .item .actions .edit {

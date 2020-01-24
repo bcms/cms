@@ -17,12 +17,13 @@
 
 <Button class={className} {kind} {size} {style} on:click>
   {#if icon}
-    <span class="{icon} icon" />
-    {#if onlyIcon === false}&nbsp;{/if}
+    <span class="{icon} icon {onlyIcon === false ? 'mr-20' : ''}" />
   {/if}
   {#if onlyIcon === false}
-    <slot>
-      <button />
-    </slot>
+    <div class="button">
+      <slot>
+        <button />
+      </slot>
+    </div>
   {/if}
 </Button>

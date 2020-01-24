@@ -2,11 +2,13 @@
   import { onMount } from 'svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/global/layout.svelte';
+  import Button from '../../../components/global/button.svelte';
   import FolderTree, {
     folderTreeActions,
     folderTreeType,
   } from '../../../components/media/folder-tree.svelte';
   import CreateDirModal from '../../../components/media/modals/create-dir.svelte';
+  import UploadFileModal from '../../../components/media/modals/upload-file.svelte';
   import UrlQueries from '../../../url-queries.js';
   import Base64 from '../../../base64.js';
   import StringUtil from '../../../string-util.js';
@@ -15,6 +17,7 @@
   export let Store;
 
   const createDirModalEvents = { callback: createDir };
+  const uploadFileModalEvents = { callback: uploadFile };
   let inFolder = '/';
   let items = [];
   let folderTreeEvents = {
@@ -145,10 +148,30 @@
       await folderTreeActions.render();
     }
   }
-  async function uploadFile(event) {
-    const file = document.getElementById('upload-file').files[0];
+  // async function uploadFile(event) {
+  //   const file = document.getElementById('upload-file').files[0];
+  //   const fd = new FormData();
+  //   fd.append('media_file', file, file.fileName);
+  //   const result = await axios.send({
+  //     url: `/media/file?path=${encodeURIComponent(inFolder)}`,
+  //     method: 'POST',
+  //     headers: {
+  //       'Content-Type': `multipart/form-data`,
+  //     },
+  //     data: fd,
+  //   });
+  //   if (result.success === false) {
+  //     simplePopup.error(result.error.response.data.message);
+  //     return;
+  //   }
+  //   simplePopup.success('File uploaded succesfully.');
+  //   items = [...items, result.response.data.media];
+  //   await folderTreeActions.render();
+  // }
+  async function uploadFile(data) {
+    const file = data.file;
     const fd = new FormData();
-    fd.append('media_file', file, file.fileName);
+    fd.append('media_file', file, data.fileName);
     const result = await axios.send({
       url: `/media/file?path=${encodeURIComponent(inFolder)}`,
       method: 'POST',
@@ -180,7 +203,25 @@
         <div class="path">{inFolder}</div>
       </div>
       <div class="dir-actions">
-        <button
+        <div class="create">
+          <Button
+            icon="fas fa-plus"
+            kind="ghost"
+            on:click={() => {
+              createDirModalEvents.setRootPath(inFolder);
+              createDirModalEvents.toggle();
+            }}>
+            Create new folder
+          </Button>
+        </div>
+        <Button
+          icon="fas fa-upload"
+          on:click={() => {
+            uploadFileModalEvents.toggle();
+          }}>
+          Upload file
+        </Button>
+        <!-- <button
           class="btn-border btn-blue-br btn-blue-c create"
           on:click={() => {
             createDirModalEvents.setRootPath(inFolder);
@@ -199,21 +240,24 @@
             on:change={event => {
               uploadFile(event);
             }} />
-        </div>
+        </div> -->
       </div>
       <div class="view">
         {#if items.length > 0}
           <div class="items">
             {#each items as item}
               <div class="item">
-                <button
-                  class="btn info"
-                  on:click={() => {
-                    itemClicked(item);
-                  }}>
-                  <span class="{folderTreeType[item.type].faClass} icon" />
-                  <span class="name">{shortenName(item.name, 20)}</span>
-                </button>
+                <div class="info">
+                  <Button
+                    style="width: 100%;"
+                    icon={folderTreeType[item.type].faClass}
+                    kind="ghost"
+                    on:click={() => {
+                      itemClicked(item);
+                    }}>
+                    {shortenName(item.name, 20)}
+                  </Button>
+                </div>
                 {#if item.type === 'IMG'}
                   <div class="img">
                     <img
@@ -222,7 +266,27 @@
                   </div>
                 {/if}
                 <div class="actions">
-                  <button
+                  <Button
+                    kind="danger"
+                    size="small"
+                    on:click={() => {
+                      if (item.type === 'DIR') {
+                        deleteDir(item);
+                      } else {
+                        deleteFile(item);
+                      }
+                    }}>
+                    Delete
+                  </Button>
+                  <Button
+                    kind="secondary"
+                    size="small"
+                    on:click={() => {
+                      editName(item);
+                    }}>
+                    Edit
+                  </Button>
+                  <!-- <button
                     class="btn-border btn-red-br btn-red-c delete"
                     on:click={() => {
                       if (item.type === 'DIR') {
@@ -241,7 +305,7 @@
                     }}>
                     <div class="fas fa-edit icon" />
                     <div class="text">Edit</div>
-                  </button>
+                  </button> -->
                 </div>
               </div>
             {/each}
@@ -254,3 +318,4 @@
   </div>
 </Layout>
 <CreateDirModal {axios} events={createDirModalEvents} />
+<UploadFileModal folder={inFolder} events={uploadFileModalEvents} />
