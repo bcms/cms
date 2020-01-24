@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
-  import Layout from '../../../components/layout/layout.svelte';
+  import Layout from '../../../components/global/layout.svelte';
   import UrlQueries from '../../../url-queries.js';
   import StringUtil from '../../../string-util.js';
   import Base64 from '../../../base64.js';

@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
-  import Layout from '../../../components/layout/layout.svelte';
+  import Layout from '../../../components/global/layout.svelte';
   import AddLanguageModal from '../../../components/language/modals/add-language.svelte';
 
   export let axios;

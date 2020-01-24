@@ -1,9 +1,9 @@
 <script>
   import { onMount } from 'svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
-  import { sideBarOptions } from '../../../components/layout/side-bar.svelte';
-  import Layout from '../../../components/layout/layout.svelte';
-  import ManagerLayout from '../../../components/layout/manager-content.svelte';
+  import { sideBarOptions } from '../../../components/global/side-bar.svelte';
+  import Layout from '../../../components/global/layout.svelte';
+  import ManagerLayout from '../../../components/global/manager-content.svelte';
   import AddPropModal from '../../../components/modals/add-prop.svelte';
   import EditPropModal from '../../../components/modals/edit-prop.svelte';
   import AddModal from '../../../components/template/modals/add.svelte';

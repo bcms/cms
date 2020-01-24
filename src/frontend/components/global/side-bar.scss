@@ -1,12 +1,13 @@
 .side-bar {
   font-size: 10pt;
   position: fixed;
-  top: 60px;
+  top: 0;
   bottom: 0;
   width: 250px;
   background-color: var(--c-primary-dark);
   overflow-x: hidden;
   overflow-y: auto;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
 }
 
 .section .name {

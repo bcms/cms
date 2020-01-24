@@ -1,5 +1,5 @@
 <script>
-  import Layout from '../../components/layout/layout.svelte';
+  import Layout from '../../components/global/layout.svelte';
 
   export let axios;
   export let Store;

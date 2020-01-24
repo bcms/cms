@@ -1,5 +1,4 @@
 <script>
-  import TopBar from './top-bar.svelte';
   import SideBar from './side-bar.svelte';
 
   export let Store;
@@ -17,5 +16,5 @@
     </slot>
   </div>
   <SideBar {Store} {axios}/>
-  <TopBar {Store} />
+  <!-- <TopBar {Store} /> -->
 </div>

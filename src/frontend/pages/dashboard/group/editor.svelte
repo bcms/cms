@@ -1,8 +1,8 @@
 <script>
   import { onMount } from 'svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
-  import Layout from '../../../components/layout/layout.svelte';
-  import ManagerLayout from '../../../components/layout/manager-content.svelte';
+  import Layout from '../../../components/global/layout.svelte';
+  import ManagerLayout from '../../../components/global/manager-content.svelte';
   import AddGroupModal from '../../../components/group/modals/add-group.svelte';
   import EditGroupModal from '../../../components/group/modals/edit-group.svelte';
   import AddPropModal from '../../../components/modals/add-prop.svelte';

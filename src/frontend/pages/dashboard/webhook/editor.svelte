@@ -2,9 +2,9 @@
   import { onMount } from 'svelte';
   import { TextArea } from 'carbon-components-svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
-  import { sideBarOptions } from '../../../components/layout/side-bar.svelte';
-  import Layout from '../../../components/layout/layout.svelte';
-  import ManagerLayout from '../../../components/layout/manager-content.svelte';
+  import { sideBarOptions } from '../../../components/global/side-bar.svelte';
+  import Layout from '../../../components/global/layout.svelte';
+  import ManagerLayout from '../../../components/global/manager-content.svelte';
   import PropsList from '../../../components/prop/props-list.svelte';
   import Button from '../../../components/global/button.svelte';
   import AddWebhookModal from '../../../components/webhook/modals/add-webhook.svelte';

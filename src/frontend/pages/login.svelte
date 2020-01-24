@@ -1,36 +1,44 @@
 <script>
   import { simplePopup } from '../components/simple-popup.svelte';
+  import { TextInput, PasswordInput } from 'carbon-components-svelte';
+  import Button from '../components/global/button.svelte';
   import AxiosClient from '../axios-client.js';
   import Base64 from '../base64.js';
 
   export let Store;
   export let axios;
 
+  console.log(Store);
+
   const axiosClient2 = AxiosClient.instance();
   const login = {
-    email: '',
-    pass: '',
+    email: {
+      value: '',
+      error: '',
+    },
+    pass: {
+      value: '',
+      error: '',
+    },
   };
 
   async function submit() {
-    if (login.email.trim() === '') {
-      document.getElementById('email').style = 'border-color: var(--c-error);';
-      simplePopup.error('Email input cannot be empty.');
+    if (login.email.value.replace(/ /g, '') === '') {
+      login.email.error = 'Email input cannot be empty.';
       return;
     }
-    document.getElementById('email').style = '';
-    if (login.pass.trim() === '') {
-      document.getElementById('pass').style = 'border-color: var(--c-error);';
-      simplePopup.error('Password input cannot be empty.');
+    login.email.error = '';
+    if (login.pass.value.replace(/ /g, '') === '') {
+      login.pass.error = 'Password input cannot be empty.';
       return;
     }
-    document.getElementById('pass').style = '';
+    login.pass.error = '';
     let result = await axiosClient2.send({
       url: '/auth/user',
       method: 'POST',
       headers: {
         Authorization:
-          'Basic ' + Base64.encode(login.email + ':' + login.pass),
+          'Basic ' + Base64.encode(login.email.value + ':' + login.pass.value),
       },
     });
     if (result.success === false) {
@@ -58,37 +66,38 @@
   @import './login.scss';
 </style>
 
-<div class="login">
-  <div class="heading">
-    <img src="/logo.svg" alt="NF"/>
-  </div>
-  <div class="block">
-    <div class="inputs">
-      <div class="key-value">
-        <div class="label">Email</div>
-        <div class="value">
-          <input
-            id="email"
-            class="input"
-            type="text"
-            placeholder="john@example.com"
-            bind:value={login.email} />
-        </div>
-      </div>
-      <div class="key-value">
-        <div class="label">Password</div>
-        <div class="value">
-          <input
-            id="pass"
-            class="input"
-            type="password"
-            placeholder="Password"
-            bind:value={login.pass} />
-        </div>
-      </div>
+<div class="wrapper">
+  <div class="welcome">
+    <div class="content">
+      <div class="pre-title">Welcome to</div>
+      <h1>
+        Becomes
+        <strong>CMS</strong>
+      </h1>
     </div>
+  </div>
+  <div class="login">
+    <h2>Log in</h2>
+    <TextInput
+      class="mt-50"
+      invalid={login.email.error !== '' ? true : false}
+      invalidText={login.email.error}
+      labelText="Email"
+      placeholder="- Email -"
+      on:input={event => {
+        login.email.value = event.target.value;
+      }} />
+    <PasswordInput
+      class="mt-20"
+      invalid={login.pass.error !== '' ? true : false}
+      invalidText={login.pass.error}
+      labelText="Password"
+      placeholder="- Password -"
+      on:input={event => {
+        login.pass.value = event.target.value;
+      }} />
     <div class="actions">
-      <button class="button" on:click={submit}>Log in</button>
+      <Button class="mt-50" on:click={submit}>Log in</Button>
     </div>
   </div>
 </div>

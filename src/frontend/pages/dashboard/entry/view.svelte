@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import { Select, SelectItem } from 'carbon-components-svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
-  import Layout from '../../../components/layout/layout.svelte';
+  import Layout from '../../../components/global/layout.svelte';
   import Button from '../../../components/global/button.svelte';
   import DataModelModal from '../../../components/entry/modals/add-data-model.svelte';
   import UrlQueries from '../../../url-queries.js';
@@ -260,7 +260,12 @@
         <Select
           labelText="View language"
           helperText="Entry result will be shown in selected language."
-          selected={languageSelected.code}>
+          selected={languageSelected.code}
+          on:change={event => {
+            if (event.eventPhase === 0) {
+              languageSelected = languages.find(e => (e.code = event.detail));
+            }
+          }}>
           {#each languages as lng}
             <SelectItem value={lng.code} text="{lng.name} | {lng.nativeName}" />
           {/each}
@@ -385,20 +390,33 @@
                       </div>
                     </div>
                     <div class="actions">
-                      <button
+                      <Button
+                        kind="danger"
+                        on:click={() => {
+                          deleteEntry(entry);
+                        }}>
+                        Delete
+                      </Button>
+                      <Button
+                        on:click={() => {
+                          window.location = `/dashboard/template/entry/rc?tid=${template._id}&eid=${entry._id}&lng=${languageSelected.code}`;
+                        }}>
+                        Edit
+                      </Button>
+                      <!-- <button
                         class="btn-border btn-red-br btn-red-c delete"
                         on:click={() => {
                           deleteEntry(entry);
                         }}>
                         <div class="fa fa-edit icon" />
                         <div class="text">Delete Entry</div>
-                      </button>
-                      <a
+                      </button> -->
+                      <!-- <a
                         class="btn-fill btn-blue-bg edit"
                         href="/dashboard/template/entry/rc?tid={template._id}&eid={entry._id}&lng={languageSelected.code}">
                         <div class="fa fa-edit icon" />
                         <div class="text">Edit Entry</div>
-                      </a>
+                      </a> -->
                     </div>
                   </div>
                 </div>

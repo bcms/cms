@@ -4,7 +4,7 @@
   import { onMount } from 'svelte';
   import { Select, SelectItem } from 'carbon-components-svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
-  import Leyout from '../../../components/layout/layout.svelte';
+  import Leyout from '../../../components/global/layout.svelte';
   import Props from '../../../components/prop/props.svelte';
   import QuillContent from '../../../components/entry/quill-content.svelte';
   import Button from '../../../components/global/button.svelte';
