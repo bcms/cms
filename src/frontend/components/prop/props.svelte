@@ -12,6 +12,7 @@
   import PropGroupPointerArray from './group-pointer-array.svelte';
   import StringUtil from '../../string-util.js';
 
+  export let groups = [];
   export let props;
   export let events;
 
@@ -149,11 +150,13 @@
       <PropDate {prop} error={errors[prop.name]} />
     {:else if prop.type === 'GROUP_POINTER'}
       <PropGroupPointer
+        {groups}
         {prop}
         error={errors[prop.name]}
         events={groupEvents[prop.name]} />
     {:else if prop.type === 'GROUP_POINTER_ARRAY'}
       <PropGroupPointerArray
+        {groups}
         {prop}
         error={errors[prop.name]}
         events={groupEvents[prop.name]}

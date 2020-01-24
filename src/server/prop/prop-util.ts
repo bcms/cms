@@ -40,8 +40,9 @@ export class PropUtil {
         __required: false,
       },
       add: {
-        __type: 'boolean',
+        __type: 'object',
         __required: false,
+        __child: {},
       },
     };
   }

@@ -61,71 +61,14 @@
   };
 </script>
 
-<style>
-  .primary .title {
-    color: var(--c-gray-cold);
-    background-color: var(--c-white-normal);
-    font-size: 10pt;
-    font-weight: bold;
-    padding: 3px 10px;
-  }
-
-  .actions {
-    padding: 10px;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    grid-gap: 20px;
-    width: 100%;
-  }
-
-  .action {
-    display: grid;
-    grid-template-columns: auto;
-    width: 100%;
-    border: none;
-    background-color: var(--c-transparent);
-    transition: 0.3s;
-  }
-
-  .action:hover {
-    background-color: var(--c-white-dark);
-    transition: 0.3s;
-  }
-
-  .action .icon {
-    width: 40px;
-    margin: 0 auto;
-  }
-
-  .action .icon img {
-    width: 100%;
-  }
-
-  .action .name {
-    font-weight: bold;
-    font-size: 12pt;
-    color: var(--c-primary);
-  }
-
-  .action .text {
-    font-size: 8pt;
-    color: var(--c-gray-cold);
-  }
-
-  .embed .title {
-    margin-top: 20px;
-    color: var(--c-gray-cold);
-    background-color: var(--c-white-normal);
-    font-size: 10pt;
-    font-weight: bold;
-    padding: 3px 10px;
-  }
+<style type="text/scss">
+  @import './select-element.scss';
 </style>
 
 <Modal heading={modalHeading} {events}>
   <div {id} class="modal">
-    <div class="primary">
-      <div class="title">PRIMARY</div>
+    <div class="section">
+      <h4 class="title mt-20">PRIMARY</h4>
       <div class="actions">
         {#each primaries as primary}
           <button
@@ -143,8 +86,8 @@
         {/each}
       </div>
     </div>
-    <div class="embed">
-      <div class="title">WIDGETS</div>
+    <div class="section">
+      <h4 class="title mt-20">WIDGETS</h4>
       <div class="actions">
         {#each embed as e}
           <button class="action" on:click={() => {

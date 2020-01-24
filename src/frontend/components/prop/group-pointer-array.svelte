@@ -6,16 +6,36 @@
   import Button from '../global/button.svelte';
   import StringUtil from '../../string-util.js';
 
+  export let groups = [];
   export let prop;
   export let error = '';
   export let events;
 
   const dispatch = createEventDispatcher();
 
+  console.log(prop);
+
   function init() {
     for (const i in prop.value.array) {
       const arr = prop.value.array[i];
       events.push({});
+    }
+    for (const j in prop.value.array) {
+      const group = groups.find(e => e._id === prop.value._id);
+      if (group) {
+        for (const i in group.props) {
+          if (
+            !prop.value.array[j].value.find(
+              e => e.name === group.props[i].name,
+            )
+          ) {
+            prop.value.array[j].value = [
+              ...prop.value.array[j].value,
+              JSON.parse(JSON.stringify(group.props[i])),
+            ];
+          }
+        }
+      }
     }
   }
   init();

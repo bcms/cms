@@ -11,6 +11,7 @@
   <Select
     invalid={error !== '' ? true : false}
     invalidText={error}
+    selected={prop.value.selected}
     on:change={event => {
       if (event.eventPhase === 0) {
         prop.value.selected = event.detail;

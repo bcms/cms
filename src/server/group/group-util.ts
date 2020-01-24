@@ -116,4 +116,11 @@ export class GroupUtil {
       });
     });
   }
+
+  public static async addNewPropsToWidgetInEntries(
+    entryService: EntryService,
+    logger: Logger,
+    change: PropChanges,
+    groupId: string,
+  ) {}
 }

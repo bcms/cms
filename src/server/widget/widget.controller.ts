@@ -25,6 +25,7 @@ import { WidgetFactory } from './factories/widget.factory';
 import { WidgetUtil } from './widget-util';
 import { PropUtil } from '../prop/prop-util';
 import { EntryService } from '../entry';
+import { PropChanges } from '../prop/interfaces/prop-changes.interface';
 
 @Controller('/widget')
 export class WidgetController {
@@ -294,14 +295,30 @@ export class WidgetController {
         `Failed to update Widget in database.`,
       );
     }
-    if (updateName === true || request.body.changes) {
-      await WidgetUtil.updateEntriesWithNewWidgetData(
-        this.entryService,
-        this.logger,
-        updateName === true ? oldWidgetName : widget.name,
-        updateName === true ? widget.name : undefined,
-        request.body.changes.props,
-      );
+    if (updateName === true || typeof request.body.changes !== 'undefined') {
+      const changes = request.body.changes.props as PropChanges[];
+      let addDetected: boolean = false;
+      for (const i in changes) {
+        const change = changes[i];
+        if (change.add) {
+          addDetected = true;
+          await WidgetUtil.addNewPropsToWidgetInEntries(
+            this.entryService,
+            this.logger,
+            change,
+            request.body._id,
+          );
+        }
+      }
+      if (addDetected === false) {
+        await WidgetUtil.updateEntriesWithNewWidgetData(
+          this.entryService,
+          this.logger,
+          updateName === true ? oldWidgetName : widget.name,
+          updateName === true ? widget.name : undefined,
+          request.body.changes.props,
+        );
+      }
     }
     return {
       widget,

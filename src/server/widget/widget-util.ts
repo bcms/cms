@@ -87,4 +87,41 @@ export class WidgetUtil {
       });
     });
   }
+
+  public static async addNewPropsToWidgetInEntries(
+    entryService: EntryService,
+    logger: Logger,
+    change: PropChanges,
+    widgetId: string,
+  ) {
+    const entries = await entryService.findAll();
+    entries.forEach(async entry => {
+      entry.content.forEach(async content => {
+        content.props.forEach(async prop => {
+          if (prop.type === PropType.QUILL) {
+            prop.value = prop.value as PropQuill;
+            prop.value.content.forEach(async cont => {
+              if (cont.type === PropQuillContentType.WIDGET) {
+                logger.info('', 'H1');
+                cont.value = cont.value as PropQuillContentValueWidget;
+                if (cont.value._id === widgetId) {
+                  logger.info('', 'H2');
+                  cont.value.props.push(change.add);
+                  const updateEntryResult = await entryService.update(
+                    entry,
+                  );
+                  if (updateEntryResult === false) {
+                    logger.error('updateEntriesWithNewWidgetData', {
+                      msg: `Failed to update Entry '${entry._id.toHexString()}' with new Widget prop.`,
+                      change,
+                    });
+                  }
+                }
+              }
+            });
+          }
+        });
+      });
+    });
+  }
 }

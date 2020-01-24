@@ -1,3 +1,5 @@
+import { Prop } from './prop.interface';
+
 export interface PropChanges {
   name: {
     old: string;
@@ -5,5 +7,5 @@ export interface PropChanges {
   };
   required: boolean;
   remove?: boolean;
-  add?: boolean;
+  add?: Prop;
 }

@@ -6,6 +6,7 @@
   import Button from '../global/button.svelte';
   import StringUtil from '../../string-util.js';
 
+  export let groups;
   export let quill;
   export let data;
   export let events;
@@ -160,6 +161,7 @@
   {#if data.sections.length > 0 && quill}
     {#each data.sections as section, i}
       <QuillElement
+        {groups}
         {widgets}
         {quill}
         {section}

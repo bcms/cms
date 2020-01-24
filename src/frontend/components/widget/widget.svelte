@@ -3,6 +3,7 @@
   import Props from '../prop/props.svelte';
   import StringUtil from '../../string-util.js';
 
+  export let groups;
   export let widget;
   export let events;
 
@@ -40,6 +41,6 @@
       }} />
   </div>
   <div class="props">
-    <Props props={widget.props} events={propsEvents} />
+    <Props {groups} props={widget.props} events={propsEvents} />
   </div>
 </div>

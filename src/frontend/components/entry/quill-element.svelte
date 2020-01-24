@@ -2,6 +2,7 @@
   import { onMount, afterUpdate } from 'svelte';
   import Widget from '../widget/widget.svelte';
 
+  export let groups;
   export let quill;
   export let section;
   export let events;
@@ -229,6 +230,7 @@
     {/if}
   {:else if section.type === 'WIDGET'}
     <Widget
+      {groups}
       widget={section.value}
       {events}
       on:delete={() => {

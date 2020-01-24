@@ -373,7 +373,7 @@
   </script>
 </svelte:head>
 <Leyout {Store} {axios}>
-  {#if template}
+  {#if template && groups.length > 0 && widgets.length > 0}
     <div class="wrapper">
       <div class="heading">
         <div class="info">
@@ -408,7 +408,7 @@
       </div>
       <h3>Meta</h3>
       <div class="meta">
-        <Props props={data[selectedLanguage.code].meta} events={propsEvents} />
+        <Props {groups} {widgets} props={data[selectedLanguage.code].meta} events={propsEvents} />
       </div>
       <h3>Content</h3>
       <div class="content">
@@ -416,6 +416,7 @@
           <QuillContent
             {axios}
             {quill}
+            {groups}
             {widgets}
             data={data[selectedLanguage.code]}
             events={quillContentEvents} />

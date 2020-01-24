@@ -86,7 +86,16 @@
         _id: widgetSelected._id,
         props: [...widgetSelected.props, data],
         changes: {
-          props: [],
+          props: [
+            {
+              name: {
+                old: widgetSelected.name,
+                new: widgetSelected.name,
+              },
+              required: false,
+              add: data,
+            },
+          ],
         },
       },
     });
