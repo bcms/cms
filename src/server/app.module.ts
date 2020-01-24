@@ -133,7 +133,7 @@ export class App {
     this.app.use(express.static(path.join(process.env.PROJECT_ROOT, 'public')));
     // this.app.use(express.static(path.join(__dirname, 'frontend')));
     if (process.env.DEV === 'false') {
-      this.app.use(express.static(path.join(__dirname, 'frontend', 'public')));
+      this.app.use(express.static(path.join(__dirname, 'frontend')));
     } else {
       this.app.use(
         express.static(path.join(__dirname, '..', 'frontend', 'public')),
@@ -172,13 +172,16 @@ export class App {
           request.path.startsWith('/dashboard')
         ) {
           response.status(200);
-          response.sendFile(
-            path.join(process.env.PROJECT_ROOT, 'public', 'index.html'),
-          );
         } else {
           response.status(404);
+        }
+        if (process.env.DEV === 'true') {
           response.sendFile(
-            path.join(process.env.PROJECT_ROOT, 'public', 'index.html'),
+            path.join(__dirname, '..', '..', 'public', 'index.html'),
+          );
+        } else {
+          response.sendFile(
+            path.join(__dirname, 'frontend', 'index.html'),
           );
         }
       },

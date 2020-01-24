@@ -1,5 +1,5 @@
 <script>
-  import { onMount, afterUpdate } from 'svelte';
+  import { onMount } from 'svelte';
   import { Select, SelectItem } from 'carbon-components-svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/layout/layout.svelte';
@@ -236,10 +236,6 @@
     languageSelected = languages.find(e => e.code === queries.lng);
     // addDataModalModalEvents.init();
   });
-
-  afterUpdate(() => {
-    console.log('HERE')
-  })
 </script>
 
 <style type="text/scss">

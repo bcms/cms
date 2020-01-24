@@ -22,15 +22,9 @@ export class Rollup {
     output: string;
   }): Promise<void> {
     const production = process.env.SVELTE_PROD === 'true' ? true : false;
-    const rollupInputOptions: rup.RollupOptions = {
-      input: config.input,
-      output: {
-        sourcemap: false,
-        format: 'iife',
-        name: 'app',
-        file: `${config.output}/bundle.js`,
-      },
-      plugins: [
+    let rollupPlugins;
+    if (production === false) {
+      rollupPlugins = [
         svelte({
           preprocess: sveltePreprocess({
             scss: {
@@ -52,7 +46,40 @@ export class Rollup {
         commonjs(),
         !production && livereload(config.output),
         production && terser(),
-      ],
+      ];
+    } else {
+      rollupPlugins = [
+        svelte({
+          preprocess: sveltePreprocess({
+            scss: {
+              includePaths: ['src/frontend'],
+            },
+            postcss: {
+              plugins: [require('autoprefixer')],
+            },
+          }),
+          css: css => {
+            css.write(`${config.output}/bundle.css`);
+          },
+        }),
+        resolve({
+          browser: true,
+          dedupe: importee =>
+            importee === 'svelte' || importee.startsWith('svelte/'),
+        }),
+        commonjs(),
+        production && terser(),
+      ];
+    }
+    const rollupInputOptions: rup.RollupOptions = {
+      input: config.input,
+      output: {
+        sourcemap: false,
+        format: 'iife',
+        name: 'app',
+        file: `${config.output}/bundle.js`,
+      },
+      plugins: rollupPlugins,
       watch: {
         clearScreen: false,
       },

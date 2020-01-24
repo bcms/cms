@@ -199,12 +199,21 @@
             <div
               class="menu {menu.link.startsWith(window.location.pathname) ? 'active' : ''}">
               {#if menu.type === 'link'}
-                <Link to={menu.link}>
-                  <div class="parent link">
-                    <div class="{menu.faClass} icon" />
-                    <div class="text">{menu.name}</div>
-                  </div>
-                </Link>
+                {#if section.name === 'TEMPLATES' || section.name === 'WEBHOOKS'}
+                  <a href={menu.link}>
+                    <div class="parent link">
+                      <div class="{menu.faClass} icon" />
+                      <div class="text">{menu.name}</div>
+                    </div>
+                  </a>
+                {:else}
+                  <Link to={menu.link}>
+                    <div class="parent link">
+                      <div class="{menu.faClass} icon" />
+                      <div class="text">{menu.name}</div>
+                    </div>
+                  </Link>
+                {/if}
               {/if}
             </div>
           {/each}
