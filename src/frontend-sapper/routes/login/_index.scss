@@ -1,0 +1,22 @@
+.wrapper {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--c-primary-dark);
+}
+
+.welcome {
+  width: 400px;
+  color: var(--c-white);
+  display: flex;
+  flex-direction: column;
+  margin: 50px auto;
+}
+
+.login {
+  background-color: var(--c-white);
+  padding: 50px;
+  width: 400px;
+  margin: 0 auto;
+}

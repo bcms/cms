@@ -1,0 +1,10 @@
+body {
+  padding: 0;
+  margin: 0;
+  background-color: var(--light-gray);
+}
+
+.swagger-ui .scheme-container {
+  box-shadow: none;
+  background-color: var(--light-gray);
+}

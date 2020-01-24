@@ -10,7 +10,7 @@ import { Model } from 'mongoose';
 
 @MongooseEntityService({
   db: {
-    name: 'kobil_users',
+    name: `${process.env.DB_PRFX}_users`,
   },
   entity: {
     schema: User.schema,

@@ -1,5 +1,7 @@
 import * as express from 'express';
 import * as path from 'path';
+import * as util from 'util';
+import * as fs from 'fs';
 
 import {
   Application,
@@ -129,6 +131,7 @@ export class App {
 
   private initializeControllers(controllers: any[]) {
     this.app.use(express.static(path.join(process.env.PROJECT_ROOT, 'public')));
+    // this.app.use(express.static(path.join(__dirname, 'frontend')));
     if (process.env.DEV === 'false') {
       this.app.use(express.static(path.join(__dirname, 'frontend', 'public')));
     } else {
@@ -147,7 +150,23 @@ export class App {
     this.app.use(new ExceptionHandlerMiddleware().handler);
     this.app.use(
       '/',
-      (request: express.Request, response: express.Response) => {
+      async (request: express.Request, response: express.Response) => {
+        // response.status(404);
+        // response.json({
+        //   notFound: request.originalUrl,
+        // });
+        // response.status(200);
+        // if (
+        //   (await util.promisify(fs.exists)(
+        //     path.join(process.env.PROJECT_ROOT, 'public', 'index.html'),
+        //   )) === true
+        // ) {
+        //   response.sendFile(
+        //     path.join(process.env.PROJECT_ROOT, 'public', 'index.html'),
+        //   );
+        // } else {
+        //   response.sendFile(path.join(__dirname, 'frontend', 'index.html'));
+        // }
         if (
           request.path.startsWith('/login') ||
           request.path.startsWith('/dashboard')

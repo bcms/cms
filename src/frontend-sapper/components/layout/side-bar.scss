@@ -1,0 +1,49 @@
+.side-bar {
+  font-size: 10pt;
+  position: fixed;
+  top: 60px;
+  bottom: 0;
+  width: 250px;
+  background-color: var(--c-primary-dark);
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.section .name {
+  color: var(--c-gray-cold-dark);
+  font-size: 10pt;
+  font-weight: bold;
+  margin: 30px 10px 20px 20px;
+}
+
+.menus .menu {
+  padding-left: 20px;
+}
+
+.menus .menu:hover {
+  background-color: var(--c-primary-dark-hover);
+}
+
+.menus .menu .parent {
+  display: grid;
+  grid-template-columns: 12px auto 20px;
+  grid-gap: 10px;
+  padding: 10px 0;
+}
+
+.menus .menu .parent .text {
+  margin: 0;
+  font-weight: normal;
+  color: var(--c-gray-cold-dark);
+}
+
+.menus .menu .parent .icon {
+  margin: auto 0;
+  font-size: 10pt;
+  color: var(--c-neutral);
+  color: var(--c-gray-cold-dark);
+}
+
+.menus .active .parent .icon {
+  color: var(--c-primary);
+}

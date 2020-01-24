@@ -39,6 +39,18 @@
   export let url = '';
 </script>
 
+<style type="text/scss" global>
+  @import './styles/global.scss';
+</style>
+
+<svelt:head>
+  <link rel="stylesheet" href="/font-awesome/fontawesome.min.css" />
+  <link rel="stylesheet" href="/font-awesome/solid.min.css" />
+  <link rel="stylesheet" href="/font-awesome/brands.min.css" />
+  <link rel="stylesheet" href="/css/quill.css" />
+  <link rel="stylesheet" href="/css/highlight.css" />
+</svelt:head>
+
 <Router {url}>
   {#if window.location.pathname.startsWith('/dashboard') || window.location.pathname.startsWith('/login')}
     <div class="container">
