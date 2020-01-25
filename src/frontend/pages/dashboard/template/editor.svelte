@@ -4,7 +4,7 @@
   import { sideBarOptions } from '../../../components/global/side-bar.svelte';
   import Layout from '../../../components/global/layout.svelte';
   import ManagerLayout from '../../../components/global/manager-content.svelte';
-  import AddPropModal from '../../../components/modals/add-prop.svelte';
+  import AddPropModal from '../../../components/global/modal/add-prop.svelte';
   import EditPropModal from '../../../components/modals/edit-prop.svelte';
   import AddModal from '../../../components/template/modals/add.svelte';
   import EditModal from '../../../components/template/modals/edit.svelte';
@@ -19,7 +19,7 @@
   let templates = [];
   let groups = [];
   let templateSelected;
-  let addPropModalEvents = { callback: addProp };
+  let addPropModalEvents = {};
   let editPropModalEvents = { callback: editProp };
   let editModalEvents = { callback: templateEdit };
   let addModalEvents = { callback: templateAdded, toggle: () => {} };
@@ -216,10 +216,6 @@
   });
 </script>
 
-<style type="text/scss">
-  @import './editor.scss';
-</style>
-
 <Layout {Store} {axios}>
   <ManagerLayout
     items={templates}
@@ -280,12 +276,14 @@
 <EditModal {axios} events={editModalEvents} />
 {#if templateSelected}
   <AddPropModal
-    selectedGroupId={undefined}
     usedPropNames={templateSelected.entryTemplate.map(e => {
       return e.name;
     })}
+    events={addPropModalEvents}
     {groups}
-    events={addPropModalEvents} />
+    on:done={event => {
+      addProp(event.detail);
+    }} />
   <EditPropModal
     selectedGroupId={templateSelected._id}
     usedPropNames={templateSelected.entryTemplate.map(e => {

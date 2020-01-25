@@ -8,9 +8,7 @@
   import StringUtil from '../../string-util.js';
 
   export let events;
-  export let groups;
   export let usedPropNames;
-  export let selectedGroupId;
 
   const modalHeading = {
     icon: '/assets/ics/template/icon_type_ct.png',

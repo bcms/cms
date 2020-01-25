@@ -7,7 +7,6 @@
   export let templates;
   export let functions;
   export let config;
-  export let events;
 
   const configTypes = ['Template', 'Function'];
   const configMethods = ['GET_ALL', 'GET', 'POST', 'PUT', 'DELETE'];
