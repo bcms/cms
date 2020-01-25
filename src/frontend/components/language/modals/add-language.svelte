@@ -78,32 +78,4 @@
       <SelectItem value={lng.code} text="{lng.name} | {lng.nativeName}" />
     {/each}
   </Select>
-  <!-- <div class="content">
-    <div class="title">Options</div>
-    <div class="options">
-      <div class="key-value">
-        <div class="label">
-          <div class="text">Select a language</div>
-          {#if language.code.error !== ''}
-            <div class="btn btn-red-c">
-              <div class="fas fa-exclamation icon" />
-              <div class="text">{language.code.error}</div>
-            </div>
-          {/if}
-        </div>
-        <div class="value">
-          <select
-            class="select"
-            on:change={event => {
-              language.code.value = event.target.value;
-            }}>
-            {#each languages as lng}
-              <option value={lng.code}>{lng.name} | {lng.nativeName}</option>
-            {/each}
-            <option value="" selected>- Unselected -</option>
-          </select>
-        </div>
-      </div>
-    </div>
-  </div> -->
 </Modal>

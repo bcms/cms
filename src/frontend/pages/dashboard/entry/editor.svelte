@@ -42,6 +42,7 @@
   let quillContentEvents = {};
   let propsEvents = {};
 
+
   async function addEntry() {
     const metaProps = propsEvents.validateAndGetProps();
     if (!metaProps) {
@@ -373,7 +374,7 @@
   </script>
 </svelte:head>
 <Leyout {Store} {axios}>
-  {#if template && groups.length > 0 && widgets.length > 0}
+  {#if template}
     <div class="wrapper">
       <div class="heading">
         <div class="info">
