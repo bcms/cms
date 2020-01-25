@@ -1,4 +1,6 @@
 <script>
+  import { Select, SelectItem, Checkbox } from 'carbon-components-svelte';
+  import Button from '../global/button.svelte';
   import StringUtil from '../../string-util.js';
 
   export let configType;
@@ -9,6 +11,10 @@
 
   const configTypes = ['Template', 'Function'];
   const configMethods = ['GET_ALL', 'GET', 'POST', 'PUT', 'DELETE'];
+
+  let data = {
+    nameOrIdError: '',
+  };
 
   function validate() {
     if (config.template._id.value === '') {
@@ -41,11 +47,113 @@
 </script>
 
 <style type="text/scss">
-  @import './route-config.scss';
+  .heading {
+    background-color: #e0e0e0;
+    display: flex;
+  }
+
+  .heading .title {
+    font-size: 12pt;
+    margin: auto 0 auto 20px;
+  }
+
+  .heading .remove {
+    margin-left: auto;
+  }
+
+  .content {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-gap: 10px;
+    background-color: #f4f4f4;
+    padding: 20px;
+  }
 </style>
 
 <div class="config">
   <div class="heading">
+    <div class="title">
+      <span class="fas fa-{configType === 'Template' ? 'cubes' : 'code'}" />
+      &nbsp;{configType}
+    </div>
+    <div class="remove">
+      <Button icon="fas fa-times" onlyIcon={true} kind="ghost" />
+    </div>
+  </div>
+  <div class="content">
+    {#if configType === 'Template'}
+      <Select
+        labelText="Select a Template"
+        invalid={data.nameOrIdError !== '' ? true : false}
+        invalidText={data.nameOrIdError}
+        selected={config._id}
+        on:change={event => {
+          if (event.eventPhase === 0) {
+            config._id = event.detail;
+          }
+        }}>
+        <SelectItem value="" text="- Unspecified -" />
+        {#each templates as template}
+          <SelectItem
+            value={template._id}
+            text={StringUtil.prettyName(template.name)} />
+        {/each}
+      </Select>
+      <div>
+        <div class="--legend">Template Methods</div>
+        {#if config.methods.find(e => e === 'GET')}
+          <Checkbox
+            checked={true}
+            labelText="Get"
+            on:change={event => {
+              handleMethodCheck('Template', 'GET', event.target.checked);
+            }} />
+        {:else}
+          <Checkbox
+            labelText="Get"
+            on:change={event => {
+              handleMethodCheck('Template', 'GET', event.target.checked);
+            }} />
+        {/if}
+      </div>
+      <div>
+        <div class="--legend">Entry Methods</div>
+        {#each configMethods as method}
+          {#if config.entry.methods.find(e => e === method)}
+            <Checkbox
+              checked={true}
+              labelText={StringUtil.prettyName(method)}
+              on:change={event => {
+                handleMethodCheck('Entry', method, event.target.checked);
+              }} />
+          {:else}
+            <Checkbox
+              labelText={StringUtil.prettyName(method)}
+              on:change={event => {
+                handleMethodCheck('Entry', method, event.target.checked);
+              }} />
+          {/if}
+        {/each}
+      </div>
+    {:else}
+      <Select
+        labelText="Select a Function"
+        invalid={data.nameOrIdError !== '' ? true : false}
+        invalidText={data.nameOrIdError}
+        selected=""
+        on:change={event => {
+          if (event.eventPhase === 0) {
+            config.name = event.detail;
+          }
+        }}>
+        <SelectItem value="" text="- Unspecified -" />
+        {#each functions as fn}
+          <SelectItem value={fn} text={StringUtil.prettyName(fn)} />
+        {/each}
+      </Select>
+    {/if}
+  </div>
+  <!-- <div class="heading">
     {#if configType === 'Template'}
       <div class="fas fa-cubes icon" />
     {:else if configType === 'Entry'}
@@ -164,5 +272,5 @@
         </div>
       </div>
     {/if}
-  </div>
+  </div> -->
 </div>

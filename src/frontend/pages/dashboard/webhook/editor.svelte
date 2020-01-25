@@ -7,8 +7,8 @@
   import ManagerLayout from '../../../components/global/manager-content.svelte';
   import PropsList from '../../../components/prop/props-list.svelte';
   import Button from '../../../components/global/button.svelte';
-  import AddWebhookModal from '../../../components/webhook/modals/add-webhook.svelte';
-  import EditWebhookModal from '../../../components/webhook/modals/edit-webhook.svelte';
+  import AddWebhookModal from '../../../components/global/modal/name-desc.svelte';
+  import EditWebhookModal from '../../../components/global/modal/name-desc.svelte';
   import StringUtil from '../../../string-util.js';
   import Base64 from '../../../base64.js';
 
@@ -35,8 +35,8 @@
       },
     },
   };
-  let addWebhookModalEvents = { callback: addWebhook };
-  let editWebhookModalEvents = { callback: updateWebhook };
+  let addWebhookModalEvents = {};
+  let editWebhookModalEvents = {};
   let invalidJSONObject = false;
 
   async function addWebhook(data) {
@@ -56,7 +56,6 @@
     sideBarOptions.updateWebhooks(webhooks);
   }
   async function updateWebhook(data) {
-    console.log('WOHO');
     let d;
     if (data) {
       d = data;
@@ -70,6 +69,19 @@
       }
       invalidJSONObject = false;
     }
+    console.log(d);
+    const result = await axios.send({
+      url: '/webhook',
+      method: 'PUT',
+      data: d,
+    });
+    if (result.success === false) {
+      simplePopup.error(result.error.response.data.message);
+      return;
+    }
+    webhooks = [...webhooks, result.response.data.webhook];
+    webhookSelected = result.response.data.webhook;
+    simplePopup.success('Webhook updated successfully.');
   }
   async function deleteWebhook() {
     if (confirm('Are you sure you want to delete this webhook?')) {
@@ -111,16 +123,15 @@
   });
 </script>
 
-<style type="text/scss">
-  @import './editor.scss';
-</style>
-
 <Layout {Store} {axios}>
   <ManagerLayout
     items={webhooks}
     itemSelected={webhookSelected}
     onlySlot={true}
-    menuConfig={{ heading: 'GROUPS', buttonLabel: 'Add new Group' }}
+    menuConfig={{ heading: 'WEBHOOKS', buttonLabel: 'Add new Webhook' }}
+    on:edit={event => {
+      editWebhookModalEvents.toggle();
+    }}
     on:addNewItem={event => {
       if (event.eventPhase === 0) {
         addWebhookModalEvents.toggle();
@@ -159,7 +170,26 @@
       }} />
   </ManagerLayout>
 </Layout>
-<AddWebhookModal events={addWebhookModalEvents} />
+<AddWebhookModal
+  title="Add Webhook"
+  events={addWebhookModalEvents}
+  on:done={event => {
+    addWebhook({
+      name: event.detail.name,
+      desc: event.detail.desc,
+      body: Base64.encode('{}'),
+    });
+  }} />
 {#if webhookSelected}
-  <EditWebhookModal events={editWebhookModalEvents} webhook={webhookSelected} />
+  <EditWebhookModal
+    title="Edit Webhook"
+    events={editWebhookModalEvents}
+    name={webhookSelected.name}
+    desc={webhookSelected.desc}
+    on:done={event => {
+      webhookSelected.name = event.detail.name;
+      webhookSelected.desc = event.detail.desc;
+      updateWebhook();
+    }} />
+  <!-- <EditWebhookModal events={editWebhookModalEvents} webhook={webhookSelected} /> -->
 {/if}

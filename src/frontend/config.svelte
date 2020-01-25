@@ -12,4 +12,8 @@
       '/login',
     ),
   });
+
+  if (!Store.get('loggedIn')) {
+    Store.set('loggedIn', false);
+  }
 </script>

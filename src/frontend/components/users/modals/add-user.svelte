@@ -1,13 +1,10 @@
 <script>
   import Modal from '../../modal.svelte';
   import { simplePopup } from '../../simple-popup.svelte';
+  import { TextInput, PasswordInput } from 'carbon-components-svelte';
 
   export let events;
 
-  const modalHeading = {
-    icon: '/assets/ics/template/icon_type_ct.png',
-    title: 'Create New User',
-  };
   let data = {
     email: {
       value: '',
@@ -49,11 +46,6 @@
     events.toggle();
   };
   events.done = async () => {
-    if (data.email.value.replace(/ /g, '') === '') {
-      data.email.error = 'Email input cannot be empty.';
-      return;
-    }
-    data.email.error = '';
     if (data.firstName.value.replace(/ /g, '') === '') {
       data.firstName.error = 'First Name input cannot be empty.';
       return;
@@ -64,6 +56,11 @@
       return;
     }
     data.lastName.error = '';
+    if (data.email.value.replace(/ /g, '') === '') {
+      data.email.error = 'Email input cannot be empty.';
+      return;
+    }
+    data.email.error = '';
     if (data.password.value.replace(/ /g, '') === '') {
       data.password.error = 'Password input cannot be empty.';
       return;
@@ -126,87 +123,43 @@
   }
 </style>
 
-<Modal heading={modalHeading} {events}>
-  <div class="content">
-    <div class="title">Settings</div>
-    <div class="options">
-      <div class="key-value">
-        <div class="label">
-          <span class="fas fa-envelope icon" />
-          &nbsp;
-          <span>Email</span>
-          {#if data.email.error !== ''}
-            <div style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
-              <span class="fa fa-exclamation" />
-              <span style="margin-left: 5px;">{data.email.error}</span>
-            </div>
-          {/if}
-        </div>
-        <div class="value">
-          <input
-            class="input"
-            placeholder="- Email -" 
-            bind:value={data.email.value}/>
-        </div>
-      </div>
-      <div class="key-value">
-        <div class="label">
-          <span class="fas fa-signature icon" />
-          &nbsp;
-          <span>First Name</span>
-          {#if data.firstName.error !== ''}
-            <div style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
-              <span class="fa fa-exclamation" />
-              <span style="margin-left: 5px;">{data.firstName.error}</span>
-            </div>
-          {/if}
-        </div>
-        <div class="value">
-          <input
-            class="input"
-            placeholder="- First Name -" 
-            bind:value={data.firstName.value}/>
-        </div>
-      </div>
-      <div class="key-value">
-        <div class="label">
-          <span class="fas fa-signature icon" />
-          &nbsp;
-          <span>Last Name</span>
-          {#if data.lastName.error !== ''}
-            <div style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
-              <span class="fa fa-exclamation" />
-              <span style="margin-left: 5px;">{data.lastName.error}</span>
-            </div>
-          {/if}
-        </div>
-        <div class="value">
-          <input
-            class="input"
-            placeholder="- Last Name -" 
-            bind:value={data.lastName.value}/>
-        </div>
-      </div>
-      <div class="key-value">
-        <div class="label">
-          <span class="fas fa-key icon" />
-          &nbsp;
-          <span>Password</span>
-          {#if data.password.error !== ''}
-            <div style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
-              <span class="fa fa-exclamation" />
-              <span style="margin-left: 5px;">{data.password.error}</span>
-            </div>
-          {/if}
-        </div>
-        <div class="value">
-          <input
-            class="input"
-            type="password"
-            placeholder="- Password -" 
-            bind:value={data.password.value}/>
-        </div>
-      </div>
-    </div>
-  </div>
+<Modal heading={{title: 'Add User'}} {events}>
+  <TextInput
+    labelText="First Name"
+    placeholder="- First Name -"
+    invalid={data.firstName.error !== '' ? true : false}
+    invalidText={data.firstName.error}
+    value={data.firstName.value}
+    on:input={event => {
+      data.firstName.value = event.target.value;
+    }} />
+  <TextInput
+    labelText="Last Name"
+    placeholder="- Last Name -"
+    invalid={data.lastName.error !== '' ? true : false}
+    invalidText={data.lastName.error}
+    value={data.lastName.value}
+    on:input={event => {
+      data.lastName.value = event.target.value;
+    }} />
+  <TextInput
+    labelText="Email"
+    placeholder="- Email -"
+    invalid={data.email.error !== '' ? true : false}
+    invalidText={data.email.error}
+    value={data.email.value}
+    on:input={event => {
+      data.email.value = event.target.value;
+    }} />
+  <PasswordInput
+    showPasswordLabel=""
+    hidePasswordLabel=""
+    labelText="Password"
+    placeholder="- Password -"
+    invalid={data.password.error !== '' ? true : false}
+    invalidText={data.password.error}
+    value={data.password.value}
+    on:input={event => {
+      data.password.value = event.target.value;
+    }} />
 </Modal>

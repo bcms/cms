@@ -21,7 +21,13 @@
             events.clicked(item);
           }}>
           <div class="fa fa-arrow-right icon" />
-          <div class="name">{StringUtil.prettyName(item.name)}</div>
+          {#if item.username}
+            <div class="name">
+              {StringUtil.prettyName(item.username.replace(/ /g, '_'))}
+            </div>
+          {:else}
+            <div class="name">{StringUtil.prettyName(item.name)}</div>
+          {/if}
           {#if item.type}
             <div class="type">[ {StringUtil.prettyName(item.type)} ]</div>
           {/if}
@@ -38,7 +44,13 @@
             events.clicked(item);
           }}>
           <div class="fa fa-arrow-right icon" />
-          <div class="name">{StringUtil.prettyName(item.name)}</div>
+          {#if item.username}
+            <div class="name">
+              {StringUtil.prettyName(item.username.replace(/ /g, '_'))}
+            </div>
+          {:else}
+            <div class="name">{StringUtil.prettyName(item.name)}</div>
+          {/if}
           {#if item.type}
             <div class="type">[ {StringUtil.prettyName(item.type)} ]</div>
           {/if}

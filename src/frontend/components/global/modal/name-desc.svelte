@@ -1,10 +1,16 @@
 <script>
-  import Modal from '../../modal.svelte';
+  import { createEventDispatcher } from 'svelte';
+  import Modal from './modal.svelte';
   import { simplePopup } from '../../simple-popup.svelte';
   import { TextInput, TextArea } from 'carbon-components-svelte';
 
+  export let title;
   export let events;
+  export let nameEncoding = '-';
+  export let name;
+  export let desc;
 
+  const dispatch = createEventDispatcher();
   let data = {
     name: {
       value: '',
@@ -17,16 +23,34 @@
   };
 
   function handleNameInput(event) {
-    const value = event.value
-      .toLowerCase()
-      .replace(/ /g, '_')
-      .replace(/_/g, '-')
-      .replace(/[^0-9a-z---]+/g, '');
+    let value;
+    switch (nameEncoding) {
+      case '_':
+        {
+          value = event.value
+            .toLowerCase()
+            .replace(/ /g, '_')
+            .replace(/-/g, '_')
+            .replace(/[^0-9a-z_-_]+/g, '');
+        }
+        break;
+      case '-':
+        {
+          value = event.value
+            .toLowerCase()
+            .replace(/ /g, '_')
+            .replace(/_/g, '-')
+            .replace(/[^0-9a-z---]+/g, '');
+        }
+        break;
+      default: {
+        value = event.value;
+      }
+    }
     data.name.value = value;
     event.value = value;
   }
-
-  events.cancel = () => {
+  function cancel() {
     data = {
       name: {
         value: '',
@@ -38,28 +62,19 @@
       },
     };
     events.toggle();
-  };
-  events.done = () => {
+    dispatch('cancel');
+  }
+  function done() {
     if (data.name.value.replace(/ /g, '') === '') {
       data.name.error = 'Name input cannot be empty.';
       return;
     }
     data.name.error = '';
     events.toggle();
-    if (events.callback) {
-      events.callback({
-        name: data.name.value,
-        desc: data.desc.value,
-        blocked: false,
-        access: {
-          global: {
-            methods: [],
-          },
-          templates: [],
-          functions: [],
-        },
-      });
-    }
+    dispatch('done', {
+      name: data.name.value,
+      desc: data.desc.value,
+    });
     data = {
       name: {
         value: '',
@@ -70,10 +85,19 @@
         error: '',
       },
     };
-  };
+  }
+
+  if (name) {
+    handleNameInput({
+      value: `${name}`,
+    });
+  }
+  if (desc) {
+    data.desc.value = `${desc}`;
+  }
 </script>
 
-<Modal heading={{ title: 'Add Key' }} {events}>
+<Modal heading={{ title }} {events} {events} on:cancel={cancel} on:done={done}>
   <TextInput
     labelText="Name"
     placeholder="- Name -"

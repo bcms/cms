@@ -1,6 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import { simplePopup } from '../../simple-popup.svelte';
+  import { Select, SelectItem } from 'carbon-components-svelte';
   import Modal from '../../modal.svelte';
 
   export let events;
@@ -62,7 +63,22 @@
 </script>
 
 <Modal heading={modalHeading} {events}>
-  <div class="content">
+  <Select
+    labelText="Select a language"
+    invalid={language.code.error !== '' ? true : false}
+    invalidText={language.code.error}
+    selected={language.code.value}
+    on:change={event => {
+      if (event.eventPhase === 0) {
+        language.code.value = event.detail;
+      }
+    }}>
+    <SelectItem value="" text="- Unselected -" />
+    {#each languages as lng}
+      <SelectItem value={lng.code} text="{lng.name} | {lng.nativeName}" />
+    {/each}
+  </Select>
+  <!-- <div class="content">
     <div class="title">Options</div>
     <div class="options">
       <div class="key-value">
@@ -89,5 +105,5 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
 </Modal>

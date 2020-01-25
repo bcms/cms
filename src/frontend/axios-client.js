@@ -123,6 +123,10 @@ let jwtAutoRefreshPreRequestFunction = function(
         });
         if (result.success === false) {
           if (result.error.response.status === 401) {
+            store.set('loggedIn', false);
+            store.remove('refreshToken');
+            store.remove('accessToken');
+            store.remove('user');
             window.location =
               loginPageUrl + `?error=Failed to refresh an access token.`;
           } else {

@@ -58,6 +58,7 @@
       return;
     }
     Store.set('user', result.response.data.user);
+    Store.set('loggedIn', true);
     window.location = '/dashboard/overview';
   }
 </script>

@@ -1,9 +1,10 @@
 <script>
   import { onMount } from 'svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
+  import { CodeSnippet, ToggleSmall } from 'carbon-components-svelte';
   import Layout from '../../../components/global/layout.svelte';
-  import Menu from '../../../components/menu.svelte';
-  import OnOff from '../../../components/on-off.svelte';
+  import ManagerLayout from '../../../components/global/manager-content.svelte';
+  import Button from '../../../components/global/button.svelte';
   import AddKeyModal from '../../../components/api/modals/add-key.svelte';
   import EditKeyModal from '../../../components/api/modals/edit-key.svelte';
   import AddRouteConfigModal from '../../../components/api/modals/add-route-config.svelte';
@@ -19,20 +20,6 @@
   let keySelected;
   let keyConfig;
   let usedTemplatesForKey = [];
-  let menu = {
-    events: {
-      clicked: selectKey,
-      addNewItem: () => {
-        addKeyModalEvents.toggle();
-      },
-    },
-    config: {
-      heading: 'KEYS',
-      buttonLabel: 'Add New Key',
-      items: keys,
-      itemSelected: keySelected,
-    },
-  };
   let addKeyModalEvents = { callback: addKey };
   let editKeyModalEvents = { callback: updateKey };
   let addRouteConfigModalEvents = { callback: addKeyConfig };
@@ -123,7 +110,6 @@
   }
   function selectKey(item) {
     keySelected = keys.find(e => e._id === item._id);
-    menu.config.itemSelected = keySelected;
     setKeyConfig();
   }
   async function addKey(data) {
@@ -137,9 +123,7 @@
       return;
     }
     keys = [...keys, result.response.data.key];
-    menu.config.items = keys;
     keySelected = result.response.data.key;
-    menu.config.itemSelected = keySelected;
     setKeyConfig();
   }
   async function deleteKey() {
@@ -161,8 +145,6 @@
         keySelected = undefined;
         keyConfig = undefined;
       }
-      menu.config.items = keys;
-      menu.config.itemSelected = keySelected;
     }
   }
   async function updateKey(key) {
@@ -172,7 +154,6 @@
     } else {
       k = key;
     }
-    console.log(k);
     const result = await axios.send({
       url: '/key',
       method: 'PUT',
@@ -189,8 +170,6 @@
       return key;
     });
     keySelected = result.response.data.key;
-    menu.config.itemSelected = keySelected;
-    menu.config.items = JSON.parse(JSON.stringify(keys));
     simplePopup.success('Key updated successfully.');
   }
 
@@ -204,11 +183,9 @@
       return;
     }
     keys = result.response.data.keys;
-    menu.config.items = keys;
     if (keys.length > 0) {
       keySelected = keys[0];
       setKeyConfig();
-      menu.config.itemSelected = keySelected;
     }
     result = await axios.send({
       url: '/template/all/lite',
@@ -232,11 +209,134 @@
 </script>
 
 <style type="text/scss">
-  @import './editor.scss';
+  .update {
+    margin-left: auto;
+  }
+
+  .general {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
+  }
+
+  .config {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
+  }
+
+  .router .no-config {
+    text-align: center;
+    font-size: 14pt;
+    color: var(--c-gray-dark);
+    margin-bottom: 20px;
+  }
+
+  .router .add-config {
+    text-align: center;
+  }
 </style>
 
 <Layout {Store} {axios}>
-  <div class="editor">
+  <ManagerLayout
+    onlySlot={true}
+    items={keys}
+    itemSelected={keySelected}
+    menuConfig={{ heading: 'KEYS', buttonLabel: 'Add new Key' }}
+    on:addNewItem={event => {
+      if (event.eventPhase === 0) {
+        addKeyModalEvents.toggle();
+      }
+    }}
+    on:itemClicked={event => {
+      if (event.eventPhase === 0) {
+        selectKey(event.detail);
+      }
+    }}
+    on:delete={event => {
+      if (event.eventPhase === 0) {
+        deleteKey();
+      }
+    }}>
+    {#if keySelected}
+      <div class="update">
+        <Button
+          icon="fas fa-check"
+          on:click={() => {
+            updateKey();
+          }}>
+          Update
+        </Button>
+      </div>
+      <h4>General</h4>
+      <div class="general mt-20">
+        <p>
+          <CodeSnippet code={keySelected.secret} />
+        </p>
+        {#if keySelected.blocked === true}
+          <ToggleSmall
+            toggled={true}
+            labelText="Blocked"
+            labelA="No"
+            labelB="Yes"
+            on:change={event => {
+              keySelected.blocked = event.target.checked;
+            }} />
+        {:else}
+          <ToggleSmall
+            toggled={false}
+            labelText="Blocked"
+            labelA="No"
+            labelB="Yes"
+            on:change={event => {
+              keySelected.blocked = event.target.checked;
+            }} />
+        {/if}
+      </div>
+      <h4 class="mt-50">Router Configuration</h4>
+      <div class="router mt-20">
+        {#if keySelected.access.templates.length === 0 && keySelected.access.functions.length === 0}
+          <div class="no-config">
+            This Key is not configured. No resources can be accessed using it!
+          </div>
+        {:else}
+          <div class="config">
+            {#each keySelected.access.templates as config, i}
+              <RouteConfig
+                configType="Template"
+                {templates}
+                {functions}
+                {config}
+                on:remove={() => {
+                  deleteConfig('Template', i);
+                }} />
+            {/each}
+            {#each keySelected.access.functions as config, i}
+              <RouteConfig
+                configType="Function"
+                {templates}
+                {functions}
+                {config}
+                on:remove={() => {
+                  deleteConfig('Function', i);
+                }} />
+            {/each}
+          </div>
+        {/if}
+        <div class="add-config mt-20">
+          <Button
+            icon="fas fa-plus"
+            kind="ghost"
+            on:click={() => {
+              addRouteConfigModalEvents.toggle();
+            }}>
+            Add Configuration
+          </Button>
+        </div>
+      </div>
+    {/if}
+  </ManagerLayout>
+  <!-- <div class="editor">
     <Menu events={menu.events} config={menu.config} />
     <div class="content">
       {#if keySelected}
@@ -354,7 +454,7 @@
         </div>
       {/if}
     </div>
-  </div>
+  </div> -->
 </Layout>
 <AddKeyModal events={addKeyModalEvents} />
 <AddRouteConfigModal events={addRouteConfigModalEvents} />

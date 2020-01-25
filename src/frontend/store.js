@@ -37,10 +37,10 @@ module.exports = {
     }
   },
   set: (key, value) => {
-    if (!key) {
+    if (typeof key === 'undefined') {
       throw new Error(`'key' cannot be undefined.`);
     }
-    if (!value) {
+    if (typeof value === 'undefined') {
       throw new Error(`'value' cannot be undefined.`);
     }
     switch (typeof value) {

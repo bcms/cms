@@ -24,108 +24,110 @@
   export const data = writable({});
 
   async function fatch() {
-    let result = await axios.send({
-      url: '/template/all',
-      method: 'GET',
-    });
-    if (result.success === false) {
-      console.error(result.error);
-      return;
-    }
-    templates = JSON.parse(JSON.stringify(result.response.data.templates));
-    result = await axios.send({
-      url: '/webhook/all',
-      method: 'GET',
-    });
-    if (result.success === false) {
-      console.error(result.error);
-      return;
-    }
-    webhooks = JSON.parse(JSON.stringify(result.response.data.webhooks));
-    if (Store.get('user').roles[0].name === 'ADMIN') {
-      options.sections = [
-        {
-          name: 'ADMINISTRATION',
-          menus: [
-            {
-              type: 'link',
-              name: 'Template Manager',
-              link: '/dashboard/template/editor',
-              faClass: 'fas fa-cubes',
-            },
-            {
-              type: 'link',
-              name: 'Group Manager',
-              link: '/dashboard/group/editor',
-              faClass: 'fas fa-layer-group',
-            },
-            {
-              type: 'link',
-              name: 'Widget Manager',
-              link: '/dashboard/widget/editor',
-              faClass: 'fas fa-pepper-hot',
-            },
-            {
-              type: 'link',
-              name: 'Media Manager',
-              link: '/dashboard/media/editor',
-              faClass: 'fa fa-folder',
-            },
-            {
-              type: 'link',
-              name: 'Language Manager',
-              link: '/dashboard/language/editor',
-              faClass: 'fas fa-globe-europe',
-            },
-            {
-              type: 'link',
-              name: 'Users Manager',
-              link: '/dashboard/user/editor',
-              faClass: 'fas fa-users',
-            },
-            {
-              type: 'link',
-              name: 'API Manager',
-              link: '/dashboard/api/editor',
-              faClass: 'fas fa-key',
-            },
-            {
-              type: 'link',
-              name: 'Webhook Manager',
-              link: '/dashboard/webhook/editor',
-              faClass: 'fas fa-link',
-            },
-          ],
-        },
-        ...options.sections,
-      ];
-    }
-    for (const i in options.sections) {
-      if (options.sections[i].name === 'TEMPLATES') {
-        options.sections[i].menus = templates.map(template => {
-          return {
-            type: 'link',
-            name: StringUtil.prettyName(template.name),
-            link: `/dashboard/template/entries/view/c/${template._id}?page=1&cid=${template._id}&lng=en`,
-            faClass: 'fas fa-pencil-alt',
-          };
-        });
-      } else if (options.sections[i].name === 'WEBHOOKS') {
-        options.sections[i].menus = webhooks.map(webhook => {
-          return {
-            type: 'link',
-            name: StringUtil.prettyName(webhook.name),
-            link: `/dashboard/webhook/trigger/view/w/${webhook._id}?wid=${webhook._id}`,
-            faClass: 'fas fa-link',
-          };
-        });
+    if (Store.get('loggedIn') === true) {
+      let result = await axios.send({
+        url: '/template/all',
+        method: 'GET',
+      });
+      if (result.success === false) {
+        console.error(result.error);
+        return;
       }
+      templates = JSON.parse(JSON.stringify(result.response.data.templates));
+      result = await axios.send({
+        url: '/webhook/all',
+        method: 'GET',
+      });
+      if (result.success === false) {
+        console.error(result.error);
+        return;
+      }
+      webhooks = JSON.parse(JSON.stringify(result.response.data.webhooks));
+      if (Store.get('user').roles[0].name === 'ADMIN') {
+        options.sections = [
+          {
+            name: 'ADMINISTRATION',
+            menus: [
+              {
+                type: 'link',
+                name: 'Template Manager',
+                link: '/dashboard/template/editor',
+                faClass: 'fas fa-cubes',
+              },
+              {
+                type: 'link',
+                name: 'Group Manager',
+                link: '/dashboard/group/editor',
+                faClass: 'fas fa-layer-group',
+              },
+              {
+                type: 'link',
+                name: 'Widget Manager',
+                link: '/dashboard/widget/editor',
+                faClass: 'fas fa-pepper-hot',
+              },
+              {
+                type: 'link',
+                name: 'Media Manager',
+                link: '/dashboard/media/editor',
+                faClass: 'fa fa-folder',
+              },
+              {
+                type: 'link',
+                name: 'Language Manager',
+                link: '/dashboard/language/editor',
+                faClass: 'fas fa-globe-europe',
+              },
+              {
+                type: 'link',
+                name: 'Users Manager',
+                link: '/dashboard/user/editor',
+                faClass: 'fas fa-users',
+              },
+              {
+                type: 'link',
+                name: 'API Manager',
+                link: '/dashboard/api/editor',
+                faClass: 'fas fa-key',
+              },
+              {
+                type: 'link',
+                name: 'Webhook Manager',
+                link: '/dashboard/webhook/editor',
+                faClass: 'fas fa-link',
+              },
+            ],
+          },
+          ...options.sections,
+        ];
+      }
+      for (const i in options.sections) {
+        if (options.sections[i].name === 'TEMPLATES') {
+          options.sections[i].menus = templates.map(template => {
+            return {
+              type: 'link',
+              name: StringUtil.prettyName(template.name),
+              link: `/dashboard/template/entries/view/c/${template._id}?page=1&cid=${template._id}&lng=en`,
+              faClass: 'fas fa-pencil-alt',
+            };
+          });
+        } else if (options.sections[i].name === 'WEBHOOKS') {
+          options.sections[i].menus = webhooks.map(webhook => {
+            return {
+              type: 'link',
+              name: StringUtil.prettyName(webhook.name),
+              link: `/dashboard/webhook/trigger/view/w/${webhook._id}?wid=${webhook._id}`,
+              faClass: 'fas fa-link',
+            };
+          });
+        }
+      }
+      data.set({
+        options,
+        templates,
+        webhooks,
+      });
     }
-    data.set({
-      options,
-      templates,
-      webhooks,
-    });
   }
   fatch();
 </script>
@@ -146,7 +148,10 @@
     }
   });
 
-  if (!Store.get('user')) {
+  if (Store.get('loggedIn') === false) {
+    Store.remove('refreshToken');
+    Store.remove('accessToken');
+    Store.remove('user');
     document.location = `/login?error=You are not logged in.`;
   }
 

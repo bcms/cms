@@ -21,7 +21,7 @@
     if (itemSelected) {
       if (itemSelected.entryTemplate) {
         props = itemSelected.entryTemplate;
-      } else {
+      } else if(!itemSelected.username) {
         props = itemSelected.props;
       }
     }
@@ -43,23 +43,29 @@
   <div class="content">
     {#if itemSelected}
       <div class="heading">
-        <h3>{StringUtil.prettyName(itemSelected.name)}</h3>
-        <div class="edit">
-          <Button
-            icon={'fas fa-edit'}
-            onlyIcon={true}
-            kind={'ghost'}
-            size={'small'}
-            on:click={() => {
-              dispatch('edit', 'none');
-            }} />
+        {#if itemSelected.username}
+          <h3>{StringUtil.prettyName(itemSelected.username.replace(/ /g, '_'))}</h3>
+        {:else}
+          <h3>{StringUtil.prettyName(itemSelected.name)}</h3>
+          <div class="edit">
+            <Button
+              icon={'fas fa-edit'}
+              onlyIcon={true}
+              kind={'ghost'}
+              size={'small'}
+              on:click={() => {
+                dispatch('edit', 'none');
+              }} />
+          </div>
+        {/if}
+      </div>
+      {#if itemSelected.name}
+        <div class="desc">
+          {#if itemSelected.desc === ''}
+            Description is not available for this item.
+          {:else}{itemSelected.desc}{/if}
         </div>
-      </div>
-      <div class="desc">
-        {#if itemSelected.desc === ''}
-          Description is not available for this item.
-        {:else}{itemSelected.desc}{/if}
-      </div>
+      {/if}
       <div class="basic-info">
         <div class="key-value">
           <div class="label">ID</div>
@@ -145,8 +151,10 @@
     {:else}
       <div class="props">
         <div class="no-props">
-          <div class="message">No Templates in Database yet</div>
-          <div class="desc">Add your first Template</div>
+          <div class="message">
+            No {StringUtil.prettyName(menuConfig.heading)} in Database yet
+          </div>
+          <div class="desc">Add your first now</div>
           <div class="action">
             <Button
               icon="fas fa-plus"

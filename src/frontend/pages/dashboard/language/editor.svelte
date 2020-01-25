@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/global/layout.svelte';
+  import Button from '../../../components/global/button.svelte';
   import AddLanguageModal from '../../../components/language/modals/add-language.svelte';
 
   export let axios;
@@ -73,12 +74,15 @@
     <div class="title">Language Manager</div>
     <div class="desc">Add lanuages that will be available for Entries.</div>
     <div class="actions">
-      <button
-        class="btn-fill btn-blue-bg add"
-        on:click={addLanguageModalEvents.toggle}>
-        <div class="fas fa-plus icon" />
-        <div class="text">Add Language</div>
-      </button>
+      <div class="add">
+        <Button
+          icon="fas fa-plus"
+          on:click={() => {
+            addLanguageModalEvents.toggle();
+          }}>
+          Add Language
+        </Button>
+      </div>
     </div>
     <div class="lngs">
       {#each languages as language}
@@ -87,14 +91,23 @@
           <div class="native-name">{language.nativeName}</div>
           {#if language.code !== 'en'}
             <div class="actions">
-              <button
+              <Button
+                class="w-100p"
+                kind="danger"
+                size="small"
+                on:click={() => {
+                  removeLanguage(language._id);
+                }}>
+                Remove
+              </Button>
+              <!-- <button
                 class="btn-border btn-red-br btn-red-c delete"
                 on:click={() => {
                   removeLanguage(language._id);
                 }}>
                 <div class="fas fa-trash icon" />
                 <div class="text">Remove</div>
-              </button>
+              </button> -->
             </div>
           {/if}
         </div>
