@@ -114,7 +114,7 @@
     invalidText={prop.name.error}
     value={prop.name.value}
     on:input={event => {
-      handleNameInput(event.explicitOriginalTarget);
+      handleNameInput(event.target);
     }} />
   {#if prop.type === 'ENUMERATION'}
     <MultiAdd label="Enumaretions" options={enumInputOptions} />

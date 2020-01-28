@@ -307,7 +307,8 @@
       invalidText={data.name.error}
       value={data.name.value}
       on:input={event => {
-        handleNameInput(event.explicitOriginalTarget);
+        console.log('here');
+        handleNameInput(event.target);
       }} />
     {#if data.type.value === 'ENUMERATION'}
       <MultiAdd label="Enumaretions" options={enumInputOptions} />

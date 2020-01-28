@@ -70,7 +70,7 @@
     value={data.fileName}
     placeholder="- File Name -"
     on:input={event => {
-      handleNameInput(event.explicitOriginalTarget);
+      handleNameInput(event.target);
     }} />
   <div class="file-area">
     <FileUploaderDropContainer

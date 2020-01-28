@@ -76,7 +76,7 @@
     value={data.name.value}
     placeholder="- Name -"
     on:input={event => {
-      handleNameInput(event.explicitOriginalTarget);
+      handleNameInput(event.target);
     }} />
   <Select
     labelText="Select type"
