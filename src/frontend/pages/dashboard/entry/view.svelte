@@ -271,30 +271,28 @@
           {/each}
         </Select>
       </div>
-      <!-- <div class="filters">
-        <div class="key-value">
-          <div class="label">Languages</div>
-          <div class="value">
-            <select
-              class="select"
+      <h4>Filters</h4>
+      <div class="filters mt-20">
+        {#each template.entryTemplate as prop}
+          {#if prop.type === 'ENUMERATION'}
+            <Select
+              labelText={StringUtil.prettyName(prop.name)}
+              helperText="Show Entries with selected enumeration."
+              selected={languageSelected.code}
               on:change={event => {
-                languageSelected = languages.find(e => e.code === event.target.value);
+                if (event.eventPhase === 0) {
+                  setFilter(prop, { selected: event.detail });
+                }
               }}>
-              {#each languages as lng}
-                {#if lng.code === languageSelected.code}
-                  <option value={lng.code} selected>
-                    {lng.name} | {lng.nativeName}
-                  </option>
-                {:else}
-                  <option value={lng.code}>
-                    {lng.name} | {lng.nativeName}
-                  </option>
-                {/if}
+              <SelectItem value="" text="- Unselected -" />
+              {#each prop.value.items as item}
+                <SelectItem value={item} text={StringUtil.prettyName(item)} />
               {/each}
-            </select>
-          </div>
-        </div>
-        <h3>Filters</h3>
+            </Select>
+          {/if}
+        {/each}
+      </div>
+      <!-- <div class="filters">
         <div class="prop-filters">
           {#each template.entryTemplate as prop}
             {#if prop.type === 'ENUMERATION' || prop.type === 'STRING'}
