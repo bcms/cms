@@ -5,8 +5,7 @@
   import Layout from '../../../components/global/layout.svelte';
   import ManagerLayout from '../../../components/global/manager-content.svelte';
   import Button from '../../../components/global/button.svelte';
-  import AddKeyModal from '../../../components/api/modals/add-key.svelte';
-  import EditKeyModal from '../../../components/api/modals/edit-key.svelte';
+  import KeyModal from '../../../components/global/modal/name-desc.svelte';
   import AddRouteConfigModal from '../../../components/api/modals/add-route-config.svelte';
   import RouteConfig from '../../../components/api/route-config.svelte';
   import StringUtil from '../../../string-util.js';
@@ -20,8 +19,8 @@
   let keySelected;
   let keyConfig;
   let usedTemplatesForKey = [];
-  let addKeyModalEvents = { callback: addKey };
-  let editKeyModalEvents = { callback: updateKey };
+  let addKeyModalEvents = {};
+  let editKeyModalEvents = {};
   let addRouteConfigModalEvents = { callback: addKeyConfig };
   let blockButtonEvents = {
     set: value => {
@@ -253,6 +252,12 @@
         selectKey(event.detail);
       }
     }}
+    on:edit={event => {
+      if (event.eventPhase === 0) {
+        editKeyModalEvents.set(keySelected.name, keySelected.desc);
+        editKeyModalEvents.toggle();
+      }
+    }}
     on:delete={event => {
       if (event.eventPhase === 0) {
         deleteKey();
@@ -456,10 +461,36 @@
     </div>
   </div> -->
 </Layout>
-<AddKeyModal events={addKeyModalEvents} />
+<KeyModal
+  title="Add new Key"
+  events={addKeyModalEvents}
+  on:done={event => {
+    if (event.eventPhase === 0) {
+      addKey({
+        name: event.detail.name,
+        desc: event.detail.desc,
+        blocked: false,
+        access: {
+          global: {
+            methods: [],
+          },
+          templates: [],
+          functions: [],
+        },
+      });
+    }
+  }} />
 <AddRouteConfigModal events={addRouteConfigModalEvents} />
 {#if keySelected}
-  <EditKeyModal
+  <KeyModal
+    title="Edit Key"
     events={editKeyModalEvents}
-    key={JSON.parse(JSON.stringify(keySelected))} />
+    on:done={event => {
+      if (event.eventPhase === 0) {
+        const key = JSON.parse(JSON.stringify(keySelected));
+        key.name = event.detail.name;
+        key.desc = event.detail.desc;
+        updateKey(key);
+      }
+    }} />
 {/if}

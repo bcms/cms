@@ -9,7 +9,7 @@
   import UrlQueries from '../../../url-queries.js';
 
   export let events;
-  export let template;
+  export let template = null;
   export let languages;
 
   const queries = UrlQueries.get();
@@ -25,6 +25,7 @@
     data = {};
     for (const i in languages) {
       const lng = languages[i];
+      data[lng.code] = {};
       data[lng.code] = {
         props: JSON.parse(
           JSON.stringify(
@@ -37,10 +38,6 @@
           ),
         ),
       };
-      // data[lng.code].errors = initErrorPaths(data[lng.code].props);
-      // data[lng.code].groupPropEvents = initGroupPropEvents(
-      //   data[lng.code].props,
-      // );
       data[lng.code].hash = crypto
         .SHA256(JSON.stringify(data[lng.code].props))
         .toString();
@@ -61,6 +58,20 @@
     selectedLanguage = event.target.value;
   }
 
+  events.setEntry = entry => {
+    for (const i in languages) {
+      const lng = languages[i];
+      console.log('entry', entry);
+      if (entry !== null) {
+        const content = entry.content.find(e => e.lng === lng.code);
+        console.log('content', content);
+        if (content) {
+          data[lng.code].props = JSON.parse(JSON.stringify(content.props));
+        }
+      }
+      console.log('data', data);
+    }
+  };
   events.cancel = () => {
     events.toggle();
     initData();
@@ -100,24 +111,18 @@
   });
 </script>
 
-<style type="text/scss">
-  @import './add-data-model.scss';
-</style>
-
 <Modal heading={modalHeading} {events}>
   {#if data}
-    <div class="content">
-      <div class="key-value">
-        <div class="label">Language</div>
-        <div class="value">
-          <select class="select" on:change={selectLanguage}>
-            {#each languages as lng}
-              <option value={lng.code}>{lng.name} | {lng.nativeName}</option>
-            {/each}
-          </select>
-        </div>
+    <div class="key-value">
+      <div class="label">Language</div>
+      <div class="value">
+        <select class="select" on:change={selectLanguage}>
+          {#each languages as lng}
+            <option value={lng.code}>{lng.name} | {lng.nativeName}</option>
+          {/each}
+        </select>
       </div>
-      <Props props={data[selectedLanguage].props} events={propsEvents} />
     </div>
+    <Props props={data[selectedLanguage].props} events={propsEvents} />
   {/if}
 </Modal>

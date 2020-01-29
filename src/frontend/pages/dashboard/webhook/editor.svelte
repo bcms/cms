@@ -7,8 +7,7 @@
   import ManagerLayout from '../../../components/global/manager-content.svelte';
   import PropsList from '../../../components/prop/props-list.svelte';
   import Button from '../../../components/global/button.svelte';
-  import AddWebhookModal from '../../../components/global/modal/name-desc.svelte';
-  import EditWebhookModal from '../../../components/global/modal/name-desc.svelte';
+  import WebhookModal from '../../../components/global/modal/name-desc.svelte';
   import StringUtil from '../../../string-util.js';
   import Base64 from '../../../base64.js';
 
@@ -18,23 +17,6 @@
   let groups = [];
   let webhooks = [];
   let webhookSelected;
-  let menu = {
-    config: {
-      heading: 'WEBHOOKS',
-      buttonLabel: 'Add New Webhook',
-      items: webhooks,
-      itemSelected: webhookSelected,
-    },
-    events: {
-      clicked: item => {
-        webhookSelected = item;
-        menu.config.itemSelected = item;
-      },
-      addNewItem: () => {
-        addWebhookModalEvents.toggle();
-      },
-    },
-  };
   let addWebhookModalEvents = {};
   let editWebhookModalEvents = {};
   let invalidJSONObject = false;
@@ -51,8 +33,6 @@
     }
     webhooks = [...webhooks, result.response.data.webhook];
     webhookSelected = result.response.data.webhook;
-    menu.config.itemSelected = webhookSelected;
-    menu.config.items = webhooks;
     sideBarOptions.updateWebhooks(webhooks);
   }
   async function updateWebhook(data) {
@@ -69,7 +49,6 @@
       }
       invalidJSONObject = false;
     }
-    console.log(d);
     const result = await axios.send({
       url: '/webhook',
       method: 'PUT',
@@ -79,8 +58,13 @@
       simplePopup.error(result.error.response.data.message);
       return;
     }
-    webhooks = [...webhooks, result.response.data.webhook];
     webhookSelected = result.response.data.webhook;
+    webhooks = webhooks.map(e => {
+      if (e._id === webhookSelected._id) {
+        return webhookSelected;
+      }
+      return e;
+    });
     simplePopup.success('Webhook updated successfully.');
   }
   async function deleteWebhook() {
@@ -99,8 +83,6 @@
       } else {
         webhookSelected = webhooks[0];
       }
-      menu.config.itemSelected = webhookSelected;
-      menu.config.items = webhooks;
       sideBarOptions.updateWebhooks(webhooks);
     }
   }
@@ -118,10 +100,14 @@
     if (webhooks.length > 0) {
       webhookSelected = webhooks[0];
     }
-    menu.config.items = webhooks;
-    menu.config.itemSelected = webhookSelected;
   });
 </script>
+
+<style type="text/scss">
+  .update {
+    margin-left: auto;
+  }
+</style>
 
 <Layout {Store} {axios}>
   <ManagerLayout
@@ -130,6 +116,7 @@
     onlySlot={true}
     menuConfig={{ heading: 'WEBHOOKS', buttonLabel: 'Add new Webhook' }}
     on:edit={event => {
+      editWebhookModalEvents.set(webhookSelected.name, webhookSelected.desc);
       editWebhookModalEvents.toggle();
     }}
     on:addNewItem={event => {
@@ -140,7 +127,6 @@
     on:itemClicked={event => {
       if (event.eventPhase === 0) {
         webhookSelected = event.detail;
-        menu.config.itemSelected = event.detail;
       }
     }}
     on:delete={event => {
@@ -159,10 +145,11 @@
       </Button>
     </div>
     <TextArea
+      style="font-family: monospace;"
       invalid={invalidJSONObject}
       invalidText={'Valid JSON Object must be provided.'}
       labelText={'Webhook body'}
-      helperText={'Valid JSON object string is required.'}
+      helperText={'Valid JSON object is required.'}
       cols="500"
       value={Base64.decode(webhookSelected.body)}
       on:input={event => {
@@ -170,8 +157,8 @@
       }} />
   </ManagerLayout>
 </Layout>
-<AddWebhookModal
-  title="Add Webhook"
+<WebhookModal
+  title="Add new Webhook"
   events={addWebhookModalEvents}
   on:done={event => {
     addWebhook({
@@ -180,16 +167,11 @@
       body: Base64.encode('{}'),
     });
   }} />
-{#if webhookSelected}
-  <EditWebhookModal
-    title="Edit Webhook"
-    events={editWebhookModalEvents}
-    name={webhookSelected.name}
-    desc={webhookSelected.desc}
-    on:done={event => {
-      webhookSelected.name = event.detail.name;
-      webhookSelected.desc = event.detail.desc;
-      updateWebhook();
-    }} />
-  <!-- <EditWebhookModal events={editWebhookModalEvents} webhook={webhookSelected} /> -->
-{/if}
+<WebhookModal
+  title="Edit Webhook"
+  events={editWebhookModalEvents}
+  on:done={event => {
+    webhookSelected.name = event.detail.name;
+    webhookSelected.desc = event.detail.desc;
+    updateWebhook();
+  }} />

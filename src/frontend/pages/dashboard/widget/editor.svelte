@@ -5,8 +5,8 @@
   import ManagerLayout from '../../../components/global/manager-content.svelte';
   import AddPropModal from '../../../components/modals/add-prop.svelte';
   import EditPropModal from '../../../components/modals/edit-prop.svelte';
-  import AddWidgetModal from '../../../components/widget/modals/add-widget.svelte';
-  import EditWidgetModal from '../../../components/widget/modals/edit-widget.svelte';
+  import AddWidgetModal from '../../../components/global/modal/name-desc.svelte';
+  import EditWidgetModal from '../../../components/global/modal/name-desc.svelte';
   import PropsList from '../../../components/prop/props-list.svelte';
   import Button from '../../../components/global/button.svelte';
   import StringUtil from '../../../string-util.js';
@@ -216,10 +216,6 @@
   });
 </script>
 
-<style type="text/scss">
-  @import './editor.scss';
-</style>
-
 <Layout {Store} {axios}>
   <ManagerLayout
     items={widgets}
@@ -238,6 +234,12 @@
     on:addProp={event => {
       if (event.eventPhase === 0) {
         addPropModalEvents.toggle();
+      }
+    }}
+    on:edit={event => {
+      if (event.eventPhase === 0) {
+        editWidgetModalEvents.set(widgetSelected.name, widgetSelected.desc);
+        editWidgetModalEvents.toggle();
       }
     }}
     on:delete={event => {
@@ -277,7 +279,15 @@
   </ManagerLayout>
 </Layout>
 
-<AddWidgetModal events={addWidgetModalEvents} />
+<AddWidgetModal
+  title="Add new Widget"
+  nameEncoding="_"
+  events={addWidgetModalEvents}
+  on:done={event => {
+    if (event.eventPhase === 0) {
+      addWidget({ name: event.detail.name, desc: event.detail.desc });
+    }
+  }} />
 {#if widgetSelected}
   <AddPropModal
     selectedGroupId={undefined}
@@ -293,5 +303,16 @@
     })}
     {groups}
     events={editPropModalEvents} />
-  <EditWidgetModal events={editWidgetModalEvents} widget={widgetSelected} />
+  <EditWidgetModal
+    title="Edit Widget"
+    nameEncoding="_"
+    events={editWidgetModalEvents}
+    on:done={event => {
+      if (event.eventPhase === 0) {
+        const widget = JSON.parse(JSON.stringify(widgetSelected));
+        widget.name = event.detail.name;
+        widget.desc = event.detail.desc;
+        editWidget(widget);
+      }
+    }} />
 {/if}

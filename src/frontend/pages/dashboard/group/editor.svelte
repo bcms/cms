@@ -3,8 +3,7 @@
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/global/layout.svelte';
   import ManagerLayout from '../../../components/global/manager-content.svelte';
-  import AddGroupModal from '../../../components/group/modals/add-group.svelte';
-  import EditGroupModal from '../../../components/group/modals/edit-group.svelte';
+  import GroupModal from '../../../components/global/modal/name-desc.svelte';
   import AddPropModal from '../../../components/modals/add-prop.svelte';
   import EditPropModal from '../../../components/modals/edit-prop.svelte';
   import PropsList from '../../../components/prop/props-list.svelte';
@@ -17,11 +16,8 @@
 
   let groups = [];
   let groupSelected;
-  let addGroupModalEvents = {
-    toggle: () => {},
-    callback: addGroup,
-  };
-  let editGroupModalEvents = { callback: editGroup };
+  let addGroupModalEvents = {};
+  let editGroupModalEvents = {};
   let addPropModalEvents = { callback: addProp };
   let editPropModalEvents = { callback: editProp };
 
@@ -204,10 +200,6 @@
   });
 </script>
 
-<style type="text/scss">
-  @import './editor.scss';
-</style>
-
 <Layout {Store} {axios}>
   <ManagerLayout
     items={groups}
@@ -226,6 +218,12 @@
     on:addProp={event => {
       if (event.eventPhase === 0) {
         addPropModalEvents.toggle();
+      }
+    }}
+    on:edit={event => {
+      if (event.eventPhase === 0) {
+        editGroupModalEvents.set(groupSelected.name, groupSelected.desc);
+        editGroupModalEvents.toggle();
       }
     }}
     on:delete={event => {
@@ -264,7 +262,15 @@
     {/if}
   </ManagerLayout>
 </Layout>
-<AddGroupModal events={addGroupModalEvents} />
+<GroupModal
+  title="Add new Group"
+  nameEncoding="_"
+  events={addGroupModalEvents}
+  on:done={event => {
+    if (event.eventPhase === 0) {
+      addGroup({ name: event.detail.name, desc: event.detail.desc });
+    }
+  }} />
 {#if groupSelected}
   <AddPropModal
     selectedGroupId={groupSelected._id}
@@ -280,5 +286,17 @@
     })}
     {groups}
     events={editPropModalEvents} />
-  <EditGroupModal events={editGroupModalEvents} group={groupSelected} />
+  <GroupModal
+    title="Edit Group"
+    nameEncoding="_"
+    events={editGroupModalEvents}
+    on:done={event => {
+      if (event.eventPhase === 0) {
+        const data = event.detail;
+        const group = JSON.parse(JSON.stringify(groupSelected));
+        group.name = data.name;
+        group.desc = data.desc;
+        editGroup(group);
+      }
+    }} />
 {/if}

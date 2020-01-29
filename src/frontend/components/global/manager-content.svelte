@@ -21,7 +21,7 @@
     if (itemSelected) {
       if (itemSelected.entryTemplate) {
         props = itemSelected.entryTemplate;
-      } else if(!itemSelected.username) {
+      } else if (!itemSelected.username) {
         props = itemSelected.props;
       }
     }
@@ -44,7 +44,9 @@
     {#if itemSelected}
       <div class="heading">
         {#if itemSelected.username}
-          <h3>{StringUtil.prettyName(itemSelected.username.replace(/ /g, '_'))}</h3>
+          <h3>
+            {StringUtil.prettyName(itemSelected.username.replace(/ /g, '_'))}
+          </h3>
         {:else}
           <h3>{StringUtil.prettyName(itemSelected.name)}</h3>
           <div class="edit">
@@ -67,19 +69,19 @@
         </div>
       {/if}
       <div class="basic-info">
-        <div class="key-value">
-          <div class="label">ID</div>
-          <div class="value">{itemSelected._id}</div>
+        <div>
+          <div class="bx--label">ID</div>
+          <div class="bx--form__helper-text">{itemSelected._id}</div>
         </div>
-        <div class="key-value">
-          <div class="label">Created At</div>
-          <div class="value">
+        <div>
+          <div class="bx--label">Created At</div>
+          <div class="bx--form__helper-text">
             {new Date(itemSelected.createdAt).toLocaleString()}
           </div>
         </div>
-        <div class="key-value">
-          <div class="label">Updated At</div>
-          <div class="value">
+        <div>
+          <div class="bx--label">Updated At</div>
+          <div class="bx--form__helper-text">
             {new Date(itemSelected.updatedAt).toLocaleString()}
           </div>
         </div>

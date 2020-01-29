@@ -292,40 +292,6 @@
           {/if}
         {/each}
       </div>
-      <!-- <div class="filters">
-        <div class="prop-filters">
-          {#each template.entryTemplate as prop}
-            {#if prop.type === 'ENUMERATION' || prop.type === 'STRING'}
-              <div class="key-value prop">
-                <div class="label">{StringUtil.prettyName(prop.name)}</div>
-                <div class="value">
-                  {#if prop.type === 'ENUMERATION'}
-                    <select
-                      class="select"
-                      on:change={event => {
-                        setFilter(prop, { selected: event.target.value });
-                      }}>
-                      <option value="" selected>- Unselected -</option>
-                      {#each prop.value.items as item}
-                        <option value={item}>
-                          {StringUtil.prettyName(item)}
-                        </option>
-                      {/each}
-                    </select>
-                  {:else}
-                    <div class="string">
-                      <textarea id="filter-{prop.name}" class="input" />
-                      <div class="actions">
-
-                      </div>
-                    </div>
-                  {/if}
-                </div>
-              </div>
-            {/if}
-          {/each}
-        </div>
-      </div> -->
       {#if entries.length > 0}
         <div class="entries">
           {#each entries as entry, i}
@@ -467,24 +433,22 @@
                       </pre>
                     </div>
                     <div class="actions">
-                      <button
-                        class="btn-border btn-red-br btn-red-c delete"
+                      <Button
+                        kind="secondary"
+                        on:click={() => {
+                          editEntry = entry;
+                          editDataModelModalEvents.setEntry(entry);
+                          editDataModelModalEvents.toggle();
+                        }}>
+                        Edit
+                      </Button>
+                      <Button
+                        kind="danger"
                         on:click={() => {
                           deleteEntry(entry);
                         }}>
-                        <div class="fas fa-trash icon" />
-                        <div class="text">Delete Entry</div>
-                      </button>
-                      <button
-                        on:click={() => {
-                          editEntry = entry;
-                          editDataModelModalEvents.setData(entry);
-                          editDataModelModalEvents.toggle();
-                        }}
-                        class="btn-fill btn-blue-bg edit">
-                        <div class="fas fa-edit icon" />
-                        <div class="text">Edit Entry</div>
-                      </button>
+                        Delete
+                      </Button>
                     </div>
                   </div>
                 </div>

@@ -7,7 +7,7 @@
   import AddPropModal from '../../../components/global/modal/add-prop.svelte';
   import EditPropModal from '../../../components/modals/edit-prop.svelte';
   import AddModal from '../../../components/template/modals/add.svelte';
-  import EditModal from '../../../components/template/modals/edit.svelte';
+  import EditModal from '../../../components/global/modal/name-desc.svelte';
   import PropsList from '../../../components/prop/props-list.svelte';
   import Button from '../../../components/global/button.svelte';
   import UrlQueries from '../../../url-queries.js';
@@ -21,7 +21,7 @@
   let templateSelected;
   let addPropModalEvents = {};
   let editPropModalEvents = { callback: editProp };
-  let editModalEvents = { callback: templateEdit };
+  let editModalEvents = {};
   let addModalEvents = { callback: templateAdded, toggle: () => {} };
 
   function showTemplate(template) {
@@ -42,11 +42,24 @@
     templateSelected = result.response.data.template;
     sideBarOptions.updateTemplates(templates);
   }
-  function templateEdit(template) {
-    templateSelected = template;
+  async function updateTemplate(data) {
+    const result = await axios.send({
+      url: '/template',
+      method: 'PUT',
+      data: {
+        _id: templateSelected._id,
+        name: data.name,
+        desc: data.desc,
+      },
+    });
+    if (result.success === false) {
+      simplePopup.error(result.error.response.data.message);
+      return;
+    }
+    templateSelected = result.response.data.template;
     templates = templates.map(e => {
-      if (e._id === template._id) {
-        e = template;
+      if (e._id === templateSelected._id) {
+        return templateSelected;
       }
       return e;
     });
@@ -236,6 +249,10 @@
         addPropModalEvents.toggle();
       }
     }}
+    on:edit={event => {
+      editModalEvents.set(templateSelected.name, templateSelected.desc);
+      editModalEvents.toggle();
+    }}
     on:delete={event => {
       if (event.eventPhase === 0) {
         deleteTemplate();
@@ -273,8 +290,23 @@
   </ManagerLayout>
 </Layout>
 <AddModal {axios} events={addModalEvents} />
-<EditModal {axios} events={editModalEvents} />
 {#if templateSelected}
+  <EditModal
+    title="Edit Template"
+    events={editModalEvents}
+    name={templateSelected.name}
+    desc={templateSelected.desc}
+    on:cancel={event => {
+      if (event.eventPhase === 0) {
+        editModalEvents.toggle();
+      }
+    }}
+    on:done={event => {
+      if (event.eventPhase === 0) {
+        const data = event.detail;
+        updateTemplate(data);
+      }
+    }} />
   <AddPropModal
     usedPropNames={templateSelected.entryTemplate.map(e => {
       return e.name;

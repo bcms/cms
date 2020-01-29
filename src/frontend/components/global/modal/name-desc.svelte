@@ -1,5 +1,5 @@
 <script>
-  import { createEventDispatcher } from 'svelte';
+  import { afterUpdate, createEventDispatcher } from 'svelte';
   import Modal from './modal.svelte';
   import { simplePopup } from '../../simple-popup.svelte';
   import { TextInput, TextArea } from 'carbon-components-svelte';
@@ -95,6 +95,16 @@
   if (desc) {
     data.desc.value = `${desc}`;
   }
+
+  events.set = (name, desc) => {
+    if (name) {
+      // handleNameInput({value: data.name.value});
+      data.name.value = name;
+    }
+    if (desc) {
+      data.desc.value = desc;
+    }
+  };
 </script>
 
 <Modal heading={{ title }} {events} {events} on:cancel={cancel} on:done={done}>
