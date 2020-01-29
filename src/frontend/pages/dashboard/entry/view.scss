@@ -59,9 +59,8 @@
 }
 
 .entry .info {
-  display: grid;
-  grid-template-columns: auto;
-  grid-gap: 20px;
+  display: flex;
+  flex-direction: column;
   background-color: var(--c-white);
   padding: 20px;
   overflow-x: auto;

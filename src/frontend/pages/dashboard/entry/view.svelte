@@ -325,12 +325,7 @@
                         {#if prop.type === 'QUILL'}
                           {#if prop.value.heading.title !== ''}
                             <div class="title">{prop.value.heading.title}</div>
-                            <div class="slug">
-                              /template/{template._id}/entry/{entry._id}
-                            </div>
-                            <div class="desc">
-                              {prop.value.heading.desc.substring(0, 80)}...
-                            </div>
+                            <div class="desc">{prop.value.heading.desc}</div>
                           {:else}
                             <div class="not-available">
                               This Entry is not available in '{languageSelected.code}'
@@ -345,33 +340,23 @@
                         language.
                       </div>
                     {/if}
-                    <div class="key-value date-time">
-                      <div class="label">
-                        <span class="fas fa-clock icon" />
-                        <span>Created At</span>
-                      </div>
-                      <div class="text">
-                        <span class="date">
-                          {new Date(entry.createdAt).toLocaleDateString()}
-                        </span>
-                        <span class="time">
-                          {new Date(entry.createdAt).toLocaleTimeString()}
-                        </span>
-                      </div>
+                    <div class="bx--label mt-20">Created At</div>
+                    <div class="date-time">
+                      <span class="date">
+                        {new Date(entry.createdAt).toLocaleDateString()}
+                      </span>
+                      <span class="time">
+                        {new Date(entry.createdAt).toLocaleTimeString()}
+                      </span>
                     </div>
-                    <div class="key-value date-time">
-                      <div class="label">
-                        <span class="fas fa-clock icon" />
-                        <span>Update At</span>
-                      </div>
-                      <div class="text">
-                        <span class="date">
-                          {new Date(entry.updatedAt).toLocaleDateString()}
-                        </span>
-                        <span class="time">
-                          {new Date(entry.updatedAt).toLocaleTimeString()}
-                        </span>
-                      </div>
+                    <div class="bx--label mt-20">Updated At</div>
+                    <div class="date-time">
+                      <span class="date">
+                        {new Date(entry.updatedAt).toLocaleDateString()}
+                      </span>
+                      <span class="time">
+                        {new Date(entry.updatedAt).toLocaleTimeString()}
+                      </span>
                     </div>
                   </div>
                 </div>
