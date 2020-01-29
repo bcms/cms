@@ -40,18 +40,22 @@
 .entry {
   background-color: var(--c-white);
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
-  border-radius: 3px;
-  overflow: hidden;
   width: 100%;
   font-size: 10pt;
   margin-bottom: auto;
 }
 
 .entry .heading {
-  padding: 3px 20px;
-  background-color: var(--c-gray-light);
-  color: var(--c-gray-cold);
-  font-weight: bold;
+  display: flex;
+}
+
+.entry .heading .id {
+  margin: auto 0;
+  padding-left: 20px;
+}
+
+.entry .heading .overflow-menu {
+  margin-left: auto;
 }
 
 .entry .info {
@@ -112,12 +116,12 @@
 }
 
 .entry .info .schema {
-  background-color: var(--c-primary);
-  color: var(--c-neutral);
-  border-radius: 5px;
+  color: var(--c-black);
+  border: 1px solid var(--c-gray-light);
   padding: 10px;
   font-size: 8pt;
   font-weight: bold;
+  overflow: auto;
 }
 
 .page-scroll {

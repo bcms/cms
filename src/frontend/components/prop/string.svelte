@@ -5,7 +5,6 @@
 
   export let prop;
   export let error = '';
-  console.log('String', prop);
 </script>
 
 <Prop name={prop.name} required={prop.required} type={prop.type}>

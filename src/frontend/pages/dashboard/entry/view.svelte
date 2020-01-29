@@ -1,6 +1,11 @@
 <script>
   import { onMount } from 'svelte';
-  import { Select, SelectItem } from 'carbon-components-svelte';
+  import {
+    Select,
+    SelectItem,
+    OverflowMenu,
+    OverflowMenuItem,
+  } from 'carbon-components-svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/global/layout.svelte';
   import Button from '../../../components/global/button.svelte';
@@ -298,7 +303,22 @@
             {#if filterEntry(entry, i) === true}
               {#if template.type === 'RICH_CONTENT'}
                 <div class="entry">
-                  <div class="heading">{entry._id}</div>
+                  <div class="heading">
+                    <div class="id">{entry._id}</div>
+                    <div class="overflow-menu">
+                      <OverflowMenu>
+                        <OverflowMenuItem
+                          text="Edit"
+                          href="/dashboard/template/entry/rc?tid={template._id}&eid={entry._id}&lng={languageSelected.code}" />
+                        <OverflowMenuItem
+                          danger={true}
+                          text="Delete"
+                          on:click={() => {
+                            deleteEntry(entry);
+                          }} />
+                      </OverflowMenu>
+                    </div>
+                  </div>
                   <div class="info">
                     {#if entry.content.find(e => e.lng === languageSelected.code)}
                       {#each entry.content.find(e => e.lng === languageSelected.code).props as prop}
@@ -353,40 +373,30 @@
                         </span>
                       </div>
                     </div>
-                    <div class="actions">
-                      <Button
-                        kind="danger"
-                        on:click={() => {
-                          deleteEntry(entry);
-                        }}>
-                        Delete
-                      </Button>
-                      <Button
-                        on:click={() => {
-                          window.location = `/dashboard/template/entry/rc?tid=${template._id}&eid=${entry._id}&lng=${languageSelected.code}`;
-                        }}>
-                        Edit
-                      </Button>
-                      <!-- <button
-                        class="btn-border btn-red-br btn-red-c delete"
-                        on:click={() => {
-                          deleteEntry(entry);
-                        }}>
-                        <div class="fa fa-edit icon" />
-                        <div class="text">Delete Entry</div>
-                      </button> -->
-                      <!-- <a
-                        class="btn-fill btn-blue-bg edit"
-                        href="/dashboard/template/entry/rc?tid={template._id}&eid={entry._id}&lng={languageSelected.code}">
-                        <div class="fa fa-edit icon" />
-                        <div class="text">Edit Entry</div>
-                      </a> -->
-                    </div>
                   </div>
                 </div>
               {:else}
                 <div class="entry">
-                  <div class="heading">{entry._id}</div>
+                  <div class="heading">
+                    <div class="id">{entry._id}</div>
+                    <div class="overflow-menu">
+                      <OverflowMenu>
+                        <OverflowMenuItem
+                          text="Edit"
+                          on:click={() => {
+                            editEntry = entry;
+                            editDataModelModalEvents.setEntry(entry);
+                            editDataModelModalEvents.toggle();
+                          }} />
+                        <OverflowMenuItem
+                          danger={true}
+                          text="Delete"
+                          on:click={() => {
+                            deleteEntry(entry);
+                          }} />
+                      </OverflowMenu>
+                    </div>
+                  </div>
                   <div class="info">
                     <div class="slug">
                       /template/{template._id}/entry/{entry._id}
@@ -431,24 +441,6 @@
                           {compileSchema(contentToSchema(entry.content))}
                         </code>
                       </pre>
-                    </div>
-                    <div class="actions">
-                      <Button
-                        kind="secondary"
-                        on:click={() => {
-                          editEntry = entry;
-                          editDataModelModalEvents.setEntry(entry);
-                          editDataModelModalEvents.toggle();
-                        }}>
-                        Edit
-                      </Button>
-                      <Button
-                        kind="danger"
-                        on:click={() => {
-                          deleteEntry(entry);
-                        }}>
-                        Delete
-                      </Button>
                     </div>
                   </div>
                 </div>
