@@ -84,7 +84,16 @@ export class FunctionController {
         }
       }
     }
-    const fnResult = await fn.resolve(request);
+    let fnResult;
+    try {
+      fnResult = await fn.resolve(request);
+    } catch (e) {
+      throw error.occurred(HttpStatus.INTERNAL_SERVER_ERROR, {
+        success: false,
+        message: 'Failed to execute a function.',
+        err: e,
+      });
+    }
     return {
       success: true,
       result: fnResult,
