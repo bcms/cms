@@ -383,9 +383,6 @@
                     </div>
                   </div>
                   <div class="info">
-                    <div class="slug">
-                      /template/{template._id}/entry/{entry._id}
-                    </div>
                     {#if !entry.content.find(e => e.lng === languageSelected.code)}
                       <div class="not-available">
                         This Entry is not available in '{languageSelected.code}'
