@@ -233,14 +233,18 @@
       {groups}
       widget={section.value}
       {events}
-      on:delete={() => {
-        events.delete(section.id);
+      on:delete={event => {
+        if (event.eventPhase === 0) {
+          events.delete(section.id);
+        }
       }}
-      on:move={where => {
-        if (where === 'up') {
-          events.move(section.order, section.order - 1, section.id);
-        } else {
-          events.move(section.order, section.order + 1, section.id);
+      on:move={event => {
+        if (event.eventPhase === 0) {
+          if (event.detail === 'up') {
+            events.move(section.order, section.order - 1, section.id);
+          } else {
+            events.move(section.order, section.order + 1, section.id);
+          }
         }
       }} />
   {:else}

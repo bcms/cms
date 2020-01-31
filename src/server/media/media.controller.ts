@@ -380,7 +380,7 @@ export class MediaController {
     } else {
       this.logger.warn('addFile', 'No Parent');
     }
-    GitUtil.updateUploads(media);
+    GitUtil.push(media);
     return {
       media,
     };
@@ -580,7 +580,7 @@ export class MediaController {
         `Failed to delete '${rootMedia.path}' directory from FS.`,
       );
     }
-    GitUtil.updateUploads(rootMedia);
+    GitUtil.push(rootMedia);
     return {
       message: 'Success.',
     };
@@ -639,34 +639,9 @@ export class MediaController {
         `Failed to delete '${rootMedia.path}/${rootMedia.name}' file from FS.`,
       );
     }
-    GitUtil.updateUploads(rootMedia);
+    GitUtil.push(rootMedia);
     return {
       message: 'Success.',
     };
   }
-
-  // @Get('/folder-tree')
-  // async getFolderTree(request: Request): Promise<{ folderTree: FolderTree[] }> {
-  //   const error = HttpErrorFactory.simple('getFolderTree', this.logger);
-  //   const jwt = JWTEncoding.decode(request.headers.authorization);
-  //   if (jwt instanceof Error) {
-  //     throw error.occurred(HttpStatus.UNAUTHORIZED, jwt.message);
-  //   } else {
-  //     const jwtValid = JWTSecurity.validateAndCheckTokenPermissions(
-  //       jwt,
-  //       [RoleName.ADMIN, RoleName.USER],
-  //       PermissionName.READ,
-  //       JWTConfigService.get('user-token-config'),
-  //     );
-  //     if (jwtValid instanceof Error) {
-  //       throw error.occurred(HttpStatus.UNAUTHORIZED, jwtValid.message);
-  //     }
-  //   }
-  //   const folderTree = await FSUtil.folderTree(
-  //     path.join(__dirname, '../../uploads'),
-  //   );
-  //   return {
-  //     folderTree,
-  //   };
-  // }
 }

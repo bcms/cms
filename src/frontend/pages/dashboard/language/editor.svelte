@@ -1,15 +1,17 @@
 <script>
   import { onMount } from 'svelte';
+  import { axios, fatch, languageStore } from '../../../config.svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/global/layout.svelte';
   import Button from '../../../components/global/button.svelte';
   import AddLanguageModal from '../../../components/language/modals/add-language.svelte';
 
-  export let axios;
-  export let Store;
-
   let languages = [];
   let addLanguageModalEvents = { callback: addLanguage };
+
+  languageStore.subscribe(value => {
+    languages = value;
+  });
 
   async function addLanguage(language) {
     const result = await axios.send({
@@ -20,7 +22,10 @@
       simplePopup.error(result.error.response.data.message);
       return;
     }
-    languages = [...languages, result.response.data.language];
+    languageStore.update(value => [
+      ...languages,
+      result.response.data.language,
+    ]);
   }
   async function removeLanguage(id) {
     if (
@@ -37,39 +42,70 @@
         simplePopup.error(result.error.response.data.message);
         return;
       }
-      languages = languages.filter(e => e._id !== id);
+      languageStore.update(value => languages.filter(e => e._id !== id));
     }
   }
 
   onMount(async () => {
-    let result = await axios.send({
-      url: '/language/all',
-      method: 'GET',
-    });
-    if (result.success === false) {
-      simplePopup.error(result.error.response.data.message);
-      return;
-    }
-    languages = result.response.data.languages;
-    if (languages.length === 0) {
-      result = await axios.send({
-        url: '/language/en',
-        method: 'POST',
-      });
-      if (result.success === false) {
-        simplePopup.error(result.error.response.data.message);
-        return;
-      }
-      languages = [...languages, result.response.data.language];
-    }
+    fatch();
   });
 </script>
 
 <style type="text/scss">
-  @import './editor.scss';
+  .wrapper {
+    padding: 20px;
+  }
+
+  .title {
+    font-size: 16pt;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  .desc {
+    color: var(--c-gray-cold);
+    font-size: 10pt;
+  }
+
+  .actions {
+    display: flex;
+    margin-top: 20px;
+  }
+
+  .actions .add {
+    margin-left: auto;
+  }
+
+  .lngs {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-gap: 20px;
+    margin-top: 50px;
+  }
+
+  .lng {
+    background-color: var(--c-white);
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    margin-bottom: auto;
+  }
+
+  .lng .name {
+    font-size: 12pt;
+    font-weight: bold;
+  }
+
+  .lng .native-name {
+    font-size: 10pt;
+    color: var(--c-gray-cold);
+  }
+
+  .lng .actions {
+    margin-top: 20px;
+  }
 </style>
 
-<Layout {Store} {axios}>
+<Layout>
   <div class="wrapper">
     <div class="title">Language Manager</div>
     <div class="desc">Add lanuages that will be available for Entries.</div>

@@ -1,7 +1,12 @@
 <script>
+  import {
+    axios,
+    templateStore,
+    groupStore,
+    fatch,
+  } from '../../../config.svelte';
   import { onMount } from 'svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
-  import { sideBarOptions } from '../../../components/global/side-bar.svelte';
   import Layout from '../../../components/global/layout.svelte';
   import ManagerLayout from '../../../components/global/manager-content.svelte';
   import AddPropModal from '../../../components/global/modal/add-prop.svelte';
@@ -13,16 +18,23 @@
   import UrlQueries from '../../../url-queries.js';
   import StringUtil from '../../../string-util.js';
 
-  export let axios;
-  export let Store;
-
   let templates = [];
   let groups = [];
-  let templateSelected;
+  let templateSelected = templates[0];
   let addPropModalEvents = {};
   let editPropModalEvents = { callback: editProp };
   let editModalEvents = {};
   let addModalEvents = { callback: templateAdded, toggle: () => {} };
+
+  templateStore.subscribe(value => {
+    templates = value;
+    if (!templateSelected && templates.length > 0) {
+      templateSelected = templates[0];
+    }
+  });
+  groupStore.subscribe(value => {
+    groups = value;
+  });
 
   function showTemplate(template) {
     templateSelected = template;
@@ -37,10 +49,11 @@
       simplePopup.push('error', result.error.response.data.message);
       return;
     }
-
-    templates = [...templates, result.response.data.template];
+    templateStore.update(value => [
+      ...templates,
+      result.response.data.template,
+    ]);
     templateSelected = result.response.data.template;
-    sideBarOptions.updateTemplates(templates);
   }
   async function updateTemplate(data) {
     const result = await axios.send({
@@ -57,13 +70,14 @@
       return;
     }
     templateSelected = result.response.data.template;
-    templates = templates.map(e => {
-      if (e._id === templateSelected._id) {
-        return templateSelected;
-      }
-      return e;
-    });
-    sideBarOptions.updateTemplates(templates);
+    templateStore.update(value =>
+      templates.map(e => {
+        if (e._id === templateSelected._id) {
+          return templateSelected;
+        }
+        return e;
+      }),
+    );
   }
   async function addProp(data) {
     if (data.name === 'content') {
@@ -93,12 +107,20 @@
       return;
     }
     templateSelected = result.response.data.template;
-    templates = templates.map(e => {
-      if (e._id === templateSelected._id) {
-        return templateSelected;
-      }
-      return e;
-    });
+    templateStore.update(value =>
+      templates.map(e => {
+        if (e._id === templateSelected._id) {
+          return templateSelected;
+        }
+        return e;
+      }),
+    );
+    // templates = templates.map(e => {
+    //   if (e._id === templateSelected._id) {
+    //     return templateSelected;
+    //   }
+    //   return e;
+    // });
   }
   async function deleteTemplate() {
     if (
@@ -113,8 +135,9 @@
         return;
       }
       simplePopup.success('Template deleted successfully.');
-      templates = templates.filter(e => e._id !== templateSelected._id);
-      sideBarOptions.updateTemplates(templates);
+      templateStore.update(value =>
+        templates.filter(e => e._id !== templateSelected._id),
+      );
       if (templates.length === 0) {
         templateSelected = undefined;
       } else {
@@ -156,12 +179,14 @@
       return;
     }
     templateSelected = result.response.data.template;
-    templates = templates.map(e => {
-      if (e._id === templateSelected._id) {
-        return templateSelected;
-      }
-      return e;
-    });
+    templateStore.update(value =>
+      templates.map(e => {
+        if (e._id === templateSelected._id) {
+          return templateSelected;
+        }
+        return e;
+      }),
+    );
   }
   async function deleteProp(prop, index) {
     if (confirm('Are you sure you want to delete this property?')) {
@@ -195,41 +220,26 @@
         return;
       }
       templateSelected = result.response.data.template;
-      templates = templates.map(e => {
-        if (e._id === templateSelected._id) {
-          return templateSelected;
-        }
-        return e;
-      });
+      templateStore.update(value =>
+        templates.map(e => {
+          if (e._id === templateSelected._id) {
+            return templateSelected;
+          }
+          return e;
+        }),
+      );
     }
   }
 
   onMount(async () => {
-    const queries = UrlQueries.get();
-    let result = await axios.send({
-      url: '/group/all',
-      method: 'GET',
-    });
-    if (result.success === false) {
-      simplePopup.error(result.error.response.data.message);
-      return;
-    }
-    groups = result.response.data.groups;
-    result = await axios.send({
-      url: '/template/all',
-      method: 'GET',
-    });
-    if (result.success === false) {
-      return;
-    }
-    templates = result.response.data.templates;
+    fatch();
     if (!templateSelected && templates.length > 0) {
       templateSelected = templates[0];
     }
   });
 </script>
 
-<Layout {Store} {axios}>
+<Layout>
   <ManagerLayout
     items={templates}
     itemSelected={templateSelected}

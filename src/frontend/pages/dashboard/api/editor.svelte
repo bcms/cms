@@ -1,5 +1,12 @@
 <script>
   import { onMount } from 'svelte';
+  import {
+    axios,
+    fatch,
+    templateStore,
+    functionStore,
+    keyStore,
+  } from '../../../config.svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import { CodeSnippet, ToggleSmall } from 'carbon-components-svelte';
   import Layout from '../../../components/global/layout.svelte';
@@ -9,9 +16,6 @@
   import AddRouteConfigModal from '../../../components/api/modals/add-route-config.svelte';
   import RouteConfig from '../../../components/api/route-config.svelte';
   import StringUtil from '../../../string-util.js';
-
-  export let Store;
-  export let axios;
 
   let templates = [];
   let functions = [];
@@ -34,6 +38,20 @@
     },
   };
   let routeSecurityEvents = {};
+
+  templateStore.subscribe(value => {
+    templates = value;
+  });
+  functionStore.subscribe(value => {
+    functions = value;
+  });
+  keyStore.subscribe(value => {
+    keys = value;
+    if (keys.length > 0 && !keySelected) {
+      keySelected = keys[0];
+      setKeyConfig();
+    }
+  });
 
   function setKeyConfig() {
     keyConfig = {
@@ -121,7 +139,7 @@
       simplePopup.error(result.error.response.data.message);
       return;
     }
-    keys = [...keys, result.response.data.key];
+    keyStore.update(value => [...keys, result.response.data.key]);
     keySelected = result.response.data.key;
     setKeyConfig();
   }
@@ -136,7 +154,7 @@
         return;
       }
       simplePopup.success('Keye deleted successfully!');
-      keys = keys.filter(e => e._id !== keySelected._id);
+      keyStore.update(value => keys.filter(e => e._id !== keySelected._id));
       if (keys.length > 0) {
         keySelected = keys[0];
         setKeyConfig();
@@ -162,48 +180,24 @@
       simplePopup.error(result.error.response.data.message);
       return;
     }
-    keys = keys.map(key => {
-      if (key._id === k._id) {
-        return k;
-      }
-      return key;
-    });
+    keyStore.update(value =>
+      keys.map(key => {
+        if (key._id === k._id) {
+          return k;
+        }
+        return key;
+      }),
+    );
     keySelected = result.response.data.key;
     simplePopup.success('Key updated successfully.');
   }
 
-  onMount(async () => {
-    let result = await axios.send({
-      url: '/key/all',
-      method: 'GET',
-    });
-    if (result.success === false) {
-      simplePopup.error(result.error.response.data.message);
-      return;
-    }
-    keys = result.response.data.keys;
-    if (keys.length > 0) {
+  onMount(() => {
+    fatch();
+    if (keys.length > 0 && !keySelected) {
       keySelected = keys[0];
       setKeyConfig();
     }
-    result = await axios.send({
-      url: '/template/all/lite',
-      method: 'GET',
-    });
-    if (result.success === false) {
-      simplePopup.error(result.error.response.data.message);
-      return;
-    }
-    templates = result.response.data.templates;
-    result = await axios.send({
-      url: '/function/all/available',
-      method: 'GET',
-    });
-    if (result.success === false) {
-      simplePopup.error(result.error.response.data.message);
-      return;
-    }
-    functions = result.response.data.functions;
   });
 </script>
 
@@ -236,7 +230,7 @@
   }
 </style>
 
-<Layout {Store} {axios}>
+<Layout>
   <ManagerLayout
     onlySlot={true}
     items={keys}

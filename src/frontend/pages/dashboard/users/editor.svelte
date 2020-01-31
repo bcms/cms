@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import { axios, fatch, userStore } from '../../../config.svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import { TextInput, PasswordInput } from 'carbon-components-svelte';
   import Layout from '../../../components/global/layout.svelte';
@@ -7,12 +8,16 @@
   import Button from '../../../components/global/button.svelte';
   import AddUserModal from '../../../components/users/modals/add-user.svelte';
 
-  export let Store;
-  export let axios;
-
   let users = [];
   let userSelected;
   let addUserModalEvents = { callback: addUser };
+
+  userStore.subscribe(value => {
+    users = value;
+    if (users.length > 0 && !userSelected) {
+      userSelected = users[0];
+    }
+  });
 
   async function addUser(data) {
     const result = await axios.send({
@@ -24,7 +29,7 @@
       simplePopup.error(result.error.response.data.message);
       return;
     }
-    users = [...users, result.response.data.user];
+    userStore.update(value => [...users, result.response.data.user]);
     userSelected = result.response.data.user;
   }
   async function deleteUser() {
@@ -37,7 +42,7 @@
         simplePopup.error(result.error.response.data.message);
         return;
       }
-      users = users.filter(e => e._id !== userSelected._id);
+      userStore.update(value => users.filter(e => e._id !== userSelected._id));
       userSelected = users[0];
     }
   }
@@ -68,28 +73,22 @@
         simplePopup.error(result.error.response.data.message);
         return;
       }
-      users = users.map(e => {
-        if (e._id === userSelected._id) {
-          return result.response.data.user;
-        }
-        return e;
-      });
+      userStore.update(value =>
+        users.map(e => {
+          if (e._id === userSelected._id) {
+            return result.response.data.user;
+          }
+          return e;
+        }),
+      );
       userSelected = result.response.data.user;
       simplePopup.success('User updated successfully.');
     }
   }
 
   onMount(async () => {
-    const result = await axios.send({
-      url: '/user/all',
-      method: 'GET',
-    });
-    if (result.success === false) {
-      simplePopup.error(result.error.response.data.message);
-      return;
-    }
-    users = result.response.data.users;
-    if (users.length > 0) {
+    fatch();
+    if (users.length > 0 && !userSelected) {
       userSelected = users[0];
     }
   });
@@ -106,7 +105,7 @@
   }
 </style>
 
-<Layout {Store} {axios}>
+<Layout>
   <ManagerLayout
     onlySlot={true}
     items={users}

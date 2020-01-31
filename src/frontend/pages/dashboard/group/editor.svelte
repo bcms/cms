@@ -1,4 +1,5 @@
 <script>
+  import { groupStore, fatch } from '../../../config.svelte';
   import { onMount } from 'svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/global/layout.svelte';
@@ -21,6 +22,13 @@
   let addPropModalEvents = { callback: addProp };
   let editPropModalEvents = { callback: editProp };
 
+  groupStore.subscribe(value => {
+    groups = value;
+    if (!groupSelected && groups.length > 0) {
+      groupSelected = groups[0];
+    }
+  });
+
   function openGroup(group) {
     groupSelected = group;
   }
@@ -37,7 +45,8 @@
       simplePopup.error(result.error.response.data.message);
       return;
     }
-    groups = [...groups, result.response.data.group];
+    groupStore.update(value => [...groups, result.response.data.group]);
+    // groups = [...groups, result.response.data.group];
     groupSelected = result.response.data.group;
   }
   async function editGroup(data) {
@@ -54,12 +63,20 @@
       return;
     }
     groupSelected = result.response.data.group;
-    groups = groups.map(group => {
-      if (group._id === result.response.data.group._id) {
-        return result.response.data.group;
-      }
-      return group;
-    });
+    groupStore.update(value =>
+      groups.map(group => {
+        if (group._id === result.response.data.group._id) {
+          return result.response.data.group;
+        }
+        return group;
+      }),
+    );
+    // groups = groups.map(group => {
+    //   if (group._id === result.response.data.group._id) {
+    //     return result.response.data.group;
+    //   }
+    //   return group;
+    // });
   }
   async function deleteGroup() {
     if (
@@ -77,7 +94,10 @@
         simplePopup.error(result.error.response.data.message);
         return;
       }
-      groups = groups.filter(e => e._id !== groupSelected._id);
+      groupStore.update(value =>
+        groups.filter(e => e._id !== groupSelected._id),
+      );
+      // groups = groups.filter(e => e._id !== groupSelected._id);
       if (groups.length > 0) {
         groupSelected = groups[0];
       } else {
@@ -103,11 +123,14 @@
     }
     const group = result.response.data.group;
     groupSelected = group;
-    groups.forEach(g => {
-      if (g._id === group._id) {
-        g = group;
-      }
-    });
+    groupStore.update(value =>
+      groups.map(g => {
+        if (g._id === group._id) {
+          return group;
+        }
+        return g;
+      }),
+    );
   }
   async function editProp(originalName, data) {
     const changes = {
@@ -141,11 +164,14 @@
     }
     const group = result.response.data.group;
     groupSelected = group;
-    groups.forEach(g => {
-      if (g._id === group._id) {
-        g = group;
-      }
-    });
+    groupStore.update(value =>
+      groups.map(g => {
+        if (g._id === group._id) {
+          return group;
+        }
+        return g;
+      }),
+    );
   }
   async function deleteProp(prop, i) {
     const result = await axios.send({
@@ -173,27 +199,23 @@
       return;
     }
     groupSelected.props = groupSelected.props.filter(p => p.name !== prop.name);
-    groups.forEach(e => {
-      if (e._id === groupSelected._id) {
-        e.props = groupSelected.props;
-      }
-    });
+    groupStore.update(value =>
+      groups.map(e => {
+        if (e._id === groupSelected._id) {
+          return groupSelected;
+        }
+        return e;
+      }),
+    );
+    // groups.forEach(e => {
+    //   if (e._id === groupSelected._id) {
+    //     e.props = groupSelected.props;
+    //   }
+    // });
   }
 
   onMount(async () => {
-    const result = await axios.send({
-      url: '/group/all',
-      method: 'GET',
-    });
-    if (result.success === false) {
-      simplePopup.error(result.error.response.data.message);
-      return;
-    }
-    groups = result.response.data.groups;
-    const queries = UrlQueries.get();
-    if (queries.gid) {
-      groupSelected = groups.find(e => e._id === queries.gid);
-    }
+    fatch();
     if (!groupSelected && groups.length > 0) {
       groupSelected = groups[0];
     }

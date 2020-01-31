@@ -13,8 +13,6 @@
 
   const dispatch = createEventDispatcher();
 
-  console.log(prop);
-
   function init() {
     for (const i in prop.value.array) {
       const arr = prop.value.array[i];

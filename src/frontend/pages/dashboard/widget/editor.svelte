@@ -1,5 +1,11 @@
 <script>
   import { onMount } from 'svelte';
+  import {
+    axios,
+    widgetStore,
+    groupStore,
+    fatch,
+  } from '../../../config.svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/global/layout.svelte';
   import ManagerLayout from '../../../components/global/manager-content.svelte';
@@ -12,9 +18,6 @@
   import StringUtil from '../../../string-util.js';
   import UrlQueries from '../../../url-queries.js';
 
-  export let axios;
-  export let Store;
-
   let groups = [];
   let widgets = [];
   let widgetSelected;
@@ -22,6 +25,16 @@
   let editWidgetModalEvents = { callback: editWidget };
   let addPropModalEvents = { callback: addProp };
   let editPropModalEvents = { callback: editProp };
+
+  groupStore.subscribe(value => {
+    groups = value;
+  });
+  widgetStore.subscribe(value => {
+    widgets = value;
+    if (!widgetSelected && widgets.length > 0) {
+      widgetSelected = widgets[0];
+    }
+  });
 
   async function addWidget(data) {
     const result = await axios.send({
@@ -188,35 +201,14 @@
   }
 
   onMount(async () => {
-    let result = await axios.send({
-      url: '/group/all',
-      method: 'GET',
-    });
-    if (result.success === false) {
-      simplePopup.error(result.error.response.data.message);
-      return;
-    }
-    groups = result.response.data.groups;
-    result = await axios.send({
-      url: '/widget/all',
-      method: 'GET',
-    });
-    if (result.success === false) {
-      simplePopup.error(result.error.response.data.message);
-      return;
-    }
-    widgets = result.response.data.widgets;
-    const queries = UrlQueries.get();
-    if (queries.wid) {
-      widgetSelected = widgets.find(e => e._id === queries.wid);
-    }
+    fatch();
     if (!widgetSelected && widgets.length > 0) {
       widgetSelected = widgets[0];
     }
   });
 </script>
 
-<Layout {Store} {axios}>
+<Layout>
   <ManagerLayout
     items={widgets}
     itemSelected={widgetSelected}

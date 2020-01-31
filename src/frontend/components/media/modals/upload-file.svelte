@@ -28,8 +28,11 @@
   }
 
   events.cancel = () => {
-    data = {
+    let data = {
       fileName: '',
+      file: {
+        error: '',
+      },
     };
     events.toggle();
   };
@@ -42,7 +45,7 @@
     const nameParts = data.file.value.name.split('.');
     nameParts[0] = data.fileName.split('.')[0];
     const fileName = nameParts.join('.');
-    events.callback({fileName, file: data.file.value});
+    events.callback({ fileName, file: data.file.value });
     data = {
       fileName: '',
       file: {

@@ -1,11 +1,20 @@
 <script>
-  import { onMount } from 'svelte';
+  import { onMount, afterUpdate } from 'svelte';
+  import {
+    axios,
+    Store,
+    fatch,
+    languageStore,
+    templateStore,
+    pathStore,
+  } from '../../../config.svelte';
   import {
     Select,
     SelectItem,
     OverflowMenu,
     OverflowMenuItem,
   } from 'carbon-components-svelte';
+  import uuid from 'uuid';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/global/layout.svelte';
   import Button from '../../../components/global/button.svelte';
@@ -14,10 +23,7 @@
   import Base64 from '../../../base64.js';
   import StringUtil from '../../../string-util.js';
 
-  export let axios;
-  export let Store;
-
-  const queries = UrlQueries.get();
+  let queries = UrlQueries.get();
   const allowedEntriesPerPage = [10, 20, 30];
   const addDataModalModalEvents = { callback: addNewDataModelEntry };
   const editDataModelModalEvents = { callback: updateDataModalEntry };
@@ -26,11 +32,32 @@
     code: 'en',
   };
   let entriesPerPage = 10;
-  let entries = [];
+  let entries;
   let editEntry;
   let template;
   let page = 1;
   let filters = [];
+  let templates = [];
+
+  languageStore.subscribe(value => {
+    languages = value;
+    languageSelected = languages.find(e => e.code === queries.lng);
+    if (!languageSelected) {
+      languageSelected = {
+        code: 'en',
+      };
+    }
+  });
+  templateStore.subscribe(value => {
+    templates = value;
+    template = templates.find(e => e._id === queries.cid);
+  });
+  pathStore.subscribe(value => {
+    setTimeout(() => {
+      queries = UrlQueries.get();
+      getData();
+    }, 100);
+  });
 
   if (Store.get('entriesPerPage')) {
     entriesPerPage = Store.get(entriesPerPage);
@@ -201,45 +228,30 @@
     }
     entries = [...entries];
   }
+  async function getData() {
+    if (!queries.cid) {
+      return;
+    }
+    template = templates.find(e => e._id === queries.cid);
+    if (template) {
+      let result = await axios.send({
+        url: `/template/${template._id}/entry/all`,
+        method: 'GET',
+      });
+      if (result.success === false) {
+        console.error(result.error);
+        simplePopup.error(result.error.response.data.message);
+        return;
+      }
+      entries = result.response.data.entries;
+    } else {
+      setTimeout(getData, 100);
+    }
+  }
 
   onMount(async () => {
-    if (!queries.cid) {
-      simplePopup.error(`Query is missing 'cid'.`);
-      return;
-    }
-    let result = await axios.send({
-      url: `/template/${queries.cid}`,
-      method: 'GET',
-    });
-    if (result.success === false) {
-      console.error(result.error);
-      simplePopup.error(result.error.response.data.message);
-      return;
-    }
-    template = result.response.data.template;
-    result = await axios.send({
-      url: `/template/${template._id}/entry/all`,
-      method: 'GET',
-    });
-    if (result.success === false) {
-      console.error(result.error);
-      simplePopup.error(result.error.response.data.message);
-      return;
-    }
-    entries = result.response.data.entries;
-    // Get Languages
-    result = await axios.send({
-      url: `/language/all`,
-      method: 'GET',
-    });
-    if (result.success === false) {
-      console.error(result.error);
-      simplePopup.error(result.error.response.data.message);
-      return;
-    }
-    languages = result.response.data.languages;
-    languageSelected = languages.find(e => e.code === queries.lng);
-    // addDataModalModalEvents.init();
+    fatch();
+    getData();
   });
 </script>
 
@@ -247,9 +259,9 @@
   @import './view.scss';
 </style>
 
-<Layout {axios} {Store}>
-  <div class="content">
-    {#if template}
+<Layout>
+  <div key={uuid.v4()} class="content">
+    {#if template && entries}
       <div class="heading">
         <div class="text">
           <h2>{StringUtil.prettyName(template.name)}</h2>

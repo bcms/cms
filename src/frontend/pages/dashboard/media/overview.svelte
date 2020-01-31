@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import { axios } from '../../../config.svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/global/layout.svelte';
   import Button from '../../../components/global/button.svelte';
@@ -12,9 +13,6 @@
   import UrlQueries from '../../../url-queries.js';
   import Base64 from '../../../base64.js';
   import StringUtil from '../../../string-util.js';
-
-  export let axios;
-  export let Store;
 
   const createDirModalEvents = { callback: createDir };
   const uploadFileModalEvents = { callback: uploadFile };
@@ -148,26 +146,6 @@
       await folderTreeActions.render();
     }
   }
-  // async function uploadFile(event) {
-  //   const file = document.getElementById('upload-file').files[0];
-  //   const fd = new FormData();
-  //   fd.append('media_file', file, file.fileName);
-  //   const result = await axios.send({
-  //     url: `/media/file?path=${encodeURIComponent(inFolder)}`,
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': `multipart/form-data`,
-  //     },
-  //     data: fd,
-  //   });
-  //   if (result.success === false) {
-  //     simplePopup.error(result.error.response.data.message);
-  //     return;
-  //   }
-  //   simplePopup.success('File uploaded succesfully.');
-  //   items = [...items, result.response.data.media];
-  //   await folderTreeActions.render();
-  // }
   async function uploadFile(data) {
     const file = data.file;
     const fd = new FormData();
@@ -194,9 +172,9 @@
   @import './overview.scss';
 </style>
 
-<Layout {axios} {Store}>
+<Layout>
   <div class="content-layout">
-    <FolderTree {axios} events={folderTreeEvents} {Store} />
+    <FolderTree events={folderTreeEvents} />
     <div class="viewer">
       <div class="heading">
         <div class="title">Media Manager</div>

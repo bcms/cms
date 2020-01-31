@@ -1,9 +1,7 @@
 <script>
   import { Router, Route } from 'svelte-routing';
   import { onMount } from 'svelte';
-  // import Store from './store.js';
-  // import AxiosClient from './axios-client.js';
-  import {axios, Store} from './config.svelte';
+  import {pathStore} from './config.svelte';
 
   import SimplePopup from './components/simple-popup.svelte';
   import Login from './pages/login.svelte';
@@ -78,7 +76,6 @@
       component: LanguageEditor
     }
   ]
-  // let axios = AxiosClient.instance();
 
   function validatePath(path) {
     const pathParts = path.split('/');
@@ -105,15 +102,6 @@
     }
     return found;
   }
-  
-  // axios.config({
-  //   baseURL: '',
-  //   preRequestFunction: AxiosClient.jwtAutoRefreshPreRequestFunction(
-  //     Store,
-  //     '/auth/token/refresh',
-  //     '/login',
-  //   ),
-  // });
 
   if (window.location.pathname === '/') {
     window.location = '/login';
@@ -132,7 +120,7 @@
 
 <Router {url}>
   {#each routes as route}
-    <Route path={route.path} component="{route.component}" {Store} {axios}/>
+    <Route path={route.path} component="{route.component}" />
   {/each}
   {#if validatePath(window.location.pathname) === false}
     <Page404 />

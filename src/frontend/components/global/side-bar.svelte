@@ -1,16 +1,71 @@
-<script context="module">
-  import { writable } from 'svelte/store';
-  import { axios, Store } from '../../config.svelte';
+<script>
+  import {
+    Store,
+    fatch,
+    templateStore,
+    webhookStore,
+    pathStore,
+  } from '../../config.svelte';
+  import { onMount } from 'svelte';
+  import { Link } from 'svelte-routing';
+  import Base64 from '../../base64.js';
+  import StringUtil from '../../string-util.js';
 
-  export const sideBarOptions = {
-    updateTemplates: () => {},
-    updateWebhooks: () => {},
-  };
-
-  let templates = [];
-  let webhooks = [];
   let options = {
     sections: [
+      {
+        name: 'ADMINISTRATION',
+        menus: [
+          {
+            type: 'link',
+            name: 'Template Manager',
+            link: '/dashboard/template/editor',
+            faClass: 'fas fa-cubes',
+          },
+          {
+            type: 'link',
+            name: 'Group Manager',
+            link: '/dashboard/group/editor',
+            faClass: 'fas fa-layer-group',
+          },
+          {
+            type: 'link',
+            name: 'Widget Manager',
+            link: '/dashboard/widget/editor',
+            faClass: 'fas fa-pepper-hot',
+          },
+          {
+            type: 'link',
+            name: 'Media Manager',
+            link: '/dashboard/media/editor',
+            faClass: 'fa fa-folder',
+          },
+          {
+            type: 'link',
+            name: 'Language Manager',
+            link: '/dashboard/language/editor',
+            faClass: 'fas fa-globe-europe',
+          },
+          {
+            type: 'link',
+            name: 'Users Manager',
+            link: '/dashboard/user/editor',
+            faClass: 'fas fa-users',
+          },
+          {
+            type: 'link',
+            name: 'API Manager',
+            link: '/dashboard/api/editor',
+            faClass: 'fas fa-key',
+          },
+          {
+            type: 'link',
+            name: 'Webhook Manager',
+            link: '/dashboard/webhook/editor',
+            faClass: 'fas fa-link',
+          },
+        ],
+      },
       {
         name: 'WEBHOOKS',
         menus: [],
@@ -21,131 +76,11 @@
       },
     ],
   };
-  export const data = writable({});
-
-  async function fatch() {
-    if (Store.get('loggedIn') === true) {
-      let result = await axios.send({
-        url: '/template/all',
-        method: 'GET',
-      });
-      if (result.success === false) {
-        console.error(result.error);
-        return;
-      }
-      templates = JSON.parse(JSON.stringify(result.response.data.templates));
-      result = await axios.send({
-        url: '/webhook/all',
-        method: 'GET',
-      });
-      if (result.success === false) {
-        console.error(result.error);
-        return;
-      }
-      webhooks = JSON.parse(JSON.stringify(result.response.data.webhooks));
-      if (Store.get('user').roles[0].name === 'ADMIN') {
-        options.sections = [
-          {
-            name: 'ADMINISTRATION',
-            menus: [
-              {
-                type: 'link',
-                name: 'Template Manager',
-                link: '/dashboard/template/editor',
-                faClass: 'fas fa-cubes',
-              },
-              {
-                type: 'link',
-                name: 'Group Manager',
-                link: '/dashboard/group/editor',
-                faClass: 'fas fa-layer-group',
-              },
-              {
-                type: 'link',
-                name: 'Widget Manager',
-                link: '/dashboard/widget/editor',
-                faClass: 'fas fa-pepper-hot',
-              },
-              {
-                type: 'link',
-                name: 'Media Manager',
-                link: '/dashboard/media/editor',
-                faClass: 'fa fa-folder',
-              },
-              {
-                type: 'link',
-                name: 'Language Manager',
-                link: '/dashboard/language/editor',
-                faClass: 'fas fa-globe-europe',
-              },
-              {
-                type: 'link',
-                name: 'Users Manager',
-                link: '/dashboard/user/editor',
-                faClass: 'fas fa-users',
-              },
-              {
-                type: 'link',
-                name: 'API Manager',
-                link: '/dashboard/api/editor',
-                faClass: 'fas fa-key',
-              },
-              {
-                type: 'link',
-                name: 'Webhook Manager',
-                link: '/dashboard/webhook/editor',
-                faClass: 'fas fa-link',
-              },
-            ],
-          },
-          ...options.sections,
-        ];
-      }
-      for (const i in options.sections) {
-        if (options.sections[i].name === 'TEMPLATES') {
-          options.sections[i].menus = templates.map(template => {
-            return {
-              type: 'link',
-              name: StringUtil.prettyName(template.name),
-              link: `/dashboard/template/entries/view/c/${template._id}?page=1&cid=${template._id}&lng=en`,
-              faClass: 'fas fa-pencil-alt',
-            };
-          });
-        } else if (options.sections[i].name === 'WEBHOOKS') {
-          options.sections[i].menus = webhooks.map(webhook => {
-            return {
-              type: 'link',
-              name: StringUtil.prettyName(webhook.name),
-              link: `/dashboard/webhook/trigger/view/w/${webhook._id}?wid=${webhook._id}`,
-              faClass: 'fas fa-link',
-            };
-          });
-        }
-      }
-      data.set({
-        options,
-        templates,
-        webhooks,
-      });
-    }
-  }
-  fatch();
-</script>
-
-<script>
-  import { onMount } from 'svelte';
-  import { Link } from 'svelte-routing';
-  import Base64 from '../../base64.js';
-  import StringUtil from '../../string-util.js';
-
-  export let Store;
-  // export let axios;
-
-  let options = {};
-  data.subscribe(value => {
-    if (value.templates) {
-      options = value.options;
-    }
+  templateStore.subscribe(value => {
+    updateTemplates(value);
+  });
+  webhookStore.subscribe(value => {
+    updateWebhooks(value);
   });
 
   if (Store.get('loggedIn') === false) {
@@ -168,7 +103,7 @@
     });
   }
 
-  sideBarOptions.updateTemplates = templates => {
+  function updateTemplates(templates) {
     options.sections = options.sections.map(section => {
       if (section.name === 'TEMPLATES') {
         section.menus = templates.map(template => {
@@ -182,8 +117,8 @@
       }
       return section;
     });
-  };
-  sideBarOptions.updateWebhooks = webhooks => {
+  }
+  function updateWebhooks(webhooks) {
     options.sections = options.sections.map(section => {
       if (section.name === 'WEBHOOKS') {
         section.menus = webhooks.map(webhook => {
@@ -204,109 +139,7 @@
       }
       return section;
     });
-  };
-
-  // onMount(async () => {
-  //   // let result = await axios.send({
-  //   //   url: '/template/all',
-  //   //   method: 'GET',
-  //   // });
-  //   // if (result.success === false) {
-  //   //   console.error(result.error);
-  //   //   return;
-  //   // }
-  //   // const templates = JSON.parse(
-  //   //   JSON.stringify(result.response.data.templates),
-  //   // );
-  //   // result = await axios.send({
-  //   //   url: '/webhook/all',
-  //   //   method: 'GET',
-  //   // });
-  //   // if (result.success === false) {
-  //   //   console.error(result.error);
-  //   //   return;
-  //   // }
-  //   // const webhooks = JSON.parse(JSON.stringify(result.response.data.webhooks));
-  //   // if (Store.get('user').roles[0].name === 'ADMIN') {
-  //   //   options.sections = [
-  //   //     {
-  //   //       name: 'ADMINISTRATION',
-  //   //       menus: [
-  //   //         {
-  //   //           type: 'link',
-  //   //           name: 'Template Manager',
-  //   //           link: '/dashboard/template/editor',
-  //   //           faClass: 'fas fa-cubes',
-  //   //         },
-  //   //         {
-  //   //           type: 'link',
-  //   //           name: 'Group Manager',
-  //   //           link: '/dashboard/group/editor',
-  //   //           faClass: 'fas fa-layer-group',
-  //   //         },
-  //   //         {
-  //   //           type: 'link',
-  //   //           name: 'Widget Manager',
-  //   //           link: '/dashboard/widget/editor',
-  //   //           faClass: 'fas fa-pepper-hot',
-  //   //         },
-  //   //         {
-  //   //           type: 'link',
-  //   //           name: 'Media Manager',
-  //   //           link: '/dashboard/media/editor',
-  //   //           faClass: 'fa fa-folder',
-  //   //         },
-  //   //         {
-  //   //           type: 'link',
-  //   //           name: 'Language Manager',
-  //   //           link: '/dashboard/language/editor',
-  //   //           faClass: 'fas fa-globe-europe',
-  //   //         },
-  //   //         {
-  //   //           type: 'link',
-  //   //           name: 'Users Manager',
-  //   //           link: '/dashboard/user/editor',
-  //   //           faClass: 'fas fa-users',
-  //   //         },
-  //   //         {
-  //   //           type: 'link',
-  //   //           name: 'API Manager',
-  //   //           link: '/dashboard/api/editor',
-  //   //           faClass: 'fas fa-key',
-  //   //         },
-  //   //         {
-  //   //           type: 'link',
-  //   //           name: 'Webhook Manager',
-  //   //           link: '/dashboard/webhook/editor',
-  //   //           faClass: 'fas fa-link',
-  //   //         },
-  //   //       ],
-  //   //     },
-  //   //     ...options.sections,
-  //   //   ];
-  //   // }
-  //   // for (const i in options.sections) {
-  //   //   if (options.sections[i].name === 'TEMPLATES') {
-  //   //     options.sections[i].menus = templates.map(template => {
-  //   //       return {
-  //   //         type: 'link',
-  //   //         name: StringUtil.prettyName(template.name),
-  //   //         link: `/dashboard/template/entries/view/c/${template._id}?page=1&cid=${template._id}&lng=en`,
-  //   //         faClass: 'fas fa-pencil-alt',
-  //   //       };
-  //   //     });
-  //   //   } else if (options.sections[i].name === 'WEBHOOKS') {
-  //   //     options.sections[i].menus = webhooks.map(webhook => {
-  //   //       return {
-  //   //         type: 'link',
-  //   //         name: StringUtil.prettyName(webhook.name),
-  //   //         link: `/dashboard/webhook/trigger/view/w/${webhook._id}?wid=${webhook._id}`,
-  //   //         faClass: 'fas fa-link',
-  //   //       };
-  //   //     });
-  //   //   }
-  //   // }
-  // });
+  }
 </script>
 
 <style type="text/scss">
@@ -324,21 +157,18 @@
               <div
                 class="menu {menu.link.startsWith(window.location.pathname) ? 'active' : ''}">
                 {#if menu.type === 'link'}
-                  {#if section.name === 'TEMPLATES' || section.name === 'WEBHOOKS'}
-                    <a href={menu.link}>
-                      <div class="parent link">
-                        <div class="{menu.faClass} icon" />
-                        <div class="text">{menu.name}</div>
-                      </div>
-                    </a>
-                  {:else}
-                    <Link to={menu.link}>
-                      <div class="parent link">
-                        <div class="{menu.faClass} icon" />
-                        <div class="text">{menu.name}</div>
-                      </div>
-                    </Link>
-                  {/if}
+                  <Link
+                    to={menu.link}
+                    state={{ link: menu.link }}
+                    on:click={() => {
+                      pathStore.update(value => menu.link);
+                      options.sections = [...options.sections];
+                    }}>
+                    <div class="parent link">
+                      <div class="{menu.faClass} icon" />
+                      <div class="text">{menu.name}</div>
+                    </div>
+                  </Link>
                 {/if}
               </div>
             {/each}

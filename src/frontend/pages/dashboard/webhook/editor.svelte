@@ -1,8 +1,13 @@
 <script>
   import { onMount } from 'svelte';
+  import {
+    axios,
+    fatch,
+    groupStore,
+    webhookStore,
+  } from '../../../config.svelte';
   import { TextArea } from 'carbon-components-svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
-  import { sideBarOptions } from '../../../components/global/side-bar.svelte';
   import Layout from '../../../components/global/layout.svelte';
   import ManagerLayout from '../../../components/global/manager-content.svelte';
   import PropsList from '../../../components/prop/props-list.svelte';
@@ -11,15 +16,22 @@
   import StringUtil from '../../../string-util.js';
   import Base64 from '../../../base64.js';
 
-  export let axios;
-  export let Store;
-
   let groups = [];
   let webhooks = [];
   let webhookSelected;
   let addWebhookModalEvents = {};
   let editWebhookModalEvents = {};
   let invalidJSONObject = false;
+
+  groupStore.subscribe(value => {
+    groups = value;
+  });
+  webhookStore.subscribe(value => {
+    webhooks = value;
+    if (webhooks.length > 0) {
+      webhookSelected = webhooks[0];
+    }
+  });
 
   async function addWebhook(data) {
     const result = await axios.send({
@@ -31,9 +43,8 @@
       simplePopup.error(result.error.response.data.message);
       return;
     }
-    webhooks = [...webhooks, result.response.data.webhook];
+    webhookStore.update(value => [...webhooks, result.response.data.webhook]);
     webhookSelected = result.response.data.webhook;
-    sideBarOptions.updateWebhooks(webhooks);
   }
   async function updateWebhook(data) {
     let d;
@@ -59,12 +70,14 @@
       return;
     }
     webhookSelected = result.response.data.webhook;
-    webhooks = webhooks.map(e => {
-      if (e._id === webhookSelected._id) {
-        return webhookSelected;
-      }
-      return e;
-    });
+    webhookStore.update(value =>
+      webhooks.map(e => {
+        if (e._id === webhookSelected._id) {
+          return webhookSelected;
+        }
+        return e;
+      }),
+    );
     simplePopup.success('Webhook updated successfully.');
   }
   async function deleteWebhook() {
@@ -77,26 +90,19 @@
         simplePopup.error(result.error.response.data.message);
         return;
       }
-      webhooks = webhooks.filter(e => e._id !== webhookSelected._id);
+      webhookStore.update(value =>
+        webhooks.filter(e => e._id !== webhookSelected._id),
+      );
       if (webhooks.length === 0) {
         webhookSelected = undefined;
       } else {
         webhookSelected = webhooks[0];
       }
-      sideBarOptions.updateWebhooks(webhooks);
     }
   }
 
   onMount(async () => {
-    let result = await axios.send({
-      url: `/webhook/all`,
-      method: 'GET',
-    });
-    if (result.success === false) {
-      simplePopup.error(result.error.response.data.message);
-      return;
-    }
-    webhooks = result.response.data.webhooks;
+    fatch();
     if (webhooks.length > 0) {
       webhookSelected = webhooks[0];
     }
@@ -109,7 +115,7 @@
   }
 </style>
 
-<Layout {Store} {axios}>
+<Layout>
   <ManagerLayout
     items={webhooks}
     itemSelected={webhookSelected}

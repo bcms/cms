@@ -24,11 +24,10 @@
 </script>
 
 <script>
+  import { axios, Stror } from '../../config.svelte';
   import { onMount } from 'svelte';
   import { simplePopup } from '../simple-popup.svelte';
 
-  export let Store;
-  export let axios;
   export let events;
 
   let folderTree = [];
