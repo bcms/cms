@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import { axios, webhookStore } from '../../../config.svelte';
   import { CodeSnippet } from 'carbon-components-svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/global/layout.svelte';
@@ -8,12 +9,13 @@
   import StringUtil from '../../../string-util.js';
   import Base64 from '../../../base64.js';
 
-  export let axios;
-  export let Store;
-
   const queries = UrlQueries.get();
   let webhook;
   let serverResponse;
+
+  webhookStore.subscribe(value => {
+    webhook = value.find(e => e._id === queries.wid);
+  })
 
   async function invoke() {
     if (confirm('Are you sure that you want to invoke this webhook?')) {
@@ -38,17 +40,17 @@
     }
   }
 
-  onMount(async () => {
-    const result = await axios.send({
-      url: `/webhook/${queries.wid}`,
-      method: 'GET',
-    });
-    if (result.success === false) {
-      simplePopup.error(result.error.response.data.message);
-      return;
-    }
-    webhook = result.response.data.webhook;
-  });
+  // onMount(async () => {
+  //   const result = await axios.send({
+  //     url: `/webhook/${queries.wid}`,
+  //     method: 'GET',
+  //   });
+  //   if (result.success === false) {
+  //     simplePopup.error(result.error.response.data.message);
+  //     return;
+  //   }
+  //   webhook = result.response.data.webhook;
+  // });
 </script>
 
 <style type="text/scss">
@@ -63,7 +65,7 @@
   }
 </style>
 
-<Layout {Store} {axios}>
+<Layout>
   {#if webhook}
     <div class="content">
       <div class="info">

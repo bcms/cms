@@ -2,6 +2,12 @@
   import uuid from 'uuid';
   import crypto from 'crypto-js';
   import { onMount } from 'svelte';
+  import {
+    axios,
+    widgetStore,
+    groupStore,
+    languageStore,
+  } from '../../../config.svelte';
   import { Select, SelectItem } from 'carbon-components-svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Leyout from '../../../components/global/layout.svelte';
@@ -10,9 +16,6 @@
   import Button from '../../../components/global/button.svelte';
   import StringUtil from '../../../string-util.js';
   import UrlQueries from '../../../url-queries.js';
-
-  export let Store;
-  export let axios;
 
   const queries = UrlQueries.get();
   let entryId;
@@ -41,7 +44,6 @@
   let dataHash;
   let quillContentEvents = {};
   let propsEvents = {};
-
 
   async function addEntry() {
     const metaProps = propsEvents.validateAndGetProps();
@@ -165,8 +167,7 @@
   }
   function changeLanguage(lng) {
     let path =
-      `/dashboard/template/entry/` +
-      `rc?tid=${template._id}&lng=${lng}`;
+      `/dashboard/template/entry/` + `rc?tid=${template._id}&lng=${lng}`;
     if (queries.eid) {
       path += `&eid=${queries.eid}`;
     }
@@ -226,6 +227,18 @@
   }
 
   onMount(async () => {
+    // widgetStore.update(value => {
+    //   widgets = value;
+    //   return value;
+    // });
+    // groupStore.update(value => {
+    //   groups = value;
+    //   return value;
+    // });
+    // languageStore.update(value => {
+    //   languages = value;
+    //   return value;
+    // });
     // Get WIDGETS
     let result = await axios.send({
       url: `/widget/all`,
@@ -373,7 +386,7 @@
 
   </script>
 </svelte:head>
-<Leyout {Store} {axios}>
+<Leyout>
   {#if template}
     <div class="wrapper">
       <div class="heading">
@@ -409,7 +422,11 @@
       </div>
       <h3>Meta</h3>
       <div class="meta">
-        <Props {groups} {widgets} props={data[selectedLanguage.code].meta} events={propsEvents} />
+        <Props
+          {groups}
+          {widgets}
+          props={data[selectedLanguage.code].meta}
+          events={propsEvents} />
       </div>
       <h3>Content</h3>
       <div class="content">
