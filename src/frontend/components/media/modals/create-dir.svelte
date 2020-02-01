@@ -57,6 +57,12 @@
   };
   events.cancel = () => {
     events.toggle();
+    data = {
+      name: {
+        value: '',
+        error: '',
+      },
+    };
   };
   events.done = async () => {
     const errors = await containsErrors();
@@ -67,6 +73,12 @@
     if (events.callback) {
       events.callback(data.name.value);
     }
+    data = {
+      name: {
+        value: '',
+        error: '',
+      },
+    };
   };
   onMount(() => {});
 </script>

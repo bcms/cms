@@ -19,6 +19,8 @@
     PHP: { value: 'PHP', faClass: 'fab fa-php icon' },
   };
   export const viewerFileStore = writable([]);
+  export const fileStore = writable([]);
+  export const pushFile = writable();
   viewerFileStore.set([]);
 </script>
 
@@ -30,6 +32,34 @@
 
   const dispatch = createEventDispatcher();
   let files = [];
+
+  fileStore.subscribe(value => {
+    files = value;
+  });
+  pushFile.subscribe(value => {
+    if (value) {
+      const result = push(value, files);
+      fileStore.update(value => files);
+    }
+  });
+
+  function push(file, filess) {
+    for (const i in filess) {
+      const f = filess[i];
+      if (f.type === 'DIR') {
+        if (f.path === file.path) {
+          f.children.push(file);
+          return true;
+        } else {
+          const result = push(file, f.children);
+          if (result === true) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
 
   onMount(async () => {
     const result = await axios.send({
@@ -48,7 +78,8 @@
       }
       return 0;
     });
-    files = result.response.data.media;
+    console.log(result.response.data.media);
+    fileStore.update(value => result.response.data.media);
     viewerFileStore.update(value => files);
   });
 </script>
@@ -84,12 +115,13 @@
   <div class="files">
     {#each files as file}
       <FileExplorerItem
+        events={{}}
         {file}
         isVisable={true}
         on:close={event => {
           if (event.eventPhase === 0) {
-            const f = event.detail;
-            dispatch('close', f);
+            const f = event.detail.file;
+            dispatch('close', event.detail);
             if (f.isInRoot === true) {
               viewerFileStore.update(value => files);
             } else {
@@ -100,7 +132,7 @@
         on:open={event => {
           if (event.eventPhase === 0) {
             dispatch('open', event.detail);
-            const f = event.detail;
+            const f = event.detail.file;
             viewerFileStore.update(value => f.children);
           }
         }} />

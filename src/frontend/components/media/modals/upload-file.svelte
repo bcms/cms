@@ -65,7 +65,7 @@
 <Modal heading={{ title: 'Upload file' }} {events}>
   <p>
     File fill be added to
-    <i>"/media{folder}"</i>
+    <i>"{folder}"</i>
   </p>
   <TextInput
     labelText="File name"

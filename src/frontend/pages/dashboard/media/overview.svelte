@@ -4,11 +4,11 @@
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/global/layout.svelte';
   import Button from '../../../components/global/button.svelte';
-  import FolderTree, {
-    folderTreeActions,
-    folderTreeType,
-  } from '../../../components/media/folder-tree.svelte';
-  import FileExplorer from '../../../components/media/file-explorer.svelte';
+  import FileExplorer, {
+    fileStore,
+    viewerFileStore,
+    pushFile,
+  } from '../../../components/media/file-explorer.svelte';
   import MediaViewer from '../../../components/media/media-viewer.svelte';
   import CreateDirModal from '../../../components/media/modals/create-dir.svelte';
   import UploadFileModal from '../../../components/media/modals/upload-file.svelte';
@@ -18,43 +18,18 @@
 
   const createDirModalEvents = { callback: createDir };
   const uploadFileModalEvents = { callback: uploadFile };
-  let inFolder = '/';
-  let items = [];
-  let folderTreeEvents = {
-    click: (type, domEl, ft, state) => {
-      if (type === 'dir') {
-        inFolder = ft.path;
-        if (ft.children) {
-          items = JSON.parse(
-            JSON.stringify(
-              ft.children.map(e => {
-                return {
-                  _id: e._id,
-                  type: e.type,
-                  name: e.name,
-                  path: e.path,
-                };
-              }),
-            ),
-          );
-        }
-      }
+  let files = [];
+  let viewPath = [
+    {
+      _id: 'media',
+      name: '/media',
+      type: 'DIR',
     },
-    init: ft => {
-      items = JSON.parse(
-        JSON.stringify(
-          ft.map(e => {
-            return {
-              _id: e._id,
-              type: e.type,
-              name: e.name,
-              path: e.path,
-            };
-          }),
-        ),
-      );
-    },
-  };
+  ];
+
+  fileStore.subscribe(value => {
+    files = value;
+  });
 
   function itemClicked(item) {
     folderTreeActions.setActive(JSON.parse(JSON.stringify(item)));
@@ -108,44 +83,44 @@
       return;
     }
   }
-  async function deleteDir(item) {
+  async function deleteDir(file) {
     if (
       confirm(
-        `Are you sure you want to delete '${item.name}' folder?\n\n` +
+        `Are you sure you want to delete '${file.name}' folder?\n\n` +
           `THIS WILL DELETE ALL CHILD CONTENT AND ACTION IN IRREVERSABLE!`,
       )
     ) {
       const result = await axios.send({
-        url: `/media/folder/${item._id}`,
+        url: `/media/folder/${file._id}`,
         method: 'DELETE',
       });
       if (result.success === false) {
         simplePopup.error(result.error.response.data.message);
         return;
       }
-      simplePopup.success(`Folder '${item.name}' deleted successfully.`);
-      items = items.filter(i => i._id !== item._id);
-      await folderTreeActions.render();
+      simplePopup.success(`Folder '${file.name}' deleted successfully.`);
+      fileStore.update(value => files.filter(i => i._id !== file._id));
+      viewerFileStore.update(value => value.filter(e => e._id !== file._id));
     }
   }
-  async function deleteFile(item) {
+  async function deleteFile(file) {
     if (
       confirm(
-        `Are you sure you want to delete '${item.name}'?\n\n` +
+        `Are you sure you want to delete '${file.name}'?\n\n` +
           `THIS WILL DELETE ALL CHILD CONTENT AND ACTION IN IRREVERSABLE!`,
       )
     ) {
       const result = await axios.send({
-        url: `/media/file/${item._id}`,
+        url: `/media/file/${file._id}`,
         method: 'DELETE',
       });
       if (result.success === false) {
         simplePopup.error(result.error.response.data.message);
         return;
       }
-      simplePopup.success(`File '${item.name}' deleted successfully.`);
-      items = items.filter(i => i._id !== item._id);
-      await folderTreeActions.render();
+      simplePopup.success(`File '${file.name}' deleted successfully.`);
+      fileStore.update(value => files.filter(i => i._id !== file._id));
+      viewerFileStore.update(value => value.filter(e => e._id !== file._id));
     }
   }
   async function uploadFile(data) {
@@ -153,7 +128,15 @@
     const fd = new FormData();
     fd.append('media_file', file, data.fileName);
     const result = await axios.send({
-      url: `/media/file?path=${encodeURIComponent(inFolder)}`,
+      url: `/media/file?path=${encodeURIComponent(
+        '/' +
+          viewPath
+            .filter((e, i) => i > 0)
+            .map(e => {
+              return e.name;
+            })
+            .join('/'),
+      )}`,
       method: 'POST',
       headers: {
         'Content-Type': `multipart/form-data`,
@@ -165,8 +148,13 @@
       return;
     }
     simplePopup.success('File uploaded succesfully.');
-    items = [...items, result.response.data.media];
-    await folderTreeActions.render();
+    const f = result.response.data.media;
+    if (f.isInRoot === true) {
+      fileStore.update(value => [...value, f]);
+    } else {
+      pushFile.update(value => f);
+    }
+    // viewerFileStore.update(value => [...value, f]);
   }
 </script>
 
@@ -179,19 +167,31 @@
     <FileExplorer
       on:close={event => {
         if (event.eventPhase === 0) {
-          const f = event.detail;
+          const f = event.detail.file;
+          viewPath = viewPath.filter((e, i) => {
+            if (i >= event.detail.depth) {
+              return false;
+            }
+            return true;
+          });
         }
       }}
       on:open={event => {
         if (event.eventPhase === 0) {
-          const f = event.detail;
+          const f = event.detail.file;
+          viewPath = [...viewPath, { _id: f._id, type: f.type, name: f.name }];
         }
       }} />
-    <!-- <FolderTree events={folderTreeEvents} /> -->
     <div class="viewer">
       <div class="heading">
         <div class="title">Media Manager</div>
-        <div class="path">/media{inFolder}</div>
+        <div class="path">
+          {viewPath
+            .map(e => {
+              return e.name;
+            })
+            .join('/')}
+        </div>
       </div>
       <div class="dir-actions">
         <div class="create">
@@ -199,7 +199,11 @@
             icon="fas fa-plus"
             kind="ghost"
             on:click={() => {
-              createDirModalEvents.setRootPath(inFolder);
+              createDirModalEvents.setRootPath(viewPath
+                  .map(e => {
+                    return e.name;
+                  })
+                  .join('/'));
               createDirModalEvents.toggle();
             }}>
             Create new folder
@@ -213,61 +217,26 @@
           Upload file
         </Button>
       </div>
-      <MediaViewer />
-      <!-- <div class="view">
-        {#if items.length > 0}
-          <div class="items">
-            {#each items as item}
-              <div class="item">
-                <div class="info">
-                  <Button
-                    style="width: 100%;"
-                    icon={folderTreeType[item.type].faClass}
-                    kind="ghost"
-                    on:click={() => {
-                      itemClicked(item);
-                    }}>
-                    {shortenName(item.name, 20)}
-                  </Button>
-                </div>
-                {#if item.type === 'IMG'}
-                  <div class="img">
-                    <img
-                      src="/media/file?path={encodeURIComponent(item.path + '/' + item.name)}&access_token={Store.get('accessToken')}"
-                      alt="NF" />
-                  </div>
-                {/if}
-                <div class="actions">
-                  <Button
-                    kind="danger"
-                    size="small"
-                    on:click={() => {
-                      if (item.type === 'DIR') {
-                        deleteDir(item);
-                      } else {
-                        deleteFile(item);
-                      }
-                    }}>
-                    Delete
-                  </Button>
-                  <Button
-                    kind="secondary"
-                    size="small"
-                    on:click={() => {
-                      editName(item);
-                    }}>
-                    Edit
-                  </Button>
-                </div>
-              </div>
-            {/each}
-          </div>
-        {:else}
-          <div class="no-items">This folder is empty</div>
-        {/if}
-      </div> -->
+      <MediaViewer
+        {viewPath}
+        on:remove={event => {
+          if (event.eventPhase === 0) {
+            const file = event.detail;
+            if (file.type !== 'DIR') {
+              deleteFile(file);
+            } else {
+              deleteDir(file);
+            }
+          }
+        }} />
     </div>
   </div>
 </Layout>
 <CreateDirModal {axios} events={createDirModalEvents} />
-<UploadFileModal folder={inFolder} events={uploadFileModalEvents} />
+<UploadFileModal
+  folder={viewPath
+    .map(e => {
+      return e.name;
+    })
+    .join('/')}
+  events={uploadFileModalEvents} />
