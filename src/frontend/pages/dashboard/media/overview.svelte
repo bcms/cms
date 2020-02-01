@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { axios } from '../../../config.svelte';
+  import { axios, Store } from '../../../config.svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/global/layout.svelte';
   import Button from '../../../components/global/button.svelte';
@@ -8,6 +8,8 @@
     folderTreeActions,
     folderTreeType,
   } from '../../../components/media/folder-tree.svelte';
+  import FileExplorer from '../../../components/media/file-explorer.svelte';
+  import MediaViewer from '../../../components/media/media-viewer.svelte';
   import CreateDirModal from '../../../components/media/modals/create-dir.svelte';
   import UploadFileModal from '../../../components/media/modals/upload-file.svelte';
   import UrlQueries from '../../../url-queries.js';
@@ -174,11 +176,22 @@
 
 <Layout>
   <div class="content-layout">
-    <FolderTree events={folderTreeEvents} />
+    <FileExplorer
+      on:close={event => {
+        if (event.eventPhase === 0) {
+          const f = event.detail;
+        }
+      }}
+      on:open={event => {
+        if (event.eventPhase === 0) {
+          const f = event.detail;
+        }
+      }} />
+    <!-- <FolderTree events={folderTreeEvents} /> -->
     <div class="viewer">
       <div class="heading">
         <div class="title">Media Manager</div>
-        <div class="path">{inFolder}</div>
+        <div class="path">/media{inFolder}</div>
       </div>
       <div class="dir-actions">
         <div class="create">
@@ -199,28 +212,9 @@
           }}>
           Upload file
         </Button>
-        <!-- <button
-          class="btn-border btn-blue-br btn-blue-c create"
-          on:click={() => {
-            createDirModalEvents.setRootPath(inFolder);
-            createDirModalEvents.toggle();
-          }}>
-          <div class="fas fa-plus icon" />
-          <div class="text">Create New Folder</div>
-        </button>
-        <div class="btn-border btn-green-br btn-green-c upload">
-          <div class="fas fa-plus icon" />
-          <input
-            id="upload-file"
-            class="text"
-            type="file"
-            placeholder="Upload File"
-            on:change={event => {
-              uploadFile(event);
-            }} />
-        </div> -->
       </div>
-      <div class="view">
+      <MediaViewer />
+      <!-- <div class="view">
         {#if items.length > 0}
           <div class="items">
             {#each items as item}
@@ -264,26 +258,6 @@
                     }}>
                     Edit
                   </Button>
-                  <!-- <button
-                    class="btn-border btn-red-br btn-red-c delete"
-                    on:click={() => {
-                      if (item.type === 'DIR') {
-                        deleteDir(item);
-                      } else {
-                        deleteFile(item);
-                      }
-                    }}>
-                    <div class="fas fa-trash-alt icon" />
-                    <div class="text">Delete</div>
-                  </button>
-                  <button
-                    class="btn-fill btn-blue-bg edit"
-                    on:click={() => {
-                      editName(item);
-                    }}>
-                    <div class="fas fa-edit icon" />
-                    <div class="text">Edit</div>
-                  </button> -->
                 </div>
               </div>
             {/each}
@@ -291,7 +265,7 @@
         {:else}
           <div class="no-items">This folder is empty</div>
         {/if}
-      </div>
+      </div> -->
     </div>
   </div>
 </Layout>

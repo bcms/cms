@@ -54,7 +54,7 @@
           };
           messages = [...messages, message];
           setTimeout(() => {
-            message.position = 320;
+            message.position = 370;
             messages = [...messages];
           }, 100);
           setTimeout(() => {
@@ -72,7 +72,7 @@
           };
           messages = [...messages, message];
           setTimeout(() => {
-            message.position = 320;
+            message.position = 370;
             messages = [...messages];
           }, 100);
           setTimeout(() => {

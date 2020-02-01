@@ -24,7 +24,7 @@
 </script>
 
 <script>
-  import { axios, Stror } from '../../config.svelte';
+  import { axios, Store } from '../../config.svelte';
   import { onMount } from 'svelte';
   import { simplePopup } from '../simple-popup.svelte';
 
