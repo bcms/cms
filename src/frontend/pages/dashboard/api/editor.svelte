@@ -208,13 +208,13 @@
 
   .general {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(250px, 370px));
     grid-gap: 20px;
   }
 
   .config {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(250px, 370px));
     grid-gap: 20px;
   }
 

@@ -95,6 +95,7 @@
   {#each messages as message}
     <div id={message.id} class="message" style="right: {message.position}px;">
       <ToastNotification
+        style="width: 100%;"
         title={StringUtil.prettyName(message.type)}
         kind={message.type}
         lowContrast={true}

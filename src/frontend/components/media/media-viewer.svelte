@@ -1,12 +1,16 @@
+<script context="module">
+  import { writable } from 'svelte/store';
+
+  export const viewerPushFile = writable();
+  export const viewerPopFile = writable();
+</script>
+
 <script>
   import { createEventDispatcher } from 'svelte';
   import { Store } from '../../config.svelte';
   import { simplePopup } from '../simple-popup.svelte';
   import { viewerFileStore, fileType } from './file-explorer.svelte';
-  import {
-    OverflowMenu,
-    OverflowMenuItem,
-  } from 'carbon-components-svelte';
+  import { OverflowMenu, OverflowMenuItem } from 'carbon-components-svelte';
   import Button from '../global/button.svelte';
 
   export let viewPath;
@@ -15,14 +19,46 @@
   let files = [];
 
   viewerFileStore.subscribe(value => {
-    files = value;
+    const dirs = value.filter(e => e.type === 'DIR');
+    const fs = value.filter(e => e.type !== 'DIR');
+    dirs.sort((a, b) => {
+      if (a.name < b.name) {
+        return -1;
+      } else if (a.name > b.name) {
+        return 1;
+      }
+      return 0;
+    });
+    fs.sort((a, b) => {
+      if (a.name < b.name) {
+        return -1;
+      } else if (a.name > b.name) {
+        return 1;
+      }
+      return 0;
+    });
+    files = [...dirs, ...fs];
+  });
+  viewerPushFile.subscribe(value => {
+    if (value) {
+      if (!files.find(e => e._id === value._id)) {
+        viewerFileStore.update(v => [...files, value]);
+      } else {
+        viewerFileStore.update(v => [...files]);
+      }
+    }
+  });
+  viewerPopFile.subscribe(value => {
+    if (value) {
+      viewerFileStore.update(v => files.filter(e => e._id !== value._id));
+    }
   });
 </script>
 
 <style type="text/scss">
   .viewer {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(250px, 370px));
     grid-gap: 20px;
   }
 

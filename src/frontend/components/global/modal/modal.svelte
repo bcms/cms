@@ -91,7 +91,7 @@
   .footer {
     margin-top: auto;
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(250px, 370px));
   }
 </style>
 

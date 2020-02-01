@@ -8,8 +8,12 @@
     fileStore,
     viewerFileStore,
     pushFile,
+    popFile,
   } from '../../../components/media/file-explorer.svelte';
-  import MediaViewer from '../../../components/media/media-viewer.svelte';
+  import MediaViewer, {
+    viewerPushFile,
+    viewerPopFile,
+  } from '../../../components/media/media-viewer.svelte';
   import CreateDirModal from '../../../components/media/modals/create-dir.svelte';
   import UploadFileModal from '../../../components/media/modals/upload-file.svelte';
   import UrlQueries from '../../../url-queries.js';
@@ -50,7 +54,17 @@
   }
   async function createDir(name) {
     const result = await axios.send({
-      url: `/media/folder?path=${encodeURIComponent(inFolder + '/' + name)}`,
+      url: `/media/folder?path=${encodeURIComponent(
+        '/' +
+          viewPath
+            .filter((e, i) => i > 0)
+            .map(e => {
+              return e.name;
+            })
+            .join('/') +
+          '/' +
+          name,
+      )}`,
       method: 'POST',
     });
     if (result.success === false) {
@@ -58,15 +72,13 @@
       return;
     }
     simplePopup.success('Folder created!');
-    await folderTreeActions.render();
-    inFolder = `${inFolder}/${name}`.replace(/\/\//g, '/');
-    const media = result.response.data.media;
-    folderTreeActions.setActive({
-      _id: media._id,
-      type: media.type,
-      path: media.path,
-      name: media.name,
-    });
+    const f = result.response.data.media;
+    if (f.isInRoot === true) {
+      fileStore.update(value => [...value, f]);
+    } else {
+      pushFile.update(value => f);
+    }
+    viewerPushFile.update(value => f);
   }
   async function editName(item) {
     let name = prompt('Enter new name:');
@@ -99,8 +111,12 @@
         return;
       }
       simplePopup.success(`Folder '${file.name}' deleted successfully.`);
-      fileStore.update(value => files.filter(i => i._id !== file._id));
-      viewerFileStore.update(value => value.filter(e => e._id !== file._id));
+      if (file.isInRoot === true) {
+        fileStore.update(value => value.filter(e => e._id !== file._id));
+      } else {
+        popFile.update(value => file);
+      }
+      viewerPopFile.update(value => file);
     }
   }
   async function deleteFile(file) {
@@ -119,8 +135,10 @@
         return;
       }
       simplePopup.success(`File '${file.name}' deleted successfully.`);
-      fileStore.update(value => files.filter(i => i._id !== file._id));
-      viewerFileStore.update(value => value.filter(e => e._id !== file._id));
+      popFile.update(value => file);
+      viewerPopFile.update(value => file);
+      // fileStore.update(value => files.filter(i => i._id !== file._id));
+      // viewerFileStore.update(value => value.filter(e => e._id !== file._id));
     }
   }
   async function uploadFile(data) {
@@ -154,7 +172,7 @@
     } else {
       pushFile.update(value => f);
     }
-    // viewerFileStore.update(value => [...value, f]);
+    viewerPushFile.update(value => f);
   }
 </script>
 
@@ -163,7 +181,7 @@
 </style>
 
 <Layout>
-  <div class="content-layout">
+  <div class="wrapper">
     <FileExplorer
       on:close={event => {
         if (event.eventPhase === 0) {

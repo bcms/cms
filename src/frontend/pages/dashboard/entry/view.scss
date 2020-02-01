@@ -1,38 +1,19 @@
-.content {
-  display: flex;
-  flex-direction: column;
+.wrapper {
   padding: 20px;
-  height: 100%;
 }
 
 .heading {
   display: flex;
 }
 
-.heading .text .entry-count {
-  font-size: 10pt;
-  color: var(--c-gray-cold);
-}
-
 .heading .action {
   margin-left: auto;
-}
-
-.options {
-  margin: 50px 0;
-}
-
-.no-entries {
-  font-size: 18pt;
-  text-align: center;
-  margin-top: 100px;
-  color: var(--c-gray-cold);
 }
 
 .entries {
   margin-top: 30px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(250px, 370px));
   grid-gap: 20px;
   width: 100%;
 }
@@ -74,54 +55,6 @@
 .entry .info .title {
   font-size: 12pt;
   font-weight: bold;
-}
-
-.entry .info .slug {
-  font-size: 8pt;
-  color: var(--c-gray-cold);
-}
-
-.entry .info .desc {
-  margin-top: 20px;
-  font-size: 8pt;
-}
-
-.entry .info .date-time {
-  font-size: 8pt;
-}
-
-.entry .info .date-time .icon {
-  font-size: 8pt;
-  margin-right: 10px;
-  color: var(--c-gray-cold);
-}
-
-.entry .info .date-time .text {
-  display: flex;
-}
-
-.entry .info .time {
-  margin-left: auto;
-}
-
-.entry .info .actions {
-  margin-top: 30px;
-  display: flex;
-}
-
-.entry .info .actions .edit {
-  margin-left: auto;
-  color: var(--c-white);
-}
-
-.entry .info .schema {
-  color: var(--c-black);
-  border: 1px solid var(--c-gray-light);
-  padding: 10px;
-  font-size: 8pt;
-  font-weight: bold;
-  overflow: auto;
-  max-height: 200px;
 }
 
 .page-scroll {

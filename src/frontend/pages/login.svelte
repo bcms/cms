@@ -1,14 +1,10 @@
 <script>
   import { simplePopup } from '../components/simple-popup.svelte';
+  import { Store, axios } from '../config.svelte';
   import { TextInput, PasswordInput } from 'carbon-components-svelte';
   import Button from '../components/global/button.svelte';
   import AxiosClient from '../axios-client.js';
   import Base64 from '../base64.js';
-
-  export let Store;
-  export let axios;
-
-  console.log(Store);
 
   const axiosClient2 = AxiosClient.instance();
   const login = {

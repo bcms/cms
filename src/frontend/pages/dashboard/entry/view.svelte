@@ -260,7 +260,7 @@
 </style>
 
 <Layout>
-  <div key={uuid.v4()} class="content">
+  <div key={uuid.v4()} class="wrapper">
     {#if template && entries}
       <div class="heading">
         <div class="text">
@@ -273,7 +273,7 @@
           <Button icon="fas fa-plus" on:click={addEntry}>Add new Entry</Button>
         </div>
       </div>
-      <div class="options">
+      <div class="options mt-20">
         <Select
           labelText="View language"
           helperText="Entry result will be shown in selected language."
@@ -288,7 +288,7 @@
           {/each}
         </Select>
       </div>
-      <h4>Filters</h4>
+      <h4 class="mt-20">Filters</h4>
       <div class="filters mt-20">
         {#each template.entryTemplate as prop}
           {#if prop.type === 'ENUMERATION'}

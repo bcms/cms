@@ -21,7 +21,7 @@
   export const viewerFileStore = writable([]);
   export const fileStore = writable([]);
   export const pushFile = writable();
-  viewerFileStore.set([]);
+  export const popFile = writable();
 </script>
 
 <script>
@@ -34,31 +34,117 @@
   let files = [];
 
   fileStore.subscribe(value => {
-    files = value;
+    files = sort(value);
   });
   pushFile.subscribe(value => {
     if (value) {
-      const result = push(value, files);
-      fileStore.update(value => files);
+      let path = '';
+      if (value.type === 'DIR') {
+        path = value.path
+          .split('/')
+          .slice(0, value.path.split('/').length - 1)
+          .join('/');
+      } else {
+        path = value.path;
+      }
+      const result = push(value, files, path);
+      if (result.found === true) {
+        fileStore.update(v => [...result.files]);
+      }
+    }
+  });
+  popFile.subscribe(value => {
+    if (value) {
+      const result = pop(value, files);
+      if (result.found === true) {
+        fileStore.update(v => [...result.files]);
+      }
     }
   });
 
-  function push(file, filess) {
+  function push(file, filess, path) {
     for (const i in filess) {
       const f = filess[i];
       if (f.type === 'DIR') {
-        if (f.path === file.path) {
+        if (f.path === path) {
           f.children.push(file);
-          return true;
+          return {
+            found: true,
+            files: filess,
+          };
         } else {
-          const result = push(file, f.children);
-          if (result === true) {
-            return true;
+          const result = push(file, f.children, path);
+          if (result.found === true) {
+            f.children = result.files;
+            return {
+              found: true,
+              files: filess,
+            };
           }
         }
       }
     }
-    return false;
+    return {
+      found: false,
+    };
+  }
+  function pop(file, filess) {
+    for (const i in filess) {
+      if (filess[i].type === 'DIR') {
+        if (filess[i].path === file.path) {
+          if (file.type === 'DIR') {
+            filess = filess.filter(e => e._id !== file._id);
+            return {
+              found: true,
+              files: filess,
+            };
+          }
+          filess[i].children = filess[i].children.filter(
+            e => e._id !== file._id,
+          );
+          return {
+            found: true,
+            files: filess,
+          };
+        } else {
+          const result = pop(file, filess[i].children);
+          if (result.found === true) {
+            filess[i].children = result.files;
+            return {
+              found: true,
+              files: filess,
+            };
+          }
+        }
+      }
+    }
+    return {
+      found: false,
+    };
+  }
+  function sort(filess) {
+    const dirs = filess.filter(e => e.type === 'DIR');
+    const fs = filess.filter(e => e.type !== 'DIR');
+    dirs.sort((a, b) => {
+      if (a.name < b.name) {
+        return -1;
+      } else if (a.name > b.name) {
+        return 1;
+      }
+      return 0;
+    });
+    dirs.forEach(dir => {
+      dir.children = sort(dir.children);
+    });
+    fs.sort((a, b) => {
+      if (a.name < b.name) {
+        return -1;
+      } else if (a.name > b.name) {
+        return 1;
+      }
+      return 0;
+    });
+    return [...dirs, ...fs];
   }
 
   onMount(async () => {
@@ -78,7 +164,6 @@
       }
       return 0;
     });
-    console.log(result.response.data.media);
     fileStore.update(value => result.response.data.media);
     viewerFileStore.update(value => files);
   });
@@ -103,11 +188,6 @@
     padding-left: 10px;
     margin-bottom: 20px;
   }
-
-  .files {
-    display: flex;
-    flex-direction: column;
-  }
 </style>
 
 <div class="wrapper">
@@ -121,11 +201,12 @@
         on:close={event => {
           if (event.eventPhase === 0) {
             const f = event.detail.file;
+            const pf = event.detail.parentFile;
             dispatch('close', event.detail);
             if (f.isInRoot === true) {
               viewerFileStore.update(value => files);
             } else {
-              viewerFileStore.update(value => file.children);
+              viewerFileStore.update(value => pf.children);
             }
           }
         }}
