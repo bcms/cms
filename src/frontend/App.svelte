@@ -112,11 +112,11 @@
   @import './styles/global.scss';
 </style>
 
-<svelt:head>
+<!-- <svelt:head>
   <link rel="stylesheet" href="/font-awesome/fontawesome.min.css" />
   <link rel="stylesheet" href="/font-awesome/solid.min.css" />
   <link rel="stylesheet" href="/font-awesome/brands.min.css" />
-</svelt:head>
+</svelt:head> -->
 
 <Router {url}>
   {#each routes as route}
