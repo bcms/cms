@@ -13,6 +13,7 @@
   import { OverflowMenu, OverflowMenuItem } from 'carbon-components-svelte';
   import Button from '../global/button.svelte';
 
+  export let accessToken;
   export let viewPath;
 
   const dispatch = createEventDispatcher();
@@ -110,12 +111,14 @@
                     });
                 }} />
             {/if}
-            <OverflowMenuItem
-              danger={true}
-              text="Delete"
-              on:click={() => {
-                dispatch('remove', file);
-              }} />
+            {#if accessToken.customPool.policy.media.delete}
+              <OverflowMenuItem
+                danger={true}
+                text="Delete"
+                on:click={() => {
+                  dispatch('remove', file);
+                }} />
+            {/if}
           </OverflowMenu>
         </div>
       </div>

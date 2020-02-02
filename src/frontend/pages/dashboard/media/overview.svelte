@@ -20,6 +20,7 @@
   import Base64 from '../../../base64.js';
   import StringUtil from '../../../string-util.js';
 
+  const accessToken = JSON.parse(Base64.decode(Store.get('accessToken').split('.')[1]));
   const createDirModalEvents = { callback: createDir };
   const uploadFileModalEvents = { callback: uploadFile };
   let files = [];
@@ -181,74 +182,79 @@
 </style>
 
 <Layout>
-  <div class="wrapper">
-    <FileExplorer
-      on:close={event => {
-        if (event.eventPhase === 0) {
-          const f = event.detail.file;
-          viewPath = viewPath.filter((e, i) => {
-            if (i >= event.detail.depth) {
-              return false;
-            }
-            return true;
-          });
-        }
-      }}
-      on:open={event => {
-        if (event.eventPhase === 0) {
-          const f = event.detail.file;
-          viewPath = [...viewPath, { _id: f._id, type: f.type, name: f.name }];
-        }
-      }} />
-    <div class="viewer">
-      <div class="heading">
-        <div class="title">Media Manager</div>
-        <div class="path">
-          {viewPath
-            .map(e => {
-              return e.name;
-            })
-            .join('/')}
-        </div>
-      </div>
-      <div class="dir-actions">
-        <div class="create">
-          <Button
-            icon="fas fa-plus"
-            kind="ghost"
-            on:click={() => {
-              createDirModalEvents.setRootPath(viewPath
-                  .map(e => {
-                    return e.name;
-                  })
-                  .join('/'));
-              createDirModalEvents.toggle();
-            }}>
-            Create new folder
-          </Button>
-        </div>
-        <Button
-          icon="fas fa-upload"
-          on:click={() => {
-            uploadFileModalEvents.toggle();
-          }}>
-          Upload file
-        </Button>
-      </div>
-      <MediaViewer
-        {viewPath}
-        on:remove={event => {
+  {#if accessToken && accessToken.customPool.policy.media.get === true}
+    <div class="wrapper">
+      <FileExplorer
+        on:close={event => {
           if (event.eventPhase === 0) {
-            const file = event.detail;
-            if (file.type !== 'DIR') {
-              deleteFile(file);
-            } else {
-              deleteDir(file);
-            }
+            const f = event.detail.file;
+            viewPath = viewPath.filter((e, i) => {
+              if (i >= event.detail.depth) {
+                return false;
+              }
+              return true;
+            });
+          }
+        }}
+        on:open={event => {
+          if (event.eventPhase === 0) {
+            const f = event.detail.file;
+            viewPath = [...viewPath, { _id: f._id, type: f.type, name: f.name }];
           }
         }} />
+      <div class="viewer">
+        <div class="heading">
+          <div class="title">Media Manager</div>
+          <div class="path">
+            {viewPath
+              .map(e => {
+                return e.name;
+              })
+              .join('/')}
+          </div>
+        </div>
+        <div class="dir-actions">
+          {#if accessToken.customPool.policy.media.post === true}
+            <div class="create">
+              <Button
+                icon="fas fa-plus"
+                kind="ghost"
+                on:click={() => {
+                  createDirModalEvents.setRootPath(viewPath
+                      .map(e => {
+                        return e.name;
+                      })
+                      .join('/'));
+                  createDirModalEvents.toggle();
+                }}>
+                Create new folder
+              </Button>
+            </div>
+            <Button
+              icon="fas fa-upload"
+              on:click={() => {
+                uploadFileModalEvents.toggle();
+              }}>
+              Upload file
+            </Button>
+          {/if}
+        </div>
+        <MediaViewer
+          {accessToken}
+          {viewPath}
+          on:remove={event => {
+            if (event.eventPhase === 0) {
+              const file = event.detail;
+              if (file.type !== 'DIR') {
+                deleteFile(file);
+              } else {
+                deleteDir(file);
+              }
+            }
+          }} />
+      </div>
     </div>
-  </div>
+  {/if}
 </Layout>
 <CreateDirModal {axios} events={createDirModalEvents} />
 <UploadFileModal

@@ -1,14 +1,25 @@
 <script>
   import { onMount } from 'svelte';
-  import { axios, fatch, userStore } from '../../../config.svelte';
+  import {
+    axios,
+    fatch,
+    userStore,
+    templateStore,
+    webhookStore,
+  } from '../../../config.svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import { TextInput, PasswordInput } from 'carbon-components-svelte';
   import Layout from '../../../components/global/layout.svelte';
   import ManagerLayout from '../../../components/global/manager-content.svelte';
   import Button from '../../../components/global/button.svelte';
+  import MediaManagerPolicy from '../../../components/users/media-manager-policy.svelte';
+  import TemplatePolicy from '../../../components/users/template-policy.svelte';
+  import WebhookPolicy from '../../../components/users/webhook-policy.svelte';
   import AddUserModal from '../../../components/users/modals/add-user.svelte';
 
   let users = [];
+  let templates = [];
+  let webhooks = [];
   let userSelected;
   let addUserModalEvents = { callback: addUser };
 
@@ -16,7 +27,25 @@
     users = value;
     if (users.length > 0 && !userSelected) {
       userSelected = users[0];
+      if (!userSelected.customPool.policy) {
+        userSelected.customPool.policy = {
+          media: {
+            get: false,
+            post: false,
+            put: false,
+            delete: false,
+          },
+          templates: [],
+          webhooks: [],
+        };
+      }
     }
+  });
+  templateStore.subscribe(value => {
+    templates = value;
+  });
+  webhookStore.subscribe(value => {
+    webhooks = value;
   });
 
   async function addUser(data) {
@@ -47,6 +76,7 @@
     }
   }
   async function updateUser() {
+    console.log(userSelected.customPool.policy);
     if (confirm('Are you sure you want to update a User?')) {
       const data = {
         _id: userSelected._id,
@@ -56,6 +86,7 @@
             firstName: userSelected.customPool.personal.firstName,
             lastName: userSelected.customPool.personal.lastName,
           },
+          policy: userSelected.customPool.policy,
         },
       };
       if (
@@ -90,6 +121,18 @@
     fatch();
     if (users.length > 0 && !userSelected) {
       userSelected = users[0];
+      if (!userSelected.customPool.policy) {
+        userSelected.customPool.policy = {
+          media: {
+            get: false,
+            post: false,
+            put: false,
+            delete: false,
+          },
+          templates: [],
+          webhooks: [],
+        };
+      }
     }
   });
 </script>
@@ -102,6 +145,18 @@
     display: grid;
     grid-template-columns: auto;
     grid-gap: 20px;
+  }
+
+  .policies .templates {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 370px));
+    grid-gap: 20px;
+  }
+
+  .policies .admin {
+    text-align: center;
+    font-size: 18pt;
+    color: var(--c-gray);
   }
 </style>
 
@@ -157,6 +212,26 @@
           on:input={event => {
             userSelected.password = event.target.value;
           }} />
+
+        <div class="policies mt-30">
+          {#if userSelected.roles[0].name === 'ADMIN'}
+            <div class="admin">
+              This User is Admin and it has all permissions.
+            </div>
+          {:else}
+            <MediaManagerPolicy user={userSelected} />
+            <div class="templates mt-50">
+              {#each webhooks as webhook}
+                <WebhookPolicy user={userSelected} {webhook} />
+              {/each}
+            </div>
+            <div class="templates mt-50">
+              {#each templates as template}
+                <TemplatePolicy user={userSelected} {template} />
+              {/each}
+            </div>
+          {/if}
+        </div>
       </div>
     {/if}
   </ManagerLayout>

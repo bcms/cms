@@ -21,6 +21,16 @@ export class UserFactory {
           avatarUri: '',
         },
         address: {},
+        policy: {
+          media: {
+            get: false,
+            post: false,
+            put: false,
+            delete: false,
+          },
+          templates: [],
+          webhooks: [],
+        },
       },
     );
   }
@@ -66,6 +76,16 @@ export class UserFactory {
           avatarUri: config.avatarUri || '',
         },
         address: {},
+        policy: {
+          media: {
+            get: false,
+            post: false,
+            put: false,
+            delete: false,
+          },
+          templates: [],
+          webhooks: [],
+        },
       },
     );
   }
@@ -108,6 +128,16 @@ export class UserFactory {
           avatarUri: config.avatarUri || '',
         },
         address: {},
+        policy: {
+          media: {
+            get: false,
+            post: false,
+            put: false,
+            delete: false,
+          },
+          templates: [],
+          webhooks: [],
+        },
       },
     );
   }

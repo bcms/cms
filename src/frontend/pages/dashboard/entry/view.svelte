@@ -23,10 +23,13 @@
   import Base64 from '../../../base64.js';
   import StringUtil from '../../../string-util.js';
 
-  let queries = UrlQueries.get();
+  const accessToken = JSON.parse(
+    Base64.decode(Store.get('accessToken').split('.')[1]),
+  );
   const allowedEntriesPerPage = [10, 20, 30];
   const addDataModalModalEvents = { callback: addNewDataModelEntry };
   const editDataModelModalEvents = { callback: updateDataModalEntry };
+  let queries = UrlQueries.get();
   let languages = [];
   let languageSelected = {
     code: 'en',
@@ -35,6 +38,7 @@
   let entries;
   let editEntry;
   let template;
+  let templatePolicy;
   let page = 1;
   let filters = [];
   let templates = [];
@@ -232,6 +236,9 @@
     if (!queries.cid) {
       return;
     }
+    templatePolicy = accessToken.customPool.policy.templates.find(
+      e => e._id === queries.cid,
+    );
     template = templates.find(e => e._id === queries.cid);
     if (template) {
       let result = await axios.send({
@@ -270,7 +277,11 @@
           </div>
         </div>
         <div class="action">
-          <Button icon="fas fa-plus" on:click={addEntry}>Add new Entry</Button>
+          {#if templatePolicy.post === true}
+            <Button icon="fas fa-plus" on:click={addEntry}>
+              Add new Entry
+            </Button>
+          {/if}
         </div>
       </div>
       <div class="options mt-20">
@@ -319,15 +330,19 @@
                     <div class="id">{entry._id}</div>
                     <div class="overflow-menu">
                       <OverflowMenu>
-                        <OverflowMenuItem
-                          text="Edit"
-                          href="/dashboard/template/entry/rc?tid={template._id}&eid={entry._id}&lng={languageSelected.code}" />
-                        <OverflowMenuItem
-                          danger={true}
-                          text="Delete"
-                          on:click={() => {
-                            deleteEntry(entry);
-                          }} />
+                        {#if templatePolicy && templatePolicy.put === true}
+                          <OverflowMenuItem
+                            text="Edit"
+                            href="/dashboard/template/entry/rc?tid={template._id}&eid={entry._id}&lng={languageSelected.code}" />
+                        {/if}
+                        {#if templatePolicy && templatePolicy.delete === true}
+                          <OverflowMenuItem
+                            danger={true}
+                            text="Delete"
+                            on:click={() => {
+                              deleteEntry(entry);
+                            }} />
+                        {/if}
                       </OverflowMenu>
                     </div>
                   </div>
@@ -378,19 +393,23 @@
                     <div class="id">{entry._id}</div>
                     <div class="overflow-menu">
                       <OverflowMenu>
-                        <OverflowMenuItem
-                          text="Edit"
-                          on:click={() => {
-                            editEntry = entry;
-                            editDataModelModalEvents.setEntry(entry);
-                            editDataModelModalEvents.toggle();
-                          }} />
-                        <OverflowMenuItem
-                          danger={true}
-                          text="Delete"
-                          on:click={() => {
-                            deleteEntry(entry);
-                          }} />
+                        {#if templatePolicy && templatePolicy.put === true}
+                          <OverflowMenuItem
+                            text="Edit"
+                            on:click={() => {
+                              editEntry = entry;
+                              editDataModelModalEvents.setEntry(entry);
+                              editDataModelModalEvents.toggle();
+                            }} />
+                        {/if}
+                        {#if templatePolicy && templatePolicy.delete === true}
+                          <OverflowMenuItem
+                            danger={true}
+                            text="Delete"
+                            on:click={() => {
+                              deleteEntry(entry);
+                            }} />
+                        {/if}
                       </OverflowMenu>
                     </div>
                   </div>

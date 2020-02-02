@@ -39,18 +39,6 @@
       simplePopup.success('Webhook invoked successfully.');
     }
   }
-
-  // onMount(async () => {
-  //   const result = await axios.send({
-  //     url: `/webhook/${queries.wid}`,
-  //     method: 'GET',
-  //   });
-  //   if (result.success === false) {
-  //     simplePopup.error(result.error.response.data.message);
-  //     return;
-  //   }
-  //   webhook = result.response.data.webhook;
-  // });
 </script>
 
 <style type="text/scss">

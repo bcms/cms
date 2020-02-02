@@ -31,6 +31,21 @@ export class UserService implements IMongooseEntityService<User> {
   deleteById: (id: string) => Promise<boolean>;
   deleteAllById: (ids: string[]) => Promise<number | boolean>;
 
+  async updateNew(e: User): Promise<boolean> {
+    e.updatedAt = Date.now();
+    try {
+      e.updatedAt = Date.now();
+      await this.repo.updateOne({ _id: e._id.toHexString() }, e);
+      return true;
+    } catch (error) {
+      this.logger.error('.update', {
+        errorMessage: error.message,
+        stack: error.stack,
+      });
+      return false;
+    }
+  }
+
   async findAllByCompanyId(companyId: string): Promise<User[]> {
     const entities = await this.repo.find({
       'customPool.company.id': companyId,

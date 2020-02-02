@@ -16,7 +16,6 @@ import {
   ObjectUtility,
   Put,
   Delete,
-  JWT,
 } from 'purple-cheetah';
 import { TemplateService } from './template.service';
 import { Request } from 'express';

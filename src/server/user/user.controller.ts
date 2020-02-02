@@ -333,7 +333,7 @@ export class UserController {
     if (changeDetected === false) {
       throw error.occurred(HttpStatus.FORBIDDEN, 'Nothing to update.');
     }
-    const updateUserResult = await this.userService.update(user);
+    const updateUserResult = await this.userService.updateNew(user);
     if (updateUserResult === false) {
       throw error.occurred(
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -581,6 +581,59 @@ export class UserController {
                   },
                 },
               },
+              policy: {
+                __type: 'object',
+                __require: true,
+                __child: {
+                  media: {
+                    __type: 'object',
+                    __required: true,
+                    __child: {
+                      get: {
+                        __type: 'boolean',
+                        __required: true,
+                      },
+                      post: {
+                        __type: 'boolean',
+                        __required: true,
+                      },
+                      put: {
+                        __type: 'boolean',
+                        __required: true,
+                      },
+                      delete: {
+                        __type: 'boolean',
+                        __required: true,
+                      },
+                    },
+                  },
+                  templates: {
+                    __type: 'array',
+                    __required: true,
+                    __child: {
+                      __type: 'object',
+                      __content: {
+                        get: {
+                          __type: 'boolean',
+                          __required: true,
+                        },
+                        post: {
+                          __type: 'boolean',
+                          __required: true,
+                        },
+                        put: {
+                          __type: 'boolean',
+                          __required: true,
+                        },
+                        delete: {
+                          __type: 'boolean',
+                          __required: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
             },
           },
         },
@@ -610,13 +663,13 @@ export class UserController {
       }
     }
     const user = await this.userService.findById(request.body._id);
+    user.customPool.policy = request.body.customPool.policy;
     if (user === null) {
       throw error.occurred(
         HttpStatus.NOT_FOUNT,
         `User with ID '${request.body._id}' does not exist.`,
       );
     }
-    let changeDetected: boolean = false;
     if (
       typeof request.body.email !== 'undefined' &&
       request.body.email !== user.email
@@ -627,7 +680,6 @@ export class UserController {
           `Invalid Email format for '${request.body.email}'`,
         );
       }
-      changeDetected = true;
       const userWithSameEmail = await this.userService.findByEmail(
         request.body.email,
       );
@@ -640,7 +692,6 @@ export class UserController {
       user.email = request.body.email;
     }
     if (typeof request.body.password !== 'undefined') {
-      changeDetected = true;
       if (request.body.password.replace(/ /g, '') === '') {
         throw error.occurred(
           HttpStatus.FORBIDDEN,
@@ -654,22 +705,17 @@ export class UserController {
       typeof request.body.customPool.personal !== 'undefined'
     ) {
       if (typeof request.body.customPool.personal.firstName !== 'undefined') {
-        changeDetected = true;
         user.customPool.personal.firstName =
           request.body.customPool.personal.firstName;
         user.username = `${user.customPool.personal.firstName} ${user.customPool.personal.lastName}`;
       }
       if (typeof request.body.customPool.personal.lastName !== 'undefined') {
-        changeDetected = true;
         user.customPool.personal.lastName =
           request.body.customPool.personal.lastName;
         user.username = `${user.customPool.personal.firstName} ${user.customPool.personal.lastName}`;
       }
     }
-    if (changeDetected === false) {
-      throw error.occurred(HttpStatus.FORBIDDEN, 'Nothing to update.');
-    }
-    const updateUserResult = await this.userService.update(user);
+    const updateUserResult = await this.userService.updateNew(user);
     if (updateUserResult === false) {
       throw error.occurred(
         HttpStatus.INTERNAL_SERVER_ERROR,

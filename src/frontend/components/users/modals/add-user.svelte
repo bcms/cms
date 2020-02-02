@@ -76,6 +76,16 @@
             firstName: data.firstName.value,
             lastName: data.lastName.value,
           },
+          policy: {
+            media: {
+              get: false,
+              post: false,
+              put: false,
+              delete: false,
+            },
+            templates: [],
+            webhooks: [],
+          },
         },
       });
     }
@@ -100,30 +110,7 @@
   };
 </script>
 
-<style>
-  .content .title {
-    padding-bottom: 5px;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-bottom-color: var(--c-white-dark);
-    font-size: 14pt;
-    font-weight: bold;
-  }
-
-  .content .options {
-    margin-top: 20px;
-    display: grid;
-    grid-template-columns: auto;
-    grid-gap: 20px;
-  }
-
-  .content .options .icon {
-    font-size: 8pt;
-    color: var(--c-gray-dark);
-  }
-</style>
-
-<Modal heading={{title: 'Add User'}} {events}>
+<Modal heading={{ title: 'Add User' }} {events}>
   <TextInput
     labelText="First Name"
     placeholder="- First Name -"

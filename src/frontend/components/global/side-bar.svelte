@@ -11,6 +11,9 @@
   import Base64 from '../../base64.js';
   import StringUtil from '../../string-util.js';
 
+  const accessToken = JSON.parse(
+    Base64.decode(Store.get('accessToken').split('.')[1]),
+  );
   let options = {
     sections: [
       {
@@ -102,12 +105,12 @@
       return menu;
     });
   }
-
   function updateTemplates(templates) {
     options.sections = options.sections.map(section => {
       if (section.name === 'TEMPLATES') {
         section.menus = templates.map(template => {
           return {
+            _id: template._id,
             type: 'link',
             name: StringUtil.prettyName(template.name),
             link: `/dashboard/template/entries/view/c/${template._id}?page=1&cid=${template._id}&lng=en`,
@@ -123,6 +126,7 @@
       if (section.name === 'WEBHOOKS') {
         section.menus = webhooks.map(webhook => {
           return {
+            _id: webhook._id,
             type: 'link',
             name: StringUtil.prettyName(webhook.name)
               .split('-')
@@ -140,6 +144,47 @@
       return section;
     });
   }
+  function filter(section, menu) {
+    if (accessToken.roles[0].name === 'ADMIN') {
+      return false;
+    }
+    switch (section.name) {
+      case 'ADMINISTRATION':
+        {
+          switch (menu.name) {
+            case 'Media Manager':
+              {
+                if (accessToken.customPool.policy.media.get === true) {
+                  return false;
+                }
+              }
+              break;
+          }
+        }
+        break;
+      case 'WEBHOOKS':
+        {
+          const policy = accessToken.customPool.policy.webhooks.find(
+            e => e._id === menu._id,
+          );
+          if (policy && policy.get === true) {
+            return false;
+          }
+        }
+        break;
+      case 'TEMPLATES':
+        {
+          const policy = accessToken.customPool.policy.templates.find(
+            e => e._id === menu._id,
+          );
+          if (policy && policy.get === true) {
+            return false;
+          }
+        }
+        break;
+    }
+    return true;
+  }
 </script>
 
 <style type="text/scss">
@@ -148,7 +193,7 @@
 
 <div class="side-bar">
   <div class="sections">
-    {#if options.sections}
+    {#if options.sections && accessToken}
       {#each options.sections as section}
         <div class="section">
           <div class="name">{section.name}</div>
@@ -157,18 +202,20 @@
               <div
                 class="menu {menu.link.startsWith(window.location.pathname) ? 'active' : ''}">
                 {#if menu.type === 'link'}
-                  <Link
-                    to={menu.link}
-                    state={{ link: menu.link }}
-                    on:click={() => {
-                      pathStore.update(value => menu.link);
-                      options.sections = [...options.sections];
-                    }}>
-                    <div class="parent link">
-                      <div class="{menu.faClass} icon" />
-                      <div class="text">{menu.name}</div>
-                    </div>
-                  </Link>
+                  {#if filter(section, menu) === false}
+                    <Link
+                      to={menu.link}
+                      state={{ link: menu.link }}
+                      on:click={() => {
+                        pathStore.update(value => menu.link);
+                        options.sections = [...options.sections];
+                      }}>
+                      <div class="parent link">
+                        <div class="{menu.faClass} icon" />
+                        <div class="text">{menu.name}</div>
+                      </div>
+                    </Link>
+                  {/if}
                 {/if}
               </div>
             {/each}

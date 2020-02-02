@@ -31,95 +31,122 @@
     Store.set('loggedIn', false);
   }
 
-  export async function fatch() {
+  export function fatch() {
     if (Store.get('loggedIn') === true) {
       if (cacheTill === 0 || cacheTill < Date.now()) {
         console.log('Fatch data.');
         cacheTill = Date.now() + 60000;
-        let result = await axios.send({
-          url: '/group/all',
-          method: 'GET',
-        });
-        if (result.success === false) {
-          console.error(result.error.response.data.message);
-          return;
-        }
-        groupStore.set(result.response.data.groups);
-        result = await axios.send({
-          url: '/template/all',
-          method: 'GET',
-        });
-        if (result.success === false) {
-          console.error(result.error.response.data.message);
-          return;
-        }
-        templateStore.set(result.response.data.templates);
-        result = await axios.send({
-          url: '/widget/all',
-          method: 'GET',
-        });
-        if (result.success === false) {
-          console.error(result.error.response.data.message);
-          return;
-        }
-        widgetStore.set(result.response.data.widgets);
-        result = await axios.send({
-          url: '/webhook/all',
-          method: 'GET',
-        });
-        if (result.success === false) {
-          console.error(result.error);
-          return;
-        }
-        webhookStore.set(result.response.data.webhooks);
-        result = await axios.send({
-          url: '/user/all',
-          method: 'GET',
-        });
-        if (result.success === false) {
-          simplePopup.error(result.error.response.data.message);
-          return;
-        }
-        userStore.set(result.response.data.users);
-        result = await axios.send({
-          url: '/language/all',
-          method: 'GET',
-        });
-        if (result.success === false) {
-          console.error(result.error.response.data.message);
-          return;
-        }
-        if (result.response.data.languages.length === 0) {
-          result = await axios.send({
-            url: '/language/en',
-            method: 'POST',
+        axios
+          .send({
+            url: '/group/all',
+            method: 'GET',
+          })
+          .then(result => {
+            if (result.success === false) {
+              console.error(result.error.response.data.message);
+              return;
+            }
+            groupStore.set(result.response.data.groups);
           });
-          if (result.success === false) {
-            console.error(result.error.response.data.message);
-            return;
-          }
-          languageStore.set([result.response.data.language]);
-        } else {
-          languageStore.set(result.response.data.languages);
+        axios
+          .send({
+            url: '/template/all',
+            method: 'GET',
+          })
+          .then(result => {
+            if (result.success === false) {
+              console.error(result.error.response.data.message);
+              return;
+            }
+            templateStore.set(result.response.data.templates);
+          });
+        axios
+          .send({
+            url: '/widget/all',
+            method: 'GET',
+          })
+          .then(result => {
+            if (result.success === false) {
+              console.error(result.error.response.data.message);
+              return;
+            }
+            widgetStore.set(result.response.data.widgets);
+          });
+        axios
+          .send({
+            url: '/webhook/all',
+            method: 'GET',
+          })
+          .then(result => {
+            if (result.success === false) {
+              console.error(result.error);
+              return;
+            }
+            webhookStore.set(result.response.data.webhooks);
+          });
+        axios
+          .send({
+            url: '/language/all',
+            method: 'GET',
+          })
+          .then(async result => {
+            if (result.success === false) {
+              console.error(result.error.response.data.message);
+              return;
+            }
+            if (result.response.data.languages.length === 0) {
+              result = await axios.send({
+                url: '/language/en',
+                method: 'POST',
+              });
+              if (result.success === false) {
+                console.error(result.error.response.data.message);
+                return;
+              }
+              languageStore.set([result.response.data.language]);
+            } else {
+              languageStore.set(result.response.data.languages);
+            }
+          });
+        const user = Store.get('user');
+        if (user.roles[0].name === 'ADMIN') {
+          axios
+            .send({
+              url: '/user/all',
+              method: 'GET',
+            })
+            .then(result => {
+              if (result.success === false) {
+                simplePopup.error(result.error.response.data.message);
+                return;
+              }
+              userStore.set(result.response.data.users);
+            });
+          axios
+            .send({
+              url: '/key/all',
+              method: 'GET',
+            })
+            .then(result => {
+              if (result.success === false) {
+                console.error(result.error.response.data.message);
+                return;
+              }
+              keyStore.update(value => result.response.data.keys);
+            });
+          axios
+            .send({
+              url: '/function/all/available',
+              method: 'GET',
+            })
+            .then(result => {
+              if (result.success === false) {
+                console.error(result.error.response.data.message);
+                return;
+              }
+              functionStore.set(result.response.data.functions);
+            });
         }
-        result = await axios.send({
-          url: '/key/all',
-          method: 'GET',
-        });
-        if (result.success === false) {
-          console.error(result.error.response.data.message);
-          return;
-        }
-        keyStore.update(value => result.response.data.keys);
-        result = await axios.send({
-          url: '/function/all/available',
-          method: 'GET',
-        });
-        if (result.success === false) {
-          console.error(result.error.response.data.message);
-          return;
-        }
-        functionStore.set(result.response.data.functions);
       }
     }
   }
