@@ -1,21 +1,21 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import { TextInput } from 'carbon-components-svelte';
+  import MediaPickerModal from '../global/modal/media-picker.svelte';
   import Button from '../global/button.svelte';
   import StringUtil from '../../string-util.js';
 
   export let value;
 
   const dispatch = createEventDispatcher();
+  const mediaPicketModalEvents = {};
 </script>
 
 <style type="text/scss">
   @import './widget.scss';
 
   .content {
-    border-style: solid;
-    border-color: #f4f4f4;
-    border-width: 2px;
+    border: 5px solid #f4f4f4;
     padding: 20px;
     width: 100%;
   }
@@ -24,10 +24,6 @@
     padding: 10px;
     border: 1px dashed var(--c-primary);
     text-align: center;
-  }
-
-  .action button {
-    margin: 0 auto;
   }
 </style>
 
@@ -74,7 +70,14 @@
       {value === '' ? '- Not set -' : value}
     </div>
     <div class="action">
-      <Button kind="ghost">Click to select a media</Button>
+      <Button
+        kind="ghost"
+        on:click={() => {
+          mediaPicketModalEvents.toggle();
+        }}>
+        Click to select a media
+      </Button>
     </div>
   </div>
 </div>
+<MediaPickerModal events={mediaPicketModalEvents}/>

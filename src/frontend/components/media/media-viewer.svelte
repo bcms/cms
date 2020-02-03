@@ -12,6 +12,7 @@
   import { viewerFileStore, fileType } from './file-explorer.svelte';
   import { OverflowMenu, OverflowMenuItem } from 'carbon-components-svelte';
   import Button from '../global/button.svelte';
+  import StringUtil from '../../string-util.js';
 
   export let accessToken;
   export let viewPath;
@@ -38,7 +39,7 @@
       }
       return 0;
     });
-    files = [...dirs, ...fs];
+    files = [...fs];
   });
   viewerPushFile.subscribe(value => {
     if (value) {
@@ -67,8 +68,8 @@
   .file {
     display: grid;
     flex-direction: column;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
     margin-bottom: auto;
+    border: 5px solid var(--c-gray-lighter);
   }
 
   .actions {
@@ -92,26 +93,29 @@
 </style>
 
 <div class="viewer">
+  {#if files.length === 0}
+    <h4 class="no-files"><u>{StringUtil.prettyName(viewPath[viewPath.length - 1].name.replace(/\//g, ''))}</u> folder is empty.</h4>
+  {/if}
   {#each files as file}
     <div class="file">
       <div class="actions">
         <div class="menu">
           <OverflowMenu>
-            {#if file.type !== 'DIR'}
-              <OverflowMenuItem
-                text="Copy Path"
-                on:click={() => {
-                  navigator.clipboard
-                    .writeText(`${viewPath
-                        .map(e => {
-                          return e.name;
-                        })
-                        .join('/')}/${file.name}`)
-                    .then(() => {
-                      simplePopup.success('Path copied.');
-                    });
-                }} />
-            {/if}
+            <!-- {#if file.type !== 'DIR'} -->
+            <OverflowMenuItem
+              text="Copy Path"
+              on:click={() => {
+                navigator.clipboard
+                  .writeText(`${viewPath
+                      .map(e => {
+                        return e.name;
+                      })
+                      .join('/')}/${file.name}`)
+                  .then(() => {
+                    simplePopup.success('Path copied.');
+                  });
+              }} />
+            <!-- {/if} -->
             {#if accessToken.customPool.policy.media.delete === true || accessToken.roles[0].name === 'ADMIN'}
               <OverflowMenuItem
                 danger={true}

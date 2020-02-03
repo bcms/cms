@@ -29,26 +29,26 @@
     if (cacheTill === 0 || cacheTill < Date.now()) {
       cacheTill = Date.now() + 60000;
       axios
-      .send({
-        url: '/media/all/aggregate',
-        method: 'GET',
-      })
-      .then(result => {
-        if (result.success === false) {
-          simplePopup.error(result.error.response.data.message);
-          return;
-        }
-        result.response.data.media.sort((a, b) => {
-          if (a.type === 'DIR' && b.type !== 'DIR') {
-            return -1;
-          } else if (a.type !== 'DIR' && b.type === 'DIR') {
-            return 1;
+        .send({
+          url: '/media/all/aggregate',
+          method: 'GET',
+        })
+        .then(result => {
+          if (result.success === false) {
+            simplePopup.error(result.error.response.data.message);
+            return;
           }
-          return 0;
+          result.response.data.media.sort((a, b) => {
+            if (a.type === 'DIR' && b.type !== 'DIR') {
+              return -1;
+            } else if (a.type !== 'DIR' && b.type === 'DIR') {
+              return 1;
+            }
+            return 0;
+          });
+          fileStore.update(value => result.response.data.media);
+          viewerFileStore.update(value => result.response.data.media);
         });
-        fileStore.update(value => result.response.data.media);
-        viewerFileStore.update(value => result.response.data.media);
-      });
     }
   }
   fatch();
@@ -59,6 +59,9 @@
   import { axios, Store } from '../../config.svelte';
   import { simplePopup } from '../simple-popup.svelte';
   import FileExplorerItem from './file-explorer-item.svelte';
+
+  export let showFiles = false;
+  export let onFileClick;
 
   const dispatch = createEventDispatcher();
   let files = [];
@@ -183,22 +186,20 @@
   });
   onDestroy(() => {
     viewerFileStore.update(value => files);
-  })
+  });
 </script>
 
 <style type="text/scss">
-  .wrapper {
+  .file-explorer {
     width: 100%;
-    height: 97vh;
-    background-color: var(--c-white-normal);
+    height: 100%;
     padding: 30px 20px 0 20px;
-    padding-left: 20px;
     margin: auto 0;
-    overflow-x: auto;
-    overflow-y: auto;
-    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+    overflow: auto;
+    border-right: 1px solid #e0e0e0;
+    background-color: var(--c-neutral);
   }
-  .wrapper .heading {
+  .file-explorer .heading {
     color: #919bae;
     font-size: 10pt;
     font-weight: bold;
@@ -207,33 +208,37 @@
   }
 </style>
 
-<div class="wrapper">
+<div class="file-explorer">
   <div class="heading">EXPLORER</div>
-  <div class="files">
+  <div class="items">
     {#each files as file}
-      <FileExplorerItem
-        events={{}}
-        {file}
-        isVisable={true}
-        on:close={event => {
-          if (event.eventPhase === 0) {
-            const f = event.detail.file;
-            const pf = event.detail.parentFile;
-            dispatch('close', event.detail);
-            if (f.isInRoot === true) {
-              viewerFileStore.update(value => files);
-            } else {
-              viewerFileStore.update(value => pf.children);
+      {#if file.type === 'DIR' || showFiles === true}
+        <FileExplorerItem
+          {showFiles}
+          {onFileClick}
+          events={{}}
+          {file}
+          isVisable={true}
+          on:close={event => {
+            if (event.eventPhase === 0) {
+              const f = event.detail.file;
+              const pf = event.detail.parentFile;
+              dispatch('close', event.detail);
+              if (f.isInRoot === true) {
+                viewerFileStore.update(value => files);
+              } else {
+                viewerFileStore.update(value => pf.children);
+              }
             }
-          }
-        }}
-        on:open={event => {
-          if (event.eventPhase === 0) {
-            dispatch('open', event.detail);
-            const f = event.detail.file;
-            viewerFileStore.update(value => f.children);
-          }
-        }} />
+          }}
+          on:open={event => {
+            if (event.eventPhase === 0) {
+              dispatch('open', event.detail);
+              const f = event.detail.file;
+              viewerFileStore.update(value => f.children);
+            }
+          }} />
+      {/if}
     {/each}
   </div>
 </div>

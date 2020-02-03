@@ -1,15 +1,14 @@
 <script>
   import { createEventDispatcher } from 'svelte';
+  import { fly, fade } from 'svelte/transition';
   import Button from '../button.svelte';
 
   export let heading;
   export let footer;
   export let events;
+  export let width = 450;
 
   const dispatch = createEventDispatcher();
-  let style = {
-    right: -600,
-  };
   let show = false;
 
   if (!events) {
@@ -17,21 +16,7 @@
   }
 
   events.toggle = () => {
-    if (show === false) {
-      show = true;
-      setTimeout(() => {
-        style = {
-          right: 0,
-        };
-      }, 100);
-    } else {
-      style = {
-        right: -600,
-      };
-      setTimeout(() => {
-        show = false;
-      }, 400);
-    }
+    show = show === true ? false : true;
   };
 
   if (!footer) {
@@ -55,14 +40,13 @@
   .modal {
     display: flex;
     flex-direction: column;
-    width: 450px;
     background-color: var(--c-white);
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.3);
     position: fixed;
     top: 0;
     bottom: 0;
     right: 0;
-    transition: 0.4s;
+    transition: all 0.4s;
   }
 
   .heading {
@@ -79,12 +63,12 @@
   }
 
   .content {
-    display: grid;
-    grid-template-columns: auto;
-    grid-gap: 20px;
+    display: flex;
+    flex-direction: column;
     padding: 20px;
     overflow-y: auto;
     width: 100%;
+    height: 100%;
     margin-bottom: 20px;
   }
 
@@ -100,8 +84,8 @@
 </style>
 
 {#if show === true}
-  <div class="overlay">
-    <div class="modal" style="right: {style.right}px;">
+  <div transition:fade class="overlay">
+    <div transition:fly={{ x: width }} class="modal" style="width: {width}px;">
       <div class="heading">
         <h3>{heading.title}</h3>
         <div class="close">
