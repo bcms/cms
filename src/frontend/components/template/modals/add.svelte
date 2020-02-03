@@ -6,7 +6,7 @@
     Select,
     SelectItem,
   } from 'carbon-components-svelte';
-  import Modal from '../../modal.svelte';
+  import Modal from '../../global/modal/modal.svelte';
 
   export let events;
 
@@ -30,45 +30,34 @@
     data.name.value = value;
     event.value = value;
   }
-
-  events.cancel = () => {
-    data = {
-      name: {
-        value: '',
-        error: '',
-      },
-      type: 'DATA_MODEL',
-      desc: '',
-      entryTemplate: [],
-    };
-    events.toggle();
-  };
-  events.done = async () => {
-    if (data.name.value.trim() === '') {
-      data.name.error = 'Name input cannot be empty.';
-      return;
-    }
-    data.name.error = '';
-    events.callback({
-      name: data.name.value,
-      desc: data.desc,
-      type: data.type,
-      entryTemplate: data.entryTemplate,
-    });
-    data = {
-      name: {
-        value: '',
-        error: '',
-      },
-      type: 'DATA_MODEL',
-      desc: '',
-      entryTemplate: [],
-    };
-    events.toggle();
-  };
 </script>
 
-<Modal heading={{ title: 'Create new Template' }} {events}>
+<Modal
+  heading={{ title: 'Create new Template' }}
+  {events}
+  on:cancel={event => {
+    if (event.eventPhase === 0) {
+      data = { name: { value: '', error: '' }, type: 'DATA_MODEL', desc: '', entryTemplate: [] };
+      events.toggle();
+    }
+  }}
+  on:done={event => {
+    if (event.eventPhase === 0) {
+      if (data.name.value.trim() === '') {
+        data.name.error = 'Name input cannot be empty.';
+        return;
+      }
+      data.name.error = '';
+      events.callback({
+        name: data.name.value,
+        desc: data.desc,
+        type: data.type,
+        entryTemplate: data.entryTemplate,
+      });
+      data = { name: { value: '', error: '' }, type: 'DATA_MODEL', desc: '', entryTemplate: [] };
+      events.toggle();
+    }
+  }}>
   <TextInput
     labelText="Name"
     invalid={data.name.error !== '' ? true : false}

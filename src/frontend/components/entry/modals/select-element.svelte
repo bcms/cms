@@ -1,7 +1,7 @@
 <script>
   import StringUtil from '../../../string-util.js';
   import uuid from 'uuid';
-  import Modal from '../../modal.svelte';
+  import Modal from '../../global/modal/modal.svelte';
 
   export let events;
   export let widgets;

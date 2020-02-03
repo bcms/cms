@@ -2,7 +2,7 @@
   import { onMount } from 'svelte';
   import { simplePopup } from '../../simple-popup.svelte';
   import { Select, SelectItem } from 'carbon-components-svelte';
-  import Modal from '../../modal.svelte';
+  import Modal from '../../global/modal/modal.svelte';
 
   export let events;
   export let axios;

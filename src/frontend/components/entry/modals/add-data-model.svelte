@@ -4,7 +4,7 @@
   import { onMount } from 'svelte';
   import { Select, SelectItem } from 'carbon-components-svelte';
   import { simplePopup } from '../../simple-popup.svelte';
-  import Modal from '../../modal.svelte';
+  import Modal from '../../global/modal/modal.svelte';
   import Props from '../../prop/props.svelte';
   import StringUtil from '../../../string-util.js';
   import UrlQueries from '../../../url-queries.js';
@@ -109,7 +109,40 @@
   });
 </script>
 
-<Modal heading={modalHeading} {events}>
+<Modal
+  heading={modalHeading}
+  {events}
+  on:cancel={event => {
+    if (event.eventPhase === 0) {
+      events.toggle();
+      initData();
+    }
+  }}
+  on:done={event => {
+    if (event.eventPhase === 0) {
+      const props = propsEvents.validateAndGetProps();
+      if (!props) {
+        simplePopup.error('Error in inputs.');
+        return;
+      }
+      const output = { content: [] };
+      for (const lng in data) {
+        const newDataHash = crypto
+          .SHA256(JSON.stringify(data[lng].props))
+          .toString();
+        if (newDataHash !== data[lng].hash) {
+          output.content.push({ lng, props: data[lng].props });
+        }
+      }
+      if (output.content.length === 0) {
+        simplePopup.error('There are no changes.');
+        return;
+      }
+      events.toggle();
+      events.callback(output);
+      initData();
+    }
+  }}>
   {#if data}
     <Select
       labelText="Language"

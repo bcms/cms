@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import { TextInput } from 'carbon-components-svelte';
-  import Modal from '../../modal.svelte';
+  import Modal from '../../global/modal/modal.svelte';
   import OnOff from '../../on-off.svelte';
   import StringUtil from '../../../string-util.js';
   import { simplePopup } from '../../simple-popup.svelte';

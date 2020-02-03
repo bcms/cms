@@ -1,5 +1,5 @@
 <script>
-  import Modal from '../../modal.svelte';
+  import Modal from '../../global/modal/modal.svelte';
   import { simplePopup } from '../../simple-popup.svelte';
   import Button from '../../global/button.svelte';
 
@@ -18,7 +18,19 @@
   };
 </script>
 
-<Modal heading={{ title: 'Add Key Configuration' }} {events}>
+<Modal
+  heading={{ title: 'Add Key Configuration' }}
+  {events}
+  on:cancel={event => {
+    if (event.eventPhase === 0) {
+      events.toggle();
+    }
+  }}
+  on:done={event => {
+    if (event.eventPhase === 0) {
+      events.toggle();
+    }
+  }}>
   <Button
     class="w-100p"
     icon="fas fa-cubes"

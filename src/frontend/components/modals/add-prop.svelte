@@ -7,7 +7,7 @@
     SelectItem,
   } from 'carbon-components-svelte';
   import { simplePopup } from '../simple-popup.svelte';
-  import Modal from '../modal.svelte';
+  import Modal from '../global/modal/modal.svelte';
   import MultiAdd from '../multi-add.svelte';
   import OnOff from '../on-off.svelte';
   import StringUtil from '../../string-util.js';

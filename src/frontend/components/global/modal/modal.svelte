@@ -90,8 +90,12 @@
 
   .footer {
     margin-top: auto;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 370px));
+    display: flex;
+  }
+
+  .footer .cancel,
+  .footer .done {
+    width: 100%;
   }
 </style>
 
@@ -107,6 +111,9 @@
             kind="ghost"
             size={'field'}
             on:click={() => {
+              if (events.cancel) {
+                events.cancel();
+              }
               dispatch('cancel');
             }} />
         </div>
@@ -120,6 +127,9 @@
             style="width: 100%;"
             kind="secondary"
             on:click={() => {
+              if (events.cancel) {
+                events.cancel();
+              }
               dispatch('cancel');
             }}>
             Cancel
@@ -129,6 +139,9 @@
           <Button
             style="width: 100%;"
             on:click={() => {
+              if (events.cancel) {
+                events.done();
+              }
               dispatch('done');
             }}>
             Done

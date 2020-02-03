@@ -4,7 +4,7 @@
     TextInput,
     FileUploaderDropContainer,
   } from 'carbon-components-svelte';
-  import Modal from '../../modal.svelte';
+  import Modal from '../../global/modal/modal.svelte';
 
   export let folder;
   export let events;

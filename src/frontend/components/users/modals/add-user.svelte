@@ -1,5 +1,5 @@
 <script>
-  import Modal from '../../modal.svelte';
+  import Modal from '../../global/modal/modal.svelte';
   import { simplePopup } from '../../simple-popup.svelte';
   import { TextInput, PasswordInput } from 'carbon-components-svelte';
 
