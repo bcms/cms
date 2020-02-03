@@ -153,15 +153,17 @@
     value={data.title.value}
     on:keyup={handleTitle} />
 </div>
-<div class='bx--label'>Description</div>
+<div class="bx--label">Description</div>
 <TextArea
   cols="500"
+  value={data.desc}
   placeholder="- Description -"
   on:input={event => {
     data.desc = event.target.value;
   }} />
 <div class="bx--label mt-20">Cover Image</div>
 <TextInput
+  value={data.coverImageUri}
   placeholder="- Cover Image URI -"
   on:input={event => {
     data.coverImageUri = event.target.value;
