@@ -76,6 +76,7 @@
     }
     simplePopup.success('Folder created!');
     const f = result.response.data.media;
+    f.children = [];
     if (f.isInRoot === true) {
       fileStore.update(value => [...value, f]);
     } else {
