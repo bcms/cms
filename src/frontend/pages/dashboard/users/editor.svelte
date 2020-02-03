@@ -76,7 +76,6 @@
     }
   }
   async function updateUser() {
-    console.log(userSelected.customPool.policy);
     if (confirm('Are you sure you want to update a User?')) {
       const data = {
         _id: userSelected._id,
@@ -212,7 +211,6 @@
           on:input={event => {
             userSelected.password = event.target.value;
           }} />
-
         <div class="policies mt-30">
           {#if userSelected.roles[0].name === 'ADMIN'}
             <div class="admin">

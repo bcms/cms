@@ -117,6 +117,9 @@ export class UserFactory {
             {
               name: PermissionName.DELETE,
             },
+            {
+              name: PermissionName.EXECUTE,
+            },
           ],
         },
       ],
