@@ -4,10 +4,11 @@
   top: 0;
   bottom: 0;
   width: 250px;
-  background-color: var(--c-primary-dark);
+  background-color: var(--c-white-normal);
+  border-right: 1px solid #e0e0e0;
   overflow-x: hidden;
   overflow-y: auto;
-  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+  // box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
 }
 
 .section .name {
@@ -22,7 +23,7 @@
 }
 
 .menus .menu:hover {
-  background-color: var(--c-primary-dark-hover);
+  background-color: var(--c-white-normal);
 }
 
 .menus .menu .parent {
