@@ -104,17 +104,10 @@ export class APISecurity {
     if (signature !== data.signature) {
       throw new Error('Invalid signature.');
     }
-    // if (!skipAccess) {
-    // } else {
-    //   if (APISecurity.verifyAccess(key, requestMethod, path) === false) {
-    //     throw new Error(`Key is not allowed to access this resource.`);
-    //   }
-    // }
-    if (
-      !skipAccess &&
-      skipAccess === true &&
-      APISecurity.verifyAccess(key, requestMethod, path) === false
-    ) {
+    if (skipAccess && skipAccess === true) {
+      return;
+    }
+    if (APISecurity.verifyAccess(key, requestMethod, path) === false) {
       throw new Error(`Key is not allowed to access this resource.`);
     }
   }
@@ -134,7 +127,6 @@ export class APISecurity {
               e.methods.find(m => m === 'GET_ALL'),
             );
             if (templateAccess) {
-              console.log('h1', templateAccess);
               return true;
             }
           } else if (method === 'GET') {
@@ -143,7 +135,6 @@ export class APISecurity {
             );
             if (templateAccess) {
               if (templateAccess.methods.find(e => e === method)) {
-                console.log('h2', templateAccess);
                 return true;
               }
             }
@@ -155,12 +146,10 @@ export class APISecurity {
           if (templateAccess) {
             if (parts.length === 5 && parts[4] === 'all') {
               if (templateAccess.entry.methods.find(e => e === 'GET_ALL')) {
-                console.log('h3', templateAccess);
                 return true;
               }
             } else {
               if (templateAccess.entry.methods.find(e => e === method)) {
-                console.log('h4', templateAccess);
                 return true;
               }
             }
