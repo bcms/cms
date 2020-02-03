@@ -2,7 +2,7 @@
   import { onMount, afterUpdate } from 'svelte';
   import { TextInput } from 'carbon-components-svelte';
   import Widget from '../widget/widget.svelte';
-  import Media from '../widget/media.svelte';
+  import Media from '../widget/media-new.svelte';
 
   export let groups;
   export let quill;

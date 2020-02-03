@@ -14,6 +14,7 @@
   export const Store = store;
   export const axios = AxiosClient.instance();
   export const pathStore = writable('');
+  export const fileStore = writable([]);
 
   let cacheTill = 0;
 
@@ -107,6 +108,26 @@
             } else {
               languageStore.set(result.response.data.languages);
             }
+          });
+        axios
+          .send({
+            url: '/media/all/aggregate',
+            method: 'GET',
+          })
+          .then(result => {
+            if (result.success === false) {
+              simplePopup.error(result.error.response.data.message);
+              return;
+            }
+            result.response.data.media.sort((a, b) => {
+              if (a.type === 'DIR' && b.type !== 'DIR') {
+                return -1;
+              } else if (a.type !== 'DIR' && b.type === 'DIR') {
+                return 1;
+              }
+              return 0;
+            });
+            fileStore.update(value => result.response.data.media);
           });
         const user = Store.get('user');
         if (user.roles[0].name === 'ADMIN') {
