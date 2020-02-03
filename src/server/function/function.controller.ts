@@ -30,7 +30,7 @@ export class FunctionController {
     } else {
       const jwtValid = JWTSecurity.validateAndCheckTokenPermissions(
         jwt,
-        [RoleName.ADMIN],
+        [RoleName.ADMIN, RoleName.USER],
         PermissionName.EXECUTE,
         JWTConfigService.get('user-token-config'),
       );
