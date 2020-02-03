@@ -33,15 +33,12 @@
       }, 800);
     }
   };
-
   simplePopup.error = content => {
     simplePopup.push(MessageType.error, content);
   };
-
   simplePopup.success = content => {
     simplePopup.push(MessageType.success, content);
   };
-
   simplePopup.push = (type, content) => {
     switch (type) {
       case MessageType.error:
@@ -57,9 +54,6 @@
             message.position = 370;
             messages = [...messages];
           }, 100);
-          setTimeout(() => {
-            simplePopup.remove(message.id);
-          }, timeout);
         }
         break;
       case MessageType.success:

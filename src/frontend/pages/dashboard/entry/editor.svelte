@@ -80,6 +80,7 @@
       return;
     }
     const content = createContent();
+    console.log('Content', content);
     const result = await axios.send({
       url: `/template/${template._id}/entry`,
       method: 'PUT',
@@ -117,11 +118,11 @@
       });
       if (d.sections.length > 0) {
         d.sections.forEach(section => {
-          if (section.type !== 'MEDIA') {
+          if (section.type === 'MEDIA') {
             props[props.length - 1].value.content.push({
               id: section.id,
               type: section.type,
-              value: section.value ? section.value : {},
+              value: section.value ? section.value : "",
               valueAsText: section.valueAsText,
             });
           } else if (section.type === 'WIDGET') {
@@ -136,7 +137,7 @@
               id: section.id,
               type: section.type,
               value: section.value ? section.value : {},
-              valueAsText: section.value,
+              valueAsText: section.valueAsText,
             });
           }
         });

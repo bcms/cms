@@ -1,5 +1,5 @@
 <script>
-  import { groupStore, fatch } from '../../../config.svelte';
+  import { axios, groupStore, fatch } from '../../../config.svelte';
   import { onMount } from 'svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/global/layout.svelte';
@@ -11,9 +11,6 @@
   import Button from '../../../components/global/button.svelte';
   import StringUtil from '../../../string-util.js';
   import UrlQueries from '../../../url-queries.js';
-
-  export let axios;
-  export let Store;
 
   let groups = [];
   let groupSelected;
@@ -144,6 +141,7 @@
         },
       ],
     };
+    console.log(data);
     const result = await axios.send({
       url: '/group',
       method: 'PUT',
@@ -222,7 +220,7 @@
   });
 </script>
 
-<Layout {Store} {axios}>
+<Layout>
   <ManagerLayout
     items={groups}
     itemSelected={groupSelected}

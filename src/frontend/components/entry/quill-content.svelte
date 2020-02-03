@@ -1,6 +1,7 @@
 <script>
   import uuid from 'uuid';
   import { onMount } from 'svelte';
+  import { TextInput, TextArea } from 'carbon-components-svelte';
   import QuillElement from './quill-element.svelte';
   import SelectElementModal from './modals/select-element.svelte';
   import Button from '../global/button.svelte';
@@ -152,11 +153,20 @@
     value={data.title.value}
     on:keyup={handleTitle} />
 </div>
-<textarea class="desc" placeholder="- Description -" bind:value={data.desc} />
-<input
-  class="input"
+<div class='bx--label'>Description</div>
+<TextArea
+  cols="500"
+  placeholder="- Description -"
+  on:input={event => {
+    data.desc = event.target.value;
+  }} />
+<div class="bx--label mt-20">Cover Image</div>
+<TextInput
   placeholder="- Cover Image URI -"
-  bind:value={data.coverImageUri} />
+  on:input={event => {
+    data.coverImageUri = event.target.value;
+  }} />
+<div class="bx--label mt-20">Content</div>
 <div class="sections">
   {#if data.sections.length > 0 && quill}
     {#each data.sections as section, i}
@@ -171,6 +181,7 @@
     <div class="actions">
       <Button
         icon="fas fa-plus"
+        kind="ghost"
         on:click={() => {
           selectElementModalEvents.toggle();
         }}>

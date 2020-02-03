@@ -22,9 +22,6 @@
       </div>
     {/if}
     <div class="type">{StringUtil.prettyName(type)}</div>
-    <div class="icon">
-      <img src="/assets/ics/template/types/{type}.png" alt="NF" />
-    </div>
   </div>
   <div class="content">
     <slot>

@@ -1,12 +1,13 @@
 <script>
   import { onMount, afterUpdate } from 'svelte';
+  import { TextInput } from 'carbon-components-svelte';
   import Widget from '../widget/widget.svelte';
+  import Media from '../widget/media.svelte';
 
   export let groups;
   export let quill;
   export let section;
   export let events;
-  export let inFocus;
 
   let id = '';
   let shift = false;
@@ -208,26 +209,26 @@
 
 <div class="quill">
   {#if section.type === 'MEDIA'}
-    {#if inFocus === true}
-      <input
-        id={section.id}
-        class="input"
-        placeholder="- Path to File -"
-        value={section.value}
-        on:keyup={event => {
-          section.value = event.target.value;
-          section.valueAsText = section.value;
-        }} />
-    {:else}
-      <input
-        class="input"
-        placeholder="- Path to File -"
-        value={section.value}
-        on:keyup={event => {
-          section.value = event.target.value;
-          section.valueAsText = section.value;
-        }} />
-    {/if}
+    <Media
+    value={section.value}
+      on:input={event => {
+        section.value = `${event.target.value}`;
+        section.valueAsText = section.value;
+      }}
+      on:delete={event => {
+        if (event.eventPhase === 0) {
+          events.delete(section.id);
+        }
+      }}
+      on:move={event => {
+        if (event.eventPhase === 0) {
+          if (event.detail === 'up') {
+            events.move(section.order, section.order - 1, section.id);
+          } else {
+            events.move(section.order, section.order + 1, section.id);
+          }
+        }
+      }} />
   {:else if section.type === 'WIDGET'}
     <Widget
       {groups}
