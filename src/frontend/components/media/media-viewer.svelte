@@ -58,8 +58,9 @@
 
 <style type="text/scss">
   .viewer {
+    width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 370px));
+    grid-template-columns: repeat(auto-fill, minmax(150px, 250px));
     grid-gap: 20px;
   }
 
@@ -111,7 +112,7 @@
                     });
                 }} />
             {/if}
-            {#if accessToken.customPool.policy.media.delete}
+            {#if accessToken.customPool.policy.media.delete === true || accessToken.roles[0].name === 'ADMIN'}
               <OverflowMenuItem
                 danger={true}
                 text="Delete"
@@ -133,7 +134,7 @@
             simplePopup.error('Please user Explorer to enter a folder.');
           }
         }}>
-        {file.name}
+        {file.name.length > 25 ? `${file.name.substring(0, 25)} ...` : file.name}
       </Button>
       {#if file.type === 'IMG'}
         <div class="img mt-20">

@@ -180,9 +180,18 @@ export class App {
             path.join(__dirname, '..', '..', 'public', 'index.html'),
           );
         } else {
-          response.sendFile(
-            path.join(__dirname, 'frontend', 'index.html'),
-          );
+          if (
+            (await util.promisify(fs.exists)(
+              path.join(process.env.PROJECT_ROOT, 'public', 'index.html'),
+            )) === true
+          ) {
+            response.sendFile(
+              path.join(process.env.PROJECT_ROOT, 'public', 'index.html'),
+            );
+          } else {
+            response.sendFile(path.join(__dirname, 'frontend', 'index.html'));
+          }
+          // response.sendFile(path.join(__dirname, 'frontend', 'index.html'));
         }
       },
     );

@@ -4,10 +4,15 @@
   height: 100%;
 }
 
-.viewer {
-  height: 100%;
+.viewer-wrapper {
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+.viewer {
+  max-width: 900px;
+  margin: 0 auto;
+  height: 100%;
   padding: 20px;
 }
 
@@ -27,15 +32,9 @@
 }
 
 .dir-actions {
-  margin-top: 30px;
-  padding: 20px;
   display: flex;
 }
 
 .dir-actions .create {
-  margin-left: auto;
-}
-
-.dir-actions .upload {
   margin-left: 20px;
 }

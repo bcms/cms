@@ -12,7 +12,9 @@
 </script>
 
 <style type="text/scss">
-  @import './button.scss';
+  .button {
+    margin-left: 0;
+  }
 </style>
 
 <Button class={className} {kind} {size} {style} on:click>

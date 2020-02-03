@@ -6,4 +6,5 @@
 </script>
 
 <Layout {Store} {axios}>
+  <h1>Overview</h1>
 </Layout>

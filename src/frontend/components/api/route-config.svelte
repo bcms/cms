@@ -61,11 +61,14 @@
   }
 
   .content {
-    display: grid;
-    grid-template-columns: auto auto auto;
-    grid-gap: 10px;
     background-color: #f4f4f4;
     padding: 20px;
+  }
+
+  .content .options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 20px;
   }
 </style>
 
@@ -98,41 +101,43 @@
             text={StringUtil.prettyName(template.name)} />
         {/each}
       </Select>
-      <div>
-        <div class="--legend">Template Methods</div>
-        {#if config.methods.find(e => e === 'GET')}
-          <Checkbox
-            checked={true}
-            labelText="Get"
-            on:change={event => {
-              handleMethodCheck('Template', 'GET', event.target.checked);
-            }} />
-        {:else}
-          <Checkbox
-            labelText="Get"
-            on:change={event => {
-              handleMethodCheck('Template', 'GET', event.target.checked);
-            }} />
-        {/if}
-      </div>
-      <div>
-        <div class="--legend">Entry Methods</div>
-        {#each configMethods as method}
-          {#if config.entry.methods.find(e => e === method)}
+      <div class="options mt-20">
+        <div>
+          <div class="bx--legend">Template Methods</div>
+          {#if config.methods.find(e => e === 'GET')}
             <Checkbox
               checked={true}
-              labelText={StringUtil.prettyName(method)}
+              labelText="Get"
               on:change={event => {
-                handleMethodCheck('Entry', method, event.target.checked);
+                handleMethodCheck('Template', 'GET', event.target.checked);
               }} />
           {:else}
             <Checkbox
-              labelText={StringUtil.prettyName(method)}
+              labelText="Get"
               on:change={event => {
-                handleMethodCheck('Entry', method, event.target.checked);
+                handleMethodCheck('Template', 'GET', event.target.checked);
               }} />
           {/if}
-        {/each}
+        </div>
+        <div>
+          <div class="bx--legend">Entry Methods</div>
+          {#each configMethods as method}
+            {#if config.entry.methods.find(e => e === method)}
+              <Checkbox
+                checked={true}
+                labelText={StringUtil.prettyName(method)}
+                on:change={event => {
+                  handleMethodCheck('Entry', method, event.target.checked);
+                }} />
+            {:else}
+              <Checkbox
+                labelText={StringUtil.prettyName(method)}
+                on:change={event => {
+                  handleMethodCheck('Entry', method, event.target.checked);
+                }} />
+            {/if}
+          {/each}
+        </div>
       </div>
     {:else}
       <Select

@@ -19,6 +19,7 @@
   import Layout from '../../../components/global/layout.svelte';
   import Button from '../../../components/global/button.svelte';
   import DataModelModal from '../../../components/entry/modals/add-data-model.svelte';
+  import ViewDataModelModal from '../../../components/entry/modals/view-data-model.svelte';
   import UrlQueries from '../../../url-queries.js';
   import Base64 from '../../../base64.js';
   import StringUtil from '../../../string-util.js';
@@ -29,6 +30,7 @@
   const allowedEntriesPerPage = [10, 20, 30];
   const addDataModalModalEvents = { callback: addNewDataModelEntry };
   const editDataModelModalEvents = { callback: updateDataModalEntry };
+  const viewDataModelModalEvents = {};
   let queries = UrlQueries.get();
   let languages = [];
   let languageSelected = {
@@ -236,9 +238,18 @@
     if (!queries.cid) {
       return;
     }
-    templatePolicy = accessToken.customPool.policy.templates.find(
-      e => e._id === queries.cid,
-    );
+    if (accessToken.roles[0].name === 'ADMIN') {
+      templatePolicy = {
+        get: true,
+        post: true,
+        put: true,
+        delete: true,
+      };
+    } else {
+      templatePolicy = accessToken.customPool.policy.templates.find(
+        e => e._id === queries.cid,
+      );
+    }
     template = templates.find(e => e._id === queries.cid);
     if (template) {
       let result = await axios.send({
@@ -330,6 +341,12 @@
                     <div class="id">{entry._id}</div>
                     <div class="overflow-menu">
                       <OverflowMenu>
+                        <OverflowMenuItem
+                          text="Data Model"
+                          on:click={() => {
+                            viewDataModelModalEvents.setDataModel(JSON.stringify(entry, null, '  '));
+                            viewDataModelModalEvents.toggle();
+                          }} />
                         {#if templatePolicy && templatePolicy.put === true}
                           <OverflowMenuItem
                             text="Edit"
@@ -393,6 +410,12 @@
                     <div class="id">{entry._id}</div>
                     <div class="overflow-menu">
                       <OverflowMenu>
+                        <OverflowMenuItem
+                          text="Data Model"
+                          on:click={() => {
+                            viewDataModelModalEvents.setDataModel(JSON.stringify(entry, null, '  '));
+                            viewDataModelModalEvents.toggle();
+                          }} />
                         {#if templatePolicy && templatePolicy.put === true}
                           <OverflowMenuItem
                             text="Edit"
@@ -420,41 +443,31 @@
                         language.
                       </div>
                     {/if}
-                    <div class="key-value date-time">
-                      <div class="label">
-                        <span class="fas fa-clock icon" />
-                        <span>Created At</span>
-                      </div>
-                      <div class="text">
-                        <span class="date">
-                          {new Date(entry.createdAt).toLocaleDateString()}
-                        </span>
-                        <span class="time">
-                          {new Date(entry.createdAt).toLocaleTimeString()}
-                        </span>
-                      </div>
+                    <div class="bx--label mt-20">Created At</div>
+                    <div class="date-time">
+                      <span class="date">
+                        {new Date(entry.createdAt).toLocaleDateString()}
+                      </span>
+                      <span class="time">
+                        {new Date(entry.createdAt).toLocaleTimeString()}
+                      </span>
                     </div>
-                    <div class="key-value date-time">
-                      <div class="label">
-                        <span class="fas fa-clock icon" />
-                        <span>Updated At</span>
-                      </div>
-                      <div class="text">
-                        <span class="date">
-                          {new Date(entry.updatedAt).toLocaleDateString()}
-                        </span>
-                        <span class="time">
-                          {new Date(entry.updatedAt).toLocaleTimeString()}
-                        </span>
-                      </div>
+                    <div class="bx--label mt-20">Updated At</div>
+                    <div class="date-time">
+                      <span class="date">
+                        {new Date(entry.updatedAt).toLocaleDateString()}
+                      </span>
+                      <span class="time">
+                        {new Date(entry.updatedAt).toLocaleTimeString()}
+                      </span>
                     </div>
-                    <div class="schema">
+                    <!-- <div class="schema">
                       <pre>
                         <code>
                           {compileSchema(contentToSchema(entry.content))}
                         </code>
                       </pre>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               {/if}
@@ -510,6 +523,7 @@
     {/if}
   </div>
 </Layout>
+<ViewDataModelModal events={viewDataModelModalEvents} />
 {#if template && languages.length > 0}
   <DataModelModal events={editDataModelModalEvents} {template} {languages} />
   <DataModelModal events={addDataModalModalEvents} {template} {languages} />
