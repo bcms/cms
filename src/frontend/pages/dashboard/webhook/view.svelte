@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { axios, webhookStore } from '../../../config.svelte';
+  import { axios, webhookStore, pathStore } from '../../../config.svelte';
   import { CodeSnippet } from 'carbon-components-svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/global/layout.svelte';
@@ -9,13 +9,21 @@
   import StringUtil from '../../../string-util.js';
   import Base64 from '../../../base64.js';
 
-  const queries = UrlQueries.get();
+  let queries = UrlQueries.get();
+  let webhooks = [];
   let webhook;
   let serverResponse;
 
   webhookStore.subscribe(value => {
+    webhooks = value;
     webhook = value.find(e => e._id === queries.wid);
-  })
+  });
+  pathStore.subscribe(value => {
+    setTimeout(() => {
+      queries = UrlQueries.get();
+      webhook = webhooks.find(e => e._id === queries.wid);
+    }, 50);
+  });
 
   async function invoke() {
     if (confirm('Are you sure that you want to invoke this webhook?')) {

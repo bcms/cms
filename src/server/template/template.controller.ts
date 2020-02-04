@@ -27,6 +27,7 @@ import { EntryService } from '../entry/entry.service';
 import { APISecurity } from '../api/api-security';
 import { TemplateLite } from './interfaces/template-lite.interface';
 import { TemplateChanges } from './interfaces/changes.interface';
+import { PropChanges } from '../prop/interfaces/prop-changes.interface';
 
 /**
  * Controller that provides CRUD for Template object.
@@ -395,19 +396,25 @@ export class TemplateController {
       );
     }
     if (typeof request.body.changes !== 'undefined') {
-      const changes = request.body.changes as TemplateChanges;
+      const changes = { props: request.body.changes.props as PropChanges[] };
       if (changes.props.length > 0) {
         const entries = await this.entryService.findAllById(template.entryIds);
         for (const i in entries) {
           const entry = entries[i];
           entry.content.forEach(content => {
-            content.props.forEach(prop => {
-              changes.props.forEach(change => {
-                if (prop.name === change.name.old) {
-                  prop.name = change.name.new;
-                  prop.required = change.required;
-                }
-              });
+            changes.props.forEach(change => {
+              if (change.remove === true) {
+                content.props = content.props.filter(
+                  prop => prop.name !== change.name.old,
+                );
+              } else {
+                content.props.forEach(prop => {
+                  if (prop.name === change.name.old) {
+                    prop.name = change.name.new;
+                    prop.required = change.required;
+                  }
+                });
+              }
             });
           });
           const updateEntryResult = await this.entryService.update(entry);

@@ -242,7 +242,6 @@
     }
   }
   function init() {
-    console.log('init');
     if (queries.eid) {
       const entryId = entry._id;
       for (const j in languages) {
@@ -319,21 +318,25 @@
     dataHash = hashData();
   }
 
-  onMount(async () => {
-    selectedLanguage = {
-      code: queries.lng,
-    };
-    let result = await axios.send({
+  selectedLanguage = {
+    code: queries.lng,
+  };
+  axios
+    .send({
       url: `/template/${queries.tid}/entry/${queries.eid}`,
       method: 'GET',
+    })
+    .then(result => {
+      if (result.success === false) {
+        console.error(result.error);
+        simplePopup.error(result.error.response.data.message);
+        return;
+      }
+      entry = result.response.data.entry;
+      init();
     });
-    if (result.success === false) {
-      console.error(result.error);
-      simplePopup.error(result.error.response.data.message);
-      return;
-    }
-    entry = result.response.data.entry;
-    init();
+
+  onMount(async () => {
     loadTimer = setInterval(getHighlight, 50);
   });
 </script>
@@ -351,7 +354,7 @@
   </script>
 </svelte:head>
 <Leyout>
-  {#if template && data[selectedLanguage.code]}
+  {#if template && entry && data[selectedLanguage.code] && data[selectedLanguage.code].meta}
     <div class="wrapper">
       <div class="heading">
         <div class="info">

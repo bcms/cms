@@ -402,9 +402,6 @@
                               Edit
                             </Link>
                           </li>
-                          <!-- <OverflowMenuItem
-                            text="Edit"
-                            href="/dashboard/template/entry/rc?tid={template._id}&eid={entry._id}&lng={languageSelected.code}" /> -->
                         {/if}
                         {#if templatePolicy && templatePolicy.delete === true}
                           <OverflowMenuItem

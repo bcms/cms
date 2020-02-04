@@ -83,6 +83,7 @@ export class GroupUtil {
                 prop.value.props = prop.value.props.filter(
                   p => p.name !== change.name.old,
                 );
+                forUpdate = true;
               } else {
                 prop.value.props.forEach(p => {
                   if (p.name === change.name.old) {

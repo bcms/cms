@@ -14,8 +14,6 @@ import {
   EnableMongoose,
 } from 'purple-cheetah';
 
-import { SwaggerController } from './swagger/swagger.controller';
-import { SwaggerServerMiddleware } from './swagger/swagger-server.middleware';
 import { ExceptionHandler } from 'purple-cheetah/interfaces/exception-handler.interface';
 import { UserController } from './user/user.controller';
 import { AuthController } from './auth/auth.controller';
@@ -72,7 +70,6 @@ if (process.env.DB_CLUSTER && process.env.DB_CLUSTER !== 'undefined') {
   controllers: [
     new UserController(),
     new AuthController(),
-    new SwaggerController(),
     new TemplateController(),
     new EntryController(),
     new MediaController(),
@@ -87,7 +84,6 @@ if (process.env.DB_CLUSTER && process.env.DB_CLUSTER !== 'undefined') {
     new CorsMiddleware(),
     new RequestLoggerMiddleware(),
     new BodyParserMiddleware(),
-    new SwaggerServerMiddleware(),
     new MulterMediaMiddleware(),
   ],
   exceptionHandlers: [],
