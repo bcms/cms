@@ -7,9 +7,17 @@
     pathStore,
   } from '../../config.svelte';
   import { onMount } from 'svelte';
-  import { Link } from 'svelte-routing';
+  import { Link, navigate } from 'svelte-routing';
   import Base64 from '../../base64.js';
   import StringUtil from '../../string-util.js';
+
+  if (!Store || !Store.get('loggedIn') || Store.get('loggedIn') === false) {
+    Store.remove('refreshToken');
+    Store.remove('accessToken');
+    Store.remove('user');
+    navigate('/login', { replace: true });
+    // document.location = `/login?error=You are not logged in.`;
+  }
 
   const accessToken = JSON.parse(
     Base64.decode(Store.get('accessToken').split('.')[1]),
@@ -85,13 +93,6 @@
   webhookStore.subscribe(value => {
     updateWebhooks(value);
   });
-
-  if (Store.get('loggedIn') === false) {
-    Store.remove('refreshToken');
-    Store.remove('accessToken');
-    Store.remove('user');
-    document.location = `/login?error=You are not logged in.`;
-  }
 
   function toggleSubMenu(event) {
     options.menus = options.menus.map(menu => {
@@ -188,11 +189,76 @@
 </script>
 
 <style type="text/scss">
-  @import './side-bar.scss';
+  .side-bar {
+    font-size: 10pt;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 250px;
+    background-color: var(--c-white-normal);
+    border-right: 1px solid #e0e0e0;
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .section .name {
+    color: var(--c-gray-cold-dark);
+    font-size: 10pt;
+    font-weight: bold;
+    margin: 30px 10px 20px 20px;
+  }
+
+  .menus .menu {
+    padding-left: 20px;
+  }
+
+  .menus .menu .parent {
+    display: grid;
+    grid-template-columns: 12px auto 20px;
+    grid-gap: 10px;
+    padding: 10px 0;
+  }
+
+  .menus .menu .parent .text {
+    margin: 0;
+    font-weight: normal;
+    color: var(--c-gray-cold-dark);
+  }
+
+  .menus .menu .parent .icon {
+    margin: auto 0;
+    font-size: 10pt;
+    color: var(--c-neutral);
+    color: var(--c-gray-cold-dark);
+  }
+
+  .menus .active .parent .icon {
+    color: var(--c-primary);
+  }
+
+  .menus .menu:hover {
+    background-color: var(--c-gray-light);
+  }
 </style>
 
 <div class="side-bar">
   <div class="sections">
+    <div class="section mt-auto">
+      <div class="menus">
+        <div class="menu">
+          <Link
+            to="/login"
+            on:click={() => {
+              Store.clear();
+            }}>
+            <div class="parent link">
+              <div class="fas fa-sign-out-alt icon" />
+              <div class="text">Sign out</div>
+            </div>
+          </Link>
+        </div>
+      </div>
+    </div>
     {#if options.sections && accessToken}
       {#each options.sections as section}
         <div class="section">

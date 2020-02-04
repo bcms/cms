@@ -1,9 +1,8 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { Store } from '../../../config.svelte';
+  import { Store, fileStore } from '../../../config.svelte';
   import Modal from './modal.svelte';
   import FileExplorer, {
-    fileStore,
     viewerFileStore,
     pushFile,
     popFile,

@@ -1,11 +1,12 @@
 <script>
   import { Router, Route } from 'svelte-routing';
   import { onMount } from 'svelte';
-  import {pathStore} from './config.svelte';
+  import { Store, pathStore } from './config.svelte';
 
   import SimplePopup from './components/simple-popup.svelte';
   import Login from './pages/login.svelte';
   import Page404 from './pages/404.svelte';
+  import FontAwesome from './components/global/font-awesome.svelte';
 
   import Overview from './pages/dashboard/overview.svelte';
   import TemplateEditor from './pages/dashboard/template/editor.svelte';
@@ -33,58 +34,62 @@
     },
     {
       path: '/dashboard/template/editor',
-      component: TemplateEditor
+      component: TemplateEditor,
     },
     {
       path: '/dashboard/group/editor',
-      component: GroupEditor
+      component: GroupEditor,
     },
     {
       path: '/dashboard/widget/editor',
-      component: WidgetEditor
+      component: WidgetEditor,
     },
     {
       path: '/dashboard/template/entries/view/c/:cid',
-      component: EntriesView
+      component: EntriesView,
     },
     {
       path: '/dashboard/template/entry/rc',
-      component: EntryEditor
+      component: EntryEditor,
     },
     {
       path: '/dashboard/media/editor',
-      component: MediaEditor
+      component: MediaEditor,
     },
     {
       path: '/dashboard/user/editor',
-      component: UsersEditor
+      component: UsersEditor,
     },
     {
       path: '/dashboard/api/editor',
-      component: ApiEditor
+      component: ApiEditor,
     },
     {
       path: '/dashboard/webhook/editor',
-      component: WebhookEditor
+      component: WebhookEditor,
     },
     {
       path: '/dashboard/webhook/trigger/view/w/:wid',
-      component: WebhookView
+      component: WebhookView,
     },
     {
       path: '/dashboard/language/editor',
-      component: LanguageEditor
-    }
-  ]
+      component: LanguageEditor,
+    },
+    {
+      path: '/',
+      component: Login,
+    },
+  ];
 
   function validatePath(path) {
     const pathParts = path.split('/');
     let found = false;
-    for (const i in routes ) {
+    for (const i in routes) {
       const routeParts = routes[i].path.split('/');
       if (pathParts.length === routeParts.length) {
         let isOk = true;
-        for(const j in routeParts) {
+        for (const j in routeParts) {
           const routePart = routeParts[j];
           const pathPart = pathParts[j];
           if (routePart.startsWith(':') === false) {
@@ -103,24 +108,21 @@
     return found;
   }
 
-  if (window.location.pathname === '/') {
-    window.location = '/login';
-  }
+  // if (window.location.pathname === '/') {
+  //   window.location = '/login';
+  // }
 </script>
 
 <style type="text/scss" global>
   @import './styles/global.scss';
 </style>
 
-<!-- <svelt:head>
-  <link rel="stylesheet" href="/font-awesome/fontawesome.min.css" />
-  <link rel="stylesheet" href="/font-awesome/solid.min.css" />
-  <link rel="stylesheet" href="/font-awesome/brands.min.css" />
-</svelt:head> -->
-
 <Router {url}>
+  {#if Store && Store.get('loggedIn') && Store.get('loggedIn') === true}
+    <FontAwesome />
+  {/if}
   {#each routes as route}
-    <Route path={route.path} component="{route.component}" />
+    <Route path={route.path} component={route.component} />
   {/each}
   {#if validatePath(window.location.pathname) === false}
     <Page404 />

@@ -7,6 +7,7 @@
     widgetStore,
     groupStore,
     languageStore,
+    templateStore,
   } from '../../../config.svelte';
   import { Select, SelectItem } from 'carbon-components-svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
@@ -20,12 +21,14 @@
   const queries = UrlQueries.get();
   let entryId;
   let template;
+  let templates = [];
   let widgets = [];
   let groups = [];
   let languages = [];
   let selectedLanguage = {
     code: 'en',
   };
+  let entry;
   let quill;
   let loadTimer;
   let data = {
@@ -44,6 +47,19 @@
   let dataHash;
   let quillContentEvents = {};
   let propsEvents = {};
+  widgetStore.subscribe(value => {
+    widgets = value;
+  });
+  groupStore.subscribe(value => {
+    groups = value;
+  });
+  languageStore.subscribe(value => {
+    languages = value;
+  });
+  templateStore.subscribe(value => {
+    templates = value;
+    template = value.find(e => e._id === queries.tid);
+  });
 
   async function addEntry() {
     const metaProps = propsEvents.validateAndGetProps();
@@ -122,7 +138,7 @@
             props[props.length - 1].value.content.push({
               id: section.id,
               type: section.type,
-              value: section.value ? section.value : "",
+              value: section.value ? section.value : '',
               valueAsText: section.valueAsText,
             });
           } else if (section.type === 'WIDGET') {
@@ -167,26 +183,20 @@
     return true;
   }
   function changeLanguage(lng) {
-    let path =
-      `/dashboard/template/entry/` + `rc?tid=${template._id}&lng=${lng}`;
-    if (queries.eid) {
-      path += `&eid=${queries.eid}`;
-    }
     const checkDataHash = hashData();
     if (checkDataHash !== dataHash) {
       if (
-        confirm(
+        !confirm(
           'You have unsaved changes. ' +
             'Are you sure you want to change language?',
         )
       ) {
-        window.location = path;
-      } else {
-        lng = queries.lng;
+        return;
       }
-    } else {
-      window.location = path;
     }
+    selectedLanguage.code = lng;
+    init();
+    propsEvents.init();
   }
   function hashData() {
     const d = {};
@@ -226,83 +236,14 @@
       loadTimer = setInterval(getQuill, 50);
     }
   }
-
-  onMount(async () => {
-    // widgetStore.update(value => {
-    //   widgets = value;
-    //   return value;
-    // });
-    // groupStore.update(value => {
-    //   groups = value;
-    //   return value;
-    // });
-    // languageStore.update(value => {
-    //   languages = value;
-    //   return value;
-    // });
-    // Get WIDGETS
-    let result = await axios.send({
-      url: `/widget/all`,
-      method: 'GET',
-    });
-    if (result.success === false) {
-      console.error(result.error);
-      simplePopup.error(result.error.response.data.message);
-      return;
-    }
-    widgets = JSON.parse(JSON.stringify(result.response.data.widgets));
-    //Get GROUPS
-    result = await axios.send({
-      url: `/group/all`,
-      method: 'GET',
-    });
-    if (result.success === false) {
-      console.error(result.error);
-      simplePopup.error(result.error.response.data.message);
-      return;
-    }
-    groups = JSON.parse(JSON.stringify(result.response.data.groups));
-    // Get TEMPLATE
-    result = await axios.send({
-      url: `/template/${queries.tid}`,
-      method: 'GET',
-    });
-    if (result.success === false) {
-      simplePopup.error(result.error.response.data.message);
-      return;
-    }
-    const t = JSON.parse(JSON.stringify(result.response.data.template));
-    // Get Languages
-    result = await axios.send({
-      url: `/language/all`,
-      method: 'GET',
-    });
-    if (result.success === false) {
-      simplePopup.error(result.error.response.data.message);
-      return;
-    }
-    languages = result.response.data.languages;
-    // Set Language
-    selectedLanguage = {
-      code: queries.lng,
-    };
-    // Get Entry
+  function init() {
     if (queries.eid) {
-      // Get ENTRY
-      result = await axios.send({
-        url: `/template/${queries.tid}/entry/${queries.eid}`,
-        method: 'GET',
-      });
-      if (result.success === false) {
-        console.error(result.error);
-        simplePopup.error(result.error.response.data.message);
-        return;
-      }
-      const entry = JSON.parse(JSON.stringify(result.response.data.entry));
-      entryId = entry._id;
+      const entryId = entry._id;
       for (const j in languages) {
         const lng = languages[j];
-        const content = entry.content.find(e => e.lng === lng.code);
+        const content = JSON.parse(
+          JSON.stringify(entry.content.find(e => e.lng === lng.code)),
+        );
         data[lng.code] = {};
         if (!content) {
           data[lng.code] = {
@@ -348,7 +289,7 @@
             };
           });
         }
-        t.entryTemplate.forEach(e => {
+        template.entryTemplate.forEach(e => {
           if (!data[lng.code].meta.find(m => m.name === e.name)) {
             data[lng.code].meta.push(e);
           }
@@ -364,13 +305,29 @@
           slug: '',
           coverImageUri: '',
           desc: '',
-          meta: JSON.parse(JSON.stringify(t.entryTemplate)),
+          meta: JSON.parse(JSON.stringify(template.entryTemplate)),
           sections: [],
         };
       });
     }
-    template = t;
     dataHash = hashData();
+  }
+
+  onMount(async () => {
+    selectedLanguage = {
+      code: queries.lng,
+    };
+    let result = await axios.send({
+      url: `/template/${queries.tid}/entry/${queries.eid}`,
+      method: 'GET',
+    });
+    if (result.success === false) {
+      console.error(result.error);
+      simplePopup.error(result.error.response.data.message);
+      return;
+    }
+    entry = result.response.data.entry;
+    init();
     loadTimer = setInterval(getHighlight, 50);
   });
 </script>
@@ -388,7 +345,7 @@
   </script>
 </svelte:head>
 <Leyout>
-  {#if template}
+  {#if template && data[selectedLanguage.code]}
     <div class="wrapper">
       <div class="heading">
         <div class="info">

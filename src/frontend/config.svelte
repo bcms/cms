@@ -33,7 +33,13 @@
   }
 
   export function fatch() {
-    if (Store.get('loggedIn') === true) {
+    if (
+      Store &&
+      Store.get('loggedIn') &&
+      Store.get('loggedIn') === true &&
+      window.location.pathname !== '/' &&
+      window.location.pathname !== '/login'
+    ) {
       if (cacheTill === 0 || cacheTill < Date.now()) {
         console.log('Fatch data.');
         cacheTill = Date.now() + 60000;

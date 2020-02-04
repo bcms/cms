@@ -1,5 +1,6 @@
 <script>
   import { onMount, afterUpdate } from 'svelte';
+  import { Link } from 'svelte-routing';
   import {
     axios,
     Store,
@@ -394,9 +395,16 @@
                             viewDataModelModalEvents.toggle();
                           }} />
                         {#if templatePolicy && templatePolicy.put === true}
-                          <OverflowMenuItem
+                          <li class="overflow-menu-link bx--overflow-menu-options__option">
+                            <Link
+                              class="bx--overflow-menu-options__btn"
+                              to="/dashboard/template/entry/rc?tid={template._id}&eid={entry._id}&lng={languageSelected.code}">
+                              Edit
+                            </Link>
+                          </li>
+                          <!-- <OverflowMenuItem
                             text="Edit"
-                            href="/dashboard/template/entry/rc?tid={template._id}&eid={entry._id}&lng={languageSelected.code}" />
+                            href="/dashboard/template/entry/rc?tid={template._id}&eid={entry._id}&lng={languageSelected.code}" /> -->
                         {/if}
                         {#if templatePolicy && templatePolicy.delete === true}
                           <OverflowMenuItem

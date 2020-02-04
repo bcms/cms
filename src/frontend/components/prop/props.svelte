@@ -104,6 +104,7 @@
     }
     return JSON.parse(JSON.stringify(props));
   };
+  events.init = init;
   init();
 </script>
 

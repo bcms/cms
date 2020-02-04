@@ -18,6 +18,9 @@
     },
   };
 
+  if (Store && Store.get('loggedIn') && Store.get('loggedIn') === true) {
+    goToDashboard();
+  }
   async function submit() {
     if (login.email.value.replace(/ /g, '') === '') {
       login.email.error = 'Email input cannot be empty.';
@@ -44,8 +47,10 @@
     }
     Store.set('accessToken', result.response.data.accessToken);
     Store.set('refreshToken', result.response.data.refreshToken);
-
-    result = await axios.send({
+    goToDashboard();
+  }
+  async function goToDashboard() {
+    let result = await axios.send({
       url: '/user/me',
       method: 'GET',
     });
@@ -93,8 +98,8 @@
       on:input={event => {
         login.pass.value = event.target.value;
       }} />
-    <div class="actions">
-      <Button class="mt-50" on:click={submit}>Log in</Button>
+    <div class="actions mt-50">
+      <Button on:click={submit}>Log in</Button>
     </div>
   </div>
 </div>

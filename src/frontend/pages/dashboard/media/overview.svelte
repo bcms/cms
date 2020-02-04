@@ -1,11 +1,10 @@
 <script>
   import { onMount } from 'svelte';
-  import { axios, Store } from '../../../config.svelte';
+  import { axios, Store, fileStore } from '../../../config.svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/global/layout.svelte';
   import Button from '../../../components/global/button.svelte';
   import FileExplorer, {
-    fileStore,
     viewerFileStore,
     pushFile,
     popFile,

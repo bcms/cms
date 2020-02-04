@@ -19,44 +19,44 @@
     PHP: { value: 'PHP', faClass: 'fab fa-php icon' },
   };
   export const viewerFileStore = writable([]);
-  export const fileStore = writable([]);
+  // export const fileStore = writable([]);
   export const pushFile = writable();
   export const popFile = writable();
 
-  let cacheTill = 0;
+  // let cacheTill = 0;
 
-  function fatch() {
-    if (cacheTill === 0 || cacheTill < Date.now()) {
-      cacheTill = Date.now() + 60000;
-      axios
-        .send({
-          url: '/media/all/aggregate',
-          method: 'GET',
-        })
-        .then(result => {
-          if (result.success === false) {
-            simplePopup.error(result.error.response.data.message);
-            return;
-          }
-          result.response.data.media.sort((a, b) => {
-            if (a.type === 'DIR' && b.type !== 'DIR') {
-              return -1;
-            } else if (a.type !== 'DIR' && b.type === 'DIR') {
-              return 1;
-            }
-            return 0;
-          });
-          fileStore.update(value => result.response.data.media);
-          viewerFileStore.update(value => result.response.data.media);
-        });
-    }
-  }
-  fatch();
+  // function fatch() {
+  //   if (cacheTill === 0 || cacheTill < Date.now()) {
+  //     cacheTill = Date.now() + 60000;
+  //     axios
+  //       .send({
+  //         url: '/media/all/aggregate',
+  //         method: 'GET',
+  //       })
+  //       .then(result => {
+  //         if (result.success === false) {
+  //           simplePopup.error(result.error.response.data.message);
+  //           return;
+  //         }
+  //         result.response.data.media.sort((a, b) => {
+  //           if (a.type === 'DIR' && b.type !== 'DIR') {
+  //             return -1;
+  //           } else if (a.type !== 'DIR' && b.type === 'DIR') {
+  //             return 1;
+  //           }
+  //           return 0;
+  //         });
+  //         fileStore.update(value => result.response.data.media);
+  //         viewerFileStore.update(value => result.response.data.media);
+  //       });
+  //   }
+  // }
+  // fatch();
 </script>
 
 <script>
   import { onMount, createEventDispatcher, onDestroy } from 'svelte';
-  import { axios, Store } from '../../config.svelte';
+  import { axios, Store, fileStore, fatch } from '../../config.svelte';
   import { simplePopup } from '../simple-popup.svelte';
   import FileExplorerItem from './file-explorer-item.svelte';
 
