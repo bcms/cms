@@ -13,6 +13,7 @@
     SelectItem,
     OverflowMenu,
     OverflowMenuItem,
+    Pagination,
   } from 'carbon-components-svelte';
   import uuid from 'uuid';
   import { simplePopup } from '../../../components/simple-popup.svelte';
@@ -196,6 +197,15 @@
                 }
               }
               break;
+            case 'BOOLEAN':
+              {
+                const prop = content.props.find(e => e.name === filter.name);
+                console.log(prop, filter.value);
+                if (prop && prop.value !== filter.value) {
+                  return false;
+                }
+              }
+              break;
           }
         }
       }
@@ -216,6 +226,15 @@
             }
           }
           break;
+        case 'BOOLEAN':
+          {
+            if (options === '') {
+              filters = filters.filter(e => e.name !== filter.name);
+            } else {
+              filter.value = options;
+            }
+          }
+          break;
       }
     } else {
       switch (prop.type) {
@@ -230,6 +249,15 @@
             }
           }
           break;
+        case 'BOOLEAN': {
+          if (options) {
+            filters.push({
+              name: prop.name,
+              type: prop.type,
+              value: options,
+            });
+          }
+        }
       }
     }
     entries = [...entries];
@@ -262,6 +290,7 @@
         return;
       }
       entries = result.response.data.entries;
+      entriesPerPage = entries.length;
     } else {
       setTimeout(getData, 100);
     }
@@ -279,6 +308,7 @@
 
 <Layout>
   <div key={uuid.v4()} class="wrapper">
+    Page: {page}
     {#if template && entries}
       <div class="heading">
         <div class="text">
@@ -327,6 +357,24 @@
               {#each prop.value.items as item}
                 <SelectItem value={item} text={StringUtil.prettyName(item)} />
               {/each}
+            </Select>
+          {:else if prop.type === 'BOOLEAN'}
+            <Select
+              labelText={StringUtil.prettyName(prop.name)}
+              helperText="Show Entries with boolean state."
+              selected={languageSelected.code}
+              on:change={event => {
+                if (event.eventPhase === 0) {
+                  if (event.detail === '') {
+                    setFilter(prop, '');
+                  } else {
+                    setFilter(prop, event.detail === 'true' ? true : false);
+                  }
+                }
+              }}>
+              <SelectItem value="" text="- Unselected -" />
+              <SelectItem value="true" text="True" />
+              <SelectItem value="false" text="False" />
             </Select>
           {/if}
         {/each}
@@ -477,7 +525,7 @@
       {:else}
         <div class="no-entries">There are no Entries in this Template</div>
       {/if}
-      <div class="page-scroll">
+      <!-- <div class="page-scroll">
         <div class="wrapper">
           {#if entries.length > 0}
             <div class="entry-count">
@@ -517,7 +565,7 @@
             </div>
           {/if}
         </div>
-      </div>
+      </div> -->
     {:else}
       <div class="no-template">Template was not provided.</div>
     {/if}
