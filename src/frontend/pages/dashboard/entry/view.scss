@@ -57,6 +57,13 @@
   font-weight: bold;
 }
 
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 250px));
+  grid-gap: 20px;
+  width: 100%;
+}
+
 .page-scroll {
   margin-top: auto;
 }

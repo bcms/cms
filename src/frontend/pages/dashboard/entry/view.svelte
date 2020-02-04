@@ -308,7 +308,6 @@
 
 <Layout>
   <div key={uuid.v4()} class="wrapper">
-    Page: {page}
     {#if template && entries}
       <div class="heading">
         <div class="text">
