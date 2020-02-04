@@ -1,29 +1,51 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import { TextInput } from 'carbon-components-svelte';
-  import MediaPickerModal from '../global/modal/media-picker.svelte';
   import Button from '../global/button.svelte';
   import StringUtil from '../../string-util.js';
 
   export let value;
 
   const dispatch = createEventDispatcher();
-  const mediaPicketModalEvents = {};
 </script>
 
 <style type="text/scss">
-  @import './widget.scss';
-
-  .content {
-    border: 5px solid #f4f4f4;
-    padding: 20px;
-    width: 100%;
+  .widget {
+    font-size: 10pt;
+    font-weight: normal;
+    margin-top: 30px;
   }
 
-  .action {
-    padding: 10px;
-    border: 1px dashed var(--c-primary);
-    text-align: center;
+  .widget .head {
+    display: flex;
+    padding: 5px;
+    background-color: #f4f4f4;
+  }
+
+  .widget .head .icon {
+    color: var(--c-primary);
+    margin: auto 0;
+  }
+
+  .widget .head .text {
+    font-weight: normal;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: auto auto auto 20px;
+  }
+
+  .widget .head .move {
+    font-size: 12pt;
+    margin: auto 0;
+  }
+
+  .widget .props {
+    display: grid;
+    grid-template-columns: auto;
+    grid-gap: 20px;
+    border-style: solid;
+    border-color: #f4f4f4;
+    border-width: 2px;
+    padding: 20px;
   }
 </style>
 
@@ -64,20 +86,10 @@
       </Button>
     </div>
   </div>
-  <div class="content">
-    <div class="bx--label">Media path</div>
-    <div class="bx--form__helper-text">
-      {value === '' ? '- Not set -' : value}
-    </div>
-    <div class="action">
-      <Button
-        kind="ghost"
-        on:click={() => {
-          mediaPicketModalEvents.toggle();
-        }}>
-        Click to select a media
-      </Button>
-    </div>
+  <div class="props">
+    <TextInput
+      value={value}
+      placeholder="/path/to/media/file"
+      on:input />
   </div>
 </div>
-<MediaPickerModal events={mediaPicketModalEvents}/>

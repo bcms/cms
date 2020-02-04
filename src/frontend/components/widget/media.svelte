@@ -1,51 +1,47 @@
 <script>
   import { createEventDispatcher } from 'svelte';
+  import { Store } from '../../config.svelte';
   import { TextInput } from 'carbon-components-svelte';
+  import MediaPickerModal from '../global/modal/media-picker.svelte';
   import Button from '../global/button.svelte';
   import StringUtil from '../../string-util.js';
 
   export let value;
 
   const dispatch = createEventDispatcher();
+  const mediaPicketModalEvents = {};
 </script>
 
 <style type="text/scss">
-  .widget {
-    font-size: 10pt;
-    font-weight: normal;
-    margin-top: 30px;
-  }
+  @import './widget.scss';
 
-  .widget .head {
-    display: flex;
-    padding: 5px;
-    background-color: #f4f4f4;
-  }
-
-  .widget .head .icon {
-    color: var(--c-primary);
-    margin: auto 0;
-  }
-
-  .widget .head .text {
-    font-weight: normal;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin: auto auto auto 20px;
-  }
-
-  .widget .head .move {
-    font-size: 12pt;
-    margin: auto 0;
-  }
-
-  .widget .props {
-    display: grid;
-    grid-template-columns: auto;
-    grid-gap: 20px;
-    border-style: solid;
-    border-color: #f4f4f4;
-    border-width: 2px;
+  .content {
+    border: 5px solid #f4f4f4;
     padding: 20px;
+    width: 100%;
+  }
+
+  .heading {
+    display: flex;
+  }
+
+  .info {
+    width: 100%;
+  }
+
+  .img {
+    margin-left: auto;
+    width: 200px;
+  }
+
+  .img img {
+    width: 100%;
+  }
+
+  .action {
+    padding: 10px;
+    border: 1px dashed var(--c-primary);
+    text-align: center;
   }
 </style>
 
@@ -86,10 +82,38 @@
       </Button>
     </div>
   </div>
-  <div class="props">
-    <TextInput
-      value={value}
-      placeholder="/path/to/media/file"
-      on:input />
+  <div class="content">
+    <div class="heading">
+      <div class="info">
+        <div class="bx--label">Media path</div>
+        <div class="bx--form__helper-text">
+          {value === '' ? '- Not set -' : value}
+        </div>
+      </div>
+      {#if value !== ''}
+        <div class="img">
+          <img
+            src="/media/file?path={encodeURIComponent(value.replace('/media', ''))}&access_token={Store.get('accessToken')}"
+            alt="Image" />
+        </div>
+      {/if}
+    </div>
+    <div class="action">
+      <Button
+        kind="ghost"
+        on:click={() => {
+          mediaPicketModalEvents.toggle();
+        }}>
+        Click to select a media
+      </Button>
+    </div>
   </div>
 </div>
+<MediaPickerModal
+  events={mediaPicketModalEvents}
+  on:done={event => {
+    if (event.eventPhase === 0) {
+      value = event.detail;
+      dispatch('change', value);
+    }
+  }} />

@@ -2,7 +2,7 @@
   import { onMount, afterUpdate } from 'svelte';
   import { TextInput } from 'carbon-components-svelte';
   import Widget from '../widget/widget.svelte';
-  import Media from '../widget/media-new.svelte';
+  import Media from '../widget/media.svelte';
 
   export let groups;
   export let quill;
@@ -210,10 +210,12 @@
 <div class="quill">
   {#if section.type === 'MEDIA'}
     <Media
-    value={section.value}
-      on:input={event => {
-        section.value = `${event.target.value}`;
-        section.valueAsText = section.value;
+      value={section.value}
+      on:change={event => {
+        if (event.eventPhase === 0) {
+          section.value = `${event.detail}`;
+          section.valueAsText = section.value;
+        }
       }}
       on:delete={event => {
         if (event.eventPhase === 0) {
