@@ -200,7 +200,6 @@
             case 'BOOLEAN':
               {
                 const prop = content.props.find(e => e.name === filter.name);
-                console.log(prop, filter.value);
                 if (prop && prop.value !== filter.value) {
                   return false;
                 }
@@ -231,7 +230,7 @@
             if (options === '') {
               filters = filters.filter(e => e.name !== filter.name);
             } else {
-              filter.value = options;
+              filter.value = options === 'true' ? true : false;
             }
           }
           break;
@@ -254,7 +253,7 @@
             filters.push({
               name: prop.name,
               type: prop.type,
-              value: options,
+              value: options === 'true' ? true : false,
             });
           }
         }
@@ -367,7 +366,7 @@
                   if (event.detail === '') {
                     setFilter(prop, '');
                   } else {
-                    setFilter(prop, event.detail === 'true' ? true : false);
+                    setFilter(prop, event.detail);
                   }
                 }
               }}>
