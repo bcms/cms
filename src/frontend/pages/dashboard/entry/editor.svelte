@@ -2,6 +2,7 @@
   import uuid from 'uuid';
   import crypto from 'crypto-js';
   import { onMount } from 'svelte';
+  import { navigate } from 'svelte-routing';
   import {
     axios,
     widgetStore,
@@ -194,6 +195,10 @@
         return;
       }
     }
+    navigate(
+      `/dashboard/template/entry/rc?tid=${template._id}&eid=${entry._id}&lng=${lng}`,
+      { replace: true },
+    );
     selectedLanguage.code = lng;
     init();
     propsEvents.init();
@@ -237,6 +242,7 @@
     }
   }
   function init() {
+    console.log('init');
     if (queries.eid) {
       const entryId = entry._id;
       for (const j in languages) {

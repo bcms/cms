@@ -17,10 +17,12 @@
   export let props;
   export let events;
 
-  const errors = {};
-  const groupEvents = {};
+  let errors = {};
+  let groupEvents = {};
 
   function init() {
+    errors = {};
+    groupEvents = {};
     for (const i in props) {
       const prop = props[i];
       errors[prop.name] = '';
@@ -31,80 +33,87 @@
       }
     }
   }
-  events.validateAndGetProps = () => {
-    for (const i in props) {
-      const prop = props[i];
-      if (prop.required === true) {
-        switch (prop.type) {
-          case 'STRING':
-            {
-              if (prop.value.replace(/ /g, '') === '') {
-                errors[prop.name] = 'Value is required and cannot be emplty.';
-                simplePopup.error(
-                  `Error in property '${StringUtil.prettyName(prop.name)}'.`,
-                );
-                return;
-              }
-              errors[prop.name] = '';
-            }
-            break;
-          case 'STRING_ARRAY':
-            {
-              for (const j in prop.value) {
-                const element = prop.value[j];
-                if (element.replace(/ /g, '') === '') {
-                  errors[
-                    prop.name
-                  ] = `Value is required and cannot be emplty at position [${j}].`;
+
+  if (events) {
+    events.validateAndGetProps = () => {
+      for (const i in props) {
+        const prop = props[i];
+        if (prop.required === true) {
+          switch (prop.type) {
+            case 'STRING':
+              {
+                if (prop.value.replace(/ /g, '') === '') {
+                  errors[prop.name] = 'Value is required and cannot be emplty.';
                   simplePopup.error(
                     `Error in property '${StringUtil.prettyName(prop.name)}'.`,
                   );
                   return;
                 }
+                errors[prop.name] = '';
               }
-              errors[prop.name] = '';
-            }
-            break;
-          case 'ENUMERATION':
-            {
-              if (prop.value.selected.replace(/ /g, '') === '') {
-                errors[prop.name] = 'Please selece an option.';
-                simplePopup.error(
-                  `Error in property '${StringUtil.prettyName(prop.name)}'.`,
-                );
-                return;
+              break;
+            case 'STRING_ARRAY':
+              {
+                for (const j in prop.value) {
+                  const element = prop.value[j];
+                  if (element.replace(/ /g, '') === '') {
+                    errors[
+                      prop.name
+                    ] = `Value is required and cannot be emplty at position [${j}].`;
+                    simplePopup.error(
+                      `Error in property '${StringUtil.prettyName(
+                        prop.name,
+                      )}'.`,
+                    );
+                    return;
+                  }
+                }
+                errors[prop.name] = '';
               }
-              errors[prop.name] = '';
-            }
-            break;
-          case 'GROUP_POINTER':
-            {
-              const result = groupEvents[prop.name].validateAndGetProps();
-              if (!result) {
-                errors[prop.name] = 'Error in Group.';
-                return;
-              }
-              errors[prop.name] = '';
-            }
-            break;
-          case 'GROUP_POINTER_ARRAY':
-            {
-              for (const j in prop.value.array) {
-                const result = groupEvents[prop.name][j].validateAndGetProps();
-                if (!result) {
-                  errors[prop.name] = 'Error in Group Array.';
+              break;
+            case 'ENUMERATION':
+              {
+                if (prop.value.selected.replace(/ /g, '') === '') {
+                  errors[prop.name] = 'Please selece an option.';
+                  simplePopup.error(
+                    `Error in property '${StringUtil.prettyName(prop.name)}'.`,
+                  );
                   return;
                 }
                 errors[prop.name] = '';
               }
-            }
-            break;
+              break;
+            case 'GROUP_POINTER':
+              {
+                const result = groupEvents[prop.name].validateAndGetProps();
+                if (!result) {
+                  errors[prop.name] = 'Error in Group.';
+                  return;
+                }
+                errors[prop.name] = '';
+              }
+              break;
+            case 'GROUP_POINTER_ARRAY':
+              {
+                for (const j in prop.value.array) {
+                  const result = groupEvents[prop.name][
+                    j
+                  ].validateAndGetProps();
+                  if (!result) {
+                    errors[prop.name] = 'Error in Group Array.';
+                    return;
+                  }
+                  errors[prop.name] = '';
+                }
+              }
+              break;
+          }
         }
       }
-    }
-    return JSON.parse(JSON.stringify(props));
-  };
-  events.init = init;
+      return JSON.parse(JSON.stringify(props));
+    };
+    events.init = init;
+  }
   init();
 </script>
 
