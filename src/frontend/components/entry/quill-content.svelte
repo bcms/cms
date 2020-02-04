@@ -5,6 +5,7 @@
   import QuillElement from './quill-element.svelte';
   import SelectElementModal from './modals/select-element.svelte';
   import Button from '../global/button.svelte';
+  import Media from '../widget/media.svelte';
   import StringUtil from '../../string-util.js';
 
   export let groups;
@@ -162,12 +163,20 @@
     data.desc = event.target.value;
   }} />
 <div class="bx--label mt-20">Cover Image</div>
-<TextInput
+<Media
+  value={data.coverImageUri}
+  noButtons={true}
+  on:change={event => {
+    if (event.eventPhase === 0) {
+      data.coverImageUri = `${event.detail}`;
+    }
+  }} />
+<!-- <TextInput
   value={data.coverImageUri}
   placeholder="- Cover Image URI -"
   on:input={event => {
     data.coverImageUri = event.target.value;
-  }} />
+  }} /> -->
 <div class="bx--label mt-20">Content</div>
 <div class="sections">
   {#if data.sections.length > 0 && quill}

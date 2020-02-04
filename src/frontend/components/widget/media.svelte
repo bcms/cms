@@ -7,6 +7,7 @@
   import StringUtil from '../../string-util.js';
 
   export let value;
+  export let noButtons = false;
 
   const dispatch = createEventDispatcher();
   const mediaPicketModalEvents = {};
@@ -47,40 +48,42 @@
 
 <div class="widget">
   <div class="head">
-    <span class="fas fa-pepper-hot icon" />
-    &nbsp;
-    <span class="text">Media</span>
-    <div class="move up">
-      <Button
-        icon="fas fa-angle-up"
-        onlyIcon={true}
-        kind="ghost"
-        size="small"
-        on:click={() => {
-          dispatch('move', 'up');
-        }} />
-    </div>
-    <div class="move down">
-      <Button
-        icon="fas fa-angle-down"
-        onlyIcon={true}
-        kind="ghost"
-        size="small"
-        on:click={() => {
-          dispatch('move', 'down');
-        }} />
-    </div>
-    <div class="delete">
-      <Button
-        icon="fas fa-trash"
-        kind="danger"
-        size="small"
-        on:click={() => {
-          dispatch('delete', 'none');
-        }}>
-        Remove
-      </Button>
-    </div>
+    {#if noButtons === false}
+      <span class="fas fa-pepper-hot icon" />
+      &nbsp;
+      <span class="text">Media</span>
+      <div class="move up">
+        <Button
+          icon="fas fa-angle-up"
+          onlyIcon={true}
+          kind="ghost"
+          size="small"
+          on:click={() => {
+            dispatch('move', 'up');
+          }} />
+      </div>
+      <div class="move down">
+        <Button
+          icon="fas fa-angle-down"
+          onlyIcon={true}
+          kind="ghost"
+          size="small"
+          on:click={() => {
+            dispatch('move', 'down');
+          }} />
+      </div>
+      <div class="delete">
+        <Button
+          icon="fas fa-trash"
+          kind="danger"
+          size="small"
+          on:click={() => {
+            dispatch('delete', 'none');
+          }}>
+          Remove
+        </Button>
+      </div>
+    {/if}
   </div>
   <div class="content">
     <div class="heading">
@@ -94,7 +97,7 @@
         <div class="img">
           <img
             src="/media/file?path={encodeURIComponent(value.replace('/media', ''))}&access_token={Store.get('accessToken')}"
-            alt="Image" />
+            alt="File is not an image" />
         </div>
       {/if}
     </div>

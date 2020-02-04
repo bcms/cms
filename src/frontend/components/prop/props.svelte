@@ -2,6 +2,7 @@
   import { simplePopup } from '../simple-popup.svelte';
   import PropString from './string.svelte';
   import PropStringArray from './string-array.svelte';
+  import PropMedia from './media.svelte';
   import PropBoolean from './boolean.svelte';
   import PropBooleanArray from './boolean-array.svelte';
   import PropNumber from './number.svelte';
@@ -109,7 +110,11 @@
 {#each props as prop}
   <div class="prop">
     {#if prop.type === 'STRING'}
-      <PropString {prop} error={errors[prop.name]} />
+      {#if prop.name.indexOf('uri') !== -1}
+        <PropMedia {prop} error={errors[prop.name]} />
+      {:else}
+        <PropString {prop} error={errors[prop.name]} />
+      {/if}
     {:else if prop.type === 'STRING_ARRAY'}
       <PropStringArray
         {prop}
