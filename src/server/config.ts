@@ -3,6 +3,7 @@ import { JWTConfigService, JWTEncryptionAlg } from 'purple-cheetah';
 import { KeyCashService } from './api/key-cash.service';
 import { FunctionsConfig } from './function/config';
 import { WebhookCashService } from './webhook/webhook-cash.service';
+import { GitUtil } from './media/git-util';
 
 export class Config {
   public static async init() {
@@ -19,5 +20,6 @@ export class Config {
     await KeyCashService.init();
     await FunctionsConfig.init();
     await WebhookCashService.init();
+    GitUtil.init();
   }
 }
