@@ -29,9 +29,7 @@ export class GitUtil {
       ) {
         util
           .promisify(childProcess.exec)(
-            `git pull "https://${process.env.GIT_USERNAME}:${process.env.GIT_PASSWORD}@` +
-              `${process.env.GIT_HOST}/${process.env.GIT_REPO_OWNER}/${process.env.GIT_REPO}" && ` +
-              `git add ${path.join(
+            `git add ${path.join(
                 process.env.PROJECT_ROOT,
                 'uploads',
               )}/. && ` +
