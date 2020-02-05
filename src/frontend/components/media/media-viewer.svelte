@@ -39,7 +39,7 @@
       }
       return 0;
     });
-    files = [...fs];
+    files = [...dirs, ...fs];
   });
   viewerPushFile.subscribe(value => {
     if (value) {
