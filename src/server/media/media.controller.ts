@@ -470,61 +470,6 @@ export class MediaController {
     };
   }
 
-  /*
-  @Put('/file/rename')
-  async rename(request: Request): Promise<{ media: Media }> {
-    const error = HttpErrorFactory.simple('rename', this.logger);
-    try {
-      ObjectUtility.compareWithSchema(
-        request.body,
-        {
-          _id: {
-            __type: 'string',
-            __required: true,
-          },
-          name: {
-            __type: 'string',
-            __required: true,
-          },
-        },
-        'body',
-      );
-    } catch (e) {
-      throw error.occurred(HttpStatus.BAD_REQUEST, e.message);
-    }
-    if (StringUtility.isIdValid(request.body._id) === false) {
-      throw error.occurred(
-        HttpStatus.FORBIDDEN,
-        `Invalid ID '${request.body._id}' was provided.`,
-      );
-    }
-    const jwt = JWTEncoding.decode(request.headers.authorization);
-    if (jwt instanceof Error) {
-      throw error.occurred(HttpStatus.UNAUTHORIZED, jwt.message);
-    } else {
-      const jwtValid = JWTSecurity.validateAndCheckTokenPermissions(
-        jwt,
-        [RoleName.ADMIN, RoleName.USER],
-        PermissionName.WRITE,
-        JWTConfigService.get('user-token-config'),
-      );
-      if (jwtValid instanceof Error) {
-        throw error.occurred(HttpStatus.UNAUTHORIZED, jwtValid.message);
-      }
-    }
-    const media = await this.mediaService.findById(request.body._id);
-    if (media === null) {
-      throw error.occurred(
-        HttpStatus.NOT_FOUNT,
-        `Media with ID '${request.body._id}' does not exist.`,
-      );
-    }
-    {
-
-    }
-  }
-  */
-
   @Delete('/folder/:id')
   async deleteFolder(request: Request): Promise<{ message: string }> {
     const error = HttpErrorFactory.simple('deleteFolder', this.logger);

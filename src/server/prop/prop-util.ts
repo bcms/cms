@@ -185,6 +185,29 @@ export class PropUtil {
             p.value = temp;
           }
           break;
+        case PropType.ENTRY_POINTER:
+          {
+            p.type = PropType[prop.type];
+            if (typeof prop.value !== 'object') {
+              throw new Error(
+                `Invalid type of 'props[${i}].value'. ` +
+                  `Expected 'object' but got '${typeof prop.value}'.`,
+              );
+            }
+            if (typeof prop.value.templateId !== 'object') {
+              throw new Error(
+                `Invalid type of 'props[${i}].value.templateId'. ` +
+                  `Expected 'object' but got '${typeof prop.value.templateId}'.`,
+              );
+            }
+            if (typeof prop.value.entryId !== 'object') {
+              throw new Error(
+                `Invalid type of 'props[${i}].value.entryId'. ` +
+                  `Expected 'object' but got '${typeof prop.value.entryId}'.`,
+              );
+            }
+          }
+          break;
         case PropType.QUILL:
           {
             p.type = PropType[prop.type];

@@ -51,19 +51,28 @@
   let propsEvents = {};
   widgetStore.subscribe(value => {
     widgets = value;
+    if (initDone === false) {
+      init();
+    }
   });
   groupStore.subscribe(value => {
     groups = value;
-    init();
+    if (initDone === false) {
+      init();
+    }
   });
   languageStore.subscribe(value => {
     languages = value;
-    init();
+    if (initDone === false) {
+      init();
+    }
   });
   templateStore.subscribe(value => {
     templates = value;
     template = value.find(e => e._id === queries.tid);
-    init();
+    if (initDone === false) {
+      init();
+    }
   });
 
   async function addEntry() {
