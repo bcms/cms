@@ -41,9 +41,11 @@ export class GitUtil {
           )
           .then(output => {
             GitUtil.logger.info('git-push', `Media pushed to Git repository.`);
+            GitUtil.mediaBuffer = [];
           })
           .catch(e => {
             GitUtil.logger.error('git-push', e);
+            GitUtil.mediaBuffer = [];
           });
       } else {
         GitUtil.logger.info('checkBuffer', `Github not setup.`);
