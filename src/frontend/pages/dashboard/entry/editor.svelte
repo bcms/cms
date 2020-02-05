@@ -23,10 +23,10 @@
   let initDone = false;
   let entryId;
   let template;
-  let templates = [];
-  let widgets = [];
-  let groups = [];
-  let languages = [];
+  let templates;
+  let widgets;
+  let groups;
+  let languages;
   let selectedLanguage = {
     code: 'en',
   };
@@ -50,26 +50,34 @@
   let quillContentEvents = {};
   let propsEvents = {};
   widgetStore.subscribe(value => {
-    widgets = value;
+    if (value) {
+      widgets = value;
+    }
     if (initDone === false) {
       init();
     }
   });
   groupStore.subscribe(value => {
-    groups = value;
+    if (value) {
+      groups = value;
+    }
     if (initDone === false) {
       init();
     }
   });
   languageStore.subscribe(value => {
-    languages = value;
+    if (value) {
+      languages = value;
+    }
     if (initDone === false) {
       init();
     }
   });
   templateStore.subscribe(value => {
-    templates = value;
-    template = value.find(e => e._id === queries.tid);
+    if (value) {
+      templates = value;
+      template = value.find(e => e._id === queries.tid);
+    }
     if (initDone === false) {
       init();
     }
@@ -255,65 +263,70 @@
     }
   }
   function init() {
-    if (languages && template && groups && widgets) {
-      if (queries.eid && entry) {
-        const entryId = entry._id;
-        for (const j in languages) {
-          const lng = languages[j];
-          const content = JSON.parse(
-            JSON.stringify(entry.content.find(e => e.lng === lng.code)),
-          );
-          data[lng.code] = {};
-          if (!content) {
-            data[lng.code] = {
-              title: {
-                error: '',
-                value: '',
-              },
-              slug: '',
-              coverImageUri: '',
-              desc: '',
-              meta: JSON.parse(JSON.stringify(t.entryTemplate)),
-              sections: [],
-            };
-          } else {
-            data[lng.code].meta = content.props.filter(e => e.type !== 'QUILL');
-            const quillProp = content.props.find(e => e.type === 'QUILL');
-            data[lng.code].title = {
-              value: quillProp.value.heading.title,
-              error: '',
-            };
-            data[lng.code].slug = quillProp.value.heading.slug;
-            data[lng.code].desc = quillProp.value.heading.desc;
-            data[lng.code].coverImageUri =
-              quillProp.value.heading.coverImageUri;
-            data[lng.code].sections = quillProp.value.content.map((e, i) => {
-              return {
-                id: e.id,
-                type: e.type,
-                order: i,
-                error: '',
-                class: e.type.toLowerCase().replace(/_/g, '-'),
-                value: e.value,
-                valueAsText: e.valueAsText,
-                quill: undefined,
-                quillEvents: {
-                  delete: quillContentEvents.removeSection,
-                  move: quillContentEvents.moveSection,
-                  addSection: quillContentEvents.addSection,
-                  selectElementModalEvents:
-                    quillContentEvents.selectElementModalEvents,
-                  validate: () => {},
+    if (languages && languages.length > 0 && template && groups && widgets) {
+      if (queries.eid) {
+        if (entry) {
+          const entryId = entry._id;
+          for (const j in languages) {
+            const lng = languages[j];
+            const content = JSON.parse(
+              JSON.stringify(entry.content.find(e => e.lng === lng.code)),
+            );
+            data[lng.code] = {};
+            if (!content) {
+              data[lng.code] = {
+                title: {
+                  error: '',
+                  value: '',
                 },
-                style: '',
+                slug: '',
+                coverImageUri: '',
+                desc: '',
+                meta: JSON.parse(JSON.stringify(t.entryTemplate)),
+                sections: [],
               };
-            });
-          }
-          template.entryTemplate.forEach(e => {
-            if (!data[lng.code].meta.find(m => m.name === e.name)) {
-              data[lng.code].meta.push(e);
+            } else {
+              data[lng.code].meta = content.props.filter(
+                e => e.type !== 'QUILL',
+              );
+              const quillProp = content.props.find(e => e.type === 'QUILL');
+              data[lng.code].title = {
+                value: quillProp.value.heading.title,
+                error: '',
+              };
+              data[lng.code].slug = quillProp.value.heading.slug;
+              data[lng.code].desc = quillProp.value.heading.desc;
+              data[lng.code].coverImageUri =
+                quillProp.value.heading.coverImageUri;
+              data[lng.code].sections = quillProp.value.content.map((e, i) => {
+                return {
+                  id: e.id,
+                  type: e.type,
+                  order: i,
+                  error: '',
+                  class: e.type.toLowerCase().replace(/_/g, '-'),
+                  value: e.value,
+                  valueAsText: e.valueAsText,
+                  quill: undefined,
+                  quillEvents: {
+                    delete: quillContentEvents.removeSection,
+                    move: quillContentEvents.moveSection,
+                    addSection: quillContentEvents.addSection,
+                    selectElementModalEvents:
+                      quillContentEvents.selectElementModalEvents,
+                    validate: () => {},
+                  },
+                  style: '',
+                };
+              });
             }
-          });
+            template.entryTemplate.forEach(e => {
+              if (!data[lng.code].meta.find(m => m.name === e.name)) {
+                data[lng.code].meta.push(e);
+              }
+            });
+            initDone = true;
+          }
         }
       } else {
         languages.forEach(e => {
@@ -329,8 +342,9 @@
             sections: [],
           };
         });
+        initDone = true;
+        console.log('data', data);
       }
-      initDone = true;
       dataHash = hashData();
     }
   }
@@ -373,7 +387,7 @@
   </script>
 </svelte:head>
 <Leyout>
-  {#if template && initDone === true && data[selectedLanguage.code] && data[selectedLanguage.code].meta}
+  {#if initDone === true}
     <div class="wrapper">
       <div class="heading">
         <div class="info">
