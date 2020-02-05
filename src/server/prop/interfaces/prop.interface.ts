@@ -8,6 +8,8 @@ export enum PropType {
   ENUMERATION = 'ENUMERATION',
   BOOLEAN = 'BOOLEAN',
 
+  ENTRY_POINTER = 'ENTRY_POINTER',
+
   GROUP_POINTER_ARRAY = 'GROUP_POINTER_ARRAY',
   STRING_ARRAY = 'STRING_ARRAY',
   NUMBER_ARRAY = 'NUMBER_ARRAY',
@@ -42,12 +44,18 @@ export interface Prop {
     | PropEnum
     | PropQuill
     | PropGroupPointer
-    | PropGroupPointerArray;
+    | PropGroupPointerArray
+    | PropEntryPointer;
 }
 
 export interface PropEnum {
   items: string[];
   selected?: string;
+}
+
+export interface PropEntryPointer {
+  templateId: string;
+  entryId: string;
 }
 
 export interface PropQuill {

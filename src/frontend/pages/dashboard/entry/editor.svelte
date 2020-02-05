@@ -20,6 +20,7 @@
   import UrlQueries from '../../../url-queries.js';
 
   const queries = UrlQueries.get();
+  let initDone = false;
   let entryId;
   let template;
   let templates = [];
@@ -53,13 +54,16 @@
   });
   groupStore.subscribe(value => {
     groups = value;
+    init();
   });
   languageStore.subscribe(value => {
     languages = value;
+    init();
   });
   templateStore.subscribe(value => {
     templates = value;
     template = value.find(e => e._id === queries.tid);
+    init();
   });
 
   async function addEntry() {
@@ -242,16 +246,69 @@
     }
   }
   function init() {
-    if (queries.eid) {
-      const entryId = entry._id;
-      for (const j in languages) {
-        const lng = languages[j];
-        const content = JSON.parse(
-          JSON.stringify(entry.content.find(e => e.lng === lng.code)),
-        );
-        data[lng.code] = {};
-        if (!content) {
-          data[lng.code] = {
+    if (languages && template && groups && widgets) {
+      if (queries.eid && entry) {
+        const entryId = entry._id;
+        for (const j in languages) {
+          const lng = languages[j];
+          const content = JSON.parse(
+            JSON.stringify(entry.content.find(e => e.lng === lng.code)),
+          );
+          data[lng.code] = {};
+          if (!content) {
+            data[lng.code] = {
+              title: {
+                error: '',
+                value: '',
+              },
+              slug: '',
+              coverImageUri: '',
+              desc: '',
+              meta: JSON.parse(JSON.stringify(t.entryTemplate)),
+              sections: [],
+            };
+          } else {
+            data[lng.code].meta = content.props.filter(e => e.type !== 'QUILL');
+            const quillProp = content.props.find(e => e.type === 'QUILL');
+            data[lng.code].title = {
+              value: quillProp.value.heading.title,
+              error: '',
+            };
+            data[lng.code].slug = quillProp.value.heading.slug;
+            data[lng.code].desc = quillProp.value.heading.desc;
+            data[lng.code].coverImageUri =
+              quillProp.value.heading.coverImageUri;
+            data[lng.code].sections = quillProp.value.content.map((e, i) => {
+              return {
+                id: e.id,
+                type: e.type,
+                order: i,
+                error: '',
+                class: e.type.toLowerCase().replace(/_/g, '-'),
+                value: e.value,
+                valueAsText: e.valueAsText,
+                quill: undefined,
+                quillEvents: {
+                  delete: quillContentEvents.removeSection,
+                  move: quillContentEvents.moveSection,
+                  addSection: quillContentEvents.addSection,
+                  selectElementModalEvents:
+                    quillContentEvents.selectElementModalEvents,
+                  validate: () => {},
+                },
+                style: '',
+              };
+            });
+          }
+          template.entryTemplate.forEach(e => {
+            if (!data[lng.code].meta.find(m => m.name === e.name)) {
+              data[lng.code].meta.push(e);
+            }
+          });
+        }
+      } else {
+        languages.forEach(e => {
+          data[e.code] = {
             title: {
               error: '',
               value: '',
@@ -259,82 +316,35 @@
             slug: '',
             coverImageUri: '',
             desc: '',
-            meta: JSON.parse(JSON.stringify(t.entryTemplate)),
+            meta: JSON.parse(JSON.stringify(template.entryTemplate)),
             sections: [],
           };
-        } else {
-          data[lng.code].meta = content.props.filter(e => e.type !== 'QUILL');
-          const quillProp = content.props.find(e => e.type === 'QUILL');
-          data[lng.code].title = {
-            value: quillProp.value.heading.title,
-            error: '',
-          };
-          data[lng.code].slug = quillProp.value.heading.slug;
-          data[lng.code].desc = quillProp.value.heading.desc;
-          data[lng.code].coverImageUri = quillProp.value.heading.coverImageUri;
-          data[lng.code].sections = quillProp.value.content.map((e, i) => {
-            return {
-              id: e.id,
-              type: e.type,
-              order: i,
-              error: '',
-              class: e.type.toLowerCase().replace(/_/g, '-'),
-              value: e.value,
-              valueAsText: e.valueAsText,
-              quill: undefined,
-              quillEvents: {
-                delete: quillContentEvents.removeSection,
-                move: quillContentEvents.moveSection,
-                addSection: quillContentEvents.addSection,
-                selectElementModalEvents:
-                  quillContentEvents.selectElementModalEvents,
-                validate: () => {},
-              },
-              style: '',
-            };
-          });
-        }
-        template.entryTemplate.forEach(e => {
-          if (!data[lng.code].meta.find(m => m.name === e.name)) {
-            data[lng.code].meta.push(e);
-          }
         });
       }
-    } else {
-      languages.forEach(e => {
-        data[e.code] = {
-          title: {
-            error: '',
-            value: '',
-          },
-          slug: '',
-          coverImageUri: '',
-          desc: '',
-          meta: JSON.parse(JSON.stringify(template.entryTemplate)),
-          sections: [],
-        };
-      });
+      initDone = true;
+      dataHash = hashData();
     }
-    dataHash = hashData();
   }
 
   selectedLanguage = {
     code: queries.lng,
   };
-  axios
-    .send({
-      url: `/template/${queries.tid}/entry/${queries.eid}`,
-      method: 'GET',
-    })
-    .then(result => {
-      if (result.success === false) {
-        console.error(result.error);
-        simplePopup.error(result.error.response.data.message);
-        return;
-      }
-      entry = result.response.data.entry;
-      init();
-    });
+  if (queries.eid) {
+    axios
+      .send({
+        url: `/template/${queries.tid}/entry/${queries.eid}`,
+        method: 'GET',
+      })
+      .then(result => {
+        if (result.success === false) {
+          console.error(result.error);
+          simplePopup.error(result.error.response.data.message);
+          return;
+        }
+        entry = result.response.data.entry;
+        init();
+      });
+  }
 
   onMount(async () => {
     loadTimer = setInterval(getHighlight, 50);
@@ -354,7 +364,7 @@
   </script>
 </svelte:head>
 <Leyout>
-  {#if template && entry && data[selectedLanguage.code] && data[selectedLanguage.code].meta}
+  {#if template && initDone === true && data[selectedLanguage.code] && data[selectedLanguage.code].meta}
     <div class="wrapper">
       <div class="heading">
         <div class="info">
