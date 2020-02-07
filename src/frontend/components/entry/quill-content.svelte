@@ -140,44 +140,6 @@
   @import './quill-content.scss';
 </style>
 
-<div class="title">
-  {#if data.title.error !== ''}
-    <div class="error">
-      <span class="fas fa-exclamation icon" />
-      <span>{data.title.error}</span>
-    </div>
-  {/if}
-  <input
-    id="title"
-    class="title"
-    placeholder="- Title -"
-    value={data.title.value}
-    on:keyup={handleTitle} />
-</div>
-<div class="bx--label">Description</div>
-<TextArea
-  cols="500"
-  value={data.desc}
-  placeholder="- Description -"
-  on:input={event => {
-    data.desc = event.target.value;
-  }} />
-<div class="bx--label mt-20">Cover Image</div>
-<Media
-  value={data.coverImageUri}
-  noButtons={true}
-  on:change={event => {
-    if (event.eventPhase === 0) {
-      data.coverImageUri = `${event.detail}`;
-    }
-  }} />
-<!-- <TextInput
-  value={data.coverImageUri}
-  placeholder="- Cover Image URI -"
-  on:input={event => {
-    data.coverImageUri = event.target.value;
-  }} /> -->
-<div class="bx--label mt-20">Content</div>
 <div class="sections">
   {#if data.sections.length > 0 && quill}
     {#each data.sections as section, i}

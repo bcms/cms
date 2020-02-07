@@ -16,7 +16,7 @@
       value: '',
       error: '',
     },
-    type: 'DATA_MODEL',
+    type: 'RICH_CONTENT',
     desc: '',
     entryTemplate: [],
   };
@@ -67,7 +67,7 @@
     on:input={event => {
       handleNameInput(event.target);
     }} />
-  <Select
+  <!-- <Select
     labelText="Select type"
     selected="DATA_MODEL"
     on:change={event => {
@@ -77,7 +77,8 @@
     }}>
     <SelectItem value="DATA_MODEL" text="Data Model" />
     <SelectItem value="RICH_CONTENT" text="Rich Content" />
-  </Select>
+  </Select> -->
+  <div class="mt-20" />
   <TextArea
     cols="500"
     labelText="Description"

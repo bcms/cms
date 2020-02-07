@@ -27,9 +27,6 @@
 }
 
 .meta {
-  display: grid;
-  grid-template-columns: repeat(1, 1fr);
-  grid-gap: 30px;
   background-color: var(--c-white);
   padding: 20px;
   margin: 10px auto 0 auto;

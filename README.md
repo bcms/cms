@@ -1,17 +1,93 @@
 # Becomes CMS
 
-This is a small CMS developed by company [Becomes](https://becomes.co) that is specialized in for [JAMstack](https://jamstack.org/). It was created because of project needs in our company and we decided to make it Open-Source since it solved a lot of problems that we had with other CMS solutions. We thing that you will find it useful in your next project.
+- [Introduction](#introduction)
+  - [Terminology](#terminology)
+  - [Short Examples](#short-examples)
+- [Back-end](#back-end)
+  - [User](#user)
+    - [Role]()
+    - [Permission]()
+  - [Auth]()
+    - [JWT]()
+    - [API Key]()
+  - [Template]()
+    - [Properties]()
+  - [Entry]()
+  - [Group]()
+  - [Widget]()
+  - [Media]()
+  - [Function]()
+    - [Webhook function]()
+  - [Webhook]()
+  - [Events]()
+- [Dashboard]()
+  - [Template Manager]()
+  - [Group Manager]()
+  - [Widget Manager]()
+  - [Language Manager]()
+  - [Users Manager]()
+  - [API Manager]()
+  - [Webhook Manager]()
+  - [Webhooks]()
+  - [Entries]()
+    - [Viewing]()
+    - [Editing]()
 
-- **What Becomes CMS is not?**
-  - It is not replacement for [WordPress](https://wordpress.com/) - WordPress is used for creating websites while Becomes CMS is used for creating API that will be consumed when generating static site. In this regard, they are completely different.
-  - It is not Website generator - As said in previous point, Becomes CMS is used for creating API that will be consumed by some other service. You cannot create web pages publicly accessible over CMS.
-  - It is not replacement for highly specialized APIs - Altho you can create any data model using Becomes CMS and manage them thru interactive dashboard, it is not designed to replace an API where high performance is required (more below).
-- **What is Becomes CMS?**
-  - In one sentence, it is highly flexible and interactive tool for creating APIs that will be consumed by services in JAMstack.
+<div id="introduction"></div>
 
 ## Introduction
 
-Becomes CMS can be split into 2 parts, Back-end part that is built using [Purple Cheetah](https://purple-cheetah.com) framework and Front-end part that is built using [Svelte](https://svelte.dev). Back-end is used for handling security and objects while Front-end is used for dashboard UI and interaction with Core Back-end API.
+This is a small CMS developed by company [Becomes](https://becomes.co) that is specialized for building APIs. It was created because of project needs in our company and we decided to make it Open-Source since it solved a lot of problems that we had with other CMS solutions. We hope that you will find it useful in your next project.
+
+- **What Becomes CMS is not?**
+  - It is not replacement for [WordPress](https://wordpress.com/) - WordPress is used for creating websites while Becomes CMS is used for creating APIs that will be consumed by other services. In this regard, they are completely different.
+  - It is not Website generator - As said in previous point, Becomes CMS is used for creating APIs that will be consumed by some other service. You cannot create web pages publicly accessible over Becomes CMS.
+  - It is not replacement for highly specialized APIs - Altho you can create any data model using Becomes CMS and manage them thru interactive dashboard, it is not designed to replace an API where very high performance is required.
+- **What is Becomes CMS?**
+  - In one sentence, it is highly flexible and interactive tool for creating APIs that will be consumed by services other services.
+
+<div id="terminology"></div>
+
+### Terminology
+
+In this document, few "special" will be used and they have specific meaning.
+
+- **Template** - It is a *container* that holds information about how new Entry should be created, it structure and how it should behave. In addition to that, Template is holding pointers to all available Entries. By itself, Template is nothing more then a template for creating Entries and keeping them in sync with each other, therefore the name is as it is. Template also dictates type of an Entry that can be created by it:
+  - **Data Modal** - This type defines that Entry is a "primitive" object, like plane JSON object (not actually but close enough). Example is a web store item, order, subscription or any other object that can be represented using key-value pairs.
+  - **Rich Content** - This type defines that Entry is a "complex" object and it extends Data Model type. This means that in addition to key-value pairs, it also has User editable rich content. Some examples are: blog post, case study post or any other type of content that will be consumed by humans in readable form.
+- **Entry** - It is an object that holds actual data in structured way that is useful to a consumer of the CMS API. The structure is defined by Template.
+- **Group** - It is a placeholder object for creating complex and nested properties in Entry. For example, if it is required for Entry to have object property (non primitive one, like string, number...) Group is used to achieve this.
+- **User** - It is an entity which is authorized to access CMS dashboard. User can have roles: ADMIN or USER (more information in [Users](#users) section).
+- **Widget** - It is a special placeholder object that can be only used in Entries of type Rich Content.
+- **Webhook** - It is a special object that can be configured to trigger CMS API function called webhook.
+- **Function** - 
+
+By showing some examples this terminology might be easier to understand.
+
+<div id="short-examples"></div>
+
+### Short Examples
+
+> Example 1 - Using CMS to create a Blog website.
+
+The core function of a blog website is a Blog Post. Every blog post on a website follows the same structure: title, cover image, author and content. Only thing that is different between 2 blog posts is the content. Therefore, in this example, Template is defining blog post structure (title property is of type string, cover image is of type string, author is of type Group and so one) while Entry is a single Blog Post and this means that it is holding values for properties defined in Template (title is "My first blog", cover image is "/image.png", author is "{name: "Tom", position: "CEO"}" and so one).
+
+> Example 2 - Using CMS to create a simple web store.
+
+The core function of a web store is an Item. To make it as simple as possible this online store is selling 2 Item types: Books and Makers. Books will be defined by creating a Template with properties: name `<string>`, title `<string>` and author `<string>` while Markers will be defined by creating a new Template with properties: name `<string>`, price `<number>` and quantity `<number>`. With this done Book Entry and Marker Entry can be added since structure is defined by Books Template and Markers Template respectively.
+
+<div id="back-end"></div>
+
+## Back-end
+
+Becomes CMS can be split into 2 parts, Back-end part that is built using [Purple Cheetah](https://purple-cheetah.com) framework and Front-end part that is built using [Svelte](https://svelte.dev).
+
+<div id="user"></div>
+
+### User
+
+It is a special model used to describe a CMS user which is a person. If it is required for service or robot to be able to access CMS content, it is highly recommended to use [API Key]() for that since its access level can be restricted. Every User must have unique email and strong password. Email does not have to be valid but it has to be unique.
+
 
 ## Becomes CMS Back-end - BCB
 

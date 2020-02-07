@@ -107,7 +107,7 @@
   };
 </script>
 
-<Modal heading={{ title }} {events} {events} on:cancel={cancel} on:done={done}>
+<Modal heading={{ title }} {events} on:cancel={cancel} on:done={done}>
   <TextInput
     labelText="Name"
     placeholder="- Name -"

@@ -70,10 +70,6 @@
       }
     }
   };
-  events.cancel = () => {
-    events.toggle();
-    initData();
-  };
   events.done = () => {
     const props = propsEvents.validateAndGetProps();
     if (!props) {
@@ -114,7 +110,6 @@
   {events}
   on:cancel={event => {
     if (event.eventPhase === 0) {
-      events.toggle();
       initData();
     }
   }}

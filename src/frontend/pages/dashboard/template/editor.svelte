@@ -23,7 +23,7 @@
   let templateSelected = templates[0];
   let addPropModalEvents = {};
   let editPropModalEvents = { callback: editProp };
-  let editModalEvents = {};
+  const editModalEvents = {};
   let addModalEvents = { callback: templateAdded, toggle: () => {} };
 
   templateStore.subscribe(value => {
@@ -306,11 +306,6 @@
     events={editModalEvents}
     name={templateSelected.name}
     desc={templateSelected.desc}
-    on:cancel={event => {
-      if (event.eventPhase === 0) {
-        editModalEvents.toggle();
-      }
-    }}
     on:done={event => {
       if (event.eventPhase === 0) {
         const data = event.detail;
