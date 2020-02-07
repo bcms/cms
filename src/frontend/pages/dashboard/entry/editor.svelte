@@ -9,6 +9,7 @@
     groupStore,
     languageStore,
     templateStore,
+    entryStore,
   } from '../../../config.svelte';
   import { Select, SelectItem } from 'carbon-components-svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
@@ -24,6 +25,7 @@
   let entryId;
   let template;
   let templates;
+  let entries;
   let widgets;
   let groups;
   let languages;
@@ -80,6 +82,14 @@
     }
     if (initDone === false) {
       init();
+    }
+  });
+  entryStore.subscribe(value => {
+    if (value) {
+      entries = value;
+      if (initDone === false) {
+        init();
+      }
     }
   });
 
@@ -343,7 +353,6 @@
           };
         });
         initDone = true;
-        console.log('data', data);
       }
       dataHash = hashData();
     }

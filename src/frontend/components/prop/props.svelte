@@ -11,6 +11,7 @@
   import PropDate from './prop-date.svelte';
   import PropGroupPointer from './group-pointer.svelte';
   import PropGroupPointerArray from './group-pointer-array.svelte';
+  import PropEntryPointer from './entry-pointer.svelte';
   import StringUtil from '../../string-util.js';
 
   export let groups = [];
@@ -184,6 +185,8 @@
             props = [...props];
           }
         }} />
+    {:else if prop.type === 'ENTRY_POINTER'}
+      <PropEntryPointer {prop} error={errors[prop.name]} />
     {/if}
   </div>
 {/each}

@@ -4,6 +4,7 @@
   import { TextInput } from 'carbon-components-svelte';
   import Button from './button.svelte';
 
+  export { className as class };
   export let options;
   export let label;
 
@@ -11,6 +12,7 @@
   let list = [];
   let value = '';
   let error = '';
+  let className;
 
   function removeItem(id) {
     list = list.filter(item => item.id !== id);
@@ -75,7 +77,7 @@
   }
 </style>
 
-<div class="multi-add">
+<div class="multi-add {className}">
   {#if error !== ''}
     <div style="font-size: 8pt; color: var(--c-error); margin-top: 5px;">
       <span class="fa fa-exclamation" />

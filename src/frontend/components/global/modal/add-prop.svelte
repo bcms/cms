@@ -6,6 +6,7 @@
     Select,
     SelectItem,
   } from 'carbon-components-svelte';
+  import { templateStore } from '../../../config.svelte';
   import { simplePopup } from '../../simple-popup.svelte';
   import Modal from './modal.svelte';
   import MultiAdd from '../multi-add.svelte';
@@ -21,6 +22,7 @@
     title: `Add new Property`,
     toggle: '',
   };
+  let templates = [];
   let propTypes = [
     {
       name: 'STRING',
@@ -48,7 +50,11 @@
     },
     {
       name: 'GROUP_POINTER',
-      desc: 'Implement properties of other Group.',
+      desc: 'Implement properties of a Group.',
+    },
+    {
+      name: 'ENTRY_POINTER',
+      desc: 'Points to specified Entry in a Template.',
     },
   ];
   let data = {
@@ -67,6 +73,10 @@
     getList: () => {},
     clear: () => {},
   };
+
+  templateStore.subscribe(value => {
+    templates = value;
+  });
 
   function selectType(p) {
     view = 2;
@@ -121,6 +131,13 @@
           };
         }
         break;
+      case 'ENTRY_POINTER': {
+        data.value = {
+          error: '',
+          templateId: '',
+          entryId: '',
+        };
+      }
     }
   }
   function handleNameInput(event) {
@@ -226,6 +243,17 @@
     if (data.type.value.indexOf('_ARRAY') !== -1) {
       value = data.value.value;
     }
+    if (data.type.value === 'ENTRY_POINTER') {
+      if (data.value.templateId.replace(/ /g, '') === '') {
+        data.value.error = 'Template must be selected.';
+        return;
+      }
+      data.value.error = '';
+      value = {
+        templateId: data.value.templateId,
+        entryId: '',
+      };
+    }
     events.toggle();
     setTimeout(() => {
       data = {
@@ -318,11 +346,6 @@
               on:click={() => {
                 selectType(propType);
               }}>
-              <div class="icon">
-                <img
-                  src="/assets/ics/template/types/{propType.name}.png"
-                  alt="NF" />
-              </div>
               <div class="name">{StringUtil.prettyName(propType.name)}</div>
               <div class="desc">{propType.desc}</div>
               <div class="fa fa-edit edit" />
@@ -334,11 +357,6 @@
             on:click={() => {
               selectType(propType);
             }}>
-            <div class="icon">
-              <img
-                src="/assets/ics/template/types/{propType.name}.png"
-                alt="NF" />
-            </div>
             <div class="name">{StringUtil.prettyName(propType.name)}</div>
             <div class="desc">{propType.desc}</div>
             <div class="fa fa-edit edit" />
@@ -356,9 +374,10 @@
         handleNameInput(event.target);
       }} />
     {#if data.type.value === 'ENUMERATION'}
-      <MultiAdd label="Enumaretions" options={enumInputOptions} />
+      <MultiAdd class="mt-20" label="Enumaretions" options={enumInputOptions} />
     {:else if data.type.value === 'GROUP_POINTER'}
       <Select
+        class="mt-20"
         labelText="Select a Group"
         selected=""
         invalid={data.value.selected.error !== '' ? true : false}
@@ -375,8 +394,9 @@
             text={StringUtil.prettyName(group.name)} />
         {/each}
       </Select>
-    {:else if data.type.value.indexOf('_ARRAY') !== -1}
+    {:else if data.type.value.endsWith('_ARRAY') === true}
       <Select
+        class="mt-20"
         labelText="Select an Array Type"
         selected="STRING_ARRAY"
         on:change={event => {
@@ -393,6 +413,7 @@
       </Select>
       {#if data.type.value === 'GROUP_POINTER_ARRAY'}
         <Select
+          class="mt-20"
           labelText="Select a Group"
           selected=""
           invalid={data.value.error !== '' ? true : false}
@@ -410,8 +431,28 @@
           {/each}
         </Select>
       {/if}
+    {:else if data.type.value === 'ENTRY_POINTER'}
+      <Select
+        class="mt-20"
+        labelText="Select a Template"
+        selected=""
+        invalid={data.value.error !== '' ? true : false}
+        invalidText={data.value.error}
+        on:change={event => {
+          if (event.eventPhase === 0) {
+            data.value.templateId = event.detail;
+          }
+        }}>
+        <SelectItem value="" text="- Unspecified -" />
+        {#each templates as template}
+          <SelectItem
+            value={template._id}
+            text={StringUtil.prettyName(template.name)} />
+        {/each}
+      </Select>
     {/if}
     <ToggleSmall
+      class="mt-20"
       labelText="Required"
       labelA="No"
       labelB="Yes"

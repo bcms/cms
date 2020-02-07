@@ -194,18 +194,19 @@ export class PropUtil {
                   `Expected 'object' but got '${typeof prop.value}'.`,
               );
             }
-            if (typeof prop.value.templateId !== 'object') {
+            if (typeof prop.value.templateId !== 'string') {
               throw new Error(
                 `Invalid type of 'props[${i}].value.templateId'. ` +
-                  `Expected 'object' but got '${typeof prop.value.templateId}'.`,
+                  `Expected 'string' but got '${typeof prop.value.templateId}'.`,
               );
             }
-            if (typeof prop.value.entryId !== 'object') {
+            if (typeof prop.value.entryId !== 'string') {
               throw new Error(
                 `Invalid type of 'props[${i}].value.entryId'. ` +
-                  `Expected 'object' but got '${typeof prop.value.entryId}'.`,
+                  `Expected 'string' but got '${typeof prop.value.entryId}'.`,
               );
             }
+            p.value = prop.value;
           }
           break;
         case PropType.QUILL:

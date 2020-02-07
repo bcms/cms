@@ -4,6 +4,7 @@
   import AxiosClient from './axios-client.js';
 
   export const templateStore = writable([]);
+  export const entryStore = writable([]);
   export const groupStore = writable([]);
   export const widgetStore = writable([]);
   export const webhookStore = writable([]);
@@ -66,6 +67,18 @@
               return;
             }
             templateStore.set(result.response.data.templates);
+          });
+        axios
+          .send({
+            url: '/template/entry/all',
+            method: 'GET',
+          })
+          .then(result => {
+            if (result.success === false) {
+              console.error(result.error.response.data.message);
+              return;
+            }
+            entryStore.set(result.response.data.entries);
           });
         axios
           .send({

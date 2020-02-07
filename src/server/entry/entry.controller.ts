@@ -51,6 +51,30 @@ export class EntryController {
   @Service(LanguageService)
   private languageService: LanguageService;
 
+  /** Return all Entries for all Templates. */
+  @Get('/entry/all')
+  async getAllEntries(request: Request): Promise<{ entries: Entry[] }> {
+    const error = HttpErrorFactory.simple('getEvery', this.logger);
+    const jwt = JWTEncoding.decode(request.headers.authorization);
+    if (jwt instanceof Error) {
+      throw error.occurred(HttpStatus.UNAUTHORIZED, jwt.message);
+    } else {
+      const jwtValid = JWTSecurity.validateAndCheckTokenPermissions(
+        jwt,
+        [RoleName.ADMIN, RoleName.USER],
+        PermissionName.READ,
+        JWTConfigService.get('user-token-config'),
+      );
+      if (jwtValid instanceof Error) {
+        throw error.occurred(HttpStatus.UNAUTHORIZED, jwtValid.message);
+      }
+    }
+    const entries = await this.entryService.findAll();
+    return {
+      entries,
+    };
+  }
+
   /** Returns all Entries for specified Template */
   @Get('/:templateIdOrName/entry/all')
   async getAllAndCompile(request: Request): Promise<{ entries: Entry[] }> {
@@ -560,7 +584,11 @@ export class EntryController {
     let changeDetected: boolean = false;
     if (typeof request.body.content !== 'undefined') {
       changeDetected = true;
-      const updateEntry = async (content: EntryContent, language: Language, i: number) => {
+      const updateEntry = async (
+        content: EntryContent,
+        language: Language,
+        i: number,
+      ) => {
         try {
           const props = await PropUtil.getPropsFromUntrustedObject(
             content.props,
@@ -617,8 +645,12 @@ export class EntryController {
         }
       };
       if (typeof request.body.onlyLng !== 'undefined') {
-        const content = request.body.content.find(e => e.lng === request.body.onlyLng);
-        const language = await this.languageService.findByCode(request.body.onlyLng);
+        const content = request.body.content.find(
+          e => e.lng === request.body.onlyLng,
+        );
+        const language = await this.languageService.findByCode(
+          request.body.onlyLng,
+        );
         if (language === null) {
           throw error.occurred(
             HttpStatus.FORBIDDEN,

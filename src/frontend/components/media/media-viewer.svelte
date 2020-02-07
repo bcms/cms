@@ -39,7 +39,7 @@
       }
       return 0;
     });
-    files = [...dirs, ...fs];
+    files = [...fs];
   });
   viewerPushFile.subscribe(value => {
     if (value) {
@@ -90,18 +90,23 @@
   .img img {
     width: 100%;
   }
+
+  .no-files {
+    text-align: center;
+    color: var(--c-gray);
+  }
 </style>
 
-<div class="viewer">
-  {#if files.length === 0}
+{#if files.length === 0}
     <h4 class="no-files"><u>{StringUtil.prettyName(viewPath[viewPath.length - 1].name.replace(/\//g, ''))}</u> folder is empty.</h4>
   {/if}
+<div class="viewer">
   {#each files as file}
     <div class="file">
       <div class="actions">
         <div class="menu">
           <OverflowMenu>
-            <!-- {#if file.type !== 'DIR'} -->
+            {#if file.type !== 'DIR'}
             <OverflowMenuItem
               text="Copy Path"
               on:click={() => {
@@ -115,7 +120,7 @@
                     simplePopup.success('Path copied.');
                   });
               }} />
-            <!-- {/if} -->
+            {/if}
             {#if accessToken.customPool.policy.media.delete === true || accessToken.roles[0].name === 'ADMIN'}
               <OverflowMenuItem
                 danger={true}

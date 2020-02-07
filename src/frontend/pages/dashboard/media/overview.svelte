@@ -187,6 +187,7 @@
   {#if accessToken && (accessToken.customPool.policy.media.get === true || accessToken.roles[0].name === 'ADMIN')}
     <div class="wrapper">
       <FileExplorer
+        showDeleteBtn={true}
         on:close={event => {
           if (event.eventPhase === 0) {
             const f = event.detail.file;
@@ -202,6 +203,16 @@
           if (event.eventPhase === 0) {
             const f = event.detail.file;
             viewPath = [...viewPath, { _id: f._id, type: f.type, name: f.name }];
+          }
+        }}
+        on:remove={event => {
+          if (event.eventPhase === 0) {
+            const file = event.detail;
+            if (file.type !== 'DIR') {
+              deleteFile(file);
+            } else {
+              deleteDir(file);
+            }
           }
         }} />
       <div class="viewer-wrapper">

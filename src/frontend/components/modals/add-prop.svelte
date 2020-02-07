@@ -44,7 +44,7 @@
       desc: 'Yes or no, true or false, 1 or 0',
     },
     {
-      name: 'ARRAY',
+      name: 'ARREAY',
       desc: 'Sequence of elements.',
     },
     {
