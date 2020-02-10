@@ -16,7 +16,9 @@
       const temp = entry.content
         .find(e => e.lng === 'en')
         .props.find(p => p.name === prop.value.displayProp);
-      return temp.value;
+      if (temp) {
+        return temp.value;
+      }
     });
   });
 </script>
