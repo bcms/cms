@@ -137,7 +137,7 @@
           templateId: '',
           entryId: '',
           displayProp: {
-            value: '',
+            value: 'main_title',
             error: '',
           },
         };
@@ -472,7 +472,7 @@
               data.value.displayProp.value = event.detail;
             }
           }}>
-          <SelectItem value="" text="- Unspecified -" />
+          <SelectItem value="main_title" text="Main Title" />
           {#each templates.find(e => e._id === data.value.templateId).entryTemplate as prop}
             {#if prop.type === 'STRING'}
               <SelectItem

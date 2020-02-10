@@ -13,11 +13,17 @@
   entryStore.subscribe(value => {
     entries = value.filter(e => e.templateId === prop.value.templateId);
     entriesTitle = entries.map(entry => {
-      const temp = entry.content
-        .find(e => e.lng === 'en')
-        .props.find(p => p.name === prop.value.displayProp);
-      if (temp) {
-        return temp.value;
+      if (prop.value.displayProp === 'main_title') {
+        return entry.content
+          .find(e => e.lng === 'en')
+          .props.find(p => p.type === 'QUILL').value.heading.title;
+      } else {
+        const temp = entry.content
+          .find(e => e.lng === 'en')
+          .props.find(p => p.name === prop.value.displayProp);
+        if (temp) {
+          return temp.value;
+        }
       }
     });
   });
