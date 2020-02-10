@@ -115,12 +115,6 @@
         return e;
       }),
     );
-    // templates = templates.map(e => {
-    //   if (e._id === templateSelected._id) {
-    //     return templateSelected;
-    //   }
-    //   return e;
-    // });
   }
   async function deleteTemplate() {
     if (
@@ -230,6 +224,66 @@
       );
     }
   }
+  async function moveProp(position, data) {
+    let found = false;
+    if (position === 'up') {
+      if (data.i > 0) {
+        found = true;
+        templateSelected.entryTemplate = templateSelected.entryTemplate.map(
+          (e, i) => {
+            if (i === data.i) {
+              return templateSelected.entryTemplate[i - 1];
+            } else if (i === data.i - 1) {
+              return data.prop;
+            }
+            return e;
+          },
+        );
+      }
+    } else if (position === 'down') {
+      if (templateSelected.entryTemplate[data.i + 1]) {
+        found = true;
+        templateSelected.entryTemplate = templateSelected.entryTemplate.map(
+          (e, i) => {
+            if (i === data.i) {
+              return templateSelected.entryTemplate[i + 1];
+            } else if (i === data.i + 1) {
+              return data.prop;
+            }
+            return e;
+          },
+        );
+      }
+    }
+    if (found === false) {
+      simplePopup.error('Action cannot be performed.');
+      return;
+    }
+    const result = await axios.send({
+      url: '/template',
+      method: 'PUT',
+      data: {
+        _id: templateSelected._id,
+        entryTemplate: templateSelected.entryTemplate,
+        changes: {
+          props: [],
+        },
+      },
+    });
+    if (result.success === false) {
+      simplePopup.error(result.error.response.data.message);
+      return;
+    }
+    templateSelected = result.response.data.template;
+    templateStore.update(value =>
+      templates.map(e => {
+        if (e._id === templateSelected._id) {
+          return templateSelected;
+        }
+        return e;
+      }),
+    );
+  }
 
   onMount(async () => {
     fatch();
@@ -281,6 +335,16 @@
           if (event.eventPhase === 0) {
             editPropModalEvents.setProp(event.detail.prop, event.detail.i);
             editPropModalEvents.toggle();
+          }
+        }}
+        on:moveUp={event => {
+          if (event.eventPhase === 0) {
+            moveProp('up', event.detail);
+          }
+        }}
+        on:moveDown={event => {
+          if (event.eventPhase === 0) {
+            moveProp('down', event.detail);
           }
         }} />
     {:else}

@@ -299,12 +299,32 @@
                 slug: '',
                 coverImageUri: '',
                 desc: '',
-                meta: JSON.parse(JSON.stringify(t.entryTemplate)),
+                meta: JSON.parse(JSON.stringify(template.entryTemplate)),
                 sections: [],
               };
             } else {
-              data[lng.code].meta = content.props.filter(
-                e => e.type !== 'QUILL',
+              const orderProps = function(props, referenceProps) {
+                return JSON.parse(
+                  JSON.stringify(
+                    referenceProps.map(e => {
+                      const p = props.find(prop => prop.name === e.name);
+                      if (!p) {
+                        return e;
+                      }
+                      if (p.type === 'GROUP_POINTER') {
+                        p.value.props = orderProps(
+                          p.value.props,
+                          e.value.props,
+                        );
+                      }
+                      return p;
+                    }),
+                  ),
+                );
+              };
+              data[lng.code].meta = orderProps(
+                content.props,
+                template.entryTemplate,
               );
               const quillProp = content.props.find(e => e.type === 'QUILL');
               data[lng.code].title = {
@@ -316,13 +336,20 @@
               data[lng.code].coverImageUri =
                 quillProp.value.heading.coverImageUri;
               data[lng.code].sections = quillProp.value.content.map((e, i) => {
+                let value = e.value;
+                if (e.type === 'WIDGET') {
+                  value.props = orderProps(
+                    value.props,
+                    widgets.find(t => t._id === value._id).props,
+                  );
+                }
                 return {
                   id: e.id,
                   type: e.type,
                   order: i,
                   error: '',
                   class: e.type.toLowerCase().replace(/_/g, '-'),
-                  value: e.value,
+                  value: value,
                   valueAsText: e.valueAsText,
                   quill: undefined,
                   quillEvents: {
@@ -337,11 +364,6 @@
                 };
               });
             }
-            template.entryTemplate.forEach(e => {
-              if (!data[lng.code].meta.find(m => m.name === e.name)) {
-                data[lng.code].meta.push(e);
-              }
-            });
             initDone = true;
           }
         }

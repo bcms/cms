@@ -199,6 +199,63 @@
     });
     simplePopup.success('Property deleted successfully!');
   }
+  async function moveProp(position, data) {
+    let found = false;
+    if (position === 'up') {
+      if (data.i > 0) {
+        found = true;
+        widgetSelected.props = widgetSelected.props.map((e, i) => {
+          if (i === data.i) {
+            return widgetSelected.props[i - 1];
+          } else if (i === data.i - 1) {
+            return data.prop;
+          }
+          return e;
+        });
+      }
+    } else if (position === 'down') {
+      if (widgetSelected.props[data.i + 1]) {
+        found = true;
+        widgetSelected.props = widgetSelected.props.map((e, i) => {
+          if (i === data.i) {
+            return widgetSelected.props[i + 1];
+          } else if (i === data.i + 1) {
+            return data.prop;
+          }
+          return e;
+        });
+      }
+    }
+    if (found === false) {
+      simplePopup.error('Action cannot be performed.');
+      return;
+    }
+    const result = await axios.send({
+      url: '/widget',
+      method: 'PUT',
+      data: {
+        _id: widgetSelected._id,
+        props: [...widgetSelected.props],
+        changes: {
+          props: [],
+        },
+      },
+    });
+    if (result.success === false) {
+      simplePopup.error(result.error.response.data.message);
+      return;
+    }
+    const widget = result.response.data.widget;
+    widgetSelected = widget;
+    widgetStore.update(value =>
+      widgets.map(e => {
+        if (e._id === widget._id) {
+          return widget;
+        }
+        return e;
+      }),
+    );
+  }
 
   onMount(async () => {
     fatch();
@@ -252,6 +309,16 @@
           if (event.eventPhase === 0) {
             editPropModalEvents.setProp(event.detail.prop, event.detail.i);
             editPropModalEvents.toggle();
+          }
+        }}
+        on:moveUp={event => {
+          if (event.eventPhase === 0) {
+            moveProp('up', event.detail);
+          }
+        }}
+        on:moveDown={event => {
+          if (event.eventPhase === 0) {
+            moveProp('down', event.detail);
           }
         }} />
     {:else}

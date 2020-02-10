@@ -1,5 +1,6 @@
 <script>
   import { createEventDispatcher } from 'svelte';
+  import { OverflowMenu, OverflowMenuItem } from 'carbon-components-svelte';
   import { Link } from 'svelte-routing';
   import Button from '../global/button.svelte';
   import StringUtil from '../../string-util.js';
@@ -21,12 +22,7 @@
     <th>
       <p>Type</p>
     </th>
-    <th class="w-100">
-      <p>Edit</p>
-    </th>
-    <th class="w-50">
-      <p>Remove</p>
-    </th>
+    <th />
   </tr>
   {#each props as prop, i}
     <tr class="table-row">
@@ -51,26 +47,29 @@
         </p>
       </td>
       <td>
-        <Button
-          class="w-100p"
-          kind="secondary"
-          size="small"
-          on:click={() => {
-            dispatch('edit', { prop, i });
-          }}>
-          Edit
-        </Button>
-      </td>
-      <td>
-        <Button
-          class="w-100p"
-          kind="danger"
-          size="small"
-          on:click={() => {
-            dispatch('remove', { prop, i });
-          }}>
-          Remove
-        </Button>
+        <OverflowMenu>
+          <OverflowMenuItem
+            text="Move Up"
+            on:click={() => {
+              dispatch('moveUp', { prop, i });
+            }} />
+          <OverflowMenuItem
+            text="Move Down"
+            on:click={() => {
+              dispatch('moveDown', { prop, i });
+            }} />
+          <OverflowMenuItem
+            text="Edit"
+            on:click={() => {
+              dispatch('edit', { prop, i });
+            }} />
+          <OverflowMenuItem
+            danger={true}
+            text="Remove"
+            on:click={() => {
+              dispatch('remove', { prop, i });
+            }} />
+        </OverflowMenu>
       </td>
     </tr>
   {/each}
