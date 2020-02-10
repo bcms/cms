@@ -136,6 +136,10 @@
           error: '',
           templateId: '',
           entryId: '',
+          displayProp: {
+            value: '',
+            error: '',
+          },
         };
       }
     }
@@ -249,9 +253,15 @@
         return;
       }
       data.value.error = '';
+      if (data.value.displayProp.value.replace(/ /g, '') === '') {
+        data.value.displayProp.error = 'Template must be selected.';
+        return;
+      }
+      data.value.displayProp.error = '';
       value = {
         templateId: data.value.templateId,
         entryId: '',
+        displayProp: data.value.displayProp.value,
       };
     }
     events.toggle();
@@ -450,6 +460,28 @@
             text={StringUtil.prettyName(template.name)} />
         {/each}
       </Select>
+      {#if data.value.templateId !== ''}
+        <Select
+          class="mt-20"
+          labelText="Select a display property"
+          selected=""
+          invalid={data.value.displayProp.error !== '' ? true : false}
+          invalidText={data.value.displayProp.error}
+          on:change={event => {
+            if (event.eventPhase === 0) {
+              data.value.displayProp.value = event.detail;
+            }
+          }}>
+          <SelectItem value="" text="- Unspecified -" />
+          {#each templates.find(e => e._id === data.value.templateId).entryTemplate as prop}
+            {#if prop.type === 'STRING'}
+              <SelectItem
+                value={prop.name}
+                text={StringUtil.prettyName(prop.name)} />
+            {/if}
+          {/each}
+        </Select>
+      {/if}
     {/if}
     <ToggleSmall
       class="mt-20"

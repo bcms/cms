@@ -56,6 +56,7 @@ export interface PropEnum {
 export interface PropEntryPointer {
   templateId: string;
   entryId: string;
+  displayProp: string;
 }
 
 export interface PropQuill {

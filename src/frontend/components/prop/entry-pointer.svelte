@@ -8,9 +8,16 @@
   export let error = '';
 
   let entries = [];
+  let entriesTitle = [];
 
   entryStore.subscribe(value => {
     entries = value.filter(e => e.templateId === prop.value.templateId);
+    entriesTitle = entries.map(entry => {
+      const temp = entry.content
+        .find(e => e.lng === 'en')
+        .props.find(p => p.name === prop.value.displayProp);
+      return temp.value;
+    });
   });
 </script>
 
@@ -25,8 +32,8 @@
       }
     }}>
     <SelectItem text="- Unselected -" value="" />
-    {#each entries as entry}
-      <SelectItem text={StringUtil.prettyName(entry._id)} value={entry._id} />
+    {#each entries as entry, i}
+      <SelectItem text="{entriesTitle[i]} | {entry._id}" value={entry._id} />
     {/each}
   </Select>
 </Prop>

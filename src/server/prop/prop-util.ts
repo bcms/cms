@@ -207,6 +207,12 @@ export class PropUtil {
                   `Expected 'string' but got '${typeof prop.value.entryId}'.`,
               );
             }
+            if (typeof prop.value.displayProp !== 'string') {
+              throw new Error(
+                `Invalid type of 'props[${i}].value.displayProp'. ` +
+                  `Expected 'string' but got '${typeof prop.value.displayProp}'.`,
+              );
+            }
             p.value = prop.value;
           }
           break;

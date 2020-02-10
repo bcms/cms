@@ -84,6 +84,18 @@
                 errors[prop.name] = '';
               }
               break;
+            case 'ENTRY_POINTER':
+              {
+                if (prop.value.entryId.replace(/ /g, '') === '') {
+                  errors[prop.name] = 'Please selece an option.';
+                  simplePopup.error(
+                    `Error in property '${StringUtil.prettyName(prop.name)}'.`,
+                  );
+                  return;
+                }
+                errors[prop.name] = '';
+              }
+              break;
             case 'GROUP_POINTER':
               {
                 const result = groupEvents[prop.name].validateAndGetProps();

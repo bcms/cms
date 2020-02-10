@@ -5,7 +5,7 @@
   import Layout from '../../../components/global/layout.svelte';
   import ManagerLayout from '../../../components/global/manager-content.svelte';
   import GroupModal from '../../../components/global/modal/name-desc.svelte';
-  import AddPropModal from '../../../components/modals/add-prop.svelte';
+  import AddPropModal from '../../../components/global/modal/add-prop.svelte';
   import EditPropModal from '../../../components/modals/edit-prop.svelte';
   import PropsList from '../../../components/prop/props-list.svelte';
   import Button from '../../../components/global/button.svelte';
@@ -293,12 +293,16 @@
   }} />
 {#if groupSelected}
   <AddPropModal
-    selectedGroupId={groupSelected._id}
     usedPropNames={groupSelected.props.map(e => {
       return e.name;
     })}
-    {groups}
-    events={addPropModalEvents} />
+    groups={groups.filter(e => e._id !== groupSelected._id)}
+    events={addPropModalEvents}
+    on:done={event => {
+      if (event.eventPhase === 0) {
+        addProp(event.detail);
+      }
+    }} />
   <EditPropModal
     selectedGroupId={groupSelected._id}
     usedPropNames={groupSelected.props.map(e => {
