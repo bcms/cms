@@ -261,8 +261,10 @@
     return crypto.SHA256(JSON.stringify(d)).toString();
   }
   function handleTitle(event) {
-    data.title.value = event.target.value;
-    data.slug = StringUtil.toUri(data.title.value);
+    data[selectedLanguage.code].title.value = event.target.value;
+    data[selectedLanguage.code].slug = StringUtil.toUri(
+      data[selectedLanguage.code].title.value,
+    );
   }
 
   function getQuill() {
@@ -449,41 +451,41 @@
           {/each}
         </Select>
       </div>
+      <div class="title">
+        {#if data[selectedLanguage.code].title.error !== ''}
+          <div class="error">
+            <span class="fas fa-exclamation icon" />
+            <span>{data[selectedLanguage.code].title.error}</span>
+          </div>
+        {/if}
+        <input
+          id="title"
+          class="title"
+          placeholder="- Title -"
+          value={data[selectedLanguage.code].title.value}
+          on:keyup={handleTitle} />
+      </div>
+      <div>
+        <div class="bx--label">Description</div>
+        <TextArea
+          cols="500"
+          value={data[selectedLanguage.code].desc}
+          placeholder="- Description -"
+          on:input={event => {
+            data[selectedLanguage.code].desc = event.target.value;
+          }} />
+      </div>
+      <div class="bx--label mt-20">Cover Image</div>
+      <Media
+        value={data[selectedLanguage.code].coverImageUri}
+        noButtons={true}
+        on:change={event => {
+          if (event.eventPhase === 0) {
+            data[selectedLanguage.code].coverImageUri = `${event.detail}`;
+          }
+        }} />
       <h3>Meta</h3>
       <div class="meta">
-        <div class="title">
-          {#if data[selectedLanguage.code].title.error !== ''}
-            <div class="error">
-              <span class="fas fa-exclamation icon" />
-              <span>{data[selectedLanguage.code].title.error}</span>
-            </div>
-          {/if}
-          <input
-            id="title"
-            class="title"
-            placeholder="- Title -"
-            value={data[selectedLanguage.code].title.value}
-            on:keyup={handleTitle} />
-        </div>
-        <div>
-          <div class="bx--label">Description</div>
-          <TextArea
-            cols="500"
-            value={data[selectedLanguage.code].desc}
-            placeholder="- Description -"
-            on:input={event => {
-              data[selectedLanguage.code].desc = event.target.value;
-            }} />
-        </div>
-        <div class="bx--label mt-20">Cover Image</div>
-        <Media
-          value={data[selectedLanguage.code].coverImageUri}
-          noButtons={true}
-          on:change={event => {
-            if (event.eventPhase === 0) {
-              data[selectedLanguage.code].coverImageUri = `${event.detail}`;
-            }
-          }} />
         <Props
           {groups}
           {widgets}

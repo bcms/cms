@@ -119,7 +119,7 @@
 </script>
 
 {#each props as prop}
-  <div class="prop">
+  <div class="prop mt-20">
     {#if prop.type === 'STRING'}
       {#if prop.name.indexOf('uri') !== -1}
         <PropMedia {prop} error={errors[prop.name]} />
