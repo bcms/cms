@@ -197,7 +197,8 @@ export class PropUtil {
             if (typeof prop.value.templateId !== 'string') {
               throw new Error(
                 `Invalid type of 'props[${i}].value.templateId'. ` +
-                  `Expected 'string' but got '${typeof prop.value.templateId}'.`,
+                  `Expected 'string' but got '${typeof prop.value
+                    .templateId}'.`,
               );
             }
             if (typeof prop.value.entryId !== 'string') {
@@ -655,6 +656,9 @@ export class PropUtil {
                   }
                   if (op.attributes.strike === true) {
                     insert = `~~${insert}~~`;
+                  }
+                  if (typeof op.attributes.link !== 'undefined') {
+                    insert = `[${insert}](${op.attributes.link})`;
                   }
                 }
                 value += insert.replace('@', op.insert);

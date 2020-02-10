@@ -36,7 +36,7 @@
     },
     PARAGRAPH: {
       modules: {
-        toolbar: [['bold', 'italic', 'underline', 'strike']],
+        toolbar: [['bold', 'italic', 'underline', 'strike', 'link']],
       },
       placeholder: 'Paragraph',
       theme: 'bubble',
@@ -51,7 +51,7 @@
     },
     LIST: {
       modules: {
-        toolbar: [['bold', 'italic', 'underline', 'strike']],
+        toolbar: [['bold', 'italic', 'underline', 'strike', 'link']],
       },
       placeholder: 'List',
       theme: 'bubble',

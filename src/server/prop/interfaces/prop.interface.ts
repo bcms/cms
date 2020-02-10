@@ -85,6 +85,7 @@ export interface PropQuillContentValueGeneric {
       strike?: boolean;
       list?: string;
       indent?: number;
+      link?: string;
     };
   }>;
 }
