@@ -37,7 +37,7 @@
   {events}
   on:cancel={event => {
     if (event.eventPhase === 0) {
-      data = { name: { value: '', error: '' }, type: 'DATA_MODEL', desc: '', entryTemplate: [] };
+      data = { name: { value: '', error: '' }, type: 'RICH_CONTENT', desc: '', entryTemplate: [] };
       events.toggle();
     }
   }}
@@ -54,7 +54,7 @@
         type: data.type,
         entryTemplate: data.entryTemplate,
       });
-      data = { name: { value: '', error: '' }, type: 'DATA_MODEL', desc: '', entryTemplate: [] };
+      data = { name: { value: '', error: '' }, type: 'RICH_CONTENT', desc: '', entryTemplate: [] };
       events.toggle();
     }
   }}>
