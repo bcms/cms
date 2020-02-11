@@ -12,6 +12,7 @@
   import PropGroupPointer from './group-pointer.svelte';
   import PropGroupPointerArray from './group-pointer-array.svelte';
   import PropEntryPointer from './entry-pointer.svelte';
+  import PropEntryPointerArray from './entry-pointer-array.svelte';
   import StringUtil from '../../string-util.js';
 
   export let groups = [];
@@ -92,6 +93,25 @@
                     `Error in property '${StringUtil.prettyName(prop.name)}'.`,
                   );
                   return;
+                }
+                errors[prop.name] = '';
+              }
+              break;
+            case 'ENTRY_POINTER_ARRAY':
+              {
+                for (const j in prop.value.entryIds) {
+                  const element = prop.value.entryIds[j];
+                  if (element.replace(/ /g, '') === '') {
+                    errors[
+                      prop.name
+                    ] = `Value is required and cannot be emplty at position [${j}].`;
+                    simplePopup.error(
+                      `Error in property '${StringUtil.prettyName(
+                        prop.name,
+                      )}'.`,
+                    );
+                    return;
+                  }
                 }
                 errors[prop.name] = '';
               }
@@ -199,6 +219,16 @@
         }} />
     {:else if prop.type === 'ENTRY_POINTER'}
       <PropEntryPointer {prop} error={errors[prop.name]} />
+    {:else if prop.type === 'ENTRY_POINTER_ARRAY'}
+      <PropEntryPointerArray
+        {prop}
+        error={errors[prop.name]}
+        on:add={event => {
+          if (event.eventPhase === 0) {
+            prop.value.entryIds.push('');
+            props = [...props];
+          }
+        }} />
     {/if}
   </div>
 {/each}

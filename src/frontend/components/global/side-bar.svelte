@@ -82,7 +82,7 @@
         menus: [],
       },
       {
-        name: 'TEMPLATES',
+        name: 'ENTRIES',
         menus: [],
       },
     ],
@@ -108,7 +108,7 @@
   }
   function updateTemplates(templates) {
     options.sections = options.sections.map(section => {
-      if (section.name === 'TEMPLATES') {
+      if (section.name === 'ENTRIES') {
         section.menus = templates.map(template => {
           return {
             _id: template._id,
@@ -173,7 +173,7 @@
           }
         }
         break;
-      case 'TEMPLATES':
+      case 'ENTRIES':
         {
           const policy = accessToken.customPool.policy.templates.find(
             e => e._id === menu._id,

@@ -183,6 +183,21 @@
           array: [],
         },
       };
+    } else if (data.type.value === 'ENTRY_POINTER_ARRAY') {
+      data.value = {
+        error: '',
+        value: {
+          templateId: {
+            value: '',
+            error: '',
+          },
+          entryIds: [],
+          displayProp: {
+            value: '',
+            error: '',
+          },
+        },
+      };
     } else {
       data.value = {
         error: '',
@@ -219,51 +234,121 @@
       return;
     }
     data.name.error = '';
-    if (data.type.value === 'GROUP_POINTER') {
-      if (data.value.selected.value === '') {
-        data.value.selected.error = 'You need to select a Group.';
-        return;
-      }
-      data.value.selected.error = '';
-    }
     const propWithSameName = usedPropNames.find(e => e === data.name.value);
     if (propWithSameName) {
       data.name.error = `Property with name '${data.name.value}' already exist.`;
       return;
     }
     data.name.error = '';
-    if (data.type.value === 'ENUMERATION') {
-      data.value.items = enumInputOptions.getList();
-      enumInputOptions.clear();
-    }
-    if (data.type.value === 'GROUP_POINTER_ARRAY') {
-      if (data.value.value._id === '') {
-        data.value.error = 'Please select Group Pointer.';
-        return;
-      }
-      data.value.error = '';
-    }
     let value = data.value;
     if (data.type.value.indexOf('_ARRAY') !== -1) {
       value = data.value.value;
     }
-    if (data.type.value === 'ENTRY_POINTER') {
-      if (data.value.templateId.replace(/ /g, '') === '') {
-        data.value.error = 'Template must be selected.';
-        return;
-      }
-      data.value.error = '';
-      if (data.value.displayProp.value.replace(/ /g, '') === '') {
-        data.value.displayProp.error = 'Template must be selected.';
-        return;
-      }
-      data.value.displayProp.error = '';
-      value = {
-        templateId: data.value.templateId,
-        entryId: '',
-        displayProp: data.value.displayProp.value,
-      };
+    switch (data.type.value) {
+      case 'GROUP_POINTER':
+        {
+          if (data.value.selected.value === '') {
+            data.value.selected.error = 'You need to select a Group.';
+            return;
+          }
+          data.value.selected.error = '';
+        }
+        break;
+      case 'ENUMERATION':
+        {
+          data.value.items = enumInputOptions.getList();
+          enumInputOptions.clear();
+        }
+        break;
+      case 'GROUP_POINTER_ARRAY':
+        {
+          if (data.value.value._id === '') {
+            data.value.error = 'Please select Group Pointer.';
+            return;
+          }
+          data.value.error = '';
+        }
+        break;
+      case 'ENTRY_POINTER_ARRAY':
+        {
+          if (data.value.value.templateId.value.replace(/ /g, '') === '') {
+            data.value.value.templateId.error = 'Template must be selected.';
+            return;
+          }
+          data.value.value.templateId.error = '';
+          if (data.value.value.displayProp.value.replace(/ /g, '') === '') {
+            data.value.value.displayProp.error = 'Template must be selected.';
+            return;
+          }
+          data.value.value.displayProp.error = '';
+          value = {
+            templateId: data.value.value.templateId.value,
+            entryIds: [],
+            displayProp: data.value.value.displayProp.value,
+          };
+        }
+        break;
+      case 'ENTRY_POINTER':
+        {
+          if (data.value.templateId.replace(/ /g, '') === '') {
+            data.value.error = 'Template must be selected.';
+            return;
+          }
+          data.value.error = '';
+          if (data.value.displayProp.value.replace(/ /g, '') === '') {
+            data.value.displayProp.error = 'Template must be selected.';
+            return;
+          }
+          data.value.displayProp.error = '';
+          value = {
+            templateId: data.value.templateId,
+            entryId: '',
+            displayProp: data.value.displayProp.value,
+          };
+        }
+        break;
     }
+    // if (data.type.value === 'GROUP_POINTER') {
+    //   if (data.value.selected.value === '') {
+    //     data.value.selected.error = 'You need to select a Group.';
+    //     return;
+    //   }
+    //   data.value.selected.error = '';
+    // }
+    // if (data.type.value === 'ENUMERATION') {
+    //   data.value.items = enumInputOptions.getList();
+    //   enumInputOptions.clear();
+    // }
+    // if (data.type.value === 'GROUP_POINTER_ARRAY') {
+    //   if (data.value.value._id === '') {
+    //     data.value.error = 'Please select Group Pointer.';
+    //     return;
+    //   }
+    //   data.value.error = '';
+    // }
+    // let value = data.value;
+    // if (data.type.value.indexOf('_ARRAY') !== -1) {
+    //   value = data.value.value;
+    // }
+    // if (data.type.value === 'ENTRY_POINTER_ARRAY') {
+    // }
+    // if (data.type.value === 'ENTRY_POINTER') {
+    //   if (data.value.templateId.replace(/ /g, '') === '') {
+    //     data.value.error = 'Template must be selected.';
+    //     return;
+    //   }
+    //   data.value.error = '';
+    //   if (data.value.displayProp.value.replace(/ /g, '') === '') {
+    //     data.value.displayProp.error = 'Template must be selected.';
+    //     return;
+    //   }
+    //   data.value.displayProp.error = '';
+    //   value = {
+    //     templateId: data.value.templateId,
+    //     entryId: '',
+    //     displayProp: data.value.displayProp.value,
+    //   };
+    // }
     events.toggle();
     setTimeout(() => {
       data = {
@@ -420,6 +505,9 @@
         {#if groups.length > 0}
           <SelectItem value="GROUP_POINTER_ARRAY" text="Group Pointer Array" />
         {/if}
+        {#if templates.length > 0}
+          <SelectItem value="ENTRY_POINTER_ARRAY" text="Entry Pointer Array" />
+        {/if}
       </Select>
       {#if data.type.value === 'GROUP_POINTER_ARRAY'}
         <Select
@@ -440,6 +528,47 @@
               text={StringUtil.prettyName(group.name)} />
           {/each}
         </Select>
+      {:else if data.type.value === 'ENTRY_POINTER_ARRAY'}
+        <Select
+          class="mt-20"
+          labelText="Select a Template"
+          selected=""
+          invalid={data.value.value.templateId.error !== '' ? true : false}
+          invalidText={data.value.value.templateId.error}
+          on:change={event => {
+            if (event.eventPhase === 0) {
+              data.value.value.templateId.value = event.detail;
+            }
+          }}>
+          <SelectItem value="" text="- Unspecified -" />
+          {#each templates as template}
+            <SelectItem
+              value={template._id}
+              text={StringUtil.prettyName(template.name)} />
+          {/each}
+        </Select>
+        {#if data.value.value.templateId.value !== ''}
+          <Select
+            class="mt-20"
+            labelText="Select a display property"
+            selected=""
+            invalid={data.value.value.displayProp.error !== '' ? true : false}
+            invalidText={data.value.value.displayProp.error}
+            on:change={event => {
+              if (event.eventPhase === 0) {
+                data.value.value.displayProp.value = event.detail;
+              }
+            }}>
+            <SelectItem value="main_title" text="Main Title" />
+            {#each templates.find(e => e._id === data.value.value.templateId.value).entryTemplate as prop}
+              {#if prop.type === 'STRING'}
+                <SelectItem
+                  value={prop.name}
+                  text={StringUtil.prettyName(prop.name)} />
+              {/if}
+            {/each}
+          </Select>
+        {/if}
       {/if}
     {:else if data.type.value === 'ENTRY_POINTER'}
       <Select

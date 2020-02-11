@@ -14,6 +14,7 @@ export enum PropType {
   STRING_ARRAY = 'STRING_ARRAY',
   NUMBER_ARRAY = 'NUMBER_ARRAY',
   BOOLEAN_ARRAY = 'BOOLEAN_ARRAY',
+  ENTRY_POINTER_ARRAY = 'ENTRY_POINTER_ARRAY',
 }
 
 export enum PropQuillContentType {
@@ -45,7 +46,8 @@ export interface Prop {
     | PropQuill
     | PropGroupPointer
     | PropGroupPointerArray
-    | PropEntryPointer;
+    | PropEntryPointer
+    | PropEntryPointerArray;
 }
 
 export interface PropEnum {
@@ -56,6 +58,12 @@ export interface PropEnum {
 export interface PropEntryPointer {
   templateId: string;
   entryId: string;
+  displayProp: string;
+}
+
+export interface PropEntryPointerArray {
+  templateId: string;
+  entryIds: string[];
   displayProp: string;
 }
 

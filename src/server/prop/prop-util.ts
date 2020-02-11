@@ -210,7 +210,8 @@ export class PropUtil {
             if (typeof prop.value.displayProp !== 'string') {
               throw new Error(
                 `Invalid type of 'props[${i}].value.displayProp'. ` +
-                  `Expected 'string' but got '${typeof prop.value.displayProp}'.`,
+                  `Expected 'string' but got '${typeof prop.value
+                    .displayProp}'.`,
               );
             }
             p.value = prop.value;
@@ -418,6 +419,44 @@ export class PropUtil {
               props: verifiedProp.value.props,
               array: prop.value.array,
             };
+          }
+          break;
+        case PropType.ENTRY_POINTER_ARRAY:
+          {
+            p.type = PropType[prop.type];
+            if (typeof prop.value !== 'object') {
+              throw new Error(
+                `Invalid type of 'props[${i}].value'. ` +
+                  `Expected 'object' but got '${typeof prop.value}'.`,
+              );
+            }
+            if (typeof prop.value.templateId !== 'string') {
+              throw new Error(
+                `Invalid type of 'props[${i}].value.templateId'. ` +
+                  `Expected 'string' but got '${typeof prop.value
+                    .templateId}'.`,
+              );
+            }
+            if (typeof prop.value.entryIds !== 'object') {
+              throw new Error(
+                `Invalid type of 'props[${i}].value.entryIds'. ` +
+                  `Expected 'object' but got '${typeof prop.value.entryIds}'.`,
+              );
+            }
+            if (!(prop.value.entryIds instanceof Array)) {
+              throw new Error(
+                `Invalid type of 'props[${i}].value.entryIds'. ` +
+                  `Expected an 'array'.`,
+              );
+            }
+            if (typeof prop.value.displayProp !== 'string') {
+              throw new Error(
+                `Invalid type of 'props[${i}].value.displayProp'. ` +
+                  `Expected 'string' but got '${typeof prop.value
+                    .displayProp}'.`,
+              );
+            }
+            p.value = prop.value;
           }
           break;
 
