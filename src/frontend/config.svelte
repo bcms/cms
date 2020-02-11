@@ -18,6 +18,7 @@
   export const fileStore = writable([]);
 
   let cacheTill = 0;
+  let skipCheck = false;
 
   axios.config({
     baseURL: '',
@@ -33,7 +34,7 @@
     Store.set('loggedIn', false);
   }
 
-  export function fatch() {
+  function check() {
     if (
       Store &&
       Store.get('loggedIn') &&
@@ -41,6 +42,13 @@
       window.location.pathname !== '/' &&
       window.location.pathname !== '/login'
     ) {
+      return true;
+    }
+    return false;
+  }
+
+  export function fatch() {
+    if (skipCheck === true || check() === true) {
       if (cacheTill === 0 || cacheTill < Date.now()) {
         console.log('Fatch data.');
         cacheTill = Date.now() + 60000;
@@ -188,11 +196,15 @@
             });
         }
       }
+    } else {
+      console.log(Store.get('loggedIn'));
     }
   }
   export function forceFatch() {
     cacheTill = 0;
+    skipCheck = true;
     fatch();
+    skipCheck = false;
   }
   fatch();
 </script>

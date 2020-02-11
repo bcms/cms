@@ -61,8 +61,12 @@
     }
     Store.set('user', result.response.data.user);
     Store.set('loggedIn', true);
-    forceFatch();
-    navigate(`/dashboard/overview`, { replace: true });
+    window.location = '/dashboard/overview';
+    // forceFatch();
+    // navigate(`/dashboard/overview`, { replace: true });
+    // setTimeout(() => {
+    //   navigate(`/dashboard/overview`, { replace: true });
+    // }, 500);
   }
 </script>
 

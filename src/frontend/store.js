@@ -105,7 +105,7 @@ module.exports = {
       };
     }
   },
-  setCallback(key, callback) {
+  subscribe(key, callback) {
     if (typeof callback !== 'function') {
       throw new Error(`'callback' must be a function.`);
     }
