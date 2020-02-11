@@ -115,9 +115,12 @@
       simplePopup.error(result.error.response.data.message);
       return;
     }
-    window.location =
+    entryStore.update(value => [...value, result.response.data.entry]);
+    navigate(
       `/dashboard/template/entries/view/c/${template._id}?` +
-      `cid=${template._id}&lng=${selectedLanguage.code}`;
+        `cid=${template._id}&lng=${selectedLanguage.code}`,
+      { replace: true },
+    );
   }
   async function updateEnrty() {
     const metaProps = propsEvents.validateAndGetProps();

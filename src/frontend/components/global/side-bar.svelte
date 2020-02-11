@@ -87,6 +87,9 @@
       },
     ],
   };
+  options.sections[0].menus = options.sections[0].menus.filter(
+    menu => !filter(options.sections[0], menu),
+  );
   templateStore.subscribe(value => {
     updateTemplates(value);
   });
@@ -118,6 +121,7 @@
             faClass: 'fas fa-pencil-alt',
           };
         });
+        section.menus = section.menus.filter(menu => !filter(section, menu));
       }
       return section;
     });
@@ -141,6 +145,7 @@
             faClass: 'fas fa-link',
           };
         });
+        section.menus = section.menus.filter(menu => !filter(section, menu));
       }
       return section;
     });
@@ -261,32 +266,34 @@
     </div>
     {#if options.sections && accessToken}
       {#each options.sections as section}
-        <div class="section">
-          <div class="name">{section.name}</div>
-          <div class="menus">
-            {#each section.menus as menu}
-              <div
-                class="menu {menu.link.startsWith(window.location.pathname) ? 'active' : ''}">
-                {#if menu.type === 'link'}
-                  {#if filter(section, menu) === false}
-                    <Link
-                      to={menu.link}
-                      state={{ link: menu.link }}
-                      on:click={() => {
-                        pathStore.update(value => menu.link);
-                        options.sections = [...options.sections];
-                      }}>
-                      <div class="parent link">
-                        <div class="{menu.faClass} icon" />
-                        <div class="text">{menu.name}</div>
-                      </div>
-                    </Link>
+        {#if section.menus.length > 0}
+          <div class="section">
+            <div class="name">{section.name}</div>
+            <div class="menus">
+              {#each section.menus as menu}
+                <div
+                  class="menu {menu.link.startsWith(window.location.pathname) ? 'active' : ''}">
+                  {#if menu.type === 'link'}
+                    {#if filter(section, menu) === false}
+                      <Link
+                        to={menu.link}
+                        state={{ link: menu.link }}
+                        on:click={() => {
+                          pathStore.update(value => menu.link);
+                          options.sections = [...options.sections];
+                        }}>
+                        <div class="parent link">
+                          <div class="{menu.faClass} icon" />
+                          <div class="text">{menu.name}</div>
+                        </div>
+                      </Link>
+                    {/if}
                   {/if}
-                {/if}
-              </div>
-            {/each}
+                </div>
+              {/each}
+            </div>
           </div>
-        </div>
+        {/if}
       {/each}
     {/if}
     <br />

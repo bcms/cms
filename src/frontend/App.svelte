@@ -9,6 +9,7 @@
   import FontAwesome from './components/global/font-awesome.svelte';
 
   import Overview from './pages/dashboard/overview.svelte';
+  import AdminInit from './pages/admin.svelte';
   import TemplateEditor from './pages/dashboard/template/editor.svelte';
   import GroupEditor from './pages/dashboard/group/editor.svelte';
   import WidgetEditor from './pages/dashboard/widget/editor.svelte';
@@ -27,6 +28,10 @@
     {
       path: '/login',
       component: Login,
+    },
+    {
+      path: '/admin',
+      component: AdminInit,
     },
     {
       path: '/dashboard/overview',

@@ -190,5 +190,9 @@
       }
     }
   }
+  export function forceFatch() {
+    cacheTill = 0;
+    fatch();
+  }
   fatch();
 </script>

@@ -35,6 +35,19 @@ export class UserController {
   @Service(UserService)
   private userService: UserService;
 
+  @Get('/is_initialized')
+  async isInitialized(request: Request): Promise<{ initialized: boolean }> {
+    const userCount = await this.userService.count();
+    if (userCount > 0) {
+      return {
+        initialized: true,
+      };
+    }
+    return {
+      initialized: false,
+    };
+  }
+
   /**
    * Returns all Users in database without protected
    * properties like password and refresh tokens.

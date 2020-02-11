@@ -1,6 +1,7 @@
 <script>
+  import { navigate } from 'svelte-routing';
   import { simplePopup } from '../components/simple-popup.svelte';
-  import { Store, axios } from '../config.svelte';
+  import { Store, axios, forceFatch } from '../config.svelte';
   import { TextInput, PasswordInput } from 'carbon-components-svelte';
   import Button from '../components/global/button.svelte';
   import AxiosClient from '../axios-client.js';
@@ -60,7 +61,8 @@
     }
     Store.set('user', result.response.data.user);
     Store.set('loggedIn', true);
-    window.location = '/dashboard/overview';
+    forceFatch();
+    navigate(`/dashboard/overview`, { replace: true });
   }
 </script>
 

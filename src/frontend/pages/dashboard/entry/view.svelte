@@ -1,6 +1,6 @@
 <script>
   import { onMount, afterUpdate } from 'svelte';
-  import { Link } from 'svelte-routing';
+  import { Link, navigate } from 'svelte-routing';
   import {
     axios,
     Store,
@@ -98,9 +98,11 @@
     if (template.type === 'DATA_MODEL') {
       addDataModalModalEvents.toggle();
     } else {
-      window.location =
+      navigate(
         `/dashboard/template/entry/rc` +
-        `?tid=${template._id}&lng=${languageSelected.code}`;
+          `?tid=${template._id}&lng=${languageSelected.code}`,
+        { replace: true },
+      );
     }
   }
   async function addNewDataModelEntry(data) {
@@ -395,7 +397,9 @@
                             viewDataModelModalEvents.toggle();
                           }} />
                         {#if templatePolicy && templatePolicy.put === true}
-                          <li class="overflow-menu-link bx--overflow-menu-options__option">
+                          <li
+                            class="overflow-menu-link
+                            bx--overflow-menu-options__option">
                             <Link
                               class="bx--overflow-menu-options__btn"
                               to="/dashboard/template/entry/rc?tid={template._id}&eid={entry._id}&lng={languageSelected.code}">
