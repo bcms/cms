@@ -349,12 +349,16 @@
   }} />
 {#if widgetSelected}
   <AddPropModal
-    selectedGroupId={undefined}
     usedPropNames={widgetSelected.props.map(e => {
       return e.name;
     })}
     {groups}
-    events={addPropModalEvents} />
+    events={addPropModalEvents}
+    on:done={event => {
+      if (event.eventPhase === 0) {
+        addProp(event.detail);
+      }
+    }} />
   <EditPropModal
     selectedGroupId={undefined}
     usedPropNames={widgetSelected.props.map(e => {
