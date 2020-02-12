@@ -9,12 +9,18 @@ import {
   PropQuillContentValueGeneric,
   PropQuillContentValueWidget,
   PropGroupPointerArray,
+  PropEntryPointer,
+  PropEntryPointerArray,
 } from './interfaces/prop.interface';
-import { StringUtility, Logger } from 'purple-cheetah';
+import { StringUtility, Logger, Service } from 'purple-cheetah';
 import { GroupService } from '../group/group.service';
 import { EntryContent, Entry } from '../entry/models/entry.model';
+import { EntryService } from '../entry';
 
 export class PropUtil {
+  @Service(EntryService)
+  private static entryService: EntryService;
+
   public static get changesSchema(): any {
     return {
       name: {
@@ -577,7 +583,7 @@ export class PropUtil {
     }
   }
 
-  public static propsToJSONObject(
+  public static async propsToJSONObject(
     props: Prop[],
     init?: {
       _id?: string;
@@ -588,7 +594,8 @@ export class PropUtil {
         name?: string;
       };
     },
-  ): any {
+    lng?: string,
+  ): Promise<any> {
     let object: any = {};
     if (init) {
       object = init;
@@ -599,7 +606,11 @@ export class PropUtil {
         case PropType.GROUP_POINTER:
           {
             prop.value = prop.value as PropGroupPointer;
-            object[prop.name] = PropUtil.propsToJSONObject(prop.value.props);
+            object[prop.name] = await PropUtil.propsToJSONObject(
+              prop.value.props,
+              undefined,
+              lng,
+            );
           }
           break;
         case PropType.QUILL:
@@ -611,6 +622,54 @@ export class PropUtil {
             object.coverImageUri = prop.value.heading.coverImageUri;
           }
           break;
+        case PropType.ENTRY_POINTER:
+          {
+            prop.value = prop.value as PropEntryPointer;
+            const entry = await PropUtil.entryService.findById(
+              prop.value.entryId,
+            );
+            if (entry === null) {
+              object[prop.name] = prop.value;
+            } else {
+              const entryContent = entry.content.find(e => e.lng === lng);
+              if (entryContent) {
+                object[prop.name] = await PropUtil.propsToMarkdown(
+                  entryContent.props,
+                  undefined,
+                  lng,
+                );
+              } else {
+                object[prop.name] = prop.value;
+              }
+            }
+          }
+          break;
+        case PropType.ENTRY_POINTER_ARRAY:
+          {
+            prop.value = prop.value as PropEntryPointerArray;
+            object[prop.name] = [];
+            for (const j in prop.value.entryIds) {
+              const eid = prop.value.entryIds[j];
+              const entry = await PropUtil.entryService.findById(eid);
+              if (entry === null) {
+                object[prop.name].push(prop.value);
+              } else {
+                const entryContent = entry.content.find(e => e.lng === lng);
+                if (entryContent) {
+                  object[prop.name].push(
+                    await PropUtil.propsToMarkdown(
+                      entryContent.props,
+                      undefined,
+                      lng,
+                    ),
+                  );
+                } else {
+                  object[prop.name].push(prop.value);
+                }
+              }
+            }
+          }
+          break;
         default: {
           object[prop.name] = prop.value;
         }
@@ -619,7 +678,7 @@ export class PropUtil {
     return object;
   }
 
-  public static propsToMarkdown(
+  public static async propsToMarkdown(
     props: Prop[],
     init?: {
       _id?: string;
@@ -630,15 +689,16 @@ export class PropUtil {
         name?: string;
       };
     },
-  ): {
+    lng?: string,
+  ): Promise<{
     meta: any;
     content: Array<{
       type: string;
       name?: string;
       value: any;
     }>;
-  } {
-    const meta = PropUtil.propsToJSONObject(props, init);
+  }> {
+    const meta = await PropUtil.propsToJSONObject(props, init, lng);
     const content: Array<{
       type: string;
       name?: string;
@@ -755,7 +815,11 @@ export class PropUtil {
             {
               prop.value = prop.value as PropQuillContentValueWidget;
               name = prop.value.name;
-              value = PropUtil.propsToJSONObject(prop.value.props);
+              value = await PropUtil.propsToJSONObject(
+                prop.value.props,
+                undefined,
+                lng,
+              );
             }
             break;
           case PropQuillContentType.MEDIA:
@@ -777,7 +841,7 @@ export class PropUtil {
     };
   }
 
-  public static contentToMarkdown(
+  public static async contentToMarkdown(
     entryContent: EntryContent[],
     init?: {
       _id?: string;
@@ -788,10 +852,14 @@ export class PropUtil {
         name?: string;
       };
     },
-  ): any {
+  ): Promise<any> {
     const data: any = {};
     for (const i in entryContent) {
-      const lngData = PropUtil.propsToMarkdown(entryContent[i].props, init);
+      const lngData = await PropUtil.propsToMarkdown(
+        entryContent[i].props,
+        init,
+        entryContent[i].lng,
+      );
       data[entryContent[i].lng] = {
         meta: lngData.meta,
         content: lngData.content,
@@ -800,7 +868,7 @@ export class PropUtil {
     return data;
   }
 
-  public static contentToPrettyJSON(
+  public static async contentToPrettyJSON(
     entryContent: EntryContent[],
     init?: {
       _id?: string;
@@ -815,7 +883,13 @@ export class PropUtil {
     const data: any = {};
     for (const i in entryContent) {
       data[entryContent[i].lng] = JSON.parse(
-        JSON.stringify(PropUtil.propsToMarkdown(entryContent[i].props, init)),
+        JSON.stringify(
+          await PropUtil.propsToMarkdown(
+            entryContent[i].props,
+            init,
+            entryContent[i].lng,
+          ),
+        ),
       );
     }
     return data;

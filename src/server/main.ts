@@ -17,7 +17,7 @@ function svelte() {
     );
   });
 }
-svelte();
+// svelte();
 
 /**
  * Application Object that starts ExpressJS server.

@@ -180,17 +180,32 @@ export class EntryController {
     const entries: Entry[] = await this.entryService.findAllById(
       template.entryIds,
     );
-    return {
-      entries: entries.map(e => {
-        return PropUtil.contentToPrettyJSON(e.content, {
+    const result: any[] = [];
+    for (const i in entries) {
+      const e = entries[i];
+      result.push(
+        await PropUtil.contentToPrettyJSON(e.content, {
           _id: e._id.toHexString(),
           createdAt: e.createdAt,
           updatedAt: e.updatedAt,
           user: {
             _id: e.userId,
           },
-        });
-      }),
+        }),
+      );
+    }
+    return {
+      entries: result,
+      // entries: await entries.map(async e => {
+      //   return await PropUtil.contentToPrettyJSON(e.content, {
+      //     _id: e._id.toHexString(),
+      //     createdAt: e.createdAt,
+      //     updatedAt: e.updatedAt,
+      //     user: {
+      //       _id: e.userId,
+      //     },
+      //   });
+      // }),
     };
   }
 
@@ -332,7 +347,7 @@ export class EntryController {
       );
     }
     return {
-      entry: PropUtil.contentToPrettyJSON(entry.content, {
+      entry: await PropUtil.contentToPrettyJSON(entry.content, {
         _id: entry._id.toHexString(),
         createdAt: entry.createdAt,
         updatedAt: entry.updatedAt,
