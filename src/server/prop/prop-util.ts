@@ -766,7 +766,14 @@ export class PropUtil {
                     insert = `[${insert}](${op.attributes.link})`;
                   }
                 }
-                value += insert.replace('@', op.insert.trim());
+                value += insert
+                  .replace('@', op.insert)
+                  .replace(/\*\* /g, ' **')
+                  .replace(/ \*\*/g, '** ')
+                  .replace(/\* /g, ' *')
+                  .replace(/ \*/g, '* ')
+                  .replace(/~~ /g, ' ~~')
+                  .replace(/ ~~/g, '~~ ');
               }
               value += '\n';
             }
@@ -805,7 +812,14 @@ export class PropUtil {
                     listItem += insert.replace('@', op.insert);
                   }
                 } else {
-                  listItem += insert.replace('@', op.insert);
+                  listItem += insert
+                    .replace('@', op.insert)
+                    .replace(/\*\* /g, ' **')
+                    .replace(/ \*\*/g, '** ')
+                    .replace(/\* /g, ' *')
+                    .replace(/ \*/g, '* ')
+                    .replace(/~~ /g, ' ~~')
+                    .replace(/ ~~/g, '~~ ');
                 }
               }
               value += '\n';
