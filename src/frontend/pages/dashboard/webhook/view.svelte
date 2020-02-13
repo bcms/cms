@@ -13,6 +13,7 @@
   let webhooks = [];
   let webhook;
   let serverResponse;
+  let invokeDisabled = false;
 
   webhookStore.subscribe(value => {
     webhooks = value;
@@ -45,6 +46,7 @@
       }
       serverResponse = JSON.stringify(result.response.data, null, '  ');
       simplePopup.success('Webhook invoked successfully.');
+      invokeDisabled = true;
     }
   }
 </script>
@@ -76,8 +78,14 @@
         <div class="section">
           <Button
             icon="fas fa-tools"
+            disabled={invokeDisabled}
             on:click={() => {
               invoke();
+              invokeDisabled = true;
+              const coolDownTimer = setTimeout(() => {
+                invokeDisabled = false;
+                clearTimeout(coolDownTimer);
+              }, 5000);
             }}>
             Invoke
           </Button>

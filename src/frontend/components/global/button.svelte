@@ -7,6 +7,7 @@
   export let kind = 'primary';
   export let size;
   export let style;
+  export let disabled = false;
 
   let className;
 </script>
@@ -17,7 +18,7 @@
   }
 </style>
 
-<Button class={className} {kind} {size} {style} on:click>
+<Button {disabled} class={className} {kind} {size} {style} on:click>
   {#if icon}
     <span class="{icon} icon {onlyIcon === false ? 'mr-20' : ''}" />
   {/if}
