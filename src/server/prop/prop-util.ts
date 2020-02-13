@@ -751,22 +751,22 @@ export class PropUtil {
                 let insert: string = '@';
                 if (op.attributes) {
                   if (op.attributes.bold === true) {
-                    insert = `**${insert.trim()}**`;
+                    insert = `**${insert}**`;
                   }
                   if (op.attributes.italic === true) {
-                    insert = `*${insert.trim()}*`;
+                    insert = `*${insert}*`;
                   }
                   if (op.attributes.underline === true) {
-                    insert = `<u>${insert.trim()}</u>`;
+                    insert = `<u>${insert}</u>`;
                   }
                   if (op.attributes.strike === true) {
-                    insert = `~~${insert.trim()}~~`;
+                    insert = `~~${insert}~~`;
                   }
                   if (typeof op.attributes.link !== 'undefined') {
                     insert = `[${insert}](${op.attributes.link})`;
                   }
                 }
-                value += insert.replace('@', op.insert);
+                value += insert.replace('@', op.insert.trim());
               }
               value += '\n';
             }
