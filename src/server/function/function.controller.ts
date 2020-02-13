@@ -88,10 +88,11 @@ export class FunctionController {
     try {
       fnResult = await fn.resolve(request);
     } catch (e) {
+      this.logger.error('.execute', e);
       throw error.occurred(HttpStatus.INTERNAL_SERVER_ERROR, {
         success: false,
         message: 'Failed to execute a function.',
-        err: e,
+        err: e.message,
       });
     }
     return {
