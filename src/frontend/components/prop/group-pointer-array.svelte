@@ -14,11 +14,10 @@
   const dispatch = createEventDispatcher();
 
   function init() {
-    // for (const i in prop.value.array) {
-    //   const arr = prop.value.array[i];
-    //   events.push({});
-    // }
-    console.log(prop);
+    for (const i in prop.value.array) {
+      const arr = prop.value.array[i];
+      events.push({});
+    }
     for (const j in prop.value.array) {
       const group = groups.find(e => e._id === prop.value._id);
       if (group) {
