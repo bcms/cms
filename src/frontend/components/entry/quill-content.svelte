@@ -108,15 +108,21 @@
         }
         return 0;
       });
-      data.sections = data.sections.map(e => {
-        e.quill = undefined;
-        return e;
-      });
+      const ds = [
+        ...data.sections.map(e => {
+          e.quill = undefined;
+          return e;
+        }),
+      ];
+      data.sections = [];
       setTimeout(() => {
-        data.sections.forEach(section => {
-          section.quillEvents.init();
-        });
-      }, 10);
+        data.sections = ds;
+        setTimeout(() => {
+          data.sections.forEach(section => {
+            section.quillEvents.init();
+          });
+        }, 50);
+      }, 50);
     }
   }
 

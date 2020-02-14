@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { Store } from '../../config.svelte';
+  import { Store, forceFatch } from '../../config.svelte';
   import { TextInput } from 'carbon-components-svelte';
   import MediaPickerModal from '../global/modal/media-picker.svelte';
   import Button from '../global/button.svelte';
@@ -105,6 +105,7 @@
       <Button
         kind="ghost"
         on:click={() => {
+          forceFatch('media');
           mediaPicketModalEvents.toggle();
         }}>
         Click to select a media

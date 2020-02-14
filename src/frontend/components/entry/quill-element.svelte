@@ -7,7 +7,7 @@
   export let groups;
   export let quill;
   export let section;
-  export let events;
+  export let events = {};
 
   let id = '';
   let shift = false;
