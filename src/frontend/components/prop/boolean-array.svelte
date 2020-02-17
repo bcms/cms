@@ -3,6 +3,8 @@
   import { Toggle } from 'carbon-components-svelte';
   import Prop from './prop.svelte';
   import Button from '../global/button.svelte';
+  import PropArray from './prop-array.svelte';
+  import PropArrayItem from './prop-array-item.svelte';
   import StringUtil from '../../string-util.js';
 
   export let prop;
@@ -16,7 +18,26 @@
 </style>
 
 <Prop name={prop.name} required={prop.required} type={prop.type} {error}>
-  <div class="array">
+  <PropArray on:add>
+    {#each prop.value as v, i}
+      <PropArrayItem prop={v} position={i} on:remove on:move>
+        {#if v === true}
+          <Toggle
+            toggled={true}
+            on:change={event => {
+              prop.value[i] = event.target.checked;
+            }} />
+        {:else}
+          <Toggle
+            toggled={false}
+            on:change={event => {
+              prop.value[i] = event.target.checked;
+            }} />
+        {/if}
+      </PropArrayItem>
+    {/each}
+  </PropArray>
+  <!-- <div class="array">
     {#each prop.value as v, i}
       {#if v === true}
         <Toggle
@@ -43,5 +64,5 @@
         Add Item
       </Button>
     </div>
-  </div>
+  </div> -->
 </Prop>

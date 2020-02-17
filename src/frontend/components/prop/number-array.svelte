@@ -3,6 +3,8 @@
   import { NumberInput } from 'carbon-components-svelte';
   import Prop from './prop.svelte';
   import Button from '../global/button.svelte';
+  import PropArray from './prop-array.svelte';
+  import PropArrayItem from './prop-array-item.svelte';
   import StringUtil from '../../string-util.js';
 
   export let prop;
@@ -16,24 +18,15 @@
 </style>
 
 <Prop name={prop.name} required={prop.required} type={prop.type} {error}>
-  <div class="array">
+  <PropArray on:add>
     {#each prop.value as v, i}
-      <NumberInput
-        value={v}
-        on:change={event => {
-          prop.value[i] = event.detail;
-        }} />
+      <PropArrayItem prop={v} position={i} on:remove on:move>
+        <NumberInput
+          value={v}
+          on:change={event => {
+            prop.value[i] = event.detail;
+          }} />
+      </PropArrayItem>
     {/each}
-    <div class="action">
-      <Button
-        icon="fas fa-plus"
-        size="small"
-        kind="ghost"
-        on:click={() => {
-          dispatch('add', prop);
-        }}>
-        Add Item
-      </Button>
-    </div>
-  </div>
+  </PropArray>
 </Prop>

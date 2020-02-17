@@ -150,7 +150,7 @@
   init();
 </script>
 
-{#each props as prop}
+{#each props as prop, i}
   <div class="prop mt-20">
     {#if prop.type === 'STRING'}
       {#if prop.name.indexOf('uri') !== -1}
@@ -167,6 +167,25 @@
             prop.value.push('');
             props = [...props];
           }
+        }}
+        on:remove={event => {
+          if (event.eventPhase === 0) {
+            prop.value = prop.value.filter((e, j) => j !== event.detail.position);
+          }
+        }}
+        on:move={event => {
+          if (event.eventPhase === 0) {
+            if (event.detail.to > -1 && event.detail.to < prop.value.length) {
+              prop.value = prop.value.map((e, j) => {
+                if (j === event.detail.from) {
+                  return prop.value[event.detail.to];
+                } else if (j === event.detail.to) {
+                  return prop.value[event.detail.from];
+                }
+                return e;
+              });
+            }
+          }
         }} />
     {:else if prop.type === 'BOOLEAN'}
       <PropBoolean {prop} error={errors[prop.name]} />
@@ -179,6 +198,25 @@
             prop.value.push(false);
             props = [...props];
           }
+        }}
+        on:remove={event => {
+          if (event.eventPhase === 0) {
+            prop.value = prop.value.filter((e, j) => j !== event.detail.position);
+          }
+        }}
+        on:move={event => {
+          if (event.eventPhase === 0) {
+            if (event.detail.to > -1 && event.detail.to < prop.value.length) {
+              prop.value = prop.value.map((e, j) => {
+                if (j === event.detail.from) {
+                  return prop.value[event.detail.to];
+                } else if (j === event.detail.to) {
+                  return prop.value[event.detail.from];
+                }
+                return e;
+              });
+            }
+          }
         }} />
     {:else if prop.type === 'NUMBER'}
       <PropNumber {prop} error={errors[prop.name]} />
@@ -190,6 +228,25 @@
           if (event.eventPhase === 0) {
             prop.value.push(0);
             props = [...props];
+          }
+        }}
+        on:remove={event => {
+          if (event.eventPhase === 0) {
+            prop.value = prop.value.filter((e, j) => j !== event.detail.position);
+          }
+        }}
+        on:move={event => {
+          if (event.eventPhase === 0) {
+            if (event.detail.to > -1 && event.detail.to < prop.value.length) {
+              prop.value = prop.value.map((e, j) => {
+                if (j === event.detail.from) {
+                  return prop.value[event.detail.to];
+                } else if (j === event.detail.to) {
+                  return prop.value[event.detail.from];
+                }
+                return e;
+              });
+            }
           }
         }} />
     {:else if prop.type === 'ENUMERATION'}
@@ -216,6 +273,35 @@
             groupEvents[prop.name][prop.value.array.length - 1] = {};
             props = [...props];
           }
+        }}
+        on:remove={event => {
+          if (event.eventPhase === 0) {
+            const buffer = JSON.parse(JSON.stringify(prop.value.array.filter((e, j) => j !== event.detail.position)));
+            prop.value.array = [];
+            setTimeout(() => {
+              prop.value.array = buffer;
+            }, 50);
+          }
+        }}
+        on:move={event => {
+          if (event.eventPhase === 0) {
+            if (event.detail.to > -1 && event.detail.to < prop.value.array.length) {
+              const buffer = JSON.parse(JSON.stringify(prop.value.array.map(
+                    (e, j) => {
+                      if (j === event.detail.from) {
+                        return prop.value.array[event.detail.to];
+                      } else if (j === event.detail.to) {
+                        return prop.value.array[event.detail.from];
+                      }
+                      return e;
+                    },
+                  )));
+              prop.value.array = [];
+              setTimeout(() => {
+                prop.value.array = buffer;
+              }, 50);
+            }
+          }
         }} />
     {:else if prop.type === 'ENTRY_POINTER'}
       <PropEntryPointer {prop} error={errors[prop.name]} />
@@ -227,6 +313,35 @@
           if (event.eventPhase === 0) {
             prop.value.entryIds.push('');
             props = [...props];
+          }
+        }}
+        on:remove={event => {
+          if (event.eventPhase === 0) {
+            const buffer = JSON.parse(JSON.stringify(prop.value.entryIds.filter(e => e !== event.detail.prop)));
+            prop.value.entryIds = [];
+            setTimeout(() => {
+              prop.value.entryIds = buffer;
+            }, 50);
+          }
+        }}
+        on:move={event => {
+          if (event.eventPhase === 0) {
+            if (event.detail.to > -1 && event.detail.to < prop.value.entryIds.length) {
+              const buffer = JSON.parse(JSON.stringify(prop.value.entryIds.map(
+                    (id, j) => {
+                      if (j === event.detail.from) {
+                        return prop.value.entryIds[event.detail.to];
+                      } else if (j === event.detail.to) {
+                        return prop.value.entryIds[event.detail.from];
+                      }
+                      return id;
+                    },
+                  )));
+              prop.value.entryIds = [];
+              setTimeout(() => {
+                prop.value.entryIds = buffer;
+              }, 50);
+            }
           }
         }} />
     {/if}

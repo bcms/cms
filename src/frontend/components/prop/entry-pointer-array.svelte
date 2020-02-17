@@ -2,6 +2,8 @@
   import { createEventDispatcher } from 'svelte';
   import { entryStore } from '../../config.svelte';
   import { Select, SelectItem } from 'carbon-components-svelte';
+  import PropArray from './prop-array.svelte';
+  import PropArrayItem from './prop-array-item.svelte';
   import Button from '../global/button.svelte';
   import Prop from './prop.svelte';
   import StringUtil from '../../string-util.js';
@@ -39,33 +41,24 @@
 </style>
 
 <Prop name={prop.name} required={prop.required} type={prop.type} {error}>
-  <div class="array">
+  <PropArray {prop} on:add>
     {#each prop.value.entryIds as id, i}
-      <Select
-        selected={id}
-        on:change={event => {
-          if (event.eventPhase === 0) {
-            prop.value.entryIds[i] = event.detail;
-          }
-        }}>
-        <SelectItem text="- Unselected -" value="" />
-        {#each entries as entry, i}
-          <SelectItem
-            text="{entriesTitle[i]} | {entry._id}"
-            value={entry._id} />
-        {/each}
-      </Select>
+      <PropArrayItem prop={id} position={i} on:remove on:move>
+        <Select
+          selected={id}
+          on:change={event => {
+            if (event.eventPhase === 0) {
+              prop.value.entryIds[i] = event.detail;
+            }
+          }}>
+          <SelectItem text="- Unselected -" value="" />
+          {#each entries as entry, i}
+            <SelectItem
+              text="{entriesTitle[i]} | {entry._id}"
+              value={entry._id} />
+          {/each}
+        </Select>
+      </PropArrayItem>
     {/each}
-    <div class="action">
-      <Button
-        icon="fas fa-plus"
-        size="small"
-        kind="ghost"
-        on:click={() => {
-          dispatch('add', prop);
-        }}>
-        Add Item
-      </Button>
-    </div>
-  </div>
+  </PropArray>
 </Prop>

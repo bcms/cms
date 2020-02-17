@@ -4,6 +4,8 @@
   import Prop from './prop.svelte';
   import Props from './props.svelte';
   import Button from '../global/button.svelte';
+  import PropArray from './prop-array.svelte';
+  import PropArrayItem from './prop-array-item.svelte';
   import StringUtil from '../../string-util.js';
 
   export let groups = [];
@@ -23,9 +25,7 @@
       if (group) {
         for (const i in group.props) {
           if (
-            !prop.value.array[j].value.find(
-              e => e.name === group.props[i].name,
-            )
+            !prop.value.array[j].value.find(e => e.name === group.props[i].name)
           ) {
             prop.value.array[j].value = [
               ...prop.value.array[j].value,
@@ -44,22 +44,13 @@
 </style>
 
 <Prop name={prop.name} required={prop.required} type={prop.type} {error}>
-  <div class="array">
+  <PropArray on:add>
     {#each prop.value.array as arr, i}
-      <div class="group">
-        <Props props={arr.value} events={events[i]} />
-      </div>
+      <PropArrayItem prop={arr} position={i} on:remove on:move>
+        <div class="group">
+          <Props props={arr.value} events={events[i]} />
+        </div>
+      </PropArrayItem>
     {/each}
-    <div class="action">
-      <Button
-        icon="fas fa-plus"
-        size="small"
-        kind="ghost"
-        on:click={() => {
-          dispatch('add', prop);
-        }}>
-        Add Item
-      </Button>
-    </div>
-  </div>
+  </PropArray>
 </Prop>
