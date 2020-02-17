@@ -1,7 +1,7 @@
 <script>
   import uuid from 'uuid';
   import crypto from 'crypto-js';
-  import { onMount } from 'svelte';
+  import { onMount, afterUpdate } from 'svelte';
   import { navigate } from 'svelte-routing';
   import {
     axios,
@@ -32,6 +32,7 @@
   let languages;
   let selectedLanguage = {
     code: 'en',
+    disabled: false,
   };
   let entry;
   let quill;
@@ -148,6 +149,7 @@
     }
     simplePopup.success('Entry updated successfully.');
     dataHash = hashData();
+    selectedLanguage.disabled = false;
   }
   function createContent() {
     const content = [];
@@ -227,6 +229,7 @@
             'Are you sure you want to change language?',
         )
       ) {
+        languages = JSON.parse(JSON.stringify(languages));
         return;
       }
     }
@@ -413,6 +416,14 @@
   onMount(async () => {
     loadTimer = setInterval(getHighlight, 50);
   });
+  afterUpdate(() => {
+    const checkDataHash = hashData();
+    if (checkDataHash !== dataHash) {
+      selectedLanguage.disabled = true;
+    } else {
+      selectedLanguage.disabled = false;
+    }
+  });
 </script>
 
 <style type="text/scss">
@@ -463,9 +474,19 @@
         </div>
       </div>
       <h3>Change Language</h3>
-      <div class="lng">
+      <div
+        class="lng"
+        on:click={() => {
+          const checkDataHash = hashData();
+          if (checkDataHash !== dataHash) {
+            selectedLanguage.disabled = true;
+          } else {
+            selectedLanguage.disabled = false;
+          }
+        }}>
         <Select
           selected={selectedLanguage.code}
+          disabled={selectedLanguage.disabled}
           on:change={event => {
             if (event.eventPhase === 0) {
               changeLanguage(event.detail);
