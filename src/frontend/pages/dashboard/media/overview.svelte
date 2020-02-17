@@ -202,7 +202,18 @@
         on:open={event => {
           if (event.eventPhase === 0) {
             const f = event.detail.file;
-            viewPath = [...viewPath, { _id: f._id, type: f.type, name: f.name }];
+            viewPath = [...viewPath, { _id: f._id, type: f.type, name: f.name }].filter(
+              (e, i) => {
+                if (i > 0) {
+                  if (f.path.split('/').find(t => t === e.name)) {
+                    return true;
+                  }
+                  return false;
+                } else {
+                  return true;
+                }
+              },
+            );
           }
         }}
         on:remove={event => {
