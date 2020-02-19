@@ -7,7 +7,7 @@
 
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { Store } from '../../config.svelte';
+  import { axios, Store } from '../../config.svelte';
   import { simplePopup } from '../simple-popup.svelte';
   import { viewerFileStore, fileType } from './file-explorer.svelte';
   import { OverflowMenu, OverflowMenuItem } from 'carbon-components-svelte';
@@ -20,7 +20,11 @@
   const dispatch = createEventDispatcher();
   let files = [];
 
-  viewerFileStore.subscribe(value => {
+  viewerFileStore.subscribe(async value => {
+    await axios.send({
+      url: '/heartbeat',
+      method: 'GET',
+    });
     const dirs = value.filter(e => e.type === 'DIR');
     const fs = value.filter(e => e.type !== 'DIR');
     dirs.sort((a, b) => {
@@ -98,8 +102,13 @@
 </style>
 
 {#if files.length === 0}
-    <h4 class="no-files"><u>{StringUtil.prettyName(viewPath[viewPath.length - 1].name.replace(/\//g, ''))}</u> folder is empty.</h4>
-  {/if}
+  <h4 class="no-files">
+    <u>
+      {StringUtil.prettyName(viewPath[viewPath.length - 1].name.replace(/\//g, ''))}
+    </u>
+    folder is empty.
+  </h4>
+{/if}
 <div class="viewer">
   {#each files as file}
     <div class="file">
@@ -107,19 +116,19 @@
         <div class="menu">
           <OverflowMenu>
             {#if file.type !== 'DIR'}
-            <OverflowMenuItem
-              text="Copy Path"
-              on:click={() => {
-                navigator.clipboard
-                  .writeText(`${viewPath
-                      .map(e => {
-                        return e.name;
-                      })
-                      .join('/')}/${file.name}`)
-                  .then(() => {
-                    simplePopup.success('Path copied.');
-                  });
-              }} />
+              <OverflowMenuItem
+                text="Copy Path"
+                on:click={() => {
+                  navigator.clipboard
+                    .writeText(`${viewPath
+                        .map(e => {
+                          return e.name;
+                        })
+                        .join('/')}/${file.name}`)
+                    .then(() => {
+                      simplePopup.success('Path copied.');
+                    });
+                }} />
             {/if}
             {#if accessToken.customPool.policy.media.delete === true || accessToken.roles[0].name === 'ADMIN'}
               <OverflowMenuItem

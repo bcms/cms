@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { Store, fileStore } from '../../../config.svelte';
+  import { axios, Store, fileStore } from '../../../config.svelte';
   import Modal from './modal.svelte';
   import FileExplorer, {
     viewerFileStore,
@@ -15,12 +15,14 @@
 </script>
 
 <style type="text/scss">
-  .picker {
-    overflow: hidden;
-  }
-
   .short {
     height: 300px;
+  }
+
+  .file-preview .img {
+    max-width: 300px;
+    margin: 0 auto;
+    overflow-y: auto;
   }
 
   .file-preview .img img {
@@ -46,7 +48,8 @@
     <div class="bx--label">File explorer</div>
     <div class="short">
       <FileExplorer
-        onFileClick={file => {
+        onFileClick={async file => {
+          await axios.send({ url: '/heartbeat', method: 'GET' });
           fileSelected = file;
         }}
         showFiles={true} />
