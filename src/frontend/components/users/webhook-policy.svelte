@@ -1,30 +1,36 @@
 <script>
+  import { fade } from 'svelte/transition';
   import { Checkbox } from 'carbon-components-svelte';
   import StringUtil from '../../string-util.js';
 
   export let user;
   export let webhook;
 
-  let policy = {
-    _id: webhook._id,
-    get: false,
-    post: false,
-    put: false,
-    delete: false,
-  };
+  let policy = {};
+  let userId = user._id;
 
-  if (!user.customPool.policy.webhooks.find(e => e._id === webhook._id)) {
-    user.customPool.policy.webhooks.push(policy);
-  } else {
-    policy = user.customPool.policy.webhooks.find(e => e._id === webhook._id);
+  function init() {
+    policy = {
+      _id: webhook._id,
+      get: false,
+      post: false,
+      put: false,
+      delete: false,
+    };
+    if (!user.customPool.policy.webhooks.find(e => e._id === webhook._id)) {
+      user.customPool.policy.webhooks.push(policy);
+    } else {
+      policy = user.customPool.policy.webhooks.find(e => e._id === webhook._id);
+    }
   }
+  init();
 </script>
 
 <style type="text/scss">
   @import './policy.scss';
 </style>
 
-<div class="policy">
+<div class="policy" transition:fade={{ duration: 100 }}>
   <h4>
     Webhook
     <u>{StringUtil.prettyName(webhook.name)}</u>

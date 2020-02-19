@@ -174,6 +174,14 @@
     on:itemClicked={event => {
       if (event.eventPhase === 0) {
         userSelected = event.detail;
+        const webhooksBuffer = JSON.parse(JSON.stringify(webhooks));
+        const templatesBuffer = JSON.parse(JSON.stringify(templates));
+        webhooks = [];
+        templates = [];
+        setTimeout(() => {
+          webhooks = webhooksBuffer;
+          templates = templatesBuffer;
+        }, 210);
       }
     }}>
     {#if userSelected}

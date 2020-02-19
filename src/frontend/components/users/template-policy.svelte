@@ -1,4 +1,5 @@
 <script>
+  import { fade } from 'svelte/transition';
   import { Checkbox } from 'carbon-components-svelte';
   import StringUtil from '../../string-util.js';
 
@@ -24,7 +25,7 @@
   @import './policy.scss';
 </style>
 
-<div class="policy">
+<div class="policy" transition:fade={{ duration: 100 }}>
   <h4>
     Template
     <u>{StringUtil.prettyName(template.name)}</u>
