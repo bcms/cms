@@ -238,8 +238,12 @@
       { replace: true },
     );
     selectedLanguage.code = lng;
-    init();
-    propsEvents.init();
+    initDone = false;
+    setTimeout(() => {
+      init();
+      propsEvents.init();
+      console.log(selectedLanguage)
+    }, 100);
   }
   function hashData() {
     const d = {};
