@@ -232,8 +232,6 @@
           }
         }
       }
-    } else {
-      console.log(Store.get('loggedIn'));
     }
   }
   export function forceFatch(apiName) {

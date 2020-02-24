@@ -141,7 +141,6 @@
         },
       ],
     };
-    console.log(data);
     const result = await axios.send({
       url: '/group',
       method: 'PUT',

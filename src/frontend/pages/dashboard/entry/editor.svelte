@@ -133,7 +133,6 @@
       return;
     }
     const content = createContent();
-    console.log('Content', content);
     const result = await axios.send({
       url: `/template/${template._id}/entry`,
       method: 'PUT',
@@ -242,7 +241,6 @@
     setTimeout(() => {
       init();
       propsEvents.init();
-      console.log(selectedLanguage)
     }, 100);
   }
   function hashData() {
