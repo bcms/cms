@@ -55,6 +55,8 @@
     }
   }
   async function createDir(name) {
+    // console.log(findDir(files, name));
+    // console.log(files);
     const result = await axios.send({
       url: `/media/folder?path=${encodeURIComponent(
         '/' +
@@ -282,7 +284,7 @@
     </div>
   {/if}
 </Layout>
-<CreateDirModal {axios} events={createDirModalEvents} />
+<CreateDirModal {axios} {files} events={createDirModalEvents} />
 <UploadFileModal
   folder={viewPath
     .map(e => {

@@ -6,8 +6,8 @@
   import StringUtil from '../../../string-util.js';
   import { simplePopup } from '../../simple-popup.svelte';
 
-  export let axios;
   export let events;
+  export let files;
 
   const modalHeading = {
     icon: '/assets/ics/template/icon_type_groups.png',
@@ -30,27 +30,42 @@
     data.name.value = value;
     event.value = value;
   }
-  async function containsErrors() {
-    if (data.name.value === '') {
-      data.name.error = 'Input cannot be empty.';
-      return true;
+  function findDir(filess, name) {
+    for (const i in filess) {
+      if (filess[i].type === 'DIR') {
+        if (filess[i].name === name) {
+          return filess[i];
+        } else {
+          const file = findDir(filess[i].children, name);
+          if (file) {
+            return file;
+          }
+        }
+      }
     }
-    data.name.error = '';
-    const result = await axios.send({
-      url: `/media/exist?path=${root + '/' + data.name.value}`,
-      method: 'GET',
-    });
-    if (result.success === false) {
-      simplePopup.error(result.error.response.data.message);
-      return true;
-    }
-    if (result.response.data.exist === true) {
-      data.name.error = `Folder with name '${data.name.value}' already exist at this path.`;
-      return true;
-    }
-    data.name.error = '';
-    return false;
+    return undefined;
   }
+  // async function containsErrors() {
+  //   if (data.name.value === '') {
+  //     data.name.error = 'Input cannot be empty.';
+  //     return true;
+  //   }
+  //   data.name.error = '';
+  //   const result = await axios.send({
+  //     url: `/media/exist?path=${root + '/' + data.name.value}`,
+  //     method: 'GET',
+  //   });
+  //   if (result.success === false) {
+  //     simplePopup.error(result.error.response.data.message);
+  //     return true;
+  //   }
+  //   if (result.response.data.exist === true) {
+  //     data.name.error = `Folder with name '${data.name.value}' already exist at this path.`;
+  //     return true;
+  //   }
+  //   data.name.error = '';
+  //   return false;
+  // }
 
   events.setRootPath = rootPath => {
     root = '' + rootPath;
@@ -65,10 +80,15 @@
     };
   };
   events.done = async () => {
-    const errors = await containsErrors();
-    if (errors === true) {
+    if (data.name.value.replace(/ /g, '') === '') {
+      data.name.error = 'Name cannot be empty.';
       return;
     }
+    if (findDir(files, data.name.value)) {
+      data.name.error = `Folder with name "${data.name.value}" already exist.`;
+      return;
+    }
+    data.name.error = '';
     events.toggle();
     if (events.callback) {
       events.callback(data.name.value);

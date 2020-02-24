@@ -11,5 +11,9 @@
     "baseUrl": "./",
     "incremental": true
   },
+  "typedocOptions": {
+    "mode": "file",
+    "out": "typedoc"
+  },
   "exclude": ["node_modules", "dist", "public", "lib"]
 }
