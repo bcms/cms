@@ -15,6 +15,7 @@
     OverflowMenu,
     OverflowMenuItem,
     Pagination,
+    TextInput,
   } from 'carbon-components-svelte';
   import uuid from 'uuid';
   import { simplePopup } from '../../../components/simple-popup.svelte';
@@ -208,6 +209,30 @@
                 }
               }
               break;
+            case 'STRING':
+              {
+                const prop = content.props.find(e => e.name === filter.name);
+                if (prop) {
+                  if (filter.value.type === 'contains') {
+                    if (prop.value.indexOf(filter.value.value) === -1) {
+                      return false;
+                    }
+                  } else if (filter.value.type === 'regex') {
+                    try {
+                      const regex = new RegExp(filter.value.value, 'g');
+                      if (regex.test(prop.value) === false) {
+                        return false;
+                      }
+                    } catch (error) {
+                      console.error(error);
+                      return false;
+                    }
+                  } else {
+                    return false;
+                  }
+                }
+              }
+              break;
           }
         }
       }
@@ -237,6 +262,17 @@
             }
           }
           break;
+        case 'STRING':
+          {
+            if (options === '') {
+              filters = filters.filter(e => e.name !== filter.name);
+            } else if (options.type !== '') {
+              filter.value.type = options.type;
+            } else if (options.value !== '') {
+              filter.value.value = options.value;
+            }
+          }
+          break;
       }
     } else {
       switch (prop.type) {
@@ -251,18 +287,33 @@
             }
           }
           break;
-        case 'BOOLEAN': {
-          if (options) {
-            filters.push({
-              name: prop.name,
-              type: prop.type,
-              value: options === 'true' ? true : false,
-            });
+        case 'BOOLEAN':
+          {
+            if (options) {
+              filters.push({
+                name: prop.name,
+                type: prop.type,
+                value: options === 'true' ? true : false,
+              });
+            }
           }
-        }
+          break;
+        case 'STRING':
+          {
+            if (options) {
+              filters.push({
+                name: prop.name,
+                type: prop.type,
+                value: {
+                  type: options.type,
+                  value: options.value,
+                },
+              });
+            }
+          }
+          break;
       }
     }
-    entries = [...entries];
   }
   async function getData() {
     if (!queries.cid) {
@@ -341,42 +392,86 @@
           {/each}
         </Select>
       </div>
-      <h4 class="mt-20">Filters</h4>
+      <div class="filter-heading mt-20">
+        <h4>Filters</h4>
+        <Button
+          class="ml-20"
+          kind="ghost"
+          icon="fas fa-filter"
+          on:click={() => {
+            entries = [...entries];
+          }}>
+          Filter
+        </Button>
+      </div>
       <div class="filters mt-20">
         {#each template.entryTemplate as prop}
           {#if prop.type === 'ENUMERATION'}
-            <Select
-              labelText={StringUtil.prettyName(prop.name)}
-              helperText="Show Entries with selected enumeration."
-              selected={languageSelected.code}
-              on:change={event => {
-                if (event.eventPhase === 0) {
-                  setFilter(prop, { selected: event.detail });
-                }
-              }}>
-              <SelectItem value="" text="- Unselected -" />
-              {#each prop.value.items as item}
-                <SelectItem value={item} text={StringUtil.prettyName(item)} />
-              {/each}
-            </Select>
-          {:else if prop.type === 'BOOLEAN'}
-            <Select
-              labelText={StringUtil.prettyName(prop.name)}
-              helperText="Show Entries with boolean state."
-              selected={languageSelected.code}
-              on:change={event => {
-                if (event.eventPhase === 0) {
-                  if (event.detail === '') {
-                    setFilter(prop, '');
-                  } else {
-                    setFilter(prop, event.detail);
+            <div class="filter">
+              <Select
+                labelText={StringUtil.prettyName(prop.name)}
+                helperText="Show Entries with selected enumeration."
+                selected={languageSelected.code}
+                on:change={event => {
+                  if (event.eventPhase === 0) {
+                    setFilter(prop, { selected: event.detail });
                   }
-                }
-              }}>
-              <SelectItem value="" text="- Unselected -" />
-              <SelectItem value="true" text="True" />
-              <SelectItem value="false" text="False" />
-            </Select>
+                }}>
+                <SelectItem value="" text="- Unselected -" />
+                {#each prop.value.items as item}
+                  <SelectItem value={item} text={StringUtil.prettyName(item)} />
+                {/each}
+              </Select>
+            </div>
+          {:else if prop.type === 'BOOLEAN'}
+            <div class="filter">
+              <Select
+                labelText={StringUtil.prettyName(prop.name)}
+                helperText="Show Entries with boolean state."
+                selected={languageSelected.code}
+                on:change={event => {
+                  if (event.eventPhase === 0) {
+                    if (event.detail === '') {
+                      setFilter(prop, '');
+                    } else {
+                      setFilter(prop, event.detail);
+                    }
+                  }
+                }}>
+                <SelectItem value="" text="- Unselected -" />
+                <SelectItem value="true" text="True" />
+                <SelectItem value="false" text="False" />
+              </Select>
+            </div>
+          {:else if prop.type === 'STRING'}
+            <div class="filter">
+              <Select
+                labelText={StringUtil.prettyName(prop.name)}
+                helperText="Select type of string search."
+                on:change={event => {
+                  if (event.eventPhase === 0) {
+                    if (event.detail === '') {
+                      setFilter(prop, '');
+                    } else {
+                      setFilter(prop, { type: event.detail });
+                    }
+                  }
+                }}>
+                <SelectItem value="" text="- Unselected -" />
+                <SelectItem value="contains" text="Contains" />
+                <SelectItem value="regex" text="Regex" />
+              </Select>
+              <TextInput
+                class="mt-20"
+                labelText="Search for"
+                placeholder="- Type a string to find -"
+                on:input={event => {
+                  const filter = filters.find(e => e.name === prop.name);
+                  if (filter) {
+                    filter.value.value = event.target.value;
+                  }
+                }} />
+            </div>
           {/if}
         {/each}
       </div>

@@ -57,11 +57,24 @@
   font-weight: bold;
 }
 
+.filter-heading {
+  display: flex;
+}
+
+.filter-heading h4 {
+  margin: auto 0;
+}
+
 .filters {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 250px));
+  grid-template-columns: repeat(auto-fill, minmax(200px, 370px));
   grid-gap: 20px;
   width: 100%;
+}
+
+.filter {
+  padding: 10px 20px;
+  border: 1px solid var(--c-gray-light);
 }
 
 .page-scroll {
