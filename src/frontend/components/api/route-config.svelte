@@ -1,4 +1,5 @@
 <script>
+  import { createEventDispatcher } from 'svelte';
   import { Select, SelectItem, Checkbox } from 'carbon-components-svelte';
   import Button from '../global/button.svelte';
   import StringUtil from '../../string-util.js';
@@ -8,6 +9,7 @@
   export let functions;
   export let config;
 
+  const dispatch = createEventDispatcher();
   const configTypes = ['Template', 'Function'];
   const configMethods = ['GET_ALL', 'GET', 'POST', 'PUT', 'DELETE'];
 
@@ -79,7 +81,13 @@
       &nbsp;{configType}
     </div>
     <div class="remove">
-      <Button icon="fas fa-times" onlyIcon={true} kind="ghost" />
+      <Button
+        icon="fas fa-times"
+        onlyIcon={true}
+        kind="ghost"
+        on:click={() => {
+          dispatch('remove');
+        }} />
     </div>
   </div>
   <div class="content">
