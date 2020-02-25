@@ -12,10 +12,9 @@
   import {
     Select,
     SelectItem,
-    OverflowMenu,
-    OverflowMenuItem,
     Pagination,
     TextInput,
+    NumberInput,
   } from 'carbon-components-svelte';
   import uuid from 'uuid';
   import { simplePopup } from '../../../components/simple-popup.svelte';
@@ -23,6 +22,8 @@
   import Button from '../../../components/global/button.svelte';
   import DataModelModal from '../../../components/entry/modals/add-data-model.svelte';
   import ViewDataModelModal from '../../../components/entry/modals/view-data-model.svelte';
+  import OverflowMenu from '../../../components/global/overflow-menu.svelte';
+  import OverflowMenuItem from '../../../components/global/overflow-menu-item.svelte';
   import UrlQueries from '../../../url-queries.js';
   import Base64 from '../../../base64.js';
   import StringUtil from '../../../string-util.js';
@@ -102,7 +103,6 @@
       navigate(
         `/dashboard/template/entry/rc` +
           `?tid=${template._id}&lng=${languageSelected.code}`,
-        { replace: true },
       );
     }
   }
@@ -192,10 +192,13 @@
       if (content) {
         for (const i in filters) {
           const filter = filters[i];
+          const prop = content.props.find(e => e.name === filter.name);
+          if (!prop) {
+            return false;
+          }
           switch (filter.type) {
             case 'ENUMERATION':
               {
-                const prop = content.props.find(e => e.name === filter.name);
                 if (prop && prop.value.selected !== filter.selected) {
                   return false;
                 }
@@ -203,7 +206,6 @@
               break;
             case 'BOOLEAN':
               {
-                const prop = content.props.find(e => e.name === filter.name);
                 if (prop && prop.value !== filter.value) {
                   return false;
                 }
@@ -211,7 +213,6 @@
               break;
             case 'STRING':
               {
-                const prop = content.props.find(e => e.name === filter.name);
                 if (prop) {
                   if (filter.value.type === 'contains') {
                     if (prop.value.indexOf(filter.value.value) === -1) {
@@ -228,6 +229,39 @@
                       return false;
                     }
                   } else {
+                    return false;
+                  }
+                }
+              }
+              break;
+            case 'NUMBER':
+              {
+                switch (filter.value.type) {
+                  case '=':
+                    {
+                      console.log(filter);
+                      console.log(prop.value);
+                      if (prop.value !== filter.value.value) {
+                        console.log('HERE');
+                        return false;
+                      }
+                    }
+                    break;
+                  case '>=':
+                    {
+                      if (prop.value < filter.value.value) {
+                        return false;
+                      }
+                    }
+                    break;
+                  case '<=':
+                    {
+                      if (prop.value > filter.value.value) {
+                        return false;
+                      }
+                    }
+                    break;
+                  default: {
                     return false;
                   }
                 }
@@ -266,9 +300,20 @@
           {
             if (options === '') {
               filters = filters.filter(e => e.name !== filter.name);
-            } else if (options.type !== '') {
+            } else if (options.type && options.type !== '') {
               filter.value.type = options.type;
-            } else if (options.value !== '') {
+            } else if (options.value && options.value !== '') {
+              filter.value.value = options.value;
+            }
+          }
+          break;
+        case 'NUMBER':
+          {
+            if (options === '') {
+              filters = filters.filter(e => e.name !== filter.name);
+            } else if (options.type && options.type !== '') {
+              filter.value.type = options.type;
+            } else if (options.value && options.value !== '') {
               filter.value.value = options.value;
             }
           }
@@ -299,6 +344,20 @@
           }
           break;
         case 'STRING':
+          {
+            if (options) {
+              filters.push({
+                name: prop.name,
+                type: prop.type,
+                value: {
+                  type: options.type,
+                  value: options.value,
+                },
+              });
+            }
+          }
+          break;
+        case 'NUMBER':
           {
             if (options) {
               filters.push({
@@ -453,30 +512,66 @@
                     if (event.detail === '') {
                       setFilter(prop, '');
                     } else {
-                      setFilter(prop, { type: event.detail });
+                      setFilter(prop, { type: event.detail, value: '' });
                     }
+                    template.entryTemplate = JSON.parse(JSON.stringify(template.entryTemplate));
                   }
                 }}>
                 <SelectItem value="" text="- Unselected -" />
                 <SelectItem value="contains" text="Contains" />
                 <SelectItem value="regex" text="Regex" />
               </Select>
-              <TextInput
-                class="mt-20"
-                labelText="Search for"
-                placeholder="- Type a string to find -"
-                on:input={event => {
-                  const filter = filters.find(e => e.name === prop.name);
-                  if (filter) {
-                    filter.value.value = event.target.value;
+              {#if filters.find(e => e.name === prop.name)}
+                <TextInput
+                  class="mt-20"
+                  labelText="Search for"
+                  placeholder="- Type a string to find -"
+                  on:input={event => {
+                    setFilter(prop, { value: event.target.value });
+                  }} />
+              {/if}
+            </div>
+          {:else if prop.type === 'NUMBER'}
+            <div class="filter">
+              <Select
+                labelText={StringUtil.prettyName(prop.name)}
+                helperText="Select type of number search."
+                on:change={event => {
+                  if (event.eventPhase === 0) {
+                    if (event.detail === '') {
+                      setFilter(prop, '');
+                    } else {
+                      setFilter(prop, { type: event.detail, value: 0 });
+                    }
+                    template.entryTemplate = JSON.parse(JSON.stringify(template.entryTemplate));
                   }
-                }} />
+                }}>
+                <SelectItem value="" text="- Unselected -" />
+                <SelectItem value="=" text="Equal" />
+                <SelectItem value=">=" text="Grater or equal" />
+                <SelectItem value="<=" text="Less or equal" />
+              </Select>
+              {#if filters.find(e => e.name === prop.name)}
+                <NumberInput
+                  value="0"
+                  class="mt-20"
+                  labelText="Search for"
+                  placeholder="- Type a string to find -"
+                  on:change={event => {
+                    if (event.eventPhase === 0) {
+                      const filter = filters.find(e => e.name === prop.name);
+                      if (filter) {
+                        filter.value.value = event.detail;
+                      }
+                    }
+                  }} />
+              {/if}
             </div>
           {/if}
         {/each}
       </div>
       {#if entries.length > 0}
-        <div class="entries">
+        <div class="entries mt-50">
           {#each entries as entry, i}
             {#if filterEntry(entry, i) === true}
               {#if template.type === 'RICH_CONTENT'}
@@ -492,15 +587,11 @@
                             viewDataModelModalEvents.toggle();
                           }} />
                         {#if templatePolicy && templatePolicy.put === true}
-                          <li
-                            class="overflow-menu-link
-                            bx--overflow-menu-options__option">
-                            <Link
-                              class="bx--overflow-menu-options__btn"
-                              to="/dashboard/template/entry/rc?tid={template._id}&eid={entry._id}&lng={languageSelected.code}">
-                              Edit
-                            </Link>
-                          </li>
+                          <OverflowMenuItem
+                            text="Edit"
+                            on:click={() => {
+                              navigate(`/dashboard/template/entry/rc` + `?tid=${template._id}&eid=${entry._id}&lng=${languageSelected.code}`);
+                            }} />
                         {/if}
                         {#if templatePolicy && templatePolicy.delete === true}
                           <OverflowMenuItem

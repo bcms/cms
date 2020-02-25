@@ -1,8 +1,9 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { OverflowMenu, OverflowMenuItem } from 'carbon-components-svelte';
   import { Link } from 'svelte-routing';
   import Button from '../global/button.svelte';
+  import OverflowMenu from '../global/overflow-menu.svelte';
+  import OverflowMenuItem from '../global/overflow-menu-item.svelte';
   import StringUtil from '../../string-util.js';
 
   export let groups;
@@ -47,7 +48,7 @@
         </p>
       </td>
       <td>
-        <OverflowMenu>
+        <OverflowMenu position="right">
           <OverflowMenuItem
             text="Move Up"
             on:click={() => {

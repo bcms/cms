@@ -10,7 +10,8 @@
   import { axios, Store } from '../../config.svelte';
   import { simplePopup } from '../simple-popup.svelte';
   import { viewerFileStore, fileType } from './file-explorer.svelte';
-  import { OverflowMenu, OverflowMenuItem } from 'carbon-components-svelte';
+  import OverflowMenu from '../global/overflow-menu.svelte';
+  import OverflowMenuItem from '../global/overflow-menu-item.svelte';
   import Button from '../global/button.svelte';
   import StringUtil from '../../string-util.js';
 
