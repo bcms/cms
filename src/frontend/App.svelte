@@ -5,6 +5,7 @@
 
   import SimplePopup from './components/simple-popup.svelte';
   import Login from './pages/login.svelte';
+  import CreateAdmin from './pages/create-admin.svelte';
   import Page404 from './pages/404.svelte';
   import FontAwesome from './components/global/font-awesome.svelte';
 
@@ -28,6 +29,10 @@
     {
       path: '/login',
       component: Login,
+    },
+    {
+      path: '/create-admin',
+      component: CreateAdmin,
     },
     {
       path: '/admin',

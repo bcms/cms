@@ -35,7 +35,7 @@ export class UserController {
   @Service(UserService)
   private userService: UserService;
 
-  @Get('/is_initialized')
+  @Get('/is-initialized')
   async isInitialized(request: Request): Promise<{ initialized: boolean }> {
     const userCount = await this.userService.count();
     if (userCount > 0) {
@@ -456,7 +456,7 @@ export class UserController {
     };
   }
 
-  @Post('/gen_admin_sec_code')
+  @Post('/generate-admin-secret')
   async genAdminSecCode(request: Request) {
     SecurityCodeBufferService.gen();
     return {
@@ -464,7 +464,7 @@ export class UserController {
     };
   }
 
-  @Post('/create_admin')
+  @Post('/create-admin')
   async createAdmin(
     request: Request,
   ): Promise<{ accessToken: string; refreshToken: string }> {

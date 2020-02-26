@@ -6,7 +6,9 @@ export class SecurityCodeBufferService {
   public static gen() {
     this.securityCode = crypto.randomBytes(64).toString('base64');
     // tslint:disable-next-line: no-console
-    console.log('ADMIN SECURITY CODE', this.securityCode);
+    console.log('>>>>>> Server secret for creating an Admin <<<<<');
+    // tslint:disable-next-line:no-console
+    console.log(this.securityCode);
   }
 
   public static compare(securityCode: string): boolean {

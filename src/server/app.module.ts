@@ -165,7 +165,8 @@ export class App {
         // }
         if (
           request.path.startsWith('/login') ||
-          request.path.startsWith('/dashboard')
+          request.path.startsWith('/dashboard') ||
+          request.path.startsWith('/create-admin')
         ) {
           response.status(200);
         } else {

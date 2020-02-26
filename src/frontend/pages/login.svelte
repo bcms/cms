@@ -68,6 +68,21 @@
     //   navigate(`/dashboard/overview`, { replace: true });
     // }, 500);
   }
+  async function checkAdmin() {
+    const result = await axiosClient2.send({
+      url: '/user/is-initialized',
+      method: 'GET',
+    });
+    if (result.success === false) {
+      console.log(result.error);
+      simplePopup.error(result.error.response.data.message);
+      return;
+    }
+    if (result.response.data.initialized === false) {
+      navigate('/create-admin');
+    }
+  }
+  checkAdmin();
 </script>
 
 <style type="text/scss">
