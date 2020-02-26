@@ -16,7 +16,7 @@ export class FunctionsConfig {
   public static async init() {
     const p = path.join(process.env.PROJECT_ROOT, 'functions');
     const files = await util.promisify(fs.readdir)(p);
-    files.forEach(file => {
+    files.filter(file => file.endsWith('.js')).forEach(file => {
       FunctionsConfig.functions.push({
         name: file.split('.')[0],
         resolve: require(path.join(p, file)).resolve,
