@@ -284,7 +284,15 @@
     </div>
   {/if}
 </Layout>
-<CreateDirModal {axios} {files} events={createDirModalEvents} />
+<CreateDirModal
+  folder={viewPath
+    .map(e => {
+      return e.name;
+    })
+    .join('/')}
+  {axios}
+  {files}
+  events={createDirModalEvents} />
 <UploadFileModal
   folder={viewPath
     .map(e => {
