@@ -253,6 +253,55 @@ export class MediaController {
     return;
   }
 
+  @Get('/file/index')
+  async getFileIndex(request: Request): Promise<{ media: Media }> {
+    const error = HttpErrorFactory.simple('.getFileIndex', this.logger);
+    if (request.query.signature) {
+      try {
+        APISecurity.verify(
+          request.query,
+          request.body,
+          request.method.toUpperCase(),
+          request.originalUrl,
+          true,
+        );
+      } catch (e) {
+        throw error.occurred(HttpStatus.UNAUTHORIZED, e.message);
+      }
+    } else {
+      const jwt = JWTEncoding.decode(request.headers.authorization);
+      if (jwt instanceof Error) {
+        throw error.occurred(HttpStatus.UNAUTHORIZED, jwt.message);
+      } else {
+        const jwtValid = JWTSecurity.validateAndCheckTokenPermissions(
+          jwt,
+          [RoleName.ADMIN, RoleName.USER],
+          PermissionName.READ,
+          JWTConfigService.get('user-token-config'),
+        );
+        if (jwtValid instanceof Error) {
+          throw error.occurred(HttpStatus.UNAUTHORIZED, jwtValid.message);
+        }
+      }
+    }
+    const pathParts = request.query.path.split('/');
+    const p: string = pathParts.slice(0, pathParts.length - 1).join('/');
+    const name: string = pathParts.slice(
+      pathParts.length - 1,
+      pathParts.length,
+    )[0];
+    const media = await this.mediaService.findByNameAndPath(name, p);
+    if (media === null) {
+      throw error.occurred(
+        HttpStatus.NOT_FOUNT,
+        `Media file "${request.query.path}" does not exist.`,
+      );
+    }
+    return {
+      media,
+    };
+  }
+
   @Get('/exist')
   async exist(request: Request): Promise<{ exist: boolean }> {
     const error = HttpErrorFactory.simple('exist', this.logger);

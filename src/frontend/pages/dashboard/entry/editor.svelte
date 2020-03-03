@@ -105,6 +105,7 @@
       return;
     }
     const content = createContent();
+    console.log('Content', content);
     const result = await axios.send({
       url: `/template/${template._id}/entry`,
       method: 'POST',
@@ -117,11 +118,11 @@
       return;
     }
     entryStore.update(value => [...value, result.response.data.entry]);
-    navigate(
-      `/dashboard/template/entries/view/c/${template._id}?` +
-        `cid=${template._id}&lng=${selectedLanguage.code}`,
-      { replace: true },
-    );
+    // navigate(
+    //   `/dashboard/template/entries/view/c/${template._id}?` +
+    //     `cid=${template._id}&lng=${selectedLanguage.code}`,
+    //   { replace: true },
+    // );
   }
   async function updateEnrty() {
     const metaProps = propsEvents.validateAndGetProps();
@@ -294,9 +295,15 @@
           const entryId = entry._id;
           for (const j in languages) {
             const lng = languages[j];
-            const content = JSON.parse(
-              JSON.stringify(entry.content.find(e => e.lng === lng.code)),
-            );
+            const entryContent = entry.content.find(e => e.lng === lng.code);
+            let content = [];
+            if (entryContent) {
+              content = JSON.parse(JSON.stringify(entryContent));
+            } else {
+              content = JSON.parse(
+                JSON.stringify(entry.content.find(e => e.lng === 'en')),
+              );
+            }
             data[lng.code] = {};
             if (!content) {
               data[lng.code] = {
