@@ -13,7 +13,7 @@ export class Config {
     JWTConfigService.add({
       id: 'user-token-config',
       alg: JWTEncryptionAlg.HMACSHA256,
-      expIn: 300000,
+      expIn: 1500000,
       issuer: process.env.USER_TOKEN_ISSUER,
       secret: process.env.USER_TOKEN_SECRET,
     });
