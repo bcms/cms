@@ -54,7 +54,7 @@ export class EntryController {
   /** Return all Entries for all Templates. */
   @Get('/entry/all')
   async getAllEntries(request: Request): Promise<{ entries: Entry[] }> {
-    const error = HttpErrorFactory.simple('getEvery', this.logger);
+    const error = HttpErrorFactory.simple('getAllEntries', this.logger);
     const jwt = JWTEncoding.decode(request.headers.authorization);
     if (jwt instanceof Error) {
       throw error.occurred(HttpStatus.UNAUTHORIZED, jwt.message);
@@ -72,6 +72,31 @@ export class EntryController {
     const entries = await this.entryService.findAll();
     return {
       entries,
+    };
+  }
+
+  @Get('/entry/all/lite')
+  async getAllLite(request: Request): Promise<{ entries: Entry[] }> {
+    const error = HttpErrorFactory.simple('getAllLite', this.logger);
+    const jwt = JWTEncoding.decode(request.headers.authorization);
+    if (jwt instanceof Error) {
+      throw error.occurred(HttpStatus.UNAUTHORIZED, jwt.message);
+    } else {
+      const jwtValid = JWTSecurity.validateAndCheckTokenPermissions(
+        jwt,
+        [RoleName.ADMIN, RoleName.USER],
+        PermissionName.READ,
+        JWTConfigService.get('user-token-config'),
+      );
+      if (jwtValid instanceof Error) {
+        throw error.occurred(HttpStatus.UNAUTHORIZED, jwtValid.message);
+      }
+    }
+    const entries = await this.entryService.findAll();
+    return {
+      entries: entries.map(entry => {
+        return EntryFactory.toLite(entry);
+      }),
     };
   }
 

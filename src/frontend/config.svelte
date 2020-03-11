@@ -26,7 +26,7 @@
         })
         .then(result => {
           if (result.success === false) {
-            console.error(result.error.response.data.message);
+            console.error(result.error);
             return;
           }
           groupStore.set(result.response.data.groups);
@@ -40,7 +40,7 @@
         })
         .then(result => {
           if (result.success === false) {
-            console.error(result.error.response.data.message);
+            console.error(result.error);
             return;
           }
           templateStore.set(result.response.data.templates);
@@ -49,15 +49,22 @@
     entries: () => {
       axios
         .send({
-          url: '/template/entry/all',
+          url: '/template/entry/all/lite',
           method: 'GET',
         })
         .then(result => {
           if (result.success === false) {
-            console.error(result.error.response.data.message);
+            console.error(result.error);
             return;
           }
-          entryStore.set(result.response.data.entries);
+          entryStore.set(result.response.data.entries.sort((a, b) => {
+            if (a.createdAt > b.createdAt) {
+              return -1;
+            }else if (a.createdAt < b.createdAt) {
+              return 1;
+            }
+            return 0;
+          }));
         });
     },
     widgets: () => {
@@ -68,7 +75,7 @@
         })
         .then(result => {
           if (result.success === false) {
-            console.error(result.error.response.data.message);
+            console.error(result.error);
             return;
           }
           widgetStore.set(result.response.data.widgets);
@@ -96,7 +103,7 @@
         })
         .then(async result => {
           if (result.success === false) {
-            console.error(result.error.response.data.message);
+            console.error(result.error);
             return;
           }
           if (result.response.data.languages.length === 0) {
@@ -105,7 +112,7 @@
               method: 'POST',
             });
             if (result.success === false) {
-              console.error(result.error.response.data.message);
+              console.error(result.error);
               return;
             }
             languageStore.set([result.response.data.language]);

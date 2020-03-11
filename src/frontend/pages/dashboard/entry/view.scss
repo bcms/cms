@@ -130,3 +130,49 @@
   width: 100%;
   text-align: center;
 }
+
+.etable {
+  border-collapse: collapse;
+  background-color: #f4f4f4;
+  border-spacing: 10px;
+  width: 100%;
+}
+
+.etable .header {
+  background-color: #e0e0e0;
+  text-align: left;
+  font-weight: bold;
+}
+
+.etable .header th {
+  padding: 3px 5px;
+}
+
+.etable td {
+  padding: 3px 5px;
+}
+
+.etable .title {
+  width: 300px;
+}
+
+.etable .id {
+  font-size: 8pt;
+  width: 100px;
+}
+
+.etable .date {
+  font-size: 8pt;
+  width: 100px;
+}
+
+.etable .desc {
+  overflow-y: auto;
+  max-height: 10px;
+  font-size: 10pt;
+  width: 300px;
+}
+
+.etable .actions {
+  width: 50px;
+}

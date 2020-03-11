@@ -8,6 +8,7 @@
     languageStore,
     templateStore,
     pathStore,
+    entryStore,
   } from '../../../config.svelte';
   import {
     Select,
@@ -41,12 +42,16 @@
     code: 'en',
   };
   let entriesPerPage = 10;
+  let allEntries;
   let entries;
   let editEntry;
   let template;
   let templatePolicy;
   let page = 1;
   let filters = [];
+  let sort = {
+    createdAt: '',
+  };
   let templates = [];
 
   languageStore.subscribe(value => {
@@ -61,6 +66,17 @@
   templateStore.subscribe(value => {
     templates = value;
     template = templates.find(e => e._id === queries.cid);
+    if (allEntries) {
+      entries = allEntries.filter(e => e.templateId === template._id);
+      getData();
+    }
+  });
+  entryStore.subscribe(value => {
+    allEntries = value;
+    if (template) {
+      entries = allEntries.filter(e => e.templateId === template._id);
+      getData();
+    }
   });
   pathStore.subscribe(value => {
     setTimeout(() => {
@@ -183,7 +199,36 @@
       .join('":')
       .replace(/":/g, ':');
   }
-  function sortEntries() {}
+  function sortEntries() {
+    if (sort.createdAt !== '') {
+      switch (sort.createdAt) {
+        case 'newest':
+          {
+            entries.sort((a, b) => {
+              if (a.createdAt > b.createdAt) {
+                return -1;
+              } else if (a.createdAt < b.createdAt) {
+                return 1;
+              }
+              return 0;
+            });
+          }
+          break;
+        case 'oldest':
+          {
+            entries.sort((a, b) => {
+              if (a.createdAt > b.createdAt) {
+                return 1;
+              } else if (a.createdAt < b.createdAt) {
+                return -1;
+              }
+              return 0;
+            });
+          }
+          break;
+      }
+    }
+  }
   function filterEntry(entry, i) {
     const max = page * entriesPerPage;
     const min = max - entriesPerPage;
@@ -192,7 +237,19 @@
       if (content) {
         for (const i in filters) {
           const filter = filters[i];
-          const prop = content.props.find(e => e.name === filter.name);
+          let prop;
+          if (filter.name === 'root_title') {
+            try {
+              prop = {
+                value: content.props.find(p => p.type === 'QUILL').value.heading
+                  .title,
+              };
+            } catch (error) {
+              console.error(error);
+            }
+          } else {
+            prop = content.props.find(e => e.name === filter.name);
+          }
           if (!prop) {
             return false;
           }
@@ -215,7 +272,11 @@
               {
                 if (prop) {
                   if (filter.value.type === 'contains') {
-                    if (prop.value.indexOf(filter.value.value) === -1) {
+                    if (
+                      prop.value
+                        .toLowerCase()
+                        .indexOf(filter.value.value.toLowerCase()) === -1
+                    ) {
                       return false;
                     }
                   } else if (filter.value.type === 'regex') {
@@ -391,21 +452,7 @@
       );
     }
     template = templates.find(e => e._id === queries.cid);
-    if (template) {
-      let result = await axios.send({
-        url: `/template/${template._id}/entry/all`,
-        method: 'GET',
-      });
-      if (result.success === false) {
-        console.error(result.error);
-        simplePopup.error(result.error.response.data.message);
-        return;
-      }
-      entries = result.response.data.entries;
-      entriesPerPage = entries.length;
-    } else {
-      setTimeout(getData, 100);
-    }
+    entries = allEntries.filter(e => e.templateId === template._id);
   }
 
   onMount(async () => {
@@ -458,12 +505,56 @@
           kind="ghost"
           icon="fas fa-filter"
           on:click={() => {
+            sortEntries();
             entries = [...entries];
           }}>
           Filter
         </Button>
       </div>
       <div class="filters mt-20">
+        <div class="filter">
+          <Select
+            labelText="Sort by date created"
+            helperText="Sort entries by the date they were created."
+            selected=""
+            on:change={event => {
+              if (event.eventPhase === 0) {
+                sort.createdAt = event.detail;
+              }
+            }}>
+            <SelectItem value="" text="- Unselected -" />
+            <SelectItem value="newest" text="Newest First" />
+            <SelectItem value="oldest" text="Oldest First" />
+          </Select>
+        </div>
+        <div class="filter">
+          <Select
+            labelText="Title"
+            helperText="Select a type of string search."
+            on:change={event => {
+              if (event.eventPhase === 0) {
+                if (event.detail === '') {
+                  setFilter({ type: 'STRING', name: 'root_title' }, '');
+                } else {
+                  setFilter({ type: 'STRING', name: 'root_title' }, { type: event.detail, value: '' });
+                }
+                filters = [...filters];
+              }
+            }}>
+            <SelectItem value="" text="- Unselected -" />
+            <SelectItem value="contains" text="Contains" />
+            <SelectItem value="regex" text="Regex" />
+          </Select>
+          {#if filters.find(e => e.name === 'root_title')}
+            <TextInput
+              class="mt-20"
+              labelText="Search for"
+              placeholder="- Type a string to find -"
+              on:input={event => {
+                setFilter({ type: 'STRING', name: 'root_title' }, { value: event.target.value });
+              }} />
+          {/if}
+        </div>
         {#each template.entryTemplate as prop}
           {#if prop.type === 'ENUMERATION'}
             <div class="filter">
@@ -571,194 +662,85 @@
         {/each}
       </div>
       {#if entries.length > 0}
-        <div class="entries mt-50">
+        <table class="etable mt-50 mb-50">
+          <tr class="header">
+            <th>
+              <span class="m-auto-0">ID</span>
+            </th>
+            <th>Created At</th>
+            <th>Updated At</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th />
+          </tr>
           {#each entries as entry, i}
             {#if filterEntry(entry, i) === true}
-              {#if template.type === 'RICH_CONTENT'}
-                <div class="entry">
-                  <div class="heading">
-                    <div class="id">{entry._id}</div>
-                    <div class="overflow-menu">
-                      <OverflowMenu>
-                        <OverflowMenuItem
-                          text="Data Model"
-                          on:click={() => {
-                            viewDataModelModalEvents.setDataModel(JSON.stringify(entry, null, '  '));
-                            viewDataModelModalEvents.toggle();
-                          }} />
-                        {#if templatePolicy && templatePolicy.put === true}
-                          <OverflowMenuItem
-                            text="Edit"
-                            on:click={() => {
-                              navigate(`/dashboard/template/entry/rc` + `?tid=${template._id}&eid=${entry._id}&lng=${languageSelected.code}`);
-                            }} />
-                        {/if}
-                        {#if templatePolicy && templatePolicy.delete === true}
-                          <OverflowMenuItem
-                            danger={true}
-                            text="Delete"
-                            on:click={() => {
-                              deleteEntry(entry);
-                            }} />
-                        {/if}
-                      </OverflowMenu>
-                    </div>
-                  </div>
-                  <div class="info">
-                    {#if entry.content.find(e => e.lng === languageSelected.code)}
-                      {#each entry.content.find(e => e.lng === languageSelected.code).props as prop}
-                        {#if prop.type === 'QUILL'}
-                          {#if prop.value.heading.title !== ''}
-                            <div class="title">{prop.value.heading.title}</div>
-                            <div class="desc">{prop.value.heading.desc}</div>
-                          {:else}
-                            <div class="not-available">
-                              This Entry is not available in '{languageSelected.code}'
-                              language.
-                            </div>
-                          {/if}
-                        {/if}
-                      {/each}
-                    {:else}
-                      <div class="not-available">
-                        This Entry is not available in '{languageSelected.code}'
-                        language.
-                      </div>
+              <tr class="row">
+                <td class="id">{entry._id}</td>
+                <td class="date">
+                  {new Date(entry.createdAt).toLocaleDateString()}
+                  <br />
+                  {new Date(entry.createdAt).toLocaleTimeString()}
+                </td>
+                <td class="date">
+                  {new Date(entry.updatedAt).toLocaleDateString()}
+                  <br />
+                  {new Date(entry.updatedAt).toLocaleTimeString()}
+                </td>
+                {#if entry.content.find(e => e.lng === languageSelected.code)}
+                  {#each entry.content.find(e => e.lng === languageSelected.code).props as prop}
+                    {#if prop.type === 'QUILL'}
+                      {#if prop.value.heading.title !== ''}
+                        <td class="title">{prop.value.heading.title}</td>
+                        <td class="desc">{prop.value.heading.desc}</td>
+                      {:else}
+                        <td class="title">Not available</td>
+                        <td class="desc">
+                          This Entry is not available in '{languageSelected.code}'
+                          language.
+                        </td>
+                      {/if}
                     {/if}
-                    <div class="bx--label mt-20">Created At</div>
-                    <div class="date-time">
-                      <span class="date">
-                        {new Date(entry.createdAt).toLocaleDateString()}
-                      </span>
-                      <span class="time">
-                        {new Date(entry.createdAt).toLocaleTimeString()}
-                      </span>
-                    </div>
-                    <div class="bx--label mt-20">Updated At</div>
-                    <div class="date-time">
-                      <span class="date">
-                        {new Date(entry.updatedAt).toLocaleDateString()}
-                      </span>
-                      <span class="time">
-                        {new Date(entry.updatedAt).toLocaleTimeString()}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              {:else}
-                <div class="entry">
-                  <div class="heading">
-                    <div class="id">{entry._id}</div>
-                    <div class="overflow-menu">
-                      <OverflowMenu>
-                        <OverflowMenuItem
-                          text="Data Model"
-                          on:click={() => {
-                            viewDataModelModalEvents.setDataModel(JSON.stringify(entry, null, '  '));
-                            viewDataModelModalEvents.toggle();
-                          }} />
-                        {#if templatePolicy && templatePolicy.put === true}
-                          <OverflowMenuItem
-                            text="Edit"
-                            on:click={() => {
-                              editEntry = entry;
-                              editDataModelModalEvents.setEntry(entry);
-                              editDataModelModalEvents.toggle();
-                            }} />
-                        {/if}
-                        {#if templatePolicy && templatePolicy.delete === true}
-                          <OverflowMenuItem
-                            danger={true}
-                            text="Delete"
-                            on:click={() => {
-                              deleteEntry(entry);
-                            }} />
-                        {/if}
-                      </OverflowMenu>
-                    </div>
-                  </div>
-                  <div class="info">
-                    {#if !entry.content.find(e => e.lng === languageSelected.code)}
-                      <div class="not-available">
-                        This Entry is not available in '{languageSelected.code}'
-                        language.
-                      </div>
+                  {/each}
+                {:else}
+                  <td class="title">Not available</td>
+                  <td class="desc">
+                    This Entry is not available in '{languageSelected.code}'
+                    language.
+                  </td>
+                {/if}
+                <td class="actions">
+                  <OverflowMenu position="right">
+                    <OverflowMenuItem
+                      text="Data Model"
+                      on:click={() => {
+                        viewDataModelModalEvents.setDataModel(JSON.stringify(entry, null, '  '));
+                        viewDataModelModalEvents.toggle();
+                      }} />
+                    {#if templatePolicy && templatePolicy.put === true}
+                      <OverflowMenuItem
+                        text="Edit"
+                        on:click={() => {
+                          navigate(`/dashboard/template/entry/rc` + `?tid=${template._id}&eid=${entry._id}&lng=${languageSelected.code}`);
+                        }} />
                     {/if}
-                    <div class="bx--label mt-20">Created At</div>
-                    <div class="date-time">
-                      <span class="date">
-                        {new Date(entry.createdAt).toLocaleDateString()}
-                      </span>
-                      <span class="time">
-                        {new Date(entry.createdAt).toLocaleTimeString()}
-                      </span>
-                    </div>
-                    <div class="bx--label mt-20">Updated At</div>
-                    <div class="date-time">
-                      <span class="date">
-                        {new Date(entry.updatedAt).toLocaleDateString()}
-                      </span>
-                      <span class="time">
-                        {new Date(entry.updatedAt).toLocaleTimeString()}
-                      </span>
-                    </div>
-                    <!-- <div class="schema">
-                      <pre>
-                        <code>
-                          {compileSchema(contentToSchema(entry.content))}
-                        </code>
-                      </pre>
-                    </div> -->
-                  </div>
-                </div>
-              {/if}
+                    {#if templatePolicy && templatePolicy.delete === true}
+                      <OverflowMenuItem
+                        danger={true}
+                        text="Delete"
+                        on:click={() => {
+                          deleteEntry(entry);
+                        }} />
+                    {/if}
+                  </OverflowMenu>
+                </td>
+              </tr>
             {/if}
           {/each}
-        </div>
+        </table>
       {:else}
         <div class="no-entries">There are no Entries in this Template</div>
       {/if}
-      <!-- <div class="page-scroll">
-        <div class="wrapper">
-          {#if entries.length > 0}
-            <div class="entry-count">
-              <select class="select" on:change={setEntriesPerPage}>
-                {#each allowedEntriesPerPage as i}
-                  {#if entriesPerPage === i}
-                    <option value={i} selected>{i}</option>
-                  {:else}
-                    <option value={i}>{i}</option>
-                  {/if}
-                {/each}
-              </select>
-              <span>Entries per page</span>
-            </div>
-            <div class="nav">
-              {#if page === 1}
-                <div class="fa fa-angle-left btn dis" />
-              {:else}
-                <button
-                  class="fa fa-angle-left btn"
-                  on:click={() => {
-                    page = page - 1;
-                    entries = [...entries];
-                  }} />
-              {/if}
-              <div class="current">{page}</div>
-              {#if page * entriesPerPage >= entries.length}
-                <div class="fa fa-angle-right btn dis" />
-              {:else}
-                <button
-                  class="fa fa-angle-right btn"
-                  on:click={() => {
-                    page = page + 1;
-                    entries = [...entries];
-                  }} />
-              {/if}
-            </div>
-          {/if}
-        </div>
-      </div> -->
     {:else}
       <div class="no-template">Template was not provided.</div>
     {/if}
