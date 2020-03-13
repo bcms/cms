@@ -57,32 +57,4 @@ export class GitUtil {
   public static push(media: Media) {
     GitUtil.mediaBuffer.push(media);
   }
-
-  // public static updateUploads(media: Media) {
-  //   if (
-  //     process.env.GIT_USERNAME &&
-  //     process.env.GIT_USERNAME !== 'github-username' &&
-  //     process.env.GIT_PASSWORD &&
-  //     process.env.GIT_PASSWORD !== 'github-password' &&
-  //     process.env.GIT_REPO &&
-  //     process.env.GIT_REPO_OWNER &&
-  //     process.env.GIT_HOST
-  //   ) {
-  //     util
-  //       .promisify(childProcess.exec)(
-  //         `git pull "https://${process.env.GIT_USERNAME}:${process.env.GIT_PASSWORD}@` +
-  //           `${process.env.GIT_HOST}/${process.env.GIT_REPO_OWNER}/${process.env.GIT_REPO}" && ` +
-  //           `git add ${path.join(process.env.PROJECT_ROOT, 'uploads')}/. && ` +
-  //           `git commit -m "Adding file ${media.name} via CMS." && ` +
-  //           `git push "https://${process.env.GIT_USERNAME}:${process.env.GIT_PASSWORD}@` +
-  //           `${process.env.GIT_HOST}/${process.env.GIT_REPO_OWNER}/${process.env.GIT_REPO}"`,
-  //       )
-  //       .then(output => {
-  //         GitUtil.logger.info('git-push', `File ${media.name} added to GIT.`);
-  //       })
-  //       .catch(e => {
-  //         GitUtil.logger.error('git-push', e);
-  //       });
-  //   }
-  // }
 }

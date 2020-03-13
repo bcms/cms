@@ -77,11 +77,13 @@ export function cli(args: any) {
   process.env.DB_CLUSTER = `${config.server.database.mongo.database.cluster}`;
   process.env.DB_TYPE = `${config.server.database.type}`;
 
-  process.env.GIT_USERNAME = `${config.server.git.username}`;
-  process.env.GIT_PASSWORD = `${config.server.git.password}`;
-  process.env.GIT_HOST = `${config.server.git.host}`;
-  process.env.GIT_REPO = `${config.server.git.repo}`;
-  process.env.GIT_REPO_OWNER = `${config.server.git.repo_owner}`;
+  if (config.server.git.use === true) {
+    process.env.GIT_USERNAME = `${config.server.git.username}`;
+    process.env.GIT_PASSWORD = `${config.server.git.password}`;
+    process.env.GIT_HOST = `${config.server.git.host}`;
+    process.env.GIT_REPO = `${config.server.git.repo}`;
+    process.env.GIT_REPO_OWNER = `${config.server.git.repo_owner}`;
+  }
 
   if (options.dev === true) {
     process.env.SVELTE_PROD = 'false';

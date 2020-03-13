@@ -65,10 +65,13 @@
   });
   templateStore.subscribe(value => {
     templates = value;
-    template = templates.find(e => e._id === queries.cid);
-    if (allEntries) {
-      entries = allEntries.filter(e => e.templateId === template._id);
-      getData();
+    if (queries.cid) {
+      template = templates.find(e => e._id === queries.cid);
+      console.log(template, value);
+      if (allEntries) {
+        entries = allEntries.filter(e => e.templateId === template._id);
+        getData();
+      }
     }
   });
   entryStore.subscribe(value => {
