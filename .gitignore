@@ -1,11 +1,11 @@
 # compiled output
 /dist
 /node_modules
-public/bundle.*
-doc
-events
-uploads
-functions
+/public/bundle.*
+/doc
+/events
+/uploads
+/functions
 
 # Sapper
 /src/frontend/node_modules/@sapper/
@@ -14,6 +14,7 @@ functions
 /__sapper__/
 
 # Logs
+/log
 logs
 *.log
 npm-debug.log*

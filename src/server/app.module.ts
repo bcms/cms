@@ -99,7 +99,8 @@ export class App {
   constructor() {
     Config.init();
     this.logger = new Logger('App');
-    Logger.filePath = path.join(process.env.PROJECT_ROOT, 'app.log');
+    console.log(process.env.PROJECT_ROOT);
+    Logger.setLogPath(path.join(process.env.PROJECT_ROOT, 'log'));
 
     this.controllers.forEach(controller => {
       controller.initRouter();

@@ -4,7 +4,7 @@ import { KeyCashService } from './api/key-cash.service';
 import { FunctionsConfig } from './function/config';
 import { WebhookCashService } from './webhook/webhook-cash.service';
 import { GitUtil } from './media/git-util';
-import { EventManagerService } from './events/event-manager.service';
+import { EventManagerService } from './event/event-manager.service';
 
 export class Config {
   public static async init() {
