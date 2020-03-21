@@ -1,7 +1,7 @@
 <script>
   import uuid from 'uuid';
   import { onMount } from 'svelte';
-  import { TextInput } from 'carbon-components-svelte';
+  import TextInput from './text-input.svelte';
   import Button from './button.svelte';
 
   export { className as class };

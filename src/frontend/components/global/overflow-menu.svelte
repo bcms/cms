@@ -29,6 +29,7 @@
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2);
     overflow: hidden;
     z-index: 1000;
+    width: 200px;
   }
 </style>
 
@@ -48,7 +49,7 @@
   {#if show === true}
     <div
       class="options"
-      style={position === 'right' ? 'right: 0;' : 'left: 0;'}>
+      style={position === 'right' ? 'right: 60px;' : 'left: 0;'}>
       <slot />
     </div>
   {/if}

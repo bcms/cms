@@ -2,7 +2,6 @@
   import { createEventDispatcher } from 'svelte';
 
   export { className as class };
-  export let selected;
   export let labelText;
   export let helperText;
   export let disabled = false;

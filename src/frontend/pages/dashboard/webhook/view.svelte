@@ -1,7 +1,7 @@
 <script>
   import { onMount } from 'svelte';
   import { axios, webhookStore, pathStore } from '../../../config.svelte';
-  import { CodeSnippet } from 'carbon-components-svelte';
+  import CodeSnippet from '../../../components/global/code-snippet.svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/global/layout.svelte';
   import Button from '../../../components/global/button.svelte';

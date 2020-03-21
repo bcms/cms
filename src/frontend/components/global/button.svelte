@@ -17,6 +17,7 @@
     padding: 10px 30px 10px 15px;
     border: 2px solid #0000;
     font-size: 10pt;
+    text-align: left;
   }
 
   .btn:focus {

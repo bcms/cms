@@ -2,6 +2,7 @@
   import { createEventDispatcher } from 'svelte';
 
   export { className as class };
+  export let id;
   export let value = '';
   export let placeholder = '';
   export let labelText;
@@ -27,6 +28,7 @@
     </div>
   {/if}
   <input
+    {id}
     {disabled}
     {placeholder}
     value={`${value}`}
