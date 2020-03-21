@@ -11,7 +11,9 @@
     templateStore,
     entryStore,
   } from '../../../config.svelte';
-  import { Select, SelectItem, TextArea } from 'carbon-components-svelte';
+  import Select from '../../../components/global/select/select.svelte';
+  import SelectItem from '../../../components/global/select/select-item.svelte';
+  import TextArea from '../../../components/global/text-area.svelte';
   import Media from '../../../components/widget/media.svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Leyout from '../../../components/global/layout.svelte';
@@ -58,6 +60,7 @@
       widgets = value;
     }
     if (initDone === false) {
+      console.log('widgets');
       init();
     }
   });
@@ -66,6 +69,7 @@
       groups = value;
     }
     if (initDone === false) {
+      console.log('groups');
       init();
     }
   });
@@ -74,6 +78,7 @@
       languages = value;
     }
     if (initDone === false) {
+      console.log('languages');
       init();
     }
   });
@@ -83,6 +88,7 @@
       template = value.find(e => e._id === queries.tid);
     }
     if (initDone === false) {
+      console.log('templates');
       init();
     }
   });
@@ -90,6 +96,12 @@
     if (value) {
       entries = value;
       if (initDone === false) {
+        console.log('HERE', entries);
+        if (queries.eid) {
+          entry = entries.find(e => e._id === queries.eid);
+          console.log(entry);
+        }
+        console.log('entries');
         init();
       }
     }
@@ -276,12 +288,14 @@
   }
 
   function getQuill() {
+    console.log('Quill');
     if (Quill) {
       clearInterval(loadTimer);
       quill = Quill;
     }
   }
   function getHighlight() {
+    console.log('hljs');
     if (hljs) {
       clearInterval(loadTimer);
       loadTimer = setInterval(getQuill, 50);
@@ -492,18 +506,20 @@
             selectedLanguage.disabled = false;
           }
         }}>
-        <Select
-          selected={selectedLanguage.code}
+        <!-- <Select
+          selected='en'
           disabled={selectedLanguage.disabled}
           on:change={event => {
-            if (event.eventPhase === 0) {
+            console.log(event);
+            if (event.eventPhase === 0 && entry) {
+              console.log('lol')
               changeLanguage(event.detail);
             }
           }}>
           {#each languages as lng}
             <SelectItem text="{lng.name} | {lng.nativeName}" value={lng.code} />
           {/each}
-        </Select>
+        </Select> -->
       </div>
       <div class="title">
         {#if data[selectedLanguage.code].title.error !== ''}

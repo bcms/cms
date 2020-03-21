@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { Toggle } from 'carbon-components-svelte';
+  import Toggle from '../global/toggle/small.svelte';
   import Prop from './prop.svelte';
   import Button from '../global/button.svelte';
   import PropArray from './prop-array.svelte';
@@ -21,48 +21,15 @@
   <PropArray on:add>
     {#each prop.value as v, i}
       <PropArrayItem prop={v} position={i} on:remove on:move>
-        {#if v === true}
-          <Toggle
-            toggled={true}
-            on:change={event => {
-              prop.value[i] = event.target.checked;
-            }} />
-        {:else}
-          <Toggle
-            toggled={false}
-            on:change={event => {
-              prop.value[i] = event.target.checked;
-            }} />
-        {/if}
+        <Toggle
+          toggled={prop.value[i]}
+          size="30pt"
+          on:change={event => {
+            if (event.eventPhase === 0) {
+              prop.value[i] = event.detail;
+            }
+          }} />
       </PropArrayItem>
     {/each}
   </PropArray>
-  <!-- <div class="array">
-    {#each prop.value as v, i}
-      {#if v === true}
-        <Toggle
-          toggled={true}
-          on:change={event => {
-            prop.value[i] = event.target.checked;
-          }} />
-      {:else}
-        <Toggle
-          toggled={false}
-          on:change={event => {
-            prop.value[i] = event.target.checked;
-          }} />
-      {/if}
-    {/each}
-    <div class="action">
-      <Button
-        icon="fas fa-plus"
-        size="small"
-        kind="ghost"
-        on:click={() => {
-          dispatch('add', prop);
-        }}>
-        Add Item
-      </Button>
-    </div>
-  </div> -->
 </Prop>

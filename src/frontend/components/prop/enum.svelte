@@ -1,6 +1,7 @@
 <script>
   import Prop from './prop.svelte';
-  import { Select, SelectItem } from 'carbon-components-svelte';
+  import Select from '../global/select/select.svelte';
+  import SelectItem from '../global/select/select-item.svelte';
   import StringUtil from '../../string-util.js';
 
   export let prop;
@@ -19,7 +20,14 @@
     }}>
     <SelectItem text="- Unselected -" value="" />
     {#each prop.value.items as item}
-      <SelectItem text={StringUtil.prettyName(item)} value={item} />
+      {#if prop.value.selected === item}
+        <SelectItem
+          text={StringUtil.prettyName(item)}
+          value={item}
+          selected={true} />
+      {:else}
+        <SelectItem text={StringUtil.prettyName(item)} value={item} />
+      {/if}
     {/each}
   </Select>
 </Prop>

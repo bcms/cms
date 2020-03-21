@@ -8,7 +8,8 @@
     webhookStore,
   } from '../../../config.svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
-  import { TextInput, PasswordInput } from 'carbon-components-svelte';
+  import TextInput from '../../../components/global/text-input.svelte';
+  import PasswordInput from '../../../components/global/password-input.svelte';
   import Layout from '../../../components/global/layout.svelte';
   import ManagerLayout from '../../../components/global/manager-content.svelte';
   import Button from '../../../components/global/button.svelte';
@@ -199,25 +200,33 @@
           labelText="First Name"
           value={userSelected.customPool.personal.firstName}
           on:input={event => {
-            userSelected.customPool.personal.firstName = event.target.value;
+            if (event.eventPhase === 0) {
+              userSelected.customPool.personal.firstName = event.detail;
+            }
           }} />
         <TextInput
           labelText="Last Name"
           value={userSelected.customPool.personal.lastName}
           on:input={event => {
-            userSelected.customPool.personal.lastName = event.target.value;
+            if (event.eventPhase === 0) {
+              userSelected.customPool.personal.lastName = event.detail;
+            }
           }} />
         <TextInput
           labelText="Email"
           value={userSelected.email}
           on:input={event => {
-            userSelected.email = event.target.value;
+            if (event.eventPhase === 0) {
+              userSelected.email = event.detail;
+            }
           }} />
         <PasswordInput
           labelText="Password"
           placeholder="- Password -"
           on:input={event => {
-            userSelected.password = event.target.value;
+            if (event.eventPhase === 0) {
+              userSelected.password = event.detail;
+            }
           }} />
         <div class="policies mt-30">
           {#if userSelected.roles[0].name === 'ADMIN'}

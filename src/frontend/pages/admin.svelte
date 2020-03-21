@@ -1,7 +1,8 @@
 <script>
   import { onMount } from 'svelte';
   import { navigate } from 'svelte-routing';
-  import { TextInput, PasswordInput } from 'carbon-components-svelte';
+  import TextInput from '../components/global/text-input.svelte';
+  import PasswordInput from '../components/global/password-input.svelte';
   import { simplePopup } from '../components/simple-popup.svelte';
   import Button from '../components/global/button.svelte';
   import Axios from '../axios-client.js';
@@ -32,18 +33,6 @@
   };
 
   async function isInitialized() {
-    // const result = await axios.send({
-    //   url: '/user/is_initialized',
-    //   method: 'GET',
-    // });
-    // if (result.success === false) {
-    //   console.log(result.error.response.data.message);
-    //   return;
-    // }
-    // if (result.response.data.initialized === true) {
-    //   navigate(`/login`, { replace: true });
-    //   return;
-    // }
     await axios.send({
       url: '/user/gen_admin_sec_code',
       method: 'POST',

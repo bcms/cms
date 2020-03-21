@@ -1,6 +1,5 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { TextArea } from 'carbon-components-svelte';
   import Prop from './prop.svelte';
   import Props from './props.svelte';
   import Button from '../global/button.svelte';

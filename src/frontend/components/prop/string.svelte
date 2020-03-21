@@ -1,6 +1,6 @@
 <script>
   import Prop from './prop.svelte';
-  import { TextArea } from 'carbon-components-svelte';
+  import TextArea from '../global/text-area.svelte';
   import StringUtil from '../../string-util.js';
 
   export let prop;
@@ -15,7 +15,9 @@
     rows="1"
     value={prop.value}
     on:input={event => {
-      prop.value = event.target.value;
+      if (event.eventPhase === 0) {
+        prop.value = event.detail;
+      }
     }}
     placeholder={`- ${StringUtil.prettyName(prop.name)} -`} />
 </Prop>

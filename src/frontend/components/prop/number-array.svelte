@@ -1,6 +1,6 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { NumberInput } from 'carbon-components-svelte';
+  import NumberInput from '../global/number-input.svelte';
   import Prop from './prop.svelte';
   import Button from '../global/button.svelte';
   import PropArray from './prop-array.svelte';
@@ -24,7 +24,9 @@
         <NumberInput
           value={v}
           on:change={event => {
-            prop.value[i] = event.detail;
+            if (event.eventPhase === 0) {
+              prop.value[i] = event.detail;
+            }
           }} />
       </PropArrayItem>
     {/each}

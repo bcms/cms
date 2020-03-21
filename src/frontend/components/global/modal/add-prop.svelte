@@ -1,11 +1,9 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import {
-    TextInput,
-    ToggleSmall,
-    Select,
-    SelectItem,
-  } from 'carbon-components-svelte';
+  import TextInput from '../text-input.svelte';
+  import ToggleSmall from '../toggle/small.svelte';
+  import Select from '../select/select.svelte';
+  import SelectItem from '../select/select-item.svelte';
   import { templateStore } from '../../../config.svelte';
   import { simplePopup } from '../../simple-popup.svelte';
   import Modal from './modal.svelte';
@@ -145,13 +143,12 @@
     }
   }
   function handleNameInput(event) {
-    const value = event.value
+    const value = event
       .toLowerCase()
       .replace(/ /g, '_')
       .replace(/-/g, '_')
       .replace(/[^0-9a-z_-_]+/g, '');
     data.name.value = value;
-    event.value = value;
   }
   function handleGroupPointer(event) {
     const group = groups.find(e => e._id === event.detail);
@@ -308,47 +305,6 @@
         }
         break;
     }
-    // if (data.type.value === 'GROUP_POINTER') {
-    //   if (data.value.selected.value === '') {
-    //     data.value.selected.error = 'You need to select a Group.';
-    //     return;
-    //   }
-    //   data.value.selected.error = '';
-    // }
-    // if (data.type.value === 'ENUMERATION') {
-    //   data.value.items = enumInputOptions.getList();
-    //   enumInputOptions.clear();
-    // }
-    // if (data.type.value === 'GROUP_POINTER_ARRAY') {
-    //   if (data.value.value._id === '') {
-    //     data.value.error = 'Please select Group Pointer.';
-    //     return;
-    //   }
-    //   data.value.error = '';
-    // }
-    // let value = data.value;
-    // if (data.type.value.indexOf('_ARRAY') !== -1) {
-    //   value = data.value.value;
-    // }
-    // if (data.type.value === 'ENTRY_POINTER_ARRAY') {
-    // }
-    // if (data.type.value === 'ENTRY_POINTER') {
-    //   if (data.value.templateId.replace(/ /g, '') === '') {
-    //     data.value.error = 'Template must be selected.';
-    //     return;
-    //   }
-    //   data.value.error = '';
-    //   if (data.value.displayProp.value.replace(/ /g, '') === '') {
-    //     data.value.displayProp.error = 'Template must be selected.';
-    //     return;
-    //   }
-    //   data.value.displayProp.error = '';
-    //   value = {
-    //     templateId: data.value.templateId,
-    //     entryId: '',
-    //     displayProp: data.value.displayProp.value,
-    //   };
-    // }
     events.toggle();
     setTimeout(() => {
       data = {
@@ -394,15 +350,6 @@
 
   .type-btn:hover {
     background-color: var(--c-white-normal);
-  }
-
-  .type-btn .icon {
-    width: 30px;
-    margin: auto 0;
-  }
-
-  .type-btn .icon img {
-    width: 100%;
   }
 
   .type-btn .name {
@@ -462,11 +409,14 @@
   {:else if view === 2}
     <TextInput
       labelText="Name"
+      placeholder="- Name -"
       invalid={data.name.error !== '' ? true : false}
       invalidText={data.name.error}
       value={data.name.value}
       on:input={event => {
-        handleNameInput(event.target);
+        if (event.eventPhase === 0) {
+          handleNameInput(event.detail);
+        }
       }} />
     {#if data.type.value === 'ENUMERATION'}
       <MultiAdd class="mt-20" label="Enumaretions" options={enumInputOptions} />
@@ -617,9 +567,11 @@
       labelText="Required"
       labelA="No"
       labelB="Yes"
-      toggled={false}
+      toggled={data.required}
       on:change={event => {
-        data.required = event.target.checked;
+        if (event.eventPhase === 0) {
+          data.required = event.detail;
+        }
       }} />
   {/if}
 </Modal>

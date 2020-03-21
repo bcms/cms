@@ -1,6 +1,5 @@
 <script>
   import Prop from './prop.svelte';
-  import { TextArea } from 'carbon-components-svelte';
   import Props from './props.svelte';
   import StringUtil from '../../string-util.js';
 

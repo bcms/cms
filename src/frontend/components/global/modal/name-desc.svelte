@@ -2,7 +2,8 @@
   import { afterUpdate, createEventDispatcher } from 'svelte';
   import Modal from './modal.svelte';
   import { simplePopup } from '../../simple-popup.svelte';
-  import { TextInput, TextArea } from 'carbon-components-svelte';
+  import TextInput from '../text-input.svelte';
+  import TextArea from '../text-area.svelte';
 
   export let title;
   export let events;
@@ -48,7 +49,6 @@
       }
     }
     data.name.value = value;
-    event.value = value;
   }
   function cancel() {
     data = {
@@ -115,14 +115,19 @@
     invalidText={data.name.error}
     value={data.name.value}
     on:input={event => {
-      handleNameInput(event.target);
+      if (event.eventPhase === 0) {
+        handleNameInput({ value: event.detail });
+      }
     }} />
   <TextArea
+    class="mt-20"
     labelText="Description"
     placeholder="- Description -"
     helperText="Optional input"
     value={data.desc.value}
     on:input={event => {
-      data.desc.value = event.target.value;
+      if (event.eventPhase === 0) {
+        data.desc.value = event.detail;
+      }
     }} />
 </Modal>

@@ -99,7 +99,6 @@ export class App {
   constructor() {
     Config.init();
     this.logger = new Logger('App');
-    console.log(process.env.PROJECT_ROOT);
     Logger.setLogPath(path.join(process.env.PROJECT_ROOT, 'log'));
 
     this.controllers.forEach(controller => {
@@ -128,7 +127,6 @@ export class App {
 
   private initializeControllers(controllers: any[]) {
     this.app.use(express.static(path.join(process.env.PROJECT_ROOT, 'public')));
-    // this.app.use(express.static(path.join(__dirname, 'frontend')));
     if (process.env.DEV === 'false') {
       this.app.use(express.static(path.join(__dirname, 'frontend')));
     } else {
@@ -148,22 +146,6 @@ export class App {
     this.app.use(
       '/',
       async (request: express.Request, response: express.Response) => {
-        // response.status(404);
-        // response.json({
-        //   notFound: request.originalUrl,
-        // });
-        // response.status(200);
-        // if (
-        //   (await util.promisify(fs.exists)(
-        //     path.join(process.env.PROJECT_ROOT, 'public', 'index.html'),
-        //   )) === true
-        // ) {
-        //   response.sendFile(
-        //     path.join(process.env.PROJECT_ROOT, 'public', 'index.html'),
-        //   );
-        // } else {
-        //   response.sendFile(path.join(__dirname, 'frontend', 'index.html'));
-        // }
         if (
           request.path.startsWith('/login') ||
           request.path.startsWith('/dashboard') ||
@@ -189,7 +171,6 @@ export class App {
           } else {
             response.sendFile(path.join(__dirname, 'frontend', 'index.html'));
           }
-          // response.sendFile(path.join(__dirname, 'frontend', 'index.html'));
         }
       },
     );

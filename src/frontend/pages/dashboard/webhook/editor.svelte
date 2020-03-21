@@ -6,7 +6,7 @@
     groupStore,
     webhookStore,
   } from '../../../config.svelte';
-  import { TextArea } from 'carbon-components-svelte';
+  import TextArea from '../../../components/global/text-area.svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/global/layout.svelte';
   import ManagerLayout from '../../../components/global/manager-content.svelte';

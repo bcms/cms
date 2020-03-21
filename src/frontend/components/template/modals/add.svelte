@@ -1,11 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import {
-    TextInput,
-    TextArea,
-    Select,
-    SelectItem,
-  } from 'carbon-components-svelte';
+  import TextInput from '../../global/text-input.svelte';
+  import TextArea from '../../global/text-area.svelte';
   import Modal from '../../global/modal/modal.svelte';
 
   export let events;
@@ -65,25 +61,19 @@
     value={data.name.value}
     placeholder="- Name -"
     on:input={event => {
-      handleNameInput(event.target);
-    }} />
-  <!-- <Select
-    labelText="Select type"
-    selected="DATA_MODEL"
-    on:change={event => {
       if (event.eventPhase === 0) {
-        data.type = event.detail;
+        handleNameInput({ value: event.detail });
       }
-    }}>
-    <SelectItem value="DATA_MODEL" text="Data Model" />
-    <SelectItem value="RICH_CONTENT" text="Rich Content" />
-  </Select> -->
+    }} />
   <div class="mt-20" />
   <TextArea
+    class="mt-20"
     cols="500"
     labelText="Description"
     placeholder="- Description -"
     on:input={event => {
-      data.desc = event.target.value;
+      if (event.eventPhase === 0) {
+        data.desc = event.detail;
+      }
     }} />
 </Modal>

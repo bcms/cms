@@ -8,7 +8,8 @@
     keyStore,
   } from '../../../config.svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
-  import { CodeSnippet, ToggleSmall } from 'carbon-components-svelte';
+  import CodeSnippet from '../../../components/global/code-snippet.svelte';
+  import ToggleSmall from '../../../components/global/toggle/small.svelte';
   import Layout from '../../../components/global/layout.svelte';
   import ManagerLayout from '../../../components/global/manager-content.svelte';
   import Button from '../../../components/global/button.svelte';
@@ -269,10 +270,18 @@
       </div>
       <h4>General</h4>
       <div class="general mt-20">
-        <p>
-          <CodeSnippet code={keySelected.secret} />
-        </p>
-        {#if keySelected.blocked === true}
+        <CodeSnippet code={keySelected.secret} secret={true} />
+        <ToggleSmall
+          toggled={keySelected.blocked}
+          labelText="Blocked"
+          labelA="No"
+          labelB="Yes"
+          on:change={event => {
+            if (event.eventPhase === 0) {
+              keySelected.blocked = event.detail;
+            }
+          }} />
+        <!-- {#if keySelected.blocked === true}
           <ToggleSmall
             toggled={true}
             labelText="Blocked"
@@ -290,7 +299,7 @@
             on:change={event => {
               keySelected.blocked = event.target.checked;
             }} />
-        {/if}
+        {/if} -->
       </div>
       <h4 class="mt-50">Router Configuration</h4>
       <div class="router mt-20">

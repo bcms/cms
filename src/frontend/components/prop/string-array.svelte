@@ -1,10 +1,6 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import {
-    TextArea,
-    OverflowMenu,
-    OverflowMenuItem,
-  } from 'carbon-components-svelte';
+  import TextArea from '../global/text-area.svelte';
   import Prop from './prop.svelte';
   import Button from '../global/button.svelte';
   import PropArray from './prop-array.svelte';
@@ -30,7 +26,9 @@
           rows="1"
           value={v}
           on:input={event => {
-            prop.value[i] = event.target.value;
+            if (event.eventPhase === 0) {
+              prop.value[i] = event.detail;
+            }
           }}
           placeholder={`- ${StringUtil.prettyName(prop.name)} -`} />
       </PropArrayItem>

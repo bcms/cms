@@ -2,6 +2,10 @@
 @import './carbon.scss';
 @import './highlight.scss';
 @import './quill.scss';
+@import './table.scss';
+@import './margin.scss';
+@import './width.scss';
+@import './input.scss';
 
 :root {
   --c-primary: #1c5de7;
@@ -110,103 +114,8 @@ button:focus {
   border-color: #666;
 }
 
-.mt-20 {
-  margin-top: 20px;
-}
-
-.mt-30 {
-  margin-top: 30px;
-}
-
-.mt-50 {
-  margin-top: 50px;
-}
-
-.mt-auto {
-  margin-top: auto;
-}
-
-.mb-5 {
-  margin-bottom: 5px;
-}
-
-.mb-20 {
-  margin-bottom: 20px;
-}
-
-.mb-30 {
-  margin-bottom: 30px;
-}
-
-.mb-50 {
-  margin-bottom: 50px;
-}
-
-.mr-20 {
-  margin-right: 20px;
-}
-
-.mr-30 {
-  margin-right: 30px;
-}
-
-.mr-50 {
-  margin-right: 50px;
-}
-
-.ml-20 {
-  margin-left: 20px;
-}
-
-.ml-30 {
-  margin-left: 30px;
-}
-
-.ml-50 {
-  margin-left: 50px;
-}
-
-.w-100p {
-  width: 100%;
-}
-
-.w-100 {
-  width: 100px;
-}
-
-.w-50 {
-  width: 50px;
-}
-
 .no-padding {
   padding: 0;
-}
-
-.table {
-  border-collapse: collapse;
-  background-color: #f4f4f4;
-}
-
-.table-header {
-  background-color: #e0e0e0;
-  text-align: left;
-}
-
-.table-header th,
-.table-row td {
-  padding: 4px 6px;
-}
-
-.table-header th p {
-  font-weight: bold;
-}
-
-.table-row {
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.table-row td {
-  margin: auto 0;
 }
 
 .overflow-menu-link a {
@@ -236,4 +145,24 @@ button:focus {
   transition: outline 110ms cubic-bezier(0, 0, 0.38, 0.9),
     background-color 110ms cubic-bezier(0, 0, 0.38, 0.9),
     color 110ms cubic-bezier(0, 0, 0.38, 0.9);
+}
+
+.label-text {
+  font-size: 10pt;
+}
+
+.helper-text {
+  font-size: 10pt;
+  color: var(--c-gray-dark);
+}
+
+.invalid-text {
+  color: var(--c-error);
+  font-size: 10pt;
+  display: flex;
+}
+
+.invalid-text .icon {
+  font-size: 8pt;
+  margin: 4px 10px 0 0;
 }

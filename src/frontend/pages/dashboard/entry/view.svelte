@@ -10,13 +10,10 @@
     pathStore,
     entryStore,
   } from '../../../config.svelte';
-  import {
-    Select,
-    SelectItem,
-    Pagination,
-    TextInput,
-    NumberInput,
-  } from 'carbon-components-svelte';
+  import Select from '../../../components/global/select/select.svelte';
+  import SelectItem from '../../../components/global/select/select-item.svelte';
+  import TextInput from '../../../components/global/text-input.svelte';
+  import NumberInput from '../../../components/global/number-input.svelte';
   import uuid from 'uuid';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/global/layout.svelte';
@@ -67,7 +64,6 @@
     templates = value;
     if (queries.cid) {
       template = templates.find(e => e._id === queries.cid);
-      console.log(template, value);
       if (allEntries) {
         entries = allEntries.filter(e => e.templateId === template._id);
         getData();
@@ -418,7 +414,7 @@
           break;
         case 'NUMBER':
           {
-            if (options) {
+            if (options && options !== '') {
               filters.push({
                 name: prop.name,
                 type: prop.type,
@@ -487,8 +483,11 @@
           helperText="Entry result will be shown in selected language."
           selected={languageSelected.code}
           on:change={event => {
-            if (event.eventPhase === 0) {
-              languageSelected = languages.find(e => (e.code = event.detail));
+            if (event.eventPhase === 0 && event.returnValue === true) {
+              const l = languages.find(e => (e.code = event.detail));
+              if (l) {
+                languageSelected = l;
+              }
             }
           }}>
           {#each languages as lng}
@@ -516,13 +515,13 @@
             helperText="Sort entries by the date they were created."
             selected=""
             on:change={event => {
-              if (event.eventPhase === 0) {
+              if (event.eventPhase === 0 && event.returnValue === true) {
                 sort.createdAt = event.detail;
               }
             }}>
-            <SelectItem value="" text="- Unselected -" />
-            <SelectItem value="newest" text="Newest First" />
-            <SelectItem value="oldest" text="Oldest First" />
+            <SelectItem value="">- Unselected -</SelectItem>
+            <SelectItem value="newest">Newest First</SelectItem>
+            <SelectItem value="oldest">Oldest First</SelectItem>
           </Select>
         </div>
         <div class="filter">
@@ -530,7 +529,7 @@
             labelText="Title"
             helperText="Select a type of string search."
             on:change={event => {
-              if (event.eventPhase === 0) {
+              if (event.eventPhase === 0 && typeof event.detail === 'string') {
                 if (event.detail === '') {
                   setFilter({ type: 'STRING', name: 'root_title' }, '');
                 } else {
@@ -559,10 +558,11 @@
               <Select
                 labelText={StringUtil.prettyName(prop.name)}
                 helperText="Show Entries with selected enumeration."
-                selected={languageSelected.code}
+                selected=""
                 on:change={event => {
-                  if (event.eventPhase === 0) {
+                  if (event.eventPhase === 0 && typeof event.detail === 'string') {
                     setFilter(prop, { selected: event.detail });
+                    console.log(filters);
                   }
                 }}>
                 <SelectItem value="" text="- Unselected -" />
@@ -578,12 +578,8 @@
                 helperText="Show Entries with boolean state."
                 selected={languageSelected.code}
                 on:change={event => {
-                  if (event.eventPhase === 0) {
-                    if (event.detail === '') {
-                      setFilter(prop, '');
-                    } else {
-                      setFilter(prop, event.detail);
-                    }
+                  if (event.eventPhase === 0 && typeof event.detail === 'string') {
+                    setFilter(prop, event.detail);
                   }
                 }}>
                 <SelectItem value="" text="- Unselected -" />
@@ -597,7 +593,7 @@
                 labelText={StringUtil.prettyName(prop.name)}
                 helperText="Select type of string search."
                 on:change={event => {
-                  if (event.eventPhase === 0) {
+                  if (event.eventPhase === 0 && typeof event.detail === 'string') {
                     if (event.detail === '') {
                       setFilter(prop, '');
                     } else {
@@ -616,7 +612,9 @@
                   labelText="Search for"
                   placeholder="- Type a string to find -"
                   on:input={event => {
-                    setFilter(prop, { value: event.target.value });
+                    if (event.eventPhase === 0) {
+                      setFilter(prop, { value: event.detail });
+                    }
                   }} />
               {/if}
             </div>
@@ -626,7 +624,7 @@
                 labelText={StringUtil.prettyName(prop.name)}
                 helperText="Select type of number search."
                 on:change={event => {
-                  if (event.eventPhase === 0) {
+                  if (event.eventPhase === 0 && event.returnValue === true) {
                     if (event.detail === '') {
                       setFilter(prop, '');
                     } else {

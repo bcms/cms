@@ -1,6 +1,6 @@
 <script>
   import Prop from './prop.svelte';
-  import { NumberInput } from 'carbon-components-svelte';
+  import NumberInput from '../global/number-input.svelte';
 
   export let prop;
   export let error = '';
@@ -10,6 +10,8 @@
   <NumberInput
     value={prop.value}
     on:change={event => {
-      prop.value = event.detail;
+      if (event.eventPhase === 0) {
+        prop.value = event.detail;
+      }
     }} />
 </Prop>

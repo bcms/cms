@@ -10,14 +10,18 @@ function svelte() {
   Rollup.build({
     input: path.join(__dirname, '..', 'frontend', 'main.js'),
     output: path.join(process.env.PROJECT_ROOT, 'public'),
-  }).then(() => {
-    logger.info(
-      'init',
-      `Build completed in ${(Date.now() - svelteBuildTimeOffset) / 1000}s`,
-    );
-  });
+  })
+    .then(() => {
+      logger.info(
+        'init',
+        `Build completed in ${(Date.now() - svelteBuildTimeOffset) / 1000}s`,
+      );
+    })
+    .catch(error => {
+      console.error(error);
+    });
 }
-// svelte();
+svelte();
 
 /**
  * Application Object that starts ExpressJS server.
