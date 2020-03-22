@@ -1,10 +1,10 @@
 <script>
   import { onMount } from 'svelte';
-  import { TextInput, ToggleSmall } from 'carbon-components-svelte';
+  import TextInput from '../global/text-input.svelte';
+  import ToggleSmall from '../global/toggle/small.svelte';
   import { simplePopup } from '../simple-popup.svelte';
   import Modal from '../global/modal/modal.svelte';
-  import MultiAdd from '../multi-add.svelte';
-  import OnOff from '../on-off.svelte';
+  import MultiAdd from '../global/multi-add.svelte';
   import StringUtil from '../../string-util.js';
 
   export let events;
@@ -114,28 +114,21 @@
     invalidText={prop.name.error}
     value={prop.name.value}
     on:input={event => {
-      handleNameInput(event.target);
+      if (event.eventPhase === 0) {
+        handleNameInput({ value: event.detail });
+      }
     }} />
   {#if prop.type === 'ENUMERATION'}
     <MultiAdd label="Enumaretions" options={enumInputOptions} />
   {/if}
-  {#if prop.required === true}
-    <ToggleSmall
-      labelText="Required"
-      labelA="No"
-      labelB="Yes"
-      toggled={true}
-      on:change={event => {
-        prop.required = event.target.checked;
-      }} />
-  {:else}
-    <ToggleSmall
-      labelText="Required"
-      labelA="No"
-      labelB="Yes"
-      toggled={false}
-      on:change={event => {
-        prop.required = event.target.checked;
-      }} />
-  {/if}
+  <ToggleSmall
+    labelText="Required"
+    labelA="No"
+    labelB="Yes"
+    toggled={prop.required}
+    on:change={event => {
+      if (event.eventPhase === 0) {
+        prop.required = event.detail;
+      }
+    }} />
 </Modal>

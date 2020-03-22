@@ -1,5 +1,5 @@
 <script>
-  import { Checkbox } from 'carbon-components-svelte';
+  import Checkbox from '../global/checkbox.svelte';
 
   export let user;
 </script>

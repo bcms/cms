@@ -1,6 +1,4 @@
 <script>
-  import { Button } from 'carbon-components-svelte';
-
   export { className as class };
   export let icon;
   export let onlyIcon = false;
@@ -9,12 +7,12 @@
   export let style;
   export let disabled = false;
 
-  let className;
+  let className = '';
 </script>
 
 <style type="text/scss">
   .btn {
-    padding: 10px 30px 10px 15px;
+    padding: 10px 15px 10px 15px;
     border: 2px solid #0000;
     font-size: 10pt;
     text-align: left;

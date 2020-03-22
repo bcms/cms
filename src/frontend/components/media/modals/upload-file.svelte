@@ -1,9 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import {
-    TextInput,
-    FileUploaderDropContainer,
-  } from 'carbon-components-svelte';
+  import TextInput from '../../global/text-input.svelte';
+  import { FileUploaderDropContainer } from 'carbon-components-svelte';
   import Modal from '../../global/modal/modal.svelte';
 
   export let folder;
@@ -73,7 +71,9 @@
     value={data.fileName}
     placeholder="- File Name -"
     on:input={event => {
-      handleNameInput(event.target);
+      if (event.eventPhase === 0) {
+        handleNameInput({ value: event.detail });
+      }
     }} />
   <div class="file-area">
     <FileUploaderDropContainer

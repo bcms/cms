@@ -1,7 +1,6 @@
 <script>
   import uuid from 'uuid';
   import { onMount } from 'svelte';
-  import { TextInput, TextArea } from 'carbon-components-svelte';
   import QuillElement from './quill-element.svelte';
   import SelectElementModal from './modals/select-element.svelte';
   import Button from '../global/button.svelte';

@@ -2,7 +2,8 @@
   import { navigate } from 'svelte-routing';
   import { simplePopup } from '../components/simple-popup.svelte';
   import { Store, axios, forceFatch } from '../config.svelte';
-  import { TextInput, PasswordInput } from 'carbon-components-svelte';
+  import TextInput from '../components/global/text-input.svelte';
+  import PasswordInput from '../components/global/password-input.svelte';
   import Button from '../components/global/button.svelte';
   import AxiosClient from '../axios-client.js';
   import Base64 from '../base64.js';
@@ -140,7 +141,9 @@
       labelText="Server Secret"
       placeholder="- Server Secret -"
       on:input={event => {
-        data.secret.value = event.target.value;
+        if (event.eventPhase === 0) {
+          data.secret.value = event.detail;
+        }
       }} />
     <TextInput
       class="mt-20"
@@ -149,7 +152,9 @@
       labelText="Email"
       placeholder="- Email -"
       on:input={event => {
-        data.email.value = event.target.value;
+        if (event.eventPhase === 0) {
+          data.email.value = event.detail;
+        }
       }} />
     <TextInput
       class="mt-20"
@@ -158,7 +163,9 @@
       labelText="First Name"
       placeholder="- First Name -"
       on:input={event => {
-        data.firstName.value = event.target.value;
+        if (event.eventPhase === 0) {
+          data.firstName.value = event.detail;
+        }
       }} />
     <TextInput
       class="mt-20"
@@ -167,7 +174,9 @@
       labelText="Last Name"
       placeholder="- Last Name -"
       on:input={event => {
-        data.lastName.value = event.target.value;
+        if (event.eventPhase === 0) {
+          data.lastName.value = event.detail;
+        }
       }} />
     <PasswordInput
       class="mt-20"
@@ -176,7 +185,9 @@
       labelText="Password"
       placeholder="- Password -"
       on:input={event => {
-        data.pass.value = event.target.value;
+        if (event.eventPhase === 0) {
+          data.pass.value = event.detail;
+        }
       }} />
     <div class="actions mt-50">
       <Button on:click={submit}>Create</Button>

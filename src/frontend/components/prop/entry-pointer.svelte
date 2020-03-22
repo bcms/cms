@@ -1,7 +1,8 @@
 <script>
   import { entryStore } from '../../config.svelte';
   import Prop from './prop.svelte';
-  import { Select, SelectItem } from 'carbon-components-svelte';
+  import Select from '../global/select/select.svelte';
+  import SelectItem from '../global/select/select-item.svelte';
   import StringUtil from '../../string-util.js';
 
   export let prop;

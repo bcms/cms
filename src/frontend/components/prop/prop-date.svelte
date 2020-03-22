@@ -1,5 +1,5 @@
 <script>
-  import { DatePicker, DatePickerInput, TimePicker } from 'carbon-components-svelte';
+  import DatePicker from '../global/date-picker.svelte';
   import Prop from './prop.svelte';
   import StringUtil from '../../string-util.js';
 
@@ -14,7 +14,10 @@
 </script>
 
 <Prop name={prop.name} required={prop.required} type={prop.type} {error}>
-  <DatePicker
+  <DatePicker value={prop.value} on:change={event => {
+    
+  }} />
+  <!-- <DatePicker
     datePickerType={'single'}
     value={prop.value}
     on:change={event => {
@@ -24,5 +27,5 @@
       }
     }}>
     <DatePickerInput />
-  </DatePicker>
+  </DatePicker> -->
 </Prop>

@@ -1,6 +1,6 @@
 <script>
   import { fade } from 'svelte/transition';
-  import { Checkbox } from 'carbon-components-svelte';
+  import Checkbox from '../global/checkbox.svelte';
   import StringUtil from '../../string-util.js';
 
   export let user;

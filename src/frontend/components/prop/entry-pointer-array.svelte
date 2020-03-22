@@ -1,7 +1,8 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import { entryStore } from '../../config.svelte';
-  import { Select, SelectItem } from 'carbon-components-svelte';
+  import Select from '../global/select/select.svelte';
+  import SelectItem from '../global/select/select-item.svelte';
   import PropArray from './prop-array.svelte';
   import PropArrayItem from './prop-array-item.svelte';
   import Button from '../global/button.svelte';

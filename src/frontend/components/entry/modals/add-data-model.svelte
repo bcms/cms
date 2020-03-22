@@ -2,7 +2,8 @@
   import uuid from 'uuid';
   import crypto from 'crypto-js';
   import { onMount } from 'svelte';
-  import { Select, SelectItem } from 'carbon-components-svelte';
+  import Select from '../../global/select/select.svelte';
+  import SelectItem from '../../global/select/select-item.svelte';
   import { simplePopup } from '../../simple-popup.svelte';
   import Modal from '../../global/modal/modal.svelte';
   import Props from '../../prop/props.svelte';

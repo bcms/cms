@@ -1,8 +1,7 @@
 <script>
   import { onMount } from 'svelte';
-  import { TextInput } from 'carbon-components-svelte';
+  import TextInput from '../../global/text-input.svelte';
   import Modal from '../../global/modal/modal.svelte';
-  import OnOff from '../../on-off.svelte';
   import StringUtil from '../../../string-util.js';
   import { simplePopup } from '../../simple-popup.svelte';
 
@@ -60,27 +59,6 @@
     }
     return undefined;
   }
-  // async function containsErrors() {
-  //   if (data.name.value === '') {
-  //     data.name.error = 'Input cannot be empty.';
-  //     return true;
-  //   }
-  //   data.name.error = '';
-  //   const result = await axios.send({
-  //     url: `/media/exist?path=${root + '/' + data.name.value}`,
-  //     method: 'GET',
-  //   });
-  //   if (result.success === false) {
-  //     simplePopup.error(result.error.response.data.message);
-  //     return true;
-  //   }
-  //   if (result.response.data.exist === true) {
-  //     data.name.error = `Folder with name '${data.name.value}' already exist at this path.`;
-  //     return true;
-  //   }
-  //   data.name.error = '';
-  //   return false;
-  // }
 
   events.setRootPath = rootPath => {
     root = '' + rootPath;
@@ -126,6 +104,8 @@
     invalidText={data.name.error}
     placeholder="- File Name -"
     on:input={event => {
-      handleNameInput(event.target);
+      if (event.eventPhase === 0) {
+        handleNameInput({ value: event.detail });
+      }
     }} />
 </Modal>

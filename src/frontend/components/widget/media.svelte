@@ -1,7 +1,6 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import { Store, forceFatch } from '../../config.svelte';
-  import { TextInput } from 'carbon-components-svelte';
   import MediaPickerModal from '../global/modal/media-picker.svelte';
   import Button from '../global/button.svelte';
   import StringUtil from '../../string-util.js';

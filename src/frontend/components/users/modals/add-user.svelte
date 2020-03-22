@@ -1,7 +1,8 @@
 <script>
   import Modal from '../../global/modal/modal.svelte';
   import { simplePopup } from '../../simple-popup.svelte';
-  import { TextInput, PasswordInput } from 'carbon-components-svelte';
+  import TextInput from '../../global/text-input.svelte';
+  import PasswordInput from '../../global/password-input.svelte';
 
   export let events;
 
@@ -118,7 +119,9 @@
     invalidText={data.firstName.error}
     value={data.firstName.value}
     on:input={event => {
-      data.firstName.value = event.target.value;
+      if (event.eventPhase === 0) {
+        data.firstName.value = event.detail;
+      }
     }} />
   <TextInput
     labelText="Last Name"
@@ -127,7 +130,9 @@
     invalidText={data.lastName.error}
     value={data.lastName.value}
     on:input={event => {
-      data.lastName.value = event.target.value;
+      if (event.eventPhase === 0) {
+        data.lastName.value = event.detail;
+      }
     }} />
   <TextInput
     labelText="Email"
@@ -136,7 +141,9 @@
     invalidText={data.email.error}
     value={data.email.value}
     on:input={event => {
-      data.email.value = event.target.value;
+      if (event.eventPhase === 0) {
+        data.email.value = event.detail;
+      }
     }} />
   <PasswordInput
     showPasswordLabel=""
@@ -147,6 +154,8 @@
     invalidText={data.password.error}
     value={data.password.value}
     on:input={event => {
-      data.password.value = event.target.value;
+      if (event.eventPhase === 0) {
+        data.password.value = event.detail;
+      }
     }} />
 </Modal>

@@ -1,6 +1,8 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import { Select, SelectItem, Checkbox } from 'carbon-components-svelte';
+  import Select from '../global/select/select.svelte';
+  import SelectItem from '../global/select/select-item.svelte';
+  import Checkbox from '../global/checkbox.svelte';
   import Button from '../global/button.svelte';
   import StringUtil from '../../string-util.js';
 
@@ -165,124 +167,4 @@
       </Select>
     {/if}
   </div>
-  <!-- <div class="heading">
-    {#if configType === 'Template'}
-      <div class="fas fa-cubes icon" />
-    {:else if configType === 'Entry'}
-      <div class="fas fa-cube icon" />
-    {:else if configType === 'Function'}
-      <div class="fas fa-code icon" />
-    {/if}
-    <div class="name">{configType}</div>
-    <div class="actions">
-      <button
-        class="btn btn-red-c delete"
-        on:click={() => {
-          events.remove();
-        }}>
-        <div class="fas fa-times icon" />
-      </button>
-    </div>
-  </div>
-  <div class="settings">
-    {#if configType === 'Template'}
-      <div class="key-value">
-        <div class="label">
-          <span>Select Template</span>
-        </div>
-        <div class="value">
-          <select class="select" bind:value={config._id}>
-            {#if config._id === ''}
-              <option value="">- Unselected -</option>
-            {/if}
-            {#each templates as template}
-              {#if template._id === config._id}
-                <option value={template._id} selected>
-                  {StringUtil.prettyName(template.name)}
-                </option>
-              {:else}
-                <option value={template._id}>
-                  {StringUtil.prettyName(template.name)}
-                </option>
-              {/if}
-            {/each}
-          </select>
-        </div>
-      </div>
-      <div class="key-value">
-        <div class="label">
-          <span>Select allowed methods for Template</span>
-        </div>
-        <div class="value checkbox-group">
-          <div class="item">
-            {#if config.methods.find(e => e === 'GET')}
-              <input
-                class="box"
-                type="checkbox"
-                value="GET"
-                checked
-                on:change={event => {
-                  handleMethodCheck('Template', 'GET', event.target.checked);
-                }} />
-            {:else}
-              <input
-                class="box"
-                type="checkbox"
-                value="GET"
-                on:change={event => {
-                  handleMethodCheck('Template', "GET", event.target.checked);
-                }} />
-            {/if}
-            <div class="text">{StringUtil.prettyName("GET")}</div>
-          </div>
-        </div>
-      </div>
-      <div class="key-value">
-        <div class="label">Select allowed methods for Entries</div>
-        <div class="value checkbox-group">
-          {#each configMethods as method}
-            <div class="item">
-              {#if config.entry.methods.find(e => e === method)}
-                <input
-                  class="box"
-                  type="checkbox"
-                  value={method}
-                  checked
-                  on:change={event => {
-                    handleMethodCheck('Entry', method, event.target.checked);
-                  }} />
-              {:else}
-                <input
-                  class="box"
-                  type="checkbox"
-                  value={method}
-                  on:change={event => {
-                    handleMethodCheck('Entry', method, event.target.checked);
-                  }} />
-              {/if}
-              <div class="text">{StringUtil.prettyName(method)}</div>
-            </div>
-          {/each}
-        </div>
-      </div>
-    {:else}
-      <div class="key-value">
-        <div class="label">Select a Function</div>
-        <div class="value">
-          <select class="select" bind:value={config.name}>
-            {#if config.name === ''}
-              <option value="" selected>- Unselected -</option>
-            {/if}
-            {#each functions as fn}
-              {#if fn.name === config.name}
-                <option value={fn} selected>{StringUtil.prettyName(fn)}</option>
-              {:else}
-                <option value={fn}>{StringUtil.prettyName(fn)}</option>
-              {/if}
-            {/each}
-          </select>
-        </div>
-      </div>
-    {/if}
-  </div> -->
 </div>

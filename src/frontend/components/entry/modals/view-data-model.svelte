@@ -1,6 +1,5 @@
 <script>
   import Modal from '../../global/modal/modal.svelte';
-  import { CodeSnippet } from 'carbon-components-svelte';
   export let events;
 
   let dataModel = '{}';

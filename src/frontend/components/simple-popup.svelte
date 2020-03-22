@@ -1,5 +1,4 @@
 <script context="module">
-  import { ToastNotification } from 'carbon-components-svelte';
   import StringUtil from '../string-util.js';
 
   export const simplePopup = {
@@ -82,21 +81,98 @@
 </script>
 
 <style type="text/scss" global>
-  @import './simple-popup.scss';
+  .simple-popup {
+    position: fixed;
+    bottom: 20px;
+    right: -350px;
+    width: 350px;
+    font-size: 10pt;
+    border: none;
+    z-index: 1;
+  }
+
+  .simple-popup .message {
+    transition: 0.4s;
+    color: var(--c-white);
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 3px;
+    position: relative;
+    right: 370px;
+  }
+
+  .simple-popup .message:hover {
+    cursor: pointer;
+  }
+
+  .toast {
+    width: 100%;
+    color: var(--c-black);
+    padding: 20px;
+    min-height: 80px;
+  }
+
+  .error {
+    background-color: rgb(231, 179, 179);
+    border-left: 4px solid var(--c-error);
+  }
+
+  .success {
+    background-color: rgb(188, 231, 179);
+    border-left: 4px solid var(--c-success);
+  }
+
+  .toast .type {
+    display: flex;
+  }
+
+  .toast .type .text {
+    font-size: 12pt;
+    font-weight: bold;
+    margin: auto 0 auto 10px;
+  }
+
+  .toast .type .icon {
+    font-size: 16pt;
+  }
+
+  .error .type .icon {
+    color: var(--c-error);
+  }
+
+  .success .type .icon {
+    color: var(--c-success);
+  }
+
+  .toast .type .close {
+    border: none;
+    background-color: #0000;
+    margin: auto 0 auto auto;
+    font-size: 12pt;
+  }
+
+  .toast .content {
+    margin-top: 20px;
+  }
 </style>
 
 <div class="simple-popup">
   {#each messages as message}
     <div id={message.id} class="message" style="right: {message.position}px;">
-      <ToastNotification
-        style="width: 100%;"
-        title={StringUtil.prettyName(message.type)}
-        kind={message.type}
-        lowContrast={true}
-        caption={message.content}
-        on:click={() => {
-          simplePopup.remove(message.id);
-        }} />
+      <div class="toast {message.type}">
+        <div class="type">
+          <span
+            class="fas fa-{message.type === 'error' ? 'exclamation-circle' : 'check-circle'}
+            icon" />
+          <span class="text">{StringUtil.prettyName(message.type)}</span>
+          <button
+            class="fas fa-times close"
+            on:click={() => {
+              simplePopup.remove(message.id);
+            }} />
+        </div>
+        <div class="content">{message.content}</div>
+      </div>
     </div>
   {/each}
 </div>

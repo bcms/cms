@@ -104,17 +104,6 @@
             code={serverResponse ? serverResponse : 'Not available...'} />
         </div>
       </div>
-      <!-- <div class="trigger">
-        <button class="btn-fill btn-blue-bg invoke" on:click={invoke}>
-          <div class="fas fa-tools icon" />
-          <div class="text">Invoke</div>
-        </button>
-        <div class="body">
-          <pre>
-            <code id="response" />
-          </pre>
-        </div>
-      </div> -->
     </div>
   {/if}
 </Layout>
