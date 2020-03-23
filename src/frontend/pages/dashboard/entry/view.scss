@@ -1,11 +1,9 @@
 .manager {
-  display: grid;
-  grid-template-columns: 350px auto;
   height: 100%;
 }
 
 .manager .content {
-  padding: 20px;
+  padding: 20px 20px 20px 370px;
   width: 100%;
   margin: 0 auto;
 }
@@ -18,13 +16,17 @@
 }
 
 .menu {
-  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 250px;
+  width: 350px;
   height: 100%;
   padding: 30px 20px 0 20px;
   margin: auto 0;
   overflow-x: hidden;
   overflow-y: auto;
   border-right: 1px solid #e0e0e0;
+  overflow-y: auto;
 }
 
 .menu .section {
