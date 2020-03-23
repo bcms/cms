@@ -1,6 +1,6 @@
 {
   "name": "@becomes/cms",
-  "version": "1.0.113",
+  "version": "1.0.114",
   "description": "Simple CMS for building APIs.",
   "author": "becomes.co",
   "license": "MIT",
@@ -30,6 +30,7 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "svelte-routing": "^1.4.2",
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-node-resolve": "^6.0.0",
     "@rollup/plugin-replace": "^2.3.1",
@@ -59,7 +60,6 @@
     "sirv-cli": "^0.4.4",
     "svelte": "^3.20.1",
     "svelte-preprocess": "^3.5.0",
-    "svelte-routing": "^1.4.2",
     "ts-node": "^8.7.0",
     "tsconfig-paths": "^3.9.0",
     "tslint": "^5.20.1",

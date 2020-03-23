@@ -11,6 +11,8 @@
   import Base64 from '../../base64.js';
   import StringUtil from '../../string-util.js';
 
+  export let useNormalLink = false;
+
   if (!Store || !Store.get('loggedIn') || Store.get('loggedIn') === false) {
     Store.remove('refreshToken');
     Store.remove('accessToken');
@@ -74,6 +76,13 @@
             name: 'Webhook Manager',
             link: '/dashboard/webhook/editor',
             faClass: 'fas fa-link',
+          },
+          {
+            type: 'link',
+            kind: 'normal',
+            name: 'Custom Portal',
+            link: '/dashboard/custom',
+            faClass: 'fas fa-magic',
           },
         ],
       },
@@ -251,16 +260,29 @@
     <div class="section mt-auto">
       <div class="menus">
         <div class="menu">
-          <Link
-            to="/login"
-            on:click={() => {
-              Store.clear();
-            }}>
-            <div class="parent link">
-              <div class="fas fa-sign-out-alt icon" />
-              <div class="text">Sign out</div>
-            </div>
-          </Link>
+          {#if useNormalLink === true}
+            <a
+              href="/login"
+              on:click={() => {
+                Store.clear();
+              }}>
+              <div class="parent link">
+                <div class="fas fa-sign-out-alt icon" />
+                <div class="text">Sign out</div>
+              </div>
+            </a>
+          {:else}
+            <Link
+              to="/login"
+              on:click={() => {
+                Store.clear();
+              }}>
+              <div class="parent link">
+                <div class="fas fa-sign-out-alt icon" />
+                <div class="text">Sign out</div>
+              </div>
+            </Link>
+          {/if}
         </div>
       </div>
     </div>
@@ -275,18 +297,32 @@
                   class="menu {menu.link.startsWith(window.location.pathname) ? 'active' : ''}">
                   {#if menu.type === 'link'}
                     {#if filter(section, menu) === false}
-                      <Link
-                        to={menu.link}
-                        state={{ link: menu.link }}
-                        on:click={() => {
-                          pathStore.update(value => menu.link);
-                          options.sections = [...options.sections];
-                        }}>
-                        <div class="parent link">
-                          <div class="{menu.faClass} icon" />
-                          <div class="text">{menu.name}</div>
-                        </div>
-                      </Link>
+                      {#if useNormalLink === true || menu.kind === 'normal'}
+                        <a
+                          href={menu.link}
+                          on:click={() => {
+                            pathStore.update(value => menu.link);
+                            options.sections = [...options.sections];
+                          }}>
+                          <div class="parent link">
+                            <div class="{menu.faClass} icon" />
+                            <div class="text">{menu.name}</div>
+                          </div>
+                        </a>
+                      {:else}
+                        <Link
+                          to={menu.link}
+                          state={{ link: menu.link }}
+                          on:click={() => {
+                            pathStore.update(value => menu.link);
+                            options.sections = [...options.sections];
+                          }}>
+                          <div class="parent link">
+                            <div class="{menu.faClass} icon" />
+                            <div class="text">{menu.name}</div>
+                          </div>
+                        </Link>
+                      {/if}
                     {/if}
                   {/if}
                 </div>

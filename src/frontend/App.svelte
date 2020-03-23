@@ -117,10 +117,6 @@
     }
     return found;
   }
-
-  // if (window.location.pathname === '/') {
-  //   window.location = '/login';
-  // }
 </script>
 
 <style type="text/scss" global>

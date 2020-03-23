@@ -149,7 +149,8 @@ export class App {
         if (
           request.path.startsWith('/login') ||
           request.path.startsWith('/dashboard') ||
-          request.path.startsWith('/create-admin')
+          request.path.startsWith('/create-admin') ||
+          request.path.startsWith('/dashboard/custom')
         ) {
           response.status(200);
         } else {
@@ -160,6 +161,26 @@ export class App {
             path.join(__dirname, '..', '..', 'public', 'index.html'),
           );
         } else {
+          if (
+            process.env.CUSTOM_FRONT_PATH &&
+            request.path.startsWith('/dashboard/custom')
+          ) {
+            if (
+              (await util.promisify(fs.exists)(
+                path.join(process.env.PROJECT_ROOT, 'public', 'index.html'),
+              )) === true
+            ) {
+              response.sendFile(
+                path.join(
+                  process.env.PROJECT_ROOT,
+                  'public',
+                  'custom',
+                  'index.html',
+                ),
+              );
+              return;
+            }
+          }
           if (
             (await util.promisify(fs.exists)(
               path.join(process.env.PROJECT_ROOT, 'public', 'index.html'),

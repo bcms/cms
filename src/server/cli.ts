@@ -1,12 +1,15 @@
 import * as arg from 'arg';
 import * as path from 'path';
+import * as fs from 'fs';
 import * as childProcess from 'child_process';
 import * as util from 'util';
-import { FunctionsConfig } from './function/config';
-import { Logger } from 'purple-cheetah';
-// import { Rollup } from './rollup';
+import { Rollup } from './rollup';
 
 const packageName = '.';
+const readFile = util.promisify(fs.readFile);
+const writeFile = util.promisify(fs.writeFile);
+const removeFile = util.promisify(fs.unlink);
+const copyFile = util.promisify(fs.copyFile);
 
 function parseArgsIntoOptions(rawArgs) {
   const args = arg(
@@ -26,35 +29,52 @@ function parseArgsIntoOptions(rawArgs) {
   };
 }
 
-// async function buildSvelte() {
-//   const logger = new Logger('Svelte');
-//   logger.info('init', 'Starting Svelte build...');
-//   const svelteBuildTimeOffset = Date.now();
-//   if (
-//     process.env.CUSTOM_FRONT_PATH &&
-//     process.env.CUSTOM_FRONT_PATH !== 'undefined'
-//   ) {
-//     await Rollup.build({
-//       input: path.join(process.env.CUSTOM_FRONT_PATH, 'main.js'),
-//       output: path.join(process.env.PROJECT_ROOT, 'public'),
-//     });
-//     logger.info(
-//       'init',
-//       `Build completed in ${(Date.now() - svelteBuildTimeOffset) / 1000}s`,
-//     );
-//   } else {
-//     await Rollup.build({
-//       input: path.join(__dirname, 'frontend', 'main.js'),
-//       output: path.join(process.env.PROJECT_ROOT, 'public'),
-//     });
-//     logger.info(
-//       'init',
-//       `Build completed in ${(Date.now() - svelteBuildTimeOffset) / 1000}s`,
-//     );
-//   }
-// }
+async function buildSvelte(config: any) {
+  // tslint:disable-next-line: no-console
+  console.log('CLI - Build Svelte:', 'Starting Svelte build...');
+  const svelteBuildTimeOffset = Date.now();
+  let appSvelte: string = (
+    await readFile(path.join(__dirname, 'frontend', 'custom', 'App.svelte'))
+  ).toString();
+  appSvelte = appSvelte.replace(
+    '@custom_path',
+    path.join(process.env.PROJECT_ROOT, 'custom', 'App.svelte'),
+  );
+  appSvelte = appSvelte.replace(
+    '@props',
+    config.frontend.custom.props
+      .map(e => {
+        if (typeof e === 'string') {
+          return `{${e}}`;
+        } else {
+          return `${e.name}={${e.value}}`;
+        }
+      })
+      .join(' '),
+  );
+  await writeFile(
+    path.join(__dirname, 'frontend', 'custom', 'App.temp.svelte'),
+    appSvelte,
+  );
+  await Rollup.build({
+    input: path.join(__dirname, 'frontend', 'custom', 'main.js'),
+    output: path.join(process.env.PROJECT_ROOT, 'public', 'custom'),
+  });
+  // tslint:disable-next-line: no-console
+  console.log(
+    'CLI - Build Svelte:',
+    `Build completed in ${(Date.now() - svelteBuildTimeOffset) / 1000}s`,
+  );
+  await removeFile(
+    path.join(__dirname, 'frontend', 'custom', 'App.temp.svelte'),
+  );
+  await copyFile(
+    path.join(__dirname, 'frontend', 'custom', 'index.html'),
+    path.join(process.env.PROJECT_ROOT, 'public', 'custom', 'index.html'),
+  );
+}
 
-export function cli(args: any) {
+export async function cli(args: any) {
   const options = parseArgsIntoOptions(args);
   process.env.PROJECT_ROOT = process.cwd();
   const config = require(path.join(process.env.PROJECT_ROOT, 'bcms-config.js'));
@@ -92,17 +112,24 @@ export function cli(args: any) {
     process.env.SVELTE_PROD = 'true';
     process.env.DEV = 'false';
   }
-  if (config.frontend && config.frontend.custom) {
+  if (
+    config.frontend &&
+    config.frontend.custom &&
+    config.frontend.useCustom === true
+  ) {
     process.env.CUSTOM_FRONT_PATH = `${path.join(
       process.env.PROJECT_ROOT,
-      config.frontend.custom.root,
+      'custom',
     )}`;
+    config.frontend.custom.absPath = process.env.CUSTOM_FRONT_PATH;
+    try {
+      await buildSvelte(config);
+    } catch (error) {
+      // tslint:disable-next-line: no-console
+      console.error(error);
+      throw new Error(error);
+    }
   }
-
-  // if (options.build === true) {
-  //   buildSvelte();
-  //   return;
-  // }
 
   if (config.server.git.install === true) {
     util
