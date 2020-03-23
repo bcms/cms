@@ -6,6 +6,7 @@ import * as util from 'util';
 import { Rollup } from './rollup';
 
 const packageName = '.';
+const mkdir = util.promisify(fs.mkdir);
 const readFile = util.promisify(fs.readFile);
 const writeFile = util.promisify(fs.writeFile);
 const removeFile = util.promisify(fs.unlink);
@@ -33,6 +34,10 @@ async function buildSvelte(config: any) {
   // tslint:disable-next-line: no-console
   console.log('CLI - Build Svelte:', 'Starting Svelte build...');
   const svelteBuildTimeOffset = Date.now();
+  try {
+    await mkdir(path.join(process.env.PROJECT_ROOT, 'public', 'custom'));
+  } catch (error) {
+  }
   let appSvelte: string = (
     await readFile(path.join(__dirname, 'frontend', 'custom', 'App.svelte'))
   ).toString();
@@ -47,7 +52,7 @@ async function buildSvelte(config: any) {
         if (typeof e === 'string') {
           return `{${e}}`;
         } else {
-          return `${e.name}={${e.value}}`;
+          return `${e.name}="${e.value}"`;
         }
       })
       .join(' '),
