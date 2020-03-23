@@ -1,6 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte';
 
+  export let type = 'single';
   export let secret = false;
   export let code = '';
 
@@ -25,11 +26,16 @@
     font-size: 12pt;
     border: none;
     background-color: #0000;
+    margin-bottom: auto;
   }
 </style>
 
 <div class="code-snippet">
-  <div class="code">{secret === false ? code : Array(code.length).join('*')}</div>
+  <div class="code">
+    <pre>
+      <code>{secret === false ? code : Array(code.length).join('*')}</code>
+    </pre>
+  </div>
   <button
     on:click={() => {
       navigator.clipboard.writeText(code).then(() => {
