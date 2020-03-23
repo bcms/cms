@@ -1,6 +1,6 @@
 {
   "name": "@becomes/cms",
-  "version": "1.0.111",
+  "version": "1.0.112",
   "description": "Simple CMS for building APIs.",
   "author": "becomes.co",
   "license": "MIT",
@@ -30,7 +30,6 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
-    "sirv": "^0.4.0",
     "@rollup/plugin-commonjs": "^11.0.2",
     "@rollup/plugin-node-resolve": "^6.0.0",
     "@rollup/plugin-replace": "^2.3.1",
@@ -50,12 +49,13 @@
     "crypto-js": "^3.3.0",
     "env-cmd": "^10.1.0",
     "node-sass": "^4.13.1",
-    "nodemon": "^1.19.4",
+    "nodemon": "^2.0.2",
     "rollup": "^1.32.1",
     "rollup-plugin-livereload": "^1.1.0",
     "rollup-plugin-scss": "^2.1.0",
     "rollup-plugin-svelte": "^5.0.1",
     "rollup-plugin-terser": "^5.3.0",
+    "sirv": "^0.4.0",
     "sirv-cli": "^0.4.4",
     "svelte": "^3.20.1",
     "svelte-preprocess": "^3.5.0",
@@ -63,7 +63,7 @@
     "ts-node": "^8.7.0",
     "tsconfig-paths": "^3.9.0",
     "tslint": "^5.20.1",
-    "typedoc": "^0.15.8",
+    "typedoc": "^0.17.3",
     "typescript": "^3.8.3"
   },
   "repository": {
