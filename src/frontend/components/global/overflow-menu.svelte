@@ -49,7 +49,7 @@
   {#if show === true}
     <div
       class="options"
-      style={position === 'right' ? 'right: 60px;' : 'left: 0;'}>
+      style={position === 'right' ? 'right: 0;' : 'left: 0;'}>
       <slot />
     </div>
   {/if}

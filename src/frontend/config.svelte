@@ -242,6 +242,7 @@
     }
   }
   export function forceFatch(apiName) {
+    console.log('Force fatch.');
     cacheTill = 0;
     skipCheck = true;
     fatch(apiName);

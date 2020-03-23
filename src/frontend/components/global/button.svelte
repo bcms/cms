@@ -14,12 +14,18 @@
   .btn {
     padding: 10px 15px 10px 15px;
     border: 2px solid #0000;
+    border-radius: 0;
     font-size: 10pt;
     text-align: left;
+    transition: all 0.3s;
   }
 
   .btn:focus {
     border: 2px solid var(--c-primary);
+  }
+
+  .btn:hover {
+    cursor: pointer;
   }
 
   .btn-primary {
@@ -29,7 +35,6 @@
 
   .btn-primary:hover {
     background-color: var(--c-primary-hover);
-    cursor: pointer;
   }
 
   .btn-ghost {
@@ -39,7 +44,6 @@
 
   .btn-ghost:hover {
     background-color: var(--c-gray-lighter);
-    cursor: pointer;
   }
 
   .btn-danger {
@@ -49,11 +53,19 @@
 
   .btn-danger:hover {
     background-color: var(--c-error-hover);
-    cursor: pointer;
   }
 
   .btn-danger:focus {
     border: 2px solid var(--c-error);
+  }
+
+  .btn-secondary {
+    color: var(--c-black);
+    background-color: var(--c-gray-lighter);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--c-gray-light);
   }
 </style>
 

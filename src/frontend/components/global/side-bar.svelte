@@ -200,14 +200,13 @@
     top: 0;
     bottom: 0;
     width: 250px;
-    background-color: var(--c-white-normal);
-    border-right: 1px solid #e0e0e0;
+    background-color: var(--c-primary-dark);
     overflow-x: hidden;
     overflow-y: auto;
   }
 
   .section .name {
-    color: var(--c-gray-cold-dark);
+    color: var(--c-gray);
     font-size: 10pt;
     font-weight: bold;
     margin: 30px 10px 20px 20px;
@@ -227,14 +226,14 @@
   .menus .menu .parent .text {
     margin: 0;
     font-weight: normal;
-    color: var(--c-gray-cold-dark);
+    color: var(--c-gray-light);
   }
 
   .menus .menu .parent .icon {
     margin: auto 0;
     font-size: 10pt;
     color: var(--c-neutral);
-    color: var(--c-gray-cold-dark);
+    color: var(--c-gray-light);
   }
 
   .menus .active .parent .icon {
@@ -242,7 +241,8 @@
   }
 
   .menus .menu:hover {
-    background-color: var(--c-gray-light);
+    background-color: var(--c-primary-dark-hover);
+    transition: all 0.3s;
   }
 </style>
 

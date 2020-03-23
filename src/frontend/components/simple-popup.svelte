@@ -101,57 +101,53 @@
     right: 370px;
   }
 
-  .simple-popup .message:hover {
-    cursor: pointer;
-  }
-
-  .toast {
+  .simple-popup .toast {
     width: 100%;
     color: var(--c-black);
     padding: 20px;
     min-height: 80px;
   }
 
-  .error {
+  .simple-popup .error {
     background-color: rgb(231, 179, 179);
     border-left: 4px solid var(--c-error);
   }
 
-  .success {
+  .simple-popup .success {
     background-color: rgb(188, 231, 179);
     border-left: 4px solid var(--c-success);
   }
 
-  .toast .type {
+  .simple-popup .toast .type {
     display: flex;
   }
 
-  .toast .type .text {
+  .simple-popup .toast .type .text {
     font-size: 12pt;
     font-weight: bold;
     margin: auto 0 auto 10px;
   }
 
-  .toast .type .icon {
+  .simple-popup .toast .type .icon {
     font-size: 16pt;
   }
 
-  .error .type .icon {
+  .simple-popup .error .type .icon {
     color: var(--c-error);
   }
 
-  .success .type .icon {
+  .simple-popup .success .type .icon {
     color: var(--c-success);
   }
 
-  .toast .type .close {
+  .simple-popup .toast .type .close {
     border: none;
     background-color: #0000;
     margin: auto 0 auto auto;
     font-size: 12pt;
   }
 
-  .toast .content {
+  .simple-popup .toast .content {
     margin-top: 20px;
   }
 </style>

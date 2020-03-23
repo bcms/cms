@@ -18,8 +18,7 @@ export class GroupUtil {
     props: Prop[];
   } {
     let changes: boolean = false;
-    for (const i in props) {
-      const prop = props[i];
+    props.forEach(prop => {
       if (prop.type === PropType.GROUP_POINTER) {
         prop.value = prop.value as PropGroupPointer;
         if (prop.value._id === group._id.toHexString()) {
@@ -34,23 +33,25 @@ export class GroupUtil {
         }
       } else if (prop.type === PropType.GROUP_POINTER_ARRAY) {
         prop.value = prop.value as PropGroupPointerArray;
-        for (const j in prop.value) {
-          if (prop.value[j]._id === group._id.toHexString()) {
-            prop.value[j].props = group.props;
+        if (prop.value._id === group._id.toHexString()) {
+          prop.value.props = group.props;
+          (prop.value as PropGroupPointerArray).array.forEach(array => {
+            (prop.value as PropGroupPointerArray).props.forEach(p => {
+              if (!array.value.find(e => e.name === p.name)) {
+                array.value.push(p);
+              }
+            });
+          });
+          changes = true;
+        } else {
+          const result = GroupUtil.updateGroupPointer(prop.value.props, group);
+          if (result.changes === true) {
+            prop.value.props = result.props;
             changes = true;
-          } else {
-            const result = GroupUtil.updateGroupPointer(
-              prop.value[j].props,
-              group,
-            );
-            if (result.changes === true) {
-              prop.value[j].props = result.props;
-              changes = true;
-            }
           }
         }
       }
-    }
+    });
     return {
       changes,
       props,

@@ -29,7 +29,7 @@
   padding: 10px 10px;
   border-radius: 3px;
   border: none;
-  background-color: var(--c-neutral);
+  background-color: #0000;
 }
 
 .item:hover {
@@ -52,10 +52,6 @@
   margin: auto 0 auto auto;
   font-size: 8pt;
   font-weight: bold;
-}
-
-.selected {
-  // background-color: var(--c-white-dark);
 }
 
 .selected .icon {

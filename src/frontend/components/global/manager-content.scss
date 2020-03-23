@@ -4,17 +4,17 @@
   height: 100%;
 }
 
+.content {
+  padding: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
 .content-wrapper {
   height: 100%;
   width: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-}
-
-.content {
-  padding: 20px;
-  max-width: 900px;
-  margin: 0 auto;
 }
 
 .no-props {

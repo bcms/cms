@@ -117,6 +117,6 @@ export interface PropGroupPointerArray {
   _id: string;
   props: Prop[];
   array: Array<{
-    value: PropGroupPointer;
+    value: Prop[];
   }>;
 }

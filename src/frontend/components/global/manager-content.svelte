@@ -5,6 +5,7 @@
   import PropsList from '../prop/props-list.svelte';
   import StringUtil from '../../string-util.js';
 
+  export let customMenu;
   export let items;
   export let itemSelected;
   export let onlySlot = false;
@@ -33,13 +34,17 @@
 </style>
 
 <div class="manager">
-  <Menu
-    events={{ clicked: item => {
-        dispatch('itemClicked', item);
-      }, addNewItem: () => {
-        dispatch('addNewItem', 'none');
-      } }}
-    config={{ heading: menuConfig.heading, buttonLabel: menuConfig.buttonLabel, items, itemSelected }} />
+  {#if customMenu}
+    <customMenu />
+  {:else}
+    <Menu
+      events={{ clicked: item => {
+          dispatch('itemClicked', item);
+        }, addNewItem: () => {
+          dispatch('addNewItem', 'none');
+        } }}
+      config={{ heading: menuConfig.heading, buttonLabel: menuConfig.buttonLabel, items, itemSelected }} />
+  {/if}
   <div class="content-wrapper">
     <div class="content">
       {#if itemSelected}

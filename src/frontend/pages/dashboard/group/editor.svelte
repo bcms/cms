@@ -1,5 +1,5 @@
 <script>
-  import { axios, groupStore, fatch } from '../../../config.svelte';
+  import { axios, groupStore, fatch, forceFatch } from '../../../config.svelte';
   import { onMount } from 'svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/global/layout.svelte';
@@ -68,6 +68,7 @@
         return group;
       }),
     );
+    forceFatch('templates');
     // groups = groups.map(group => {
     //   if (group._id === result.response.data.group._id) {
     //     return result.response.data.group;
@@ -128,6 +129,7 @@
         return g;
       }),
     );
+    forceFatch('templates');
   }
   async function editProp(originalName, data) {
     const changes = {
@@ -169,6 +171,7 @@
         return g;
       }),
     );
+    forceFatch('templates');
   }
   async function deleteProp(prop, i) {
     const result = await axios.send({
@@ -204,6 +207,7 @@
         return e;
       }),
     );
+    forceFatch('templates');
     // groups.forEach(e => {
     //   if (e._id === groupSelected._id) {
     //     e.props = groupSelected.props;
@@ -215,30 +219,26 @@
     if (position === 'up') {
       if (data.i > 0) {
         found = true;
-        groupSelected.props = groupSelected.props.map(
-          (e, i) => {
-            if (i === data.i) {
-              return groupSelected.props[i - 1];
-            } else if (i === data.i - 1) {
-              return data.prop;
-            }
-            return e;
-          },
-        );
+        groupSelected.props = groupSelected.props.map((e, i) => {
+          if (i === data.i) {
+            return groupSelected.props[i - 1];
+          } else if (i === data.i - 1) {
+            return data.prop;
+          }
+          return e;
+        });
       }
     } else if (position === 'down') {
       if (groupSelected.props[data.i + 1]) {
         found = true;
-        groupSelected.props = groupSelected.props.map(
-          (e, i) => {
-            if (i === data.i) {
-              return groupSelected.props[i + 1];
-            } else if (i === data.i + 1) {
-              return data.prop;
-            }
-            return e;
-          },
-        );
+        groupSelected.props = groupSelected.props.map((e, i) => {
+          if (i === data.i) {
+            return groupSelected.props[i + 1];
+          } else if (i === data.i + 1) {
+            return data.prop;
+          }
+          return e;
+        });
       }
     }
     if (found === false) {

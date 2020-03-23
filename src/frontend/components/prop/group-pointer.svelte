@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from 'svelte';
   import Prop from './prop.svelte';
   import Props from './props.svelte';
   import StringUtil from '../../string-util.js';
@@ -13,13 +14,20 @@
     if (group) {
       for (const i in group.props) {
         if (!prop.value.props.find(e => e.name === group.props[i].name)) {
-          prop.value.props = [...prop.value.props, JSON.parse(JSON.stringify(group.props[i]))];
+          prop.value.props = [
+            ...prop.value.props,
+            JSON.parse(JSON.stringify(group.props[i])),
+          ];
         }
       }
     }
   }
 
-  init();
+  onMount(() => {
+    setTimeout(() => {
+      init();
+    }, 200);
+  });
 </script>
 
 <style type="text/scss">

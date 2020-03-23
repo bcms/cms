@@ -96,10 +96,8 @@
     if (value) {
       entries = value;
       if (initDone === false) {
-        console.log('HERE', entries);
         if (queries.eid) {
           entry = entries.find(e => e._id === queries.eid);
-          console.log(entry);
         }
         console.log('entries');
         init();
@@ -340,6 +338,11 @@
                         return e;
                       }
                       if (p.type === 'GROUP_POINTER') {
+                        p.value.props = orderProps(
+                          p.value.props,
+                          e.value.props,
+                        );
+                      } else if (p.type === 'GROUP_POINTER_ARRAY') {
                         p.value.props = orderProps(
                           p.value.props,
                           e.value.props,
