@@ -1,7 +1,6 @@
 # compiled output
 /dist
 /node_modules
-/public/custom
 /public/bundle.*
 /doc
 /events
