@@ -13,12 +13,16 @@
   export let events;
 
   const dispatch = createEventDispatcher();
-  let isInitialized = false;
+  let isInitialized = true;
 
   function init() {
     const group = groups.find(e => e._id === prop.value._id);
+    if (typeof prop.value.array.lenght === 'undefined') {
+      console.log('HERE');
+      prop.value.array = [];
+    }
     if (group) {
-      return prop.value.array.map(arr => {
+      prop.value.array = prop.value.array.map(arr => {
         const array = JSON.parse(JSON.stringify(arr));
         events.push({});
         group.props.forEach(prop => {
@@ -30,11 +34,12 @@
       });
     }
   }
+  init();
   onMount(() => {
-    setTimeout(() => {
-      prop.value.array = init();
-      isInitialized = true;
-    }, 200);
+    // setTimeout(() => {
+    //   prop.value.array = init();
+    //   isInitialized = true;
+    // }, 2000);
   });
 </script>
 
@@ -48,7 +53,7 @@
       {#each prop.value.array as arr, i}
         <PropArrayItem prop={arr} position={i} on:remove on:move>
           <div class="group">
-            <Props props={arr.value} events={events[i]} />
+            <Props {groups} props={arr.value} events={events[i]} />
           </div>
         </PropArrayItem>
       {/each}

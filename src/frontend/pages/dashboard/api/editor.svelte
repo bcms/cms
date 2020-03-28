@@ -51,6 +51,7 @@
     if (keys.length > 0 && !keySelected) {
       keySelected = keys[0];
       setKeyConfig();
+      console.log(keySelected);
     }
   });
 
@@ -198,6 +199,7 @@
     if (keys.length > 0 && !keySelected) {
       keySelected = keys[0];
       setKeyConfig();
+      console.log(keySelected);
     }
   });
 </script>
@@ -281,25 +283,6 @@
               keySelected.blocked = event.detail;
             }
           }} />
-        <!-- {#if keySelected.blocked === true}
-          <ToggleSmall
-            toggled={true}
-            labelText="Blocked"
-            labelA="No"
-            labelB="Yes"
-            on:change={event => {
-              keySelected.blocked = event.target.checked;
-            }} />
-        {:else}
-          <ToggleSmall
-            toggled={false}
-            labelText="Blocked"
-            labelA="No"
-            labelB="Yes"
-            on:change={event => {
-              keySelected.blocked = event.target.checked;
-            }} />
-        {/if} -->
       </div>
       <h4 class="mt-50">Router Configuration</h4>
       <div class="router mt-20">

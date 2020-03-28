@@ -44,7 +44,10 @@
     }}>
     <SelectItem text="- Unselected -" value="" />
     {#each entries as entry, i}
-      <SelectItem text="{entriesTitle[i]} | {entry._id}" value={entry._id} />
+      <SelectItem
+        text="{entriesTitle[i]} | {entry._id}"
+        value={entry._id}
+        selected={prop.value.entryId === entry._id ? true : false} />
     {/each}
   </Select>
 </Prop>

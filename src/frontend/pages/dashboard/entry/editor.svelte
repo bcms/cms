@@ -509,20 +509,20 @@
             selectedLanguage.disabled = false;
           }
         }}>
-        <!-- <Select
-          selected='en'
+        <Select
+          selected="en"
           disabled={selectedLanguage.disabled}
           on:change={event => {
             console.log(event);
             if (event.eventPhase === 0 && entry) {
-              console.log('lol')
+              console.log('lol');
               changeLanguage(event.detail);
             }
           }}>
           {#each languages as lng}
             <SelectItem text="{lng.name} | {lng.nativeName}" value={lng.code} />
           {/each}
-        </Select> -->
+        </Select>
       </div>
       <div class="title">
         {#if data[selectedLanguage.code].title.error !== ''}
@@ -545,7 +545,9 @@
           value={data[selectedLanguage.code].desc}
           placeholder="- Description -"
           on:input={event => {
-            data[selectedLanguage.code].desc = event.target.value;
+            if (event.eventPhase === 0) {
+              data[selectedLanguage.code].desc = event.detail;
+            }
           }} />
       </div>
       <div class="bx--label mt-20">Cover Image</div>

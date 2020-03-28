@@ -18,7 +18,10 @@
         prop.value.selected = event.detail;
       }
     }}>
-    <SelectItem text="- Unselected -" value="" />
+    <SelectItem
+      text="- Unselected -"
+      value=""
+      selected={prop.value.selected === '' ? true : false} />
     {#each prop.value.items as item}
       {#if prop.value.selected === item}
         <SelectItem

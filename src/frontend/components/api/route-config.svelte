@@ -108,7 +108,8 @@
         {#each templates as template}
           <SelectItem
             value={template._id}
-            text={StringUtil.prettyName(template.name)} />
+            text={StringUtil.prettyName(template.name)} 
+            selected={config._id === template._id ? true : false} />
         {/each}
       </Select>
       <div class="options mt-20">

@@ -36,6 +36,6 @@
 
 <Prop name={prop.name} required={prop.required} type={prop.type} {error}>
   <div class="group">
-    <Props props={prop.value.props} {events} />
+    <Props {groups} props={prop.value.props} {events} />
   </div>
 </Prop>

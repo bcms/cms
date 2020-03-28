@@ -28,6 +28,12 @@
     cursor: pointer;
   }
 
+  .select-wrapper select:disabled {
+    border-bottom: 2px solid var(--c-gray-lighter);
+    cursor: default;
+    color: var(--c-gray);
+  }
+
   .select-wrapper select:focus {
     border: 2px solid var(--c-primary);
   }
