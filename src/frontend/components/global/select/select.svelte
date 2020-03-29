@@ -16,8 +16,8 @@
     max-width: 200px;
   }
 
-  .select-bg {
-    background-color: var(--c-gray-lighter);
+  .select-wrapper .select-box {
+    display: flex;
   }
 
   .select-wrapper select {
@@ -25,6 +25,7 @@
     width: 100%;
     border: 2px solid #0000;
     border-bottom: 2px solid var(--c-gray);
+    background-color: var(--c-gray-lighter);
     cursor: pointer;
   }
 
@@ -42,6 +43,7 @@
     width: 0px;
     position: relative;
     left: -25px;
+    margin: auto 0;
   }
 </style>
 
@@ -58,7 +60,7 @@
       {invalidText}
     </div>
   {/if}
-  <div class="select-bg">
+  <div class="select-box">
     <select
       {disabled}
       on:change={event => {
