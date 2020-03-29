@@ -28,6 +28,12 @@ export class UserFactory {
             put: false,
             delete: false,
           },
+          customPortal: {
+            get: false,
+            post: false,
+            put: false,
+            delete: false,
+          },
           templates: [],
           webhooks: [],
         },
@@ -83,6 +89,12 @@ export class UserFactory {
             put: false,
             delete: false,
           },
+          customPortal: {
+            get: false,
+            post: false,
+            put: false,
+            delete: false,
+          },
           templates: [],
           webhooks: [],
         },
@@ -133,6 +145,12 @@ export class UserFactory {
         address: {},
         policy: {
           media: {
+            get: false,
+            post: false,
+            put: false,
+            delete: false,
+          },
+          customPortal: {
             get: false,
             post: false,
             put: false,

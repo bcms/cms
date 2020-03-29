@@ -174,6 +174,13 @@
                 }
               }
               break;
+            case 'Custom Portal':
+              {
+                if (accessToken.customPool.policy.customPortal.get === true) {
+                  return false;
+                }
+              }
+              break;
           }
         }
         break;

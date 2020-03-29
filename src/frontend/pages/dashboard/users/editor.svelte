@@ -14,6 +14,7 @@
   import ManagerLayout from '../../../components/global/manager-content.svelte';
   import Button from '../../../components/global/button.svelte';
   import MediaManagerPolicy from '../../../components/users/media-manager-policy.svelte';
+  import CustomPortalPolicy from '../../../components/users/custom-portal-policy.svelte';
   import TemplatePolicy from '../../../components/users/template-policy.svelte';
   import WebhookPolicy from '../../../components/users/webhook-policy.svelte';
   import AddUserModal from '../../../components/users/modals/add-user.svelte';
@@ -129,9 +130,37 @@
             put: false,
             delete: false,
           },
+          customPortal: {
+            get: false,
+            post: false,
+            put: false,
+            delete: false,
+          },
           templates: [],
           webhooks: [],
         };
+      }
+      if (!userSelected.customPool.policy.media) {
+        userSelected.customPool.policy.media = {
+          get: false,
+          post: false,
+          put: false,
+          delete: false,
+        };
+      }
+      if (!userSelected.customPool.policy.customPortal) {
+        userSelected.customPool.policy.customPortal = {
+          get: false,
+          post: false,
+          put: false,
+          delete: false,
+        };
+      }
+      if (!userSelected.customPool.policy.templates) {
+        userSelected.customPool.policy.templates = [];
+      }
+      if (!userSelected.customPool.policy.webhooks) {
+        userSelected.customPool.policy.webhooks = [];
       }
     }
   });
@@ -235,6 +264,8 @@
             </div>
           {:else}
             <MediaManagerPolicy user={userSelected} />
+            <div class="mt-50" />
+            <CustomPortalPolicy user={userSelected} />
             <div class="templates mt-50">
               {#each webhooks as webhook}
                 <WebhookPolicy user={userSelected} {webhook} />

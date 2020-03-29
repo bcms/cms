@@ -5,6 +5,12 @@ export interface UserPolicy {
     put: boolean;
     delete: boolean;
   };
+  customPortal: {
+    get: boolean;
+    post: boolean;
+    put: boolean;
+    delete: boolean;
+  };
   templates: Array<{
     _id: string;
     get: boolean;
