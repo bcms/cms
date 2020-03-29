@@ -16,9 +16,11 @@ function parseArgsIntoOptions(rawArgs) {
   const args = arg(
     {
       '--dev': Boolean,
+      '--custom_front_dev': Boolean,
       '--build:': Boolean,
       '-d': '--dev',
       '-b': '--build',
+      '-cfd': '--custom_front_dev',
     },
     {
       argv: rawArgs.slice(2),
@@ -27,17 +29,17 @@ function parseArgsIntoOptions(rawArgs) {
   return {
     dev: args['--dev'] || false,
     build: args['--build'] || false,
+    cfd: args['--custom_front_dev'] || false,
   };
 }
 
-async function buildSvelte(config: any) {
+async function buildSvelte(config: any, options: any) {
   // tslint:disable-next-line: no-console
   console.log('CLI - Build Svelte:', 'Starting Svelte build...');
   const svelteBuildTimeOffset = Date.now();
   try {
     await mkdir(path.join(process.env.PROJECT_ROOT, 'public', 'custom'));
-  } catch (error) {
-  }
+  } catch (error) {}
   let appSvelte: string = (
     await readFile(path.join(__dirname, 'frontend', 'custom', 'App.svelte'))
   ).toString();
@@ -64,14 +66,12 @@ async function buildSvelte(config: any) {
   await Rollup.build({
     input: path.join(__dirname, 'frontend', 'custom', 'main.js'),
     output: path.join(process.env.PROJECT_ROOT, 'public', 'custom'),
+    dev: options.cfd,
   });
   // tslint:disable-next-line: no-console
   console.log(
     'CLI - Build Svelte:',
     `Build completed in ${(Date.now() - svelteBuildTimeOffset) / 1000}s`,
-  );
-  await removeFile(
-    path.join(__dirname, 'frontend', 'custom', 'App.temp.svelte'),
   );
   await copyFile(
     path.join(__dirname, 'frontend', 'custom', 'index.html'),
@@ -128,7 +128,7 @@ export async function cli(args: any) {
     )}`;
     config.frontend.custom.absPath = process.env.CUSTOM_FRONT_PATH;
     try {
-      await buildSvelte(config);
+      await buildSvelte(config, options);
     } catch (error) {
       // tslint:disable-next-line: no-console
       console.error(error);

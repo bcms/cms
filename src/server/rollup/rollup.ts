@@ -20,8 +20,14 @@ export class Rollup {
   public static async build(config: {
     input: string;
     output: string;
+    dev?: boolean;
   }): Promise<void> {
-    const production = process.env.SVELTE_PROD === 'true' ? true : false;
+    let production: boolean;
+    if (config.dev === true) {
+      production = false;
+    } else {
+      production = process.env.SVELTE_PROD === 'true' ? true : false;
+    }
     let rollupPlugins;
     if (production === false) {
       rollupPlugins = [
@@ -104,26 +110,5 @@ export class Rollup {
       ];
       const watch = rup.watch(watchOptions);
     }
-    // if (process.env.SVELTE_PROD === 'false') {
-    //   livereload(config.output);
-    // }
-    // const result = await rollupGenerator.generate({
-    //   sourcemap: true,
-    //   format: 'iife',
-    //   name: 'app',
-    //   file: `${config.output}/bundle.js`,
-    // });
-    // return {
-    //   js: result.output[0].code
-    //     .replace(/\n/g, '')
-    //     .replace(/\r/g, '')
-    //     .replace(/\t/g, '')
-    //     .replace(/  /g, ''),
-    //   css: cssCode
-    //     .replace(/\n/g, '')
-    //     .replace(/\r/g, '')
-    //     .replace(/\t/g, '')
-    //     .replace(/  /g, ''),
-    // };
   }
 }

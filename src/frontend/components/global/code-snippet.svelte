@@ -1,7 +1,6 @@
 <script>
   import { createEventDispatcher } from 'svelte';
 
-  export let type = 'single';
   export let secret = false;
   export let code = '';
 
