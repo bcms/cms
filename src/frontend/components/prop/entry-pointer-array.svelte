@@ -55,6 +55,7 @@
           <SelectItem text="- Unselected -" value="" />
           {#each entries as entry, i}
             <SelectItem
+              selected={id === entry._id ? true : false}
               text="{entriesTitle[i]} | {entry._id}"
               value={entry._id} />
           {/each}
