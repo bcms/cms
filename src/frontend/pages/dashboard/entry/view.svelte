@@ -1,5 +1,6 @@
 <script>
   import { onMount, afterUpdate } from 'svelte';
+  import { fade, fly } from 'svelte/transition';
   import uuid from 'uuid';
   import { Link, navigate } from 'svelte-routing';
   import {
@@ -34,6 +35,8 @@
   const addDataModalModalEvents = { callback: addNewDataModelEntry };
   const editDataModelModalEvents = { callback: updateDataModalEntry };
   const viewDataModelModalEvents = {};
+  const screenWidth = window.innerWidth;
+  let show = screenWidth < 900 ? false : true;
   let queries = UrlQueries.get();
   let languages = [];
   let languageSelected = {
@@ -462,176 +465,188 @@
 
 <Layout>
   <div key={uuid.v4()} class="manager">
-    <div class="menu">
-      <div class="section">
-        <div class="heading">Filters</div>
-        <Button
-          class="ml-auto"
-          kind="ghost"
-          icon="fas fa-filter"
-          on:click={() => {
-            sortEntries();
-            entries = [...entries];
-          }}>
-          Apply
-        </Button>
-      </div>
-      {#if template && entries}
-        <div class="filters mt-20">
-          <div class="filter">
-            <Select
-              labelText="Sort by date created"
-              helperText="Sort entries by the date they were created."
-              selected=""
-              on:change={event => {
-                if (event.eventPhase === 0 && event.returnValue === true) {
-                  sort.createdAt = event.detail;
-                }
-              }}>
-              <SelectItem value="">- Unselected -</SelectItem>
-              <SelectItem value="newest">Newest First</SelectItem>
-              <SelectItem value="oldest">Oldest First</SelectItem>
-            </Select>
-          </div>
-          <div class="filter">
-            <Select
-              labelText="Title"
-              helperText="Select a type of string search."
-              on:change={event => {
-                if (event.eventPhase === 0 && typeof event.detail === 'string') {
-                  if (event.detail === '') {
-                    setFilter({ type: 'STRING', name: 'root_title' }, '');
-                  } else {
-                    setFilter({ type: 'STRING', name: 'root_title' }, { type: event.detail, value: '' });
-                  }
-                  filters = [...filters];
-                }
-              }}>
-              <SelectItem value="" text="- Unselected -" />
-              <SelectItem value="contains" text="Contains" />
-              <SelectItem value="regex" text="Regex" />
-            </Select>
-            {#if filters.find(e => e.name === 'root_title')}
-              <TextInput
-                class="mt-20"
-                labelText="Search for"
-                placeholder="- Type a string to find -"
-                on:input={event => {
-                  if (event.eventPhase === 0) {
-                    setFilter({ type: 'STRING', name: 'root_title' }, { value: event.detail });
-                  }
-                }} />
-            {/if}
-          </div>
-          {#each template.entryTemplate as prop}
-            {#if prop.type === 'ENUMERATION'}
-              <div class="filter">
-                <Select
-                  labelText={StringUtil.prettyName(prop.name)}
-                  helperText="Show Entries with selected enumeration."
-                  selected=""
-                  on:change={event => {
-                    if (event.eventPhase === 0 && typeof event.detail === 'string') {
-                      setFilter(prop, { selected: event.detail });
-                      console.log(filters);
-                    }
-                  }}>
-                  <SelectItem value="" text="- Unselected -" />
-                  {#each prop.value.items as item}
-                    <SelectItem
-                      value={item}
-                      text={StringUtil.prettyName(item)} />
-                  {/each}
-                </Select>
-              </div>
-            {:else if prop.type === 'BOOLEAN'}
-              <div class="filter">
-                <Select
-                  labelText={StringUtil.prettyName(prop.name)}
-                  helperText="Show Entries with boolean state."
-                  selected={languageSelected.code}
-                  on:change={event => {
-                    if (event.eventPhase === 0 && typeof event.detail === 'string') {
-                      setFilter(prop, event.detail);
-                    }
-                  }}>
-                  <SelectItem value="" text="- Unselected -" />
-                  <SelectItem value="true" text="True" />
-                  <SelectItem value="false" text="False" />
-                </Select>
-              </div>
-            {:else if prop.type === 'STRING'}
-              <div class="filter">
-                <Select
-                  labelText={StringUtil.prettyName(prop.name)}
-                  helperText="Select type of string search."
-                  on:change={event => {
-                    if (event.eventPhase === 0 && typeof event.detail === 'string') {
-                      if (event.detail === '') {
-                        setFilter(prop, '');
-                      } else {
-                        setFilter(prop, { type: event.detail, value: '' });
-                      }
-                      template.entryTemplate = JSON.parse(JSON.stringify(template.entryTemplate));
-                    }
-                  }}>
-                  <SelectItem value="" text="- Unselected -" />
-                  <SelectItem value="contains" text="Contains" />
-                  <SelectItem value="regex" text="Regex" />
-                </Select>
-                {#if filters.find(e => e.name === prop.name)}
-                  <TextInput
-                    class="mt-20"
-                    labelText="Search for"
-                    placeholder="- Type a string to find -"
-                    on:input={event => {
-                      if (event.eventPhase === 0) {
-                        setFilter(prop, { value: event.detail });
-                      }
-                    }} />
-                {/if}
-              </div>
-            {:else if prop.type === 'NUMBER'}
-              <div class="filter">
-                <Select
-                  labelText={StringUtil.prettyName(prop.name)}
-                  helperText="Select type of number search."
-                  on:change={event => {
-                    if (event.eventPhase === 0 && event.returnValue === true) {
-                      if (event.detail === '') {
-                        setFilter(prop, '');
-                      } else {
-                        setFilter(prop, { type: event.detail, value: 0 });
-                      }
-                      template.entryTemplate = JSON.parse(JSON.stringify(template.entryTemplate));
-                    }
-                  }}>
-                  <SelectItem value="" text="- Unselected -" />
-                  <SelectItem value="=" text="Equal" />
-                  <SelectItem value=">=" text="Grater or equal" />
-                  <SelectItem value="<=" text="Less or equal" />
-                </Select>
-                {#if filters.find(e => e.name === prop.name)}
-                  <NumberInput
-                    value="0"
-                    class="mt-20"
-                    labelText="Search for"
-                    placeholder="- Type a string to find -"
-                    on:change={event => {
-                      if (event.eventPhase === 0) {
-                        const filter = filters.find(e => e.name === prop.name);
-                        if (filter) {
-                          filter.value.value = event.detail;
-                        }
-                      }
-                    }} />
-                {/if}
-              </div>
-            {/if}
-          {/each}
+    {#if show === true}
+      <div transition:fly={{ x: 0 }} class="menu">
+        <div class="section">
+          <div class="heading">Filters</div>
+          <Button
+            class="ml-auto"
+            kind="ghost"
+            icon="fas fa-filter"
+            on:click={() => {
+              sortEntries();
+              entries = [...entries];
+            }}>
+            Apply
+          </Button>
         </div>
-      {/if}
-    </div>
+        {#if template && entries}
+          <div class="filters mt-20">
+            <div class="filter">
+              <Select
+                labelText="Sort by date created"
+                helperText="Sort entries by the date they were created."
+                selected=""
+                on:change={event => {
+                  if (event.eventPhase === 0 && event.returnValue === true) {
+                    sort.createdAt = event.detail;
+                  }
+                }}>
+                <SelectItem value="">- Unselected -</SelectItem>
+                <SelectItem value="newest">Newest First</SelectItem>
+                <SelectItem value="oldest">Oldest First</SelectItem>
+              </Select>
+            </div>
+            <div class="filter">
+              <Select
+                labelText="Title"
+                helperText="Select a type of string search."
+                on:change={event => {
+                  if (event.eventPhase === 0 && typeof event.detail === 'string') {
+                    if (event.detail === '') {
+                      setFilter({ type: 'STRING', name: 'root_title' }, '');
+                    } else {
+                      setFilter({ type: 'STRING', name: 'root_title' }, { type: event.detail, value: '' });
+                    }
+                    filters = [...filters];
+                  }
+                }}>
+                <SelectItem value="" text="- Unselected -" />
+                <SelectItem value="contains" text="Contains" />
+                <SelectItem value="regex" text="Regex" />
+              </Select>
+              {#if filters.find(e => e.name === 'root_title')}
+                <TextInput
+                  class="mt-20"
+                  labelText="Search for"
+                  placeholder="- Type a string to find -"
+                  on:input={event => {
+                    if (event.eventPhase === 0) {
+                      setFilter({ type: 'STRING', name: 'root_title' }, { value: event.detail });
+                    }
+                  }} />
+              {/if}
+            </div>
+            {#each template.entryTemplate as prop}
+              {#if prop.type === 'ENUMERATION'}
+                <div class="filter">
+                  <Select
+                    labelText={StringUtil.prettyName(prop.name)}
+                    helperText="Show Entries with selected enumeration."
+                    selected=""
+                    on:change={event => {
+                      if (event.eventPhase === 0 && typeof event.detail === 'string') {
+                        setFilter(prop, { selected: event.detail });
+                        console.log(filters);
+                      }
+                    }}>
+                    <SelectItem value="" text="- Unselected -" />
+                    {#each prop.value.items as item}
+                      <SelectItem
+                        value={item}
+                        text={StringUtil.prettyName(item)} />
+                    {/each}
+                  </Select>
+                </div>
+              {:else if prop.type === 'BOOLEAN'}
+                <div class="filter">
+                  <Select
+                    labelText={StringUtil.prettyName(prop.name)}
+                    helperText="Show Entries with boolean state."
+                    selected={languageSelected.code}
+                    on:change={event => {
+                      if (event.eventPhase === 0 && typeof event.detail === 'string') {
+                        setFilter(prop, event.detail);
+                      }
+                    }}>
+                    <SelectItem value="" text="- Unselected -" />
+                    <SelectItem value="true" text="True" />
+                    <SelectItem value="false" text="False" />
+                  </Select>
+                </div>
+              {:else if prop.type === 'STRING'}
+                <div class="filter">
+                  <Select
+                    labelText={StringUtil.prettyName(prop.name)}
+                    helperText="Select type of string search."
+                    on:change={event => {
+                      if (event.eventPhase === 0 && typeof event.detail === 'string') {
+                        if (event.detail === '') {
+                          setFilter(prop, '');
+                        } else {
+                          setFilter(prop, { type: event.detail, value: '' });
+                        }
+                        template.entryTemplate = JSON.parse(JSON.stringify(template.entryTemplate));
+                      }
+                    }}>
+                    <SelectItem value="" text="- Unselected -" />
+                    <SelectItem value="contains" text="Contains" />
+                    <SelectItem value="regex" text="Regex" />
+                  </Select>
+                  {#if filters.find(e => e.name === prop.name)}
+                    <TextInput
+                      class="mt-20"
+                      labelText="Search for"
+                      placeholder="- Type a string to find -"
+                      on:input={event => {
+                        if (event.eventPhase === 0) {
+                          setFilter(prop, { value: event.detail });
+                        }
+                      }} />
+                  {/if}
+                </div>
+              {:else if prop.type === 'NUMBER'}
+                <div class="filter">
+                  <Select
+                    labelText={StringUtil.prettyName(prop.name)}
+                    helperText="Select type of number search."
+                    on:change={event => {
+                      if (event.eventPhase === 0 && event.returnValue === true) {
+                        if (event.detail === '') {
+                          setFilter(prop, '');
+                        } else {
+                          setFilter(prop, { type: event.detail, value: 0 });
+                        }
+                        template.entryTemplate = JSON.parse(JSON.stringify(template.entryTemplate));
+                      }
+                    }}>
+                    <SelectItem value="" text="- Unselected -" />
+                    <SelectItem value="=" text="Equal" />
+                    <SelectItem value=">=" text="Grater or equal" />
+                    <SelectItem value="<=" text="Less or equal" />
+                  </Select>
+                  {#if filters.find(e => e.name === prop.name)}
+                    <NumberInput
+                      value="0"
+                      class="mt-20"
+                      labelText="Search for"
+                      placeholder="- Type a string to find -"
+                      on:change={event => {
+                        if (event.eventPhase === 0) {
+                          const filter = filters.find(e => e.name === prop.name);
+                          if (filter) {
+                            filter.value.value = event.detail;
+                          }
+                        }
+                      }} />
+                  {/if}
+                </div>
+              {/if}
+            {/each}
+          </div>
+        {/if}
+      </div>
+    {/if}
+    {#if screenWidth < 900}
+      <div class="toggle-menu {show === true ? 'toggle-menu-show' : ''}">
+        <Button
+          icon="fas fa-bars"
+          onlyIcon={true}
+          on:click={() => {
+            show = !show;
+          }} />
+      </div>
+    {/if}
     <div class="content">
       <div class="content-wrapper">
         {#if template && entries}
@@ -778,6 +793,7 @@
     </div>
   </div>
 </Layout>
+
 <ViewDataModelModal events={viewDataModelModalEvents} />
 {#if template && languages.length > 0}
   <DataModelModal events={editDataModelModalEvents} {template} {languages} />

@@ -1,6 +1,7 @@
 <script>
   import { createEventDispatcher } from 'svelte';
-  import Button from '../global/button.svelte';
+  import OverflowMenu from '../global/overflow-menu.svelte';
+  import OverflowMenuItem from '../global/overflow-menu-item.svelte';
   import Props from '../prop/props.svelte';
   import StringUtil from '../../string-util.js';
 
@@ -26,35 +27,17 @@
     &nbsp;
     <span class="text">Widget | {StringUtil.prettyName(widget.name)}</span>
     <div class="move up">
-      <Button
-        icon="fas fa-angle-up"
-        onlyIcon={true}
-        kind="ghost"
-        size="small"
-        on:click={() => {
+      <OverflowMenu position="right">
+        <OverflowMenuItem text="Move Up" on:click={() => {
           dispatch('move', 'up');
         }} />
-    </div>
-    <div class="move down">
-      <Button
-        icon="fas fa-angle-down"
-        onlyIcon={true}
-        kind="ghost"
-        size="small"
-        on:click={() => {
+        <OverflowMenuItem text="Move Down" on:click={() => {
           dispatch('move', 'down');
         }} />
-    </div>
-    <div class="delete">
-      <Button
-        icon="fas fa-trash"
-        kind="danger"
-        size="small"
-        on:click={() => {
+        <OverflowMenuItem text="Remove" danger={true} on:click={() => {
           dispatch('delete', 'none');
-        }}>
-        Remove
-      </Button>
+        }} />
+      </OverflowMenu>
     </div>
   </div>
   <div class="props">

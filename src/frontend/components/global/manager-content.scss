@@ -1,13 +1,7 @@
 .manager {
   display: grid;
-  grid-template-columns: 350px auto;
+  grid-template-columns: 270px auto;
   height: 100%;
-}
-
-.content {
-  padding: 20px;
-  max-width: 900px;
-  margin: 0 auto;
 }
 
 .content-wrapper {
@@ -15,6 +9,12 @@
   width: 100%;
   overflow-x: hidden;
   overflow-y: auto;
+}
+
+.content-wrapper .content {
+  padding: 20px 20px 80px 20px;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .no-props {
@@ -96,4 +96,22 @@
 .delete {
   text-align: right;
   margin-bottom: 20px;
+}
+
+@media only screen and (min-width: 150px) and (max-width: 900px) {
+  .manager {
+    grid-template-columns: 100% 100%;
+  }
+
+  .basic-info {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    grid-gap: 20px;
+    margin-top: 30px;
+    font-size: 10pt;
+  }
+
+  .props .heading .action {
+    display: none;
+  }
 }

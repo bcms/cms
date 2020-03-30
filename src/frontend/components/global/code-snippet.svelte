@@ -10,6 +10,7 @@
 <style lang="scss">
   .code-snippet {
     display: grid;
+    width: 100%;
     grid-template-columns: auto 40px;
     background-color: var(--c-gray-lighter);
     padding: 10px 0px 10px 15px;
@@ -19,6 +20,7 @@
     font-family: monospace;
     font-size: 10pt;
     margin: auto 0;
+    width: 100%;
   }
 
   .code-snippet button {

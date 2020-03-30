@@ -61,3 +61,16 @@
 .create-new {
   margin: 20px 0;
 }
+
+.toggle-menu {
+  position: fixed;
+  bottom: 70px;
+  left: 0;
+  transition: all 0.35s;
+}
+
+@media only screen and (min-width: 150px) and (max-width: 900px) {
+  .menu {
+    padding: 30px 20px 70px 20px;
+  }
+}

@@ -1,5 +1,5 @@
 .wrapper {
-  width: 900px;
+  max-width: 900px;
   margin: 0 auto;
   padding: 20px;
 }
@@ -41,4 +41,14 @@
   padding: 20px 20px 60px 20px;
   margin: 30px auto 0 auto;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.15);
+}
+
+@media only screen and (min-width: 150px) and (max-width: 900px) {
+  .heading {
+    display: block;
+  }
+
+  .heading .actions {
+    margin-top: 20px;
+  }
 }

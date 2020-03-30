@@ -1,5 +1,7 @@
 <script context="module">
   import { writable } from 'svelte/store';
+  import { fly } from 'svelte/transition';
+  import Button from '../global/button.svelte';
 
   export const fileType = {
     DIR: { value: 'DIR', faClass: 'fas fa-folder icon' },
@@ -34,6 +36,8 @@
   export let onFileClick;
 
   const dispatch = createEventDispatcher();
+  const screenWidth = window.innerWidth;
+  let show = screenWidth < 900 ? false : true;
   let files = [];
   let firstTimeLoad = true;
 
@@ -176,45 +180,64 @@
     padding-left: 10px;
     margin-bottom: 20px;
   }
+
+  .toggle-menu {
+    position: fixed;
+    bottom: 70px;
+    left: 0;
+    transition: all 0.35s;
+  }
 </style>
 
-<div class="file-explorer">
-  <div class="heading">EXPLORER</div>
-  <div class="items">
-    {#each files as file}
-      {#if file.type === 'DIR' || showFiles === true}
-        <FileExplorerItem
-          {showDeleteBtn}
-          {showFiles}
-          {onFileClick}
-          events={{}}
-          {file}
-          isVisable={true}
-          on:close={event => {
-            if (event.eventPhase === 0) {
-              const f = event.detail.file;
-              const pf = event.detail.parentFile;
-              dispatch('close', event.detail);
-              if (f.isInRoot === true) {
-                viewerFileStore.update(value => files);
-              } else {
-                viewerFileStore.update(value => pf.children);
+{#if show === true}
+  <div transition:fly={{ x: -350 }} class="file-explorer">
+    <div class="heading">EXPLORER</div>
+    <div class="items">
+      {#each files as file}
+        {#if file.type === 'DIR' || showFiles === true}
+          <FileExplorerItem
+            {showDeleteBtn}
+            {showFiles}
+            {onFileClick}
+            events={{}}
+            {file}
+            isVisable={true}
+            on:close={event => {
+              if (event.eventPhase === 0) {
+                const f = event.detail.file;
+                const pf = event.detail.parentFile;
+                dispatch('close', event.detail);
+                if (f.isInRoot === true) {
+                  viewerFileStore.update(value => files);
+                } else {
+                  viewerFileStore.update(value => pf.children);
+                }
               }
-            }
-          }}
-          on:open={event => {
-            if (event.eventPhase === 0) {
-              dispatch('open', event.detail);
-              const f = event.detail.file;
-              viewerFileStore.update(value => f.children);
-            }
-          }}
-          on:remove={event => {
-            if (event.eventPhase === 0) {
-              dispatch('remove', event.detail);
-            }
-          }} />
-      {/if}
-    {/each}
+            }}
+            on:open={event => {
+              if (event.eventPhase === 0) {
+                dispatch('open', event.detail);
+                const f = event.detail.file;
+                viewerFileStore.update(value => f.children);
+              }
+            }}
+            on:remove={event => {
+              if (event.eventPhase === 0) {
+                dispatch('remove', event.detail);
+              }
+            }} />
+        {/if}
+      {/each}
+    </div>
   </div>
-</div>
+{/if}
+{#if screenWidth < 900}
+  <div class="toggle-menu {show === true ? 'toggle-menu-show' : ''}">
+    <Button
+      icon="fas fa-bars"
+      onlyIcon={true}
+      on:click={() => {
+        show = !show;
+      }} />
+  </div>
+{/if}

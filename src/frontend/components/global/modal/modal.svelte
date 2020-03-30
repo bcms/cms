@@ -8,6 +8,10 @@
   export let events;
   export let width = 450;
 
+  if (window.innerWidth <= width) {
+    width = window.innerWidth;
+  }
+
   const dispatch = createEventDispatcher();
   let show = false;
 

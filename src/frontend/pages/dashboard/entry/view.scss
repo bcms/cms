@@ -70,3 +70,31 @@
   text-align: center;
   margin-top: 50px;
 }
+
+.toggle-menu {
+  position: fixed;
+  bottom: 70px;
+  left: 0;
+  transition: all 0.35s;
+}
+
+@media only screen and (min-width: 150px) and (max-width: 900px) {
+  .manager .content {
+    padding: 20px;
+  }
+
+  .menu {
+    position: fixed;
+    top: 0;
+    left: 0px;
+    width: 270px;
+    height: 100%;
+    padding: 30px 20px 0 20px;
+    margin: auto 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-right: 1px solid #e0e0e0;
+    overflow-y: auto;
+    background-color: var(--c-neutral);
+  }
+}

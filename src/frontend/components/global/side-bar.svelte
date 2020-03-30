@@ -1,4 +1,5 @@
 <script>
+  import { fade, fly } from 'svelte/transition';
   import {
     Store,
     fatch,
@@ -8,6 +9,7 @@
   } from '../../config.svelte';
   import { onMount } from 'svelte';
   import { Link, navigate } from 'svelte-routing';
+  import Button from './button.svelte';
   import Base64 from '../../base64.js';
   import StringUtil from '../../string-util.js';
 
@@ -21,9 +23,11 @@
     // document.location = `/login?error=You are not logged in.`;
   }
 
+  const screenWidth = window.innerWidth;
   const accessToken = JSON.parse(
     Base64.decode(Store.get('accessToken').split('.')[1]),
   );
+  let show = screenWidth < 900 ? false : true;
   let options = {
     sections: [
       {
@@ -260,85 +264,111 @@
     background-color: var(--c-primary-dark-hover);
     transition: all 0.3s;
   }
+
+  .toggl-side-bar {
+    position: fixed;
+    bottom: 20px;
+    left: 0;
+    transition: all 0.35s;
+  }
+
+  .toggl-side-bar-show {
+    left: 250px;
+  }
 </style>
 
-<div class="side-bar">
-  <div class="sections">
-    <div class="section mt-auto">
-      <div class="menus">
-        <div class="menu">
-          {#if useNormalLink === true}
-            <a
-              href="/login"
-              on:click={() => {
-                Store.clear();
-              }}>
-              <div class="parent link">
-                <div class="fas fa-sign-out-alt icon" />
-                <div class="text">Sign out</div>
-              </div>
-            </a>
-          {:else}
-            <Link
-              to="/login"
-              on:click={() => {
-                Store.clear();
-              }}>
-              <div class="parent link">
-                <div class="fas fa-sign-out-alt icon" />
-                <div class="text">Sign out</div>
-              </div>
-            </Link>
-          {/if}
-        </div>
-      </div>
-    </div>
-    {#if options.sections && accessToken}
-      {#each options.sections as section}
-        {#if section.menus.length > 0}
-          <div class="section">
-            <div class="name">{section.name}</div>
-            <div class="menus">
-              {#each section.menus as menu}
-                <div
-                  class="menu {menu.link.startsWith(window.location.pathname) ? 'active' : ''}">
-                  {#if menu.type === 'link'}
-                    {#if filter(section, menu) === false}
-                      {#if useNormalLink === true || menu.kind === 'normal'}
-                        <a
-                          href={menu.link}
-                          on:click={() => {
-                            pathStore.update(value => menu.link);
-                            options.sections = [...options.sections];
-                          }}>
-                          <div class="parent link">
-                            <div class="{menu.faClass} icon" />
-                            <div class="text">{menu.name}</div>
-                          </div>
-                        </a>
-                      {:else}
-                        <Link
-                          to={menu.link}
-                          state={{ link: menu.link }}
-                          on:click={() => {
-                            pathStore.update(value => menu.link);
-                            options.sections = [...options.sections];
-                          }}>
-                          <div class="parent link">
-                            <div class="{menu.faClass} icon" />
-                            <div class="text">{menu.name}</div>
-                          </div>
-                        </Link>
-                      {/if}
-                    {/if}
-                  {/if}
-                </div>
-              {/each}
+{#if show === true}
+  <div transition:fade class="overlay">
+    <div transition:fly={{ x: -250 }} class="side-bar">
+      <div class="sections">
+        <div class="section mt-auto">
+          <div class="menus">
+            <div class="menu">
+              {#if useNormalLink === true}
+                <a
+                  href="/login"
+                  on:click={() => {
+                    Store.clear();
+                  }}>
+                  <div class="parent link">
+                    <div class="fas fa-sign-out-alt icon" />
+                    <div class="text">Sign out</div>
+                  </div>
+                </a>
+              {:else}
+                <Link
+                  to="/login"
+                  on:click={() => {
+                    Store.clear();
+                  }}>
+                  <div class="parent link">
+                    <div class="fas fa-sign-out-alt icon" />
+                    <div class="text">Sign out</div>
+                  </div>
+                </Link>
+              {/if}
             </div>
           </div>
+        </div>
+        {#if options.sections && accessToken}
+          {#each options.sections as section}
+            {#if section.menus.length > 0}
+              <div class="section">
+                <div class="name">{section.name}</div>
+                <div class="menus">
+                  {#each section.menus as menu}
+                    <div
+                      class="menu {menu.link.startsWith(window.location.pathname) ? 'active' : ''}">
+                      {#if menu.type === 'link'}
+                        {#if filter(section, menu) === false}
+                          {#if useNormalLink === true || menu.kind === 'normal'}
+                            <a
+                              href={menu.link}
+                              on:click={() => {
+                                pathStore.update(value => menu.link);
+                                options.sections = [...options.sections];
+                              }}>
+                              <div class="parent link">
+                                <div class="{menu.faClass} icon" />
+                                <div class="text">{menu.name}</div>
+                              </div>
+                            </a>
+                          {:else}
+                            <Link
+                              to={menu.link}
+                              state={{ link: menu.link }}
+                              on:click={() => {
+                                pathStore.update(value => menu.link);
+                                options.sections = [...options.sections];
+                              }}>
+                              <div class="parent link">
+                                <div class="{menu.faClass} icon" />
+                                <div class="text">{menu.name}</div>
+                              </div>
+                            </Link>
+                          {/if}
+                        {/if}
+                      {/if}
+                    </div>
+                  {/each}
+                </div>
+              </div>
+            {/if}
+          {/each}
         {/if}
-      {/each}
-    {/if}
-    <br />
+        <br />
+      </div>
+    </div>
   </div>
-</div>
+{/if}
+{#if screenWidth < 900}
+  <div class="toggl-side-bar {show === true ? 'toggl-side-bar-show' : ''}">
+    <Button
+      kind="secondary"
+      icon="fas fa-compass"
+      onlyIcon={true}
+      on:click={() => {
+        show = !show;
+      }} />
+  </div>
+{/if}

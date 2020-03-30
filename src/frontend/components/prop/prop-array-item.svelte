@@ -1,6 +1,8 @@
 <script>
   import { createEventDispatcher } from 'svelte';
   import Button from '../global/button.svelte';
+  import OverflowMenu from '../global/overflow-menu.svelte';
+  import OverflowMenuItem from '../global/overflow-menu-item.svelte';
 
   export let prop;
   export let position;
@@ -29,31 +31,24 @@
     <div class="h">
       <div class="n">Item {position + 1}</div>
       <div class="a">
-        <Button
-          icon="fas fa-chevron-up"
-          onlyIcon={true}
-          kind="ghost"
-          size="small"
-          on:click={() => {
-            dispatch('move', { prop, from: position, to: position - 1 });
-          }} />
-        <Button
-          icon="fas fa-chevron-down"
-          onlyIcon={true}
-          kind="ghost"
-          size="small"
-          on:click={() => {
-            dispatch('move', { prop, from: position, to: position + 1 });
-          }} />
-        <Button
-          icon="fas fa-trash"
-          kind="ghost"
-          size="small"
-          on:click={() => {
-            dispatch('remove', { prop, position });
-          }}>
-          Remove
-        </Button>
+        <OverflowMenu position="right">
+          <OverflowMenuItem
+            text="Move Up"
+            on:click={() => {
+              dispatch('move', { prop, from: position, to: position - 1 });
+            }} />
+          <OverflowMenuItem
+            text="Move Down"
+            on:click={() => {
+              dispatch('move', { prop, from: position, to: position + 1 });
+            }} />
+          <OverflowMenuItem
+            text="Remove"
+            danger={true}
+            on:click={() => {
+              dispatch('remove', { prop, position });
+            }} />
+        </OverflowMenu>
       </div>
     </div>
   </div>

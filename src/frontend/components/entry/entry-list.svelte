@@ -1,5 +1,5 @@
 <script>
-  import {createEventDispatcher} from 'svelte';
+  import { createEventDispatcher } from 'svelte';
   import OverflowMenu from '../global/overflow-menu.svelte';
   import OverflowMenuItem from '../global/overflow-menu-item.svelte';
 
@@ -47,29 +47,54 @@
   .entry-list table .row .actions .menu {
     margin-left: auto;
   }
+
+  @media only screen and (min-width: 150px) and (max-width: 900px) {
+    .entry-list table .header {
+      font-size: 6pt;
+    }
+
+    .entry-list table .row td {
+      font-size: 6pt;
+    }
+
+    .entry-list table .row .id {
+      display: none;
+    }
+
+    .entry-list table .header .id {
+      display: none;
+    }
+
+    .entry-list table .header th {
+      padding: 2px 4px;
+    }
+    .entry-list table .row td {
+      padding: 2px 4px;
+    }
+  }
 </style>
 
 <div class="{className} entry-list">
   <table>
     <tr class="header">
-      <th>
+      <th class="id">
         <span class="m-auto-0">ID</span>
       </th>
       <th>Created At</th>
-      <th>Updated At</th>
+      <th class="id">Updated At</th>
       <th>Title</th>
       <th>Description</th>
       <th />
     </tr>
     {#each entries as entry}
       <tr class="row">
-        <td>{entry._id}</td>
+        <td class="id">{entry._id}</td>
         <td>
           {new Date(entry.createdAt).toLocaleDateString()}
           <br />
           {new Date(entry.createdAt).toLocaleTimeString()}
         </td>
-        <td>
+        <td class="id">
           {new Date(entry.updatedAt).toLocaleDateString()}
           <br />
           {new Date(entry.updatedAt).toLocaleTimeString()}

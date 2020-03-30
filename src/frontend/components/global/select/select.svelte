@@ -44,6 +44,7 @@
     position: relative;
     left: -25px;
     margin: auto 0;
+    z-index: 0;
   }
 </style>
 

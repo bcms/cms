@@ -1,5 +1,6 @@
 <script>
   import { afterUpdate, createEventDispatcher } from 'svelte';
+  import { blur } from 'svelte/transition';
   import Menu from '../menu.svelte';
   import Button from '../global/button.svelte';
   import PropsList from '../prop/props-list.svelte';
@@ -45,7 +46,7 @@
         } }}
       config={{ heading: menuConfig.heading, buttonLabel: menuConfig.buttonLabel, items, itemSelected }} />
   {/if}
-  <div class="content-wrapper">
+  <div transition:blur={{ amount: 10 }} class="content-wrapper">
     <div class="content">
       {#if itemSelected}
         <div class="heading">

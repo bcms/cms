@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import { blur } from 'svelte/transition';
   import { axios, Store, fileStore } from '../../../config.svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/global/layout.svelte';
@@ -187,7 +188,7 @@
 
 <Layout>
   {#if accessToken && (accessToken.customPool.policy.media.get === true || accessToken.roles[0].name === 'ADMIN')}
-    <div class="wrapper">
+    <div transition:blur={{ amount: 10 }} class="wrapper">
       <FileExplorer
         showDeleteBtn={true}
         on:close={event => {
