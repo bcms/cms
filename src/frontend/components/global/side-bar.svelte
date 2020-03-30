@@ -269,7 +269,6 @@
     position: fixed;
     bottom: 20px;
     left: 0;
-    transition: all 0.35s;
   }
 
   .toggl-side-bar-show {
@@ -278,8 +277,8 @@
 </style>
 
 {#if show === true}
-  <div transition:fade class="overlay">
-    <div transition:fly={{ x: -250 }} class="side-bar">
+  <div class="overlay">
+    <div class="side-bar">
       <div class="sections">
         <div class="section mt-auto">
           <div class="menus">
