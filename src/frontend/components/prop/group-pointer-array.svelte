@@ -17,10 +17,9 @@
 
   function init() {
     const group = groups.find(e => e._id === prop.value._id);
-    if (typeof prop.value.array.lenght === 'undefined') {
-      console.log('HERE');
-      prop.value.array = [];
-    }
+    // if (typeof prop.value.array.lenght === 'undefined') {
+    //   prop.value.array = [];
+    // }
     if (group) {
       prop.value.array = prop.value.array.map(arr => {
         const array = JSON.parse(JSON.stringify(arr));
@@ -33,6 +32,7 @@
         return array;
       });
     }
+    console.log('Events', events);
   }
   init();
   onMount(() => {

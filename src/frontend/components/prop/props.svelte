@@ -129,6 +129,7 @@
             case 'GROUP_POINTER_ARRAY':
               {
                 for (const j in prop.value.array) {
+                  console.log(groupEvents);
                   const result = groupEvents[prop.name][
                     j
                   ].validateAndGetProps();
