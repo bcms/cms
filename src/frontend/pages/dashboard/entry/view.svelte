@@ -1,6 +1,6 @@
 <script>
   import { onMount, afterUpdate } from 'svelte';
-  import { fade, fly } from 'svelte/transition';
+  import { blur, fly } from 'svelte/transition';
   import uuid from 'uuid';
   import { Link, navigate } from 'svelte-routing';
   import {
@@ -466,7 +466,7 @@
 <Layout>
   <div key={uuid.v4()} class="manager">
     {#if show === true}
-      <div transition:fly={{ x: 0 }} class="menu">
+      <div transition:fly={{ x: -250 }} class="menu">
         <div class="section">
           <div class="heading">Filters</div>
           <Button
@@ -647,7 +647,7 @@
           }} />
       </div>
     {/if}
-    <div class="content">
+    <div transition:blur={{ amount: 10 }} class="content">
       <div class="content-wrapper">
         {#if template && entries}
           <div class="heading">
