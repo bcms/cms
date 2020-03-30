@@ -1,4 +1,5 @@
 <script>
+  import { blur } from 'svelte/transition';
   import uuid from 'uuid';
   import crypto from 'crypto-js';
   import { onMount, afterUpdate } from 'svelte';
@@ -480,7 +481,7 @@
 </svelte:head>
 <Leyout>
   {#if initDone === true}
-    <div class="wrapper">
+    <div transition:blur={{ amount: 10 }} class="wrapper">
       <div class="heading">
         <div class="info">
           <div class="title">
