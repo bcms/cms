@@ -1,6 +1,5 @@
 <script context="module">
   import { writable } from 'svelte/store';
-  import { fly } from 'svelte/transition';
   import Button from '../global/button.svelte';
 
   export const fileType = {
@@ -190,7 +189,7 @@
 </style>
 
 {#if show === true}
-  <div transition:fly={{ x: -350 }} class="file-explorer">
+  <div class="file-explorer">
     <div class="heading">EXPLORER</div>
     <div class="items">
       {#each files as file}

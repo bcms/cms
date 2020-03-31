@@ -1,6 +1,5 @@
 <script>
   import { onMount, afterUpdate } from 'svelte';
-  import { blur, fly } from 'svelte/transition';
   import uuid from 'uuid';
   import { Link, navigate } from 'svelte-routing';
   import {
@@ -466,7 +465,7 @@
 <Layout>
   <div key={uuid.v4()} class="manager">
     {#if show === true}
-      <div transition:fly={{ x: -250 }} class="menu">
+      <div class="menu">
         <div class="section">
           <div class="heading">Filters</div>
           <Button
@@ -647,7 +646,7 @@
           }} />
       </div>
     {/if}
-    <div transition:blur={{ amount: 10 }} class="content">
+    <div class="content">
       <div class="content-wrapper">
         {#if template && entries}
           <div class="heading">
@@ -707,82 +706,6 @@
                   deleteEntry(event.detail);
                 }
               }} />
-            <!-- <table class="etable mt-50 mb-50">
-              <tr class="header">
-                <th>
-                  <span class="m-auto-0">ID</span>
-                </th>
-                <th>Created At</th>
-                <th>Updated At</th>
-                <th>Title</th>
-                <th>Description</th>
-                <th />
-              </tr>
-              {#each entries as entry, i}
-                {#if filterEntry(entry, i) === true}
-                  <tr class="row">
-                    <td class="id">{entry._id}</td>
-                    <td class="date">
-                      {new Date(entry.createdAt).toLocaleDateString()}
-                      <br />
-                      {new Date(entry.createdAt).toLocaleTimeString()}
-                    </td>
-                    <td class="date">
-                      {new Date(entry.updatedAt).toLocaleDateString()}
-                      <br />
-                      {new Date(entry.updatedAt).toLocaleTimeString()}
-                    </td>
-                    {#if entry.content.find(e => e.lng === languageSelected.code)}
-                      {#each entry.content.find(e => e.lng === languageSelected.code).props as prop}
-                        {#if prop.type === 'QUILL'}
-                          {#if prop.value.heading.title !== ''}
-                            <td class="title">{prop.value.heading.title}</td>
-                            <td class="desc">{prop.value.heading.desc}</td>
-                          {:else}
-                            <td class="title">Not available</td>
-                            <td class="desc">
-                              This Entry is not available in '{languageSelected.code}'
-                              language.
-                            </td>
-                          {/if}
-                        {/if}
-                      {/each}
-                    {:else}
-                      <td class="title">Not available</td>
-                      <td class="desc">
-                        This Entry is not available in '{languageSelected.code}'
-                        language.
-                      </td>
-                    {/if}
-                    <td class="actions">
-                      <OverflowMenu position="right">
-                        <OverflowMenuItem
-                          text="Data Model"
-                          on:click={() => {
-                            viewDataModelModalEvents.setDataModel(JSON.stringify(entry, null, '  '));
-                            viewDataModelModalEvents.toggle();
-                          }} />
-                        {#if templatePolicy && templatePolicy.put === true}
-                          <OverflowMenuItem
-                            text="Edit"
-                            on:click={() => {
-                              navigate(`/dashboard/template/entry/rc` + `?tid=${template._id}&eid=${entry._id}&lng=${languageSelected.code}`);
-                            }} />
-                        {/if}
-                        {#if templatePolicy && templatePolicy.delete === true}
-                          <OverflowMenuItem
-                            danger={true}
-                            text="Delete"
-                            on:click={() => {
-                              deleteEntry(entry);
-                            }} />
-                        {/if}
-                      </OverflowMenu>
-                    </td>
-                  </tr>
-                {/if}
-              {/each}
-            </table> -->
           {:else}
             <div class="no-entries">There are no Entries in this Template</div>
           {/if}

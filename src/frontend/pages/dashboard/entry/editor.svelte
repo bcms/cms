@@ -1,5 +1,4 @@
 <script>
-  import { blur } from 'svelte/transition';
   import uuid from 'uuid';
   import crypto from 'crypto-js';
   import { onMount, afterUpdate } from 'svelte';
@@ -288,14 +287,14 @@
 
   function getQuill() {
     console.log('Quill');
-    if (Quill) {
+    if (window.Quill) {
       clearInterval(loadTimer);
       quill = Quill;
     }
   }
   function getHighlight() {
     console.log('hljs');
-    if (hljs) {
+    if (window.hljs) {
       clearInterval(loadTimer);
       loadTimer = setInterval(getQuill, 50);
     }
@@ -370,10 +369,15 @@
               data[lng.code].sections = quillProp.value.content.map((e, i) => {
                 let value = e.value;
                 if (e.type === 'WIDGET') {
-                  value.props = orderProps(
-                    value.props,
-                    widgets.find(t => t._id === value._id).props,
-                  );
+                  const widget = widgets.find(t => t._id === value._id);
+                  if (widget) {
+                    value.props = orderProps(value.props, widget.props);
+                  } else {
+                    console.error(
+                      `Widget "${value._id}"" does not exist!`,
+                      value,
+                    );
+                  }
                 }
                 return {
                   id: e.id,
@@ -481,7 +485,7 @@
 </svelte:head>
 <Leyout>
   {#if initDone === true}
-    <div transition:blur={{ amount: 10 }} class="wrapper">
+    <div class="wrapper">
       <div class="heading">
         <div class="info">
           <div class="title">

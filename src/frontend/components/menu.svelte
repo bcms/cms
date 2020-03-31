@@ -1,5 +1,4 @@
 <script>
-  import { fade, fly } from 'svelte/transition';
   import Button from './global/button.svelte';
   import StringUtil from '../string-util.js';
 
@@ -15,8 +14,8 @@
 </style>
 
 {#if show === true}
-  <div transition:fade class="overlay">
-    <div transition:fly={{ x: -350 }} class="menu">
+  <div class="overlay">
+    <div class="menu">
       <div class="heading">{config.heading}</div>
       <div class="items">
         {#each config.items as item}

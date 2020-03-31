@@ -1,6 +1,5 @@
 <script>
   import { onMount } from 'svelte';
-  import { blur } from 'svelte/transition';
   import { axios, fatch, languageStore } from '../../../config.svelte';
   import { simplePopup } from '../../../components/simple-popup.svelte';
   import Layout from '../../../components/global/layout.svelte';
@@ -107,7 +106,7 @@
 </style>
 
 <Layout>
-  <div transition:blur={{ amount: 10 }} class="wrapper">
+  <div class="wrapper">
     <div class="title">Language Manager</div>
     <div class="desc">Add lanuages that will be available for Entries.</div>
     <div class="actions">
