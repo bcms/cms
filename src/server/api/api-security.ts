@@ -93,7 +93,7 @@ export class APISecurity {
       payloadAsString = '' + payload;
     }
     if (
-      data.timestamp < Date.now() - 3000 ||
+      data.timestamp < Date.now() - 60000 ||
       data.timestamp > Date.now() + 3000
     ) {
       throw new Error('Timestamp out of range.');
