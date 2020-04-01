@@ -1,6 +1,7 @@
 import { IMongooseEntityService, MongooseEntityService } from 'purple-cheetah';
 import { Entry, IEntry } from './models/entry.model';
 import { Model } from 'mongoose';
+import { PropQuillContentType } from '../prop';
 
 @MongooseEntityService({
   db: {
@@ -31,6 +32,13 @@ export class EntryService implements IMongooseEntityService<Entry> {
     return await this.repo.findOne({
       templateId,
       'content.props.value.heading.slug': entrySlug,
+    });
+  }
+
+  async findAllByWidgetId(id: string) {
+    return await this.repo.find({
+      'content.props.value.content.type': PropQuillContentType.WIDGET,
+      'content.props.value.content.value._id': id,
     });
   }
 

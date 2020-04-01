@@ -26,6 +26,12 @@ import { WidgetUtil } from './widget-util';
 import { PropUtil } from '../prop/prop-util';
 import { EntryService } from '../entry';
 import { PropChanges } from '../prop/interfaces/prop-changes.interface';
+import {
+  PropType,
+  PropQuill,
+  PropQuillContentType,
+  PropQuillContentValueWidget,
+} from '../prop';
 
 @Controller('/widget')
 export class WidgetController {
@@ -364,6 +370,46 @@ export class WidgetController {
         `Failed to remove Widget from database.`,
       );
     }
+    let entries = await this.entryService.findAllByWidgetId(request.params.id);
+    entries = entries.map(entry => {
+      entry.content = entry.content.map(content => {
+        content.props = content.props.map(rootProp => {
+          if (rootProp.type === PropType.QUILL) {
+            (rootProp.value as PropQuill).content = (rootProp.value as PropQuill).content.filter(
+              quillContent => {
+                if (quillContent.type === PropQuillContentType.WIDGET) {
+                  if (
+                    (quillContent.value as PropQuillContentValueWidget)._id ===
+                    request.params.id
+                  ) {
+                    return false;
+                  }
+                }
+                return true;
+              },
+            );
+          }
+          return rootProp;
+        });
+        return content;
+      });
+      return entry;
+    });
+    entries.forEach(entry => {
+      this.entryService
+        .update(entry)
+        .then(result => {
+          if (result === false) {
+            this.logger.error(
+              '.deleteById - update entry',
+              `Failed to update entry "${entry._id.toHexString()}"`,
+            );
+          }
+        })
+        .catch(e => {
+          this.logger.error('.deleteById - update entry', e);
+        });
+    });
     return {
       message: 'Success.',
     };
