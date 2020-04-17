@@ -47,15 +47,15 @@
   {#if customMenu}
     <customMenu />
   {:else}
-    <div class="menu-wrapper">
-      <Menu
-        events={{ clicked: item => {
-            dispatch('itemClicked', item);
-          }, addNewItem: () => {
-            dispatch('addNewItem', 'none');
-          } }}
-        config={{ heading: menuConfig.heading, buttonLabel: menuConfig.buttonLabel, items, itemSelected }} />
-    </div>
+    <!-- <div class="menu-wrapper"> -->
+    <Menu
+      events={{ clicked: item => {
+          dispatch('itemClicked', item);
+        }, addNewItem: () => {
+          dispatch('addNewItem', 'none');
+        } }}
+      config={{ heading: menuConfig.heading, buttonLabel: menuConfig.buttonLabel, items, itemSelected }} />
+    <!-- </div> -->
   {/if}
   <div class="content-wrapper">
     <div class="content">
