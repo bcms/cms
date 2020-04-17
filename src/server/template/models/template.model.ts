@@ -17,6 +17,10 @@ export interface ITemplate extends IEntity {
   userId: string;
   entryTemplate: Prop[];
   entryIds: string[];
+  defaults?: {
+    title: string;
+    coverImageUri: string;
+  };
 }
 
 /**
@@ -37,6 +41,10 @@ export class Template {
     public entryTemplate: Prop[],
     /** Pointers to the Entries created using this Template. */
     public entryIds: string[],
+    public defaults?: {
+      title: string;
+      coverImageUri: string;
+    },
   ) {}
 
   /** Provides schema object for Mongoose Repository. */
@@ -51,6 +59,7 @@ export class Template {
       userId: String,
       entryTemplate: [Object],
       entryIds: [String],
+      defaults: Object,
     });
   }
 }

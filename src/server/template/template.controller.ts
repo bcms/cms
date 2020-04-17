@@ -80,7 +80,7 @@ export class TemplateController {
     let templates: Template[];
     if (request.params.ids) {
       const ids = request.params.ids.split('-');
-      ids.forEach(id => {
+      ids.forEach((id) => {
         if (StringUtility.isIdValid(id) === false) {
           throw error.occurred(
             HttpStatus.FORBIDDEN,
@@ -131,7 +131,7 @@ export class TemplateController {
     let templates: TemplateLite[];
     if (request.params.ids) {
       const ids = request.params.ids.split('-');
-      ids.forEach(id => {
+      ids.forEach((id) => {
         if (StringUtility.isIdValid(id) === false) {
           throw error.occurred(
             HttpStatus.FORBIDDEN,
@@ -297,6 +297,20 @@ export class TemplateController {
             __type: 'string',
             __required: false,
           },
+          defaults: {
+            __type: 'object',
+            __required: false,
+            __child: {
+              title: {
+                __type: 'string',
+                __required: false,
+              },
+              coverImageUri: {
+                __type: 'string',
+                __required: false,
+              },
+            },
+          },
           changes: {
             __type: 'object',
             __required: false,
@@ -368,6 +382,20 @@ export class TemplateController {
       changeDetected = true;
       template.desc = request.body.desc;
     }
+    if (typeof request.body.defaults !== 'undefined') {
+      if (!template.defaults) {
+        template.defaults = {
+          title: '',
+          coverImageUri: '',
+        };
+      }
+      if (typeof request.body.defaults.title === 'string') {
+        template.defaults.title = request.body.defaults.title;
+      }
+      if (typeof request.body.defaults.coverImageUri === 'string') {
+        template.defaults.coverImageUri = request.body.defaults.coverImageUri;
+      }
+    }
     if (typeof request.body.entryTemplate !== 'undefined') {
       if (typeof request.body.changes === 'undefined') {
         throw error.occurred(
@@ -401,14 +429,14 @@ export class TemplateController {
         const entries = await this.entryService.findAllById(template.entryIds);
         for (const i in entries) {
           const entry = entries[i];
-          entry.content.forEach(content => {
-            changes.props.forEach(change => {
+          entry.content.forEach((content) => {
+            changes.props.forEach((change) => {
               if (change.remove === true) {
                 content.props = content.props.filter(
-                  prop => prop.name !== change.name.old,
+                  (prop) => prop.name !== change.name.old,
                 );
               } else {
-                content.props.forEach(prop => {
+                content.props.forEach((prop) => {
                   if (prop.name === change.name.old) {
                     prop.name = change.name.new;
                     prop.required = change.required;

@@ -131,6 +131,18 @@ export class PropUtil {
             p.value = prop.value;
           }
           break;
+        case PropType.MEDIA:
+          {
+            p.type = PropType[prop.type];
+            if (typeof prop.value !== 'string') {
+              throw new Error(
+                `Invalid type of 'props[${i}].value'. ` +
+                  `Expected 'string' but got '${typeof prop.value}'.`,
+              );
+            }
+            p.value = prop.value;
+          }
+          break;
         case PropType.GROUP_POINTER:
           {
             const verifiedProp = await this.untrustedGroupPointerObjectToProp(
@@ -559,7 +571,9 @@ export class PropUtil {
     }
     for (const i in propsTemplate) {
       const propTemplate = propsTemplate[i];
-      const propToCheck = propsToCheck.find(e => e.name === propTemplate.name);
+      const propToCheck = propsToCheck.find(
+        (e) => e.name === propTemplate.name,
+      );
       if (!propToCheck) {
         if (propTemplate.required === true) {
           throw new Error(`Missing property '${level}.${propTemplate.name}'.`);
@@ -631,7 +645,7 @@ export class PropUtil {
             if (entry === null) {
               object[prop.name] = prop.value;
             } else {
-              const entryContent = entry.content.find(e => e.lng === lng);
+              const entryContent = entry.content.find((e) => e.lng === lng);
               if (entryContent) {
                 object[prop.name] = await PropUtil.propsToMarkdown(
                   entryContent.props,
@@ -654,7 +668,7 @@ export class PropUtil {
               if (entry === null) {
                 object[prop.name].push(prop.value);
               } else {
-                const entryContent = entry.content.find(e => e.lng === lng);
+                const entryContent = entry.content.find((e) => e.lng === lng);
                 if (entryContent) {
                   object[prop.name].push(
                     await PropUtil.propsToMarkdown(
@@ -704,7 +718,7 @@ export class PropUtil {
       name?: string;
       value: any;
     }> = [];
-    const quillProp = props.find(e => e.type === PropType.QUILL);
+    const quillProp = props.find((e) => e.type === PropType.QUILL);
     if (quillProp) {
       quillProp.value = quillProp.value as PropQuill;
       for (const i in quillProp.value.content) {
@@ -915,7 +929,7 @@ export class PropUtil {
     newName: string,
   ) {
     const recursive = (props: Prop[], on: string, nn: string) => {
-      props.forEach(prop => {
+      props.forEach((prop) => {
         if (prop.type === PropType.GROUP_POINTER) {
           prop.value = prop.value as PropGroupPointer;
           if (prop.name === on) {
@@ -927,8 +941,8 @@ export class PropUtil {
       });
       return props;
     };
-    entries.forEach(entry => {
-      entry.content.forEach(content => {
+    entries.forEach((entry) => {
+      entry.content.forEach((content) => {
         content.props = recursive(content.props, oldName, newName);
       });
     });

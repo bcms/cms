@@ -3,6 +3,9 @@
 
   export { className as class };
   export let value = Date.now();
+  export let labelText;
+  export let helperText;
+  export let invalidText;
 
   const date = new Date(value);
   const dateString = `${date.getFullYear()}-${
@@ -19,6 +22,18 @@
 </style>
 
 <div class="{className} input-wrapper date-picker">
+  {#if labelText}
+    <label class="label">{labelText}</label>
+    {#if helperText}
+      <div class="helper-text">{helperText}</div>
+    {/if}
+  {/if}
+  {#if invalidText}
+    <div class="invalid-text">
+      <span class="fas fa-exclamation icon" />
+      {invalidText}
+    </div>
+  {/if}
   <input
     type="date"
     value={dateString}

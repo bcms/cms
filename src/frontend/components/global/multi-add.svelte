@@ -1,6 +1,6 @@
 <script>
   import uuid from 'uuid';
-  import { onMount } from 'svelte';
+  import { onMount, createEventDispatcher } from 'svelte';
   import TextInput from './text-input.svelte';
   import Button from './button.svelte';
 
@@ -8,6 +8,7 @@
   export let options;
   export let label;
 
+  const dispatch = createEventDispatcher();
   const id = uuid.v4();
   let list = [];
   let value = '';
@@ -15,7 +16,9 @@
   let className;
 
   function removeItem(id) {
+    const item = list.find(item => item.id === id);
     list = list.filter(item => item.id !== id);
+    dispatch('remove', item.value);
   }
   function handleInput(event) {
     const v = event.currentTarget.value
@@ -36,9 +39,10 @@
         ...list,
         {
           id: uuid.v4(),
-          value: value,
+          value,
         },
       ];
+      dispatch('add', `${value}`);
       value = '';
       event.currentTarget.value = '';
     }

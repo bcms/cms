@@ -33,9 +33,6 @@
               {:else}
                 <div class="name">{StringUtil.prettyName(item.name)}</div>
               {/if}
-              {#if item.type}
-                <div class="type">[ {StringUtil.prettyName(item.type)} ]</div>
-              {/if}
               {#if item.roles}
                 <div class="role">
                   [ {StringUtil.prettyName(item.roles[0].name)} ]
@@ -58,9 +55,6 @@
                 </div>
               {:else}
                 <div class="name">{StringUtil.prettyName(item.name)}</div>
-              {/if}
-              {#if item.type}
-                <div class="type">[ {StringUtil.prettyName(item.type)} ]</div>
               {/if}
               {#if item.roles}
                 <div class="role">

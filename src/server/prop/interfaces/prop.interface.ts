@@ -7,6 +7,7 @@ export enum PropType {
   DATE = 'DATE',
   ENUMERATION = 'ENUMERATION',
   BOOLEAN = 'BOOLEAN',
+  MEDIA = 'MEDIA',
 
   ENTRY_POINTER = 'ENTRY_POINTER',
 

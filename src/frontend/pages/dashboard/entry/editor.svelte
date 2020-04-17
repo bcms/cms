@@ -515,17 +515,18 @@
           }
         }}>
         <Select
-          selected="en"
           disabled={selectedLanguage.disabled}
           on:change={event => {
             console.log(event);
             if (event.eventPhase === 0 && entry) {
-              console.log('lol');
               changeLanguage(event.detail);
             }
           }}>
           {#each languages as lng}
-            <SelectItem text="{lng.name} | {lng.nativeName}" value={lng.code} />
+            <SelectItem
+              text="{lng.name} | {lng.nativeName}"
+              value={lng.code}
+              selected={lng.code === selectedLanguage.code ? true : false} />
           {/each}
         </Select>
       </div>

@@ -21,7 +21,17 @@
   afterUpdate(() => {
     if (itemSelected) {
       if (itemSelected.entryTemplate) {
-        props = itemSelected.entryTemplate;
+        props = [
+          { name: 'title', type: 'STRING', required: true, default: true },
+          {
+            name: 'description',
+            type: 'STRING',
+            required: true,
+            default: true,
+          },
+          { name: 'cover_image', type: 'MEDIA', required: true, default: true },
+          ...itemSelected.entryTemplate,
+        ];
       } else if (!itemSelected.username) {
         props = itemSelected.props;
       }
@@ -37,13 +47,15 @@
   {#if customMenu}
     <customMenu />
   {:else}
-    <Menu
-      events={{ clicked: item => {
-          dispatch('itemClicked', item);
-        }, addNewItem: () => {
-          dispatch('addNewItem', 'none');
-        } }}
-      config={{ heading: menuConfig.heading, buttonLabel: menuConfig.buttonLabel, items, itemSelected }} />
+    <div class="menu-wrapper">
+      <Menu
+        events={{ clicked: item => {
+            dispatch('itemClicked', item);
+          }, addNewItem: () => {
+            dispatch('addNewItem', 'none');
+          } }}
+        config={{ heading: menuConfig.heading, buttonLabel: menuConfig.buttonLabel, items, itemSelected }} />
+    </div>
   {/if}
   <div class="content-wrapper">
     <div class="content">

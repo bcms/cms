@@ -2,11 +2,15 @@
   import { createEventDispatcher } from 'svelte';
   import TextInput from '../text-input.svelte';
   import ToggleSmall from '../toggle/small.svelte';
+  import Button from '../button.svelte';
   import Select from '../select/select.svelte';
   import SelectItem from '../select/select-item.svelte';
+  import NumberInput from '../number-input.svelte';
+  import DatePicker from '../date-picker.svelte';
   import { templateStore } from '../../../config.svelte';
   import { simplePopup } from '../../simple-popup.svelte';
   import Modal from './modal.svelte';
+  import MediaPicker from '../media-picker.svelte';
   import MultiAdd from '../multi-add.svelte';
   import StringUtil from '../../../string-util.js';
 
@@ -15,6 +19,7 @@
   export let usedPropNames;
 
   const dispatch = createEventDispatcher();
+  const mediaPickerEvents = {};
   const modalHeading = {
     icon: '/assets/ics/template/icon_type_ct.png',
     title: `Add new Property`,
@@ -54,6 +59,10 @@
       name: 'ENTRY_POINTER',
       desc: 'Points to specified Entry in a Template.',
     },
+    {
+      name: 'MEDIA',
+      desc: 'Select media file using media picker.',
+    },
   ];
   let data = {
     type: {
@@ -70,6 +79,10 @@
   let enumInputOptions = {
     getList: () => {},
     clear: () => {},
+  };
+  let enumInputValues = {
+    items: [],
+    selected: '',
   };
 
   templateStore.subscribe(value => {
@@ -101,6 +114,11 @@
         }
         break;
       case 'STRING':
+        {
+          data.value = '';
+        }
+        break;
+      case 'MEDIA':
         {
           data.value = '';
         }
@@ -230,6 +248,11 @@
       data.name.error = 'Input cannot be empty.';
       return;
     }
+    if (data.name.value === 'title' || data.name.value === 'slug') {
+      data.name.error =
+        'Names: "title" and "slug" are reserved. Please chose another name.';
+      return;
+    }
     data.name.error = '';
     const propWithSameName = usedPropNames.find(e => e === data.name.value);
     if (propWithSameName) {
@@ -254,7 +277,12 @@
       case 'ENUMERATION':
         {
           data.value.items = enumInputOptions.getList();
+          data.value.selected = enumInputValues.selected;
           enumInputOptions.clear();
+          enumInputValues = {
+            items: [],
+            selected: '',
+          };
         }
         break;
       case 'GROUP_POINTER_ARRAY':
@@ -418,8 +446,70 @@
           handleNameInput(event.detail);
         }
       }} />
-    {#if data.type.value === 'ENUMERATION'}
-      <MultiAdd class="mt-20" label="Enumaretions" options={enumInputOptions} />
+    {#if data.type.value === 'STRING'}
+      <TextInput
+        class="mt-20"
+        labelText="Default value"
+        helperText="Optional"
+        placeholder="- Default value -"
+        on:input={event => {
+          if (event.eventPhase === 0) {
+            data.value = event.detail;
+          }
+        }} />
+    {:else if data.type.value === 'MEDIA'}
+      <MediaPicker
+        class="mt-20"
+        value={data.value}
+        labelText="Default value"
+        helperText="Optional"
+        on:change={event => {
+          if (event.eventPhase === 0) {
+            data.value = event.detail;
+          }
+        }} />
+    {:else if data.type.value === 'NUMBER'}
+      <NumberInput
+        class="mt-20"
+        labelText="Default value"
+        helperText="Optional"
+        value={data.value}
+        on:change={event => {
+          if (event.eventPhase === 0) {
+            data.value = event.detail;
+          }
+        }} />
+    {:else if data.type.value === 'DATE'}
+      <DatePicker
+        class="mt-20"
+        labelText="Default value"
+        helperText="Optional"
+        on:change={event => {
+          data.value = event.detail;
+        }} />
+    {:else if data.type.value === 'ENUMERATION'}
+      <Select
+        class="mt-20"
+        labelText="Default value"
+        helperText="Optional"
+        on:change={event => {
+          enumInputValues.selected = event.detail;
+        }}>
+        <SelectItem value="" text="- Not specified -" />
+        {#each enumInputValues.items as item}
+          <SelectItem value={item} text={item} />
+        {/each}
+      </Select>
+      <MultiAdd
+        class="mt-20"
+        label="Enumaretions"
+        options={enumInputOptions}
+        on:add={event => {
+          enumInputValues.items = [...enumInputValues.items, event.detail];
+        }}
+        on:remove={event => {
+          enumInputValues.items = enumInputValues.items.filter(e => e !== event.detail);
+        }} />
     {:else if data.type.value === 'GROUP_POINTER'}
       <Select
         class="mt-20"

@@ -199,7 +199,6 @@
     if (keys.length > 0 && !keySelected) {
       keySelected = keys[0];
       setKeyConfig();
-      console.log(keySelected);
     }
   });
 </script>

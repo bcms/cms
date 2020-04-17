@@ -322,9 +322,9 @@
         deleteTemplate();
       }
     }}>
-    {#if templateSelected && templateSelected.entryTemplate.length > 0}
+    {#if templateSelected}
       <PropsList
-        props={templateSelected.entryTemplate}
+        props={[{ name: 'title', type: 'STRING', required: true, default: true }, { name: 'description', type: 'STRING', required: true, default: true }, { name: 'cover_image', type: 'MEDIA', required: true, default: true }, ...templateSelected.entryTemplate]}
         {groups}
         on:remove={event => {
           if (event.eventPhase === 0) {

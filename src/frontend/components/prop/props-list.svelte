@@ -87,29 +87,31 @@
         </td>
         <td class="actions">
           <div class="menu">
-            <OverflowMenu position="right">
-              <OverflowMenuItem
-                text="Move Up"
-                on:click={() => {
-                  dispatch('moveUp', { prop, i });
-                }} />
-              <OverflowMenuItem
-                text="Move Down"
-                on:click={() => {
-                  dispatch('moveDown', { prop, i });
-                }} />
-              <OverflowMenuItem
-                text="Edit"
-                on:click={() => {
-                  dispatch('edit', { prop, i });
-                }} />
-              <OverflowMenuItem
-                danger={true}
-                text="Remove"
-                on:click={() => {
-                  dispatch('remove', { prop, i });
-                }} />
-            </OverflowMenu>
+            {#if prop.default !== true}
+              <OverflowMenu position="right">
+                <OverflowMenuItem
+                  text="Move Up"
+                  on:click={() => {
+                    dispatch('moveUp', { prop, i });
+                  }} />
+                <OverflowMenuItem
+                  text="Move Down"
+                  on:click={() => {
+                    dispatch('moveDown', { prop, i });
+                  }} />
+                <OverflowMenuItem
+                  text="Edit"
+                  on:click={() => {
+                    dispatch('edit', { prop, i });
+                  }} />
+                <OverflowMenuItem
+                  danger={true}
+                  text="Remove"
+                  on:click={() => {
+                    dispatch('remove', { prop, i });
+                  }} />
+              </OverflowMenu>
+            {/if}
           </div>
         </td>
       </tr>

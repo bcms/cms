@@ -13,6 +13,10 @@ export class TemplateFactory {
       '',
       [],
       [],
+      {
+        title: '',
+        coverImageUri: '',
+      },
     );
   }
 }
