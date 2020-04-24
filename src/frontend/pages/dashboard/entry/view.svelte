@@ -687,7 +687,7 @@
           {#if entries.length > 0}
             <EntryList
               class="mt-50"
-              {entries}
+              entries={entries.filter((e, i) => filterEntry(e, i))}
               lng={languageSelected.code}
               {templatePolicy}
               on:data={event => {
