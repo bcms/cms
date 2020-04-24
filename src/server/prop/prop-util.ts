@@ -627,6 +627,18 @@ export class PropUtil {
             );
           }
           break;
+        case PropType.GROUP_POINTER_ARRAY:
+          {
+            prop.value = prop.value as PropGroupPointerArray;
+            object[prop.name] = [];
+            for (const j in (prop.value as PropGroupPointerArray).array) {
+              const arr = (prop.value as PropGroupPointerArray).array[j];
+              object[prop.name].push(
+                await PropUtil.propsToJSONObject(arr.value, undefined, lng),
+              );
+            }
+          }
+          break;
         case PropType.QUILL:
           {
             prop.value = prop.value as PropQuill;
