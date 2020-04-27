@@ -225,10 +225,12 @@
     }
   }
   async function moveProp(position, data) {
+    console.log(templateSelected.entryTemplate);
     let found = false;
     if (position === 'up') {
       if (data.i > 0) {
         found = true;
+        console.log(position, data);
         templateSelected.entryTemplate = templateSelected.entryTemplate.map(
           (e, i) => {
             if (i === data.i) {
@@ -328,22 +330,24 @@
         {groups}
         on:remove={event => {
           if (event.eventPhase === 0) {
-            deleteProp(event.detail.prop, event.detail.i);
+            deleteProp(event.detail.prop, event.detail.i - 3);
           }
         }}
         on:edit={event => {
           if (event.eventPhase === 0) {
-            editPropModalEvents.setProp(event.detail.prop, event.detail.i);
+            editPropModalEvents.setProp(event.detail.prop, event.detail.i - 3);
             editPropModalEvents.toggle();
           }
         }}
         on:moveUp={event => {
           if (event.eventPhase === 0) {
+            event.detail.i = event.detail.i - 3;
             moveProp('up', event.detail);
           }
         }}
         on:moveDown={event => {
           if (event.eventPhase === 0) {
+            event.detail.i = event.detail.i - 3;
             moveProp('down', event.detail);
           }
         }} />
