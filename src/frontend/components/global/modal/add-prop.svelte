@@ -599,7 +599,7 @@
                 data.value.value.displayProp.value = event.detail;
               }
             }}>
-            <SelectItem value="main_title" text="Main Title" />
+            <SelectItem value="main_title" text="Main Title" selected={true}/>
             {#each templates.find(e => e._id === data.value.value.templateId.value).entryTemplate as prop}
               {#if prop.type === 'STRING'}
                 <SelectItem

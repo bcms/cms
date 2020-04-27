@@ -9,7 +9,6 @@
 
   export let prop;
   export let error = '';
-
   const dispatch = createEventDispatcher();
 </script>
 
@@ -18,7 +17,7 @@
 </style>
 
 <Prop name={prop.name} required={prop.required} type={prop.type} {error}>
-  <PropArray on:add>
+  <PropArray on:add parentPropName={StringUtil.prettyName(prop.name)}>
     {#each prop.value as v, i}
       <PropArrayItem prop={v} position={i} on:remove on:move>
         <TextArea

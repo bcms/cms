@@ -49,7 +49,7 @@
 
 {#if isInitialized === true}
   <Prop name={prop.name} required={prop.required} type={prop.type} {error}>
-    <PropArray on:add>
+    <PropArray on:add parentPropName={StringUtil.prettyName(prop.name)}>
       {#each prop.value.array as arr, i}
         <PropArrayItem prop={arr} position={i} on:remove on:move>
           <div class="group">

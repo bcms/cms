@@ -42,7 +42,7 @@
 </style>
 
 <Prop name={prop.name} required={prop.required} type={prop.type} {error}>
-  <PropArray {prop} on:add>
+  <PropArray {prop} on:add parentPropName={StringUtil.prettyName(prop.name)}>
     {#each prop.value.entryIds as id, i}
       <PropArrayItem prop={id} position={i} on:remove on:move>
         <Select

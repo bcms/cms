@@ -3,6 +3,7 @@
   import Button from '../global/button.svelte';
 
   export let prop;
+  export let parentPropName;
 
   const dispatch = createEventDispatcher();
 </script>
@@ -21,7 +22,7 @@
       on:click={() => {
         dispatch('add', prop);
       }}>
-      Add Item
+      Add {parentPropName ? parentPropName : 'Item'}
     </Button>
   </div>
 </div>
