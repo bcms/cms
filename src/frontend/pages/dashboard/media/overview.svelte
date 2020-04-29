@@ -23,7 +23,7 @@
     Base64.decode(Store.get('accessToken').split('.')[1]),
   );
   const createDirModalEvents = { callback: createDir };
-  const uploadFileModalEvents = { callback: uploadFile };
+  const uploadFileModalEvents = { callback: uploadFiles };
   let files = [];
   let viewPath = [
     {
@@ -144,6 +144,11 @@
       viewerPopFile.update(value => file);
       // fileStore.update(value => files.filter(i => i._id !== file._id));
       // viewerFileStore.update(value => value.filter(e => e._id !== file._id));
+    }
+  }
+  async function uploadFiles(data) {
+    for (const i in data.files) {
+      await uploadFile({ file: data.files[i].value, fileName: data.files[i].fileName });
     }
   }
   async function uploadFile(data) {
