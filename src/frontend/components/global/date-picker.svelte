@@ -38,6 +38,6 @@
     type="date"
     value={dateString}
     on:change={event => {
-      dispatch('change', event.target.valueAsNumber);
+      dispatch('change', !event.target.valueAsNumber ? 0 : event.target.valueAsNumber);
     }} />
 </div>

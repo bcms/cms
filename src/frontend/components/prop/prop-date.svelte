@@ -5,27 +5,12 @@
 
   export let prop;
   export let error = '';
-
-  let date;
-
-  function handleDateTime() {
-    prop.value = date.getTime();
-  }
 </script>
 
 <Prop name={prop.name} required={prop.required} type={prop.type} {error}>
-  <DatePicker value={prop.value} on:change={event => {
-    
-  }} />
-  <!-- <DatePicker
-    datePickerType={'single'}
+  <DatePicker
     value={prop.value}
     on:change={event => {
-      if (event.eventPhase === 0) {
-        date = event.detail.selectedDates[0];
-        handleDateTime()
-      }
-    }}>
-    <DatePickerInput />
-  </DatePicker> -->
+      prop.value = event.detail;
+    }} />
 </Prop>
