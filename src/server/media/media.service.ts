@@ -1,5 +1,5 @@
 import { IMongooseEntityService, MongooseEntityService } from 'purple-cheetah';
-import { Media, IMedia } from './models/media.model';
+import { Media, IMedia, MediaType } from './models/media.model';
 import { Model } from 'mongoose';
 
 @MongooseEntityService({
@@ -25,6 +25,13 @@ export class MediaService implements IMongooseEntityService<Media> {
 
   async findByPath(path: string): Promise<Media | null> {
     return await this.repo.findOne({ path });
+  }
+
+  async findByPathAndType(
+    path: string,
+    type: MediaType,
+  ): Promise<Media | null> {
+    return await this.repo.findOne({ path, type });
   }
 
   async findByNameAndPath(name: string, path: string): Promise<Media | null> {

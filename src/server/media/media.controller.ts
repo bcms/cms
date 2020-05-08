@@ -52,8 +52,8 @@ export class MediaController {
     };
     if (rootMedia.childrenIds) {
       if (rootMedia.childrenIds.length > 0) {
-        rootMedia.childrenIds.forEach(cid => {
-          const cm = childMedia.find(e => e._id.toHexString() === cid);
+        rootMedia.childrenIds.forEach((cid) => {
+          const cm = childMedia.find((e) => e._id.toHexString() === cid);
           if (cm) {
             if (!mediaAggregate.children) {
               mediaAggregate.children = [];
@@ -193,7 +193,7 @@ export class MediaController {
     const rootMedia: Media[] = await this.mediaService.findByIsInRoot(true);
     const childMedia: Media[] = await this.mediaService.findByIsInRoot(false);
     const mediaAggregate: MediaAggregate[] = [];
-    rootMedia.forEach(media => {
+    rootMedia.forEach((media) => {
       mediaAggregate.push(MediaController.aggregate(media, childMedia));
     });
     return {
@@ -481,8 +481,9 @@ export class MediaController {
             .join('/')}' does not exist.`,
         );
       }
-      parentMedia = await this.mediaService.findByPath(
+      parentMedia = await this.mediaService.findByPathAndType(
         pathParts.slice(0, pathParts.length - 1).join('/'),
+        MediaType.DIR,
       );
       if (parentMedia === null) {
         throw error.occurred(
