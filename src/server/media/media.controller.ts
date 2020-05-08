@@ -384,7 +384,10 @@ export class MediaController {
     }
     let parentMedia: Media;
     if (media.isInRoot === false) {
-      parentMedia = await this.mediaService.findByPath(media.path);
+      parentMedia = await this.mediaService.findByPathAndType(
+        media.path,
+        MediaType.DIR,
+      );
       if (parentMedia === null) {
         throw error.occurred(
           HttpStatus.INTERNAL_SERVER_ERROR,
