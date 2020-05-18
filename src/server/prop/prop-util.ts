@@ -16,10 +16,11 @@ import { StringUtility, Logger, Service } from 'purple-cheetah';
 import { GroupService } from '../group/group.service';
 import { EntryContent, Entry } from '../entry/models/entry.model';
 import { EntryService } from '../entry';
+import { CacheControl } from '../cache-control';
 
 export class PropUtil {
-  @Service(EntryService)
-  private static entryService: EntryService;
+  // @Service(EntryService)
+  // private static entryService: EntryService;
 
   public static get changesSchema(): any {
     return {
@@ -651,10 +652,8 @@ export class PropUtil {
         case PropType.ENTRY_POINTER:
           {
             prop.value = prop.value as PropEntryPointer;
-            const entry = await PropUtil.entryService.findById(
-              prop.value.entryId,
-            );
-            if (entry === null) {
+            const entry = await CacheControl.Entry.findById(prop.value.entryId);
+            if (!entry || entry === null) {
               object[prop.name] = prop.value;
             } else {
               const entryContent = entry.content.find((e) => e.lng === lng);
@@ -676,8 +675,8 @@ export class PropUtil {
             object[prop.name] = [];
             for (const j in prop.value.entryIds) {
               const eid = prop.value.entryIds[j];
-              const entry = await PropUtil.entryService.findById(eid);
-              if (entry === null) {
+              const entry = await CacheControl.Entry.findById(eid);
+              if (!entry || entry === null) {
                 object[prop.name].push(prop.value);
               } else {
                 const entryContent = entry.content.find((e) => e.lng === lng);
