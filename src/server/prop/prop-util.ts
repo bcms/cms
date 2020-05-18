@@ -775,20 +775,34 @@ export class PropUtil {
                 const op = prop.value.ops[j];
                 let insert: string = '@';
                 if (op.attributes) {
+                  const spaceAt = {
+                    end: insert.endsWith(' '),
+                    start: insert.startsWith(' '),
+                  };
                   if (op.attributes.bold === true) {
-                    insert = `**${insert}**`;
+                    insert = `${spaceAt.start ? ' ' : ''}**${insert.trim()}**${
+                      spaceAt.end ? ' ' : ''
+                    }`;
                   }
                   if (op.attributes.italic === true) {
-                    insert = `*${insert}*`;
+                    insert = `${spaceAt.start ? ' ' : ''}*${insert.trim()}*${
+                      spaceAt.end ? ' ' : ''
+                    }`;
                   }
                   if (op.attributes.underline === true) {
                     insert = `<u>${insert}</u>`;
                   }
                   if (op.attributes.strike === true) {
-                    insert = `~~${insert}~~`;
+                    insert = `${spaceAt.start ? ' ' : ''}~~${insert.trim()}~~${
+                      spaceAt.end ? ' ' : ''
+                    }`;
                   }
                   if (typeof op.attributes.link !== 'undefined') {
-                    insert = `[${insert}](${op.attributes.link})`;
+                    insert = `${
+                      spaceAt.start ? ' ' : ''
+                    }[${insert.trim()}](${op.attributes.link.trim()})${
+                      spaceAt.end ? ' ' : ''
+                    }`;
                   }
                 }
                 insert = this.formatMarkdownInsert(insert);
@@ -812,7 +826,7 @@ export class PropUtil {
                 const op = prop.value.ops[j];
                 let insert: string = '@';
                 if (op.attributes) {
-                  if (op.attributes && op.attributes.list) {
+                  if (op.attributes.list) {
                     let tabs: string = '';
                     if (op.attributes.indent) {
                       for (let k = 0; k < op.attributes.indent; k = k + 1) {
@@ -822,17 +836,34 @@ export class PropUtil {
                     value += `${tabs}- ${listItem}\n`;
                     listItem = '';
                   } else {
+                    const spaceAt = {
+                      end: insert.endsWith(' '),
+                      start: insert.startsWith(' '),
+                    };
                     if (op.attributes.bold === true) {
-                      insert = `**${insert}**`;
+                      insert = `${
+                        spaceAt.start ? ' ' : ''
+                      }**${insert.trim()}**${spaceAt.end ? ' ' : ''}`;
                     }
                     if (op.attributes.italic === true) {
-                      insert = `*${insert}*`;
+                      insert = `${spaceAt.start ? ' ' : ''}*${insert.trim()}*${
+                        spaceAt.end ? ' ' : ''
+                      }`;
                     }
                     if (op.attributes.underline === true) {
                       insert = `<u>${insert}</u>`;
                     }
                     if (op.attributes.strike === true) {
-                      insert = `~~${insert}~~`;
+                      insert = `${
+                        spaceAt.start ? ' ' : ''
+                      }~~${insert.trim()}~~${spaceAt.end ? ' ' : ''}`;
+                    }
+                    if (typeof op.attributes.link !== 'undefined') {
+                      insert = `${
+                        spaceAt.start ? ' ' : ''
+                      }[${insert.trim()}](${op.attributes.link.trim()})${
+                        spaceAt.end ? ' ' : ''
+                      }`;
                     }
                     listItem += insert.replace('@', op.insert);
                   }
