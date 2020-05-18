@@ -791,52 +791,7 @@ export class PropUtil {
                     insert = `[${insert}](${op.attributes.link})`;
                   }
                 }
-                const checks = {
-                  end: [
-                    {
-                      from: ' **',
-                      to: '** ',
-                    },
-                    {
-                      from: ' *',
-                      to: '* ',
-                    },
-                    {
-                      from: ' ~~',
-                      to: '~~ ',
-                    },
-                  ],
-                  start: [
-                    {
-                      from: '** ',
-                      to: ' **',
-                    },
-                    {
-                      from: '* ',
-                      to: ' *',
-                    },
-                    {
-                      from: '~~ ',
-                      to: ' ~~',
-                    },
-                  ],
-                };
-                for (const k in checks.end) {
-                  if (insert.endsWith(checks.end[k].from) === true) {
-                    insert = insert.replace(
-                      checks.end[k].from,
-                      checks.end[k].to,
-                    );
-                  }
-                }
-                for (const k in checks.start) {
-                  if (insert.startsWith(checks.start[k].from) === true) {
-                    insert = insert.replace(
-                      checks.start[k].from,
-                      checks.start[k].to,
-                    );
-                  }
-                }
+                insert = this.formatMarkdownInsert(insert);
                 value += insert.replace('@', op.insert);
                 // .replace(/ \*\*/g, '** ')
                 // .replace(/\*\* /g, ' **')
@@ -882,14 +837,14 @@ export class PropUtil {
                     listItem += insert.replace('@', op.insert);
                   }
                 } else {
-                  listItem += insert
-                    .replace('@', op.insert)
-                    .replace(/\*\* /g, ' **')
-                    .replace(/ \*\*/g, '** ')
-                    .replace(/\* /g, ' *')
-                    .replace(/ \*/g, '* ')
-                    .replace(/~~ /g, ' ~~')
-                    .replace(/ ~~/g, '~~ ');
+                  insert = this.formatMarkdownInsert(insert);
+                  listItem += insert.replace('@', op.insert);
+                  // .replace(/\*\* /g, ' **')
+                  // .replace(/ \*\*/g, '** ')
+                  // .replace(/\* /g, ' *')
+                  // .replace(/ \*/g, '* ')
+                  // .replace(/~~ /g, ' ~~')
+                  // .replace(/ ~~/g, '~~ ');
                 }
               }
               value += '\n';
@@ -923,6 +878,50 @@ export class PropUtil {
       meta,
       content,
     };
+  }
+
+  public static formatMarkdownInsert(insert) {
+    const checks = {
+      end: [
+        {
+          from: ' **',
+          to: '** ',
+        },
+        {
+          from: ' *',
+          to: '* ',
+        },
+        {
+          from: ' ~~',
+          to: '~~ ',
+        },
+      ],
+      start: [
+        {
+          from: '** ',
+          to: ' **',
+        },
+        {
+          from: '* ',
+          to: ' *',
+        },
+        {
+          from: '~~ ',
+          to: ' ~~',
+        },
+      ],
+    };
+    for (const k in checks.end) {
+      if (insert.endsWith(checks.end[k].from) === true) {
+        insert = insert.replace(checks.end[k].from, checks.end[k].to);
+      }
+    }
+    for (const k in checks.start) {
+      if (insert.startsWith(checks.start[k].from) === true) {
+        insert = insert.replace(checks.start[k].from, checks.start[k].to);
+      }
+    }
+    return insert;
   }
 
   public static async contentToMarkdown(
