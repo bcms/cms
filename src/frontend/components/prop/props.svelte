@@ -159,6 +159,8 @@
       {:else}
         <PropString {prop} error={errors[prop.name]} />
       {/if}
+    {:else if prop.type === 'MEDIA'}
+      <PropMedia {prop} error={errors[prop.name]} />
     {:else if prop.type === 'STRING_ARRAY'}
       <PropStringArray
         {prop}
