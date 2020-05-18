@@ -47,8 +47,11 @@
       return;
     }
     simplePopup.success('Widget added successfully!');
-    widgets = [...widgets, result.response.data.widget];
     widgetSelected = result.response.data.widget;
+    widgetStore.update(value => {
+      value.push(result.response.data.widget);
+      return value;
+    });
   }
   async function editWidget(data) {
     data.changes = {
@@ -65,12 +68,21 @@
     }
     simplePopup.success('Group updated successfully!');
     widgetSelected = result.response.data.widget;
-    widgets = widgets.map(widget => {
-      if (widget._id === result.response.data.widget._id) {
-        return result.response.data.widget;
-      }
-      return widget;
+    widgetStore.update(value => {
+      value.push(result.response.data.widget);
+      return widgets.map(widget => {
+        if (widget._id === result.response.data.widget._id) {
+          return result.response.data.widget;
+        }
+        return widget;
+      });
     });
+    // widgets = widgets.map(widget => {
+    //   if (widget._id === result.response.data.widget._id) {
+    //     return result.response.data.widget;
+    //   }
+    //   return widget;
+    // });
   }
   async function deleteWidget() {
     if (confirm('Are you sure you want to delete the Widget?\n\n')) {
@@ -83,12 +95,16 @@
         return;
       }
       simplePopup.success('Group deleted successfully!');
-      widgets = widgets.filter(e => e._id !== widgetSelected._id);
-      if (widgets.length > 0) {
-        widgetSelected = widgets[0];
-      } else {
-        widgetSelected = undefined;
-      }
+      widgetStore.update(value => {
+        return value.filter(e => e._id !== widgetSelected._id);
+      });
+      widgetSelected = widgets[0];
+      // widgets = widgets.filter(e => e._id !== widgetSelected._id);
+      // if (widgets.length > 0) {
+      //   widgetSelected = widgets[0];
+      // } else {
+      //   widgetSelected = undefined;
+      // }
     }
   }
   async function addProp(data) {
@@ -119,10 +135,12 @@
     simplePopup.success('Group updated successfully.');
     const widget = result.response.data.widget;
     widgetSelected = widget;
-    widgets.forEach(e => {
-      if (e._id === widget._id) {
-        e = widget;
-      }
+    widgetStore.update(value => {
+      return value.map(e => {
+        if (e._id === widget._id) {
+          e = widget;
+        }
+      });
     });
   }
   async function editProp(originalName, data) {
@@ -158,10 +176,12 @@
     simplePopup.success('Group updated successfully.');
     const widget = result.response.data.widget;
     widgetSelected = widget;
-    widgets.forEach(e => {
-      if (e._id === widget._id) {
-        e = widget;
-      }
+    widgetStore.update(value => {
+      return value.map(e => {
+        if (e._id === widget._id) {
+          e = widget;
+        }
+      });
     });
   }
   async function deleteProp(prop, i) {
@@ -192,10 +212,12 @@
     widgetSelected.props = widgetSelected.props.filter(
       p => p.name !== prop.name,
     );
-    widgets.forEach(e => {
-      if (e._id === widgetSelected._id) {
-        e.props = widgetSelected.props;
-      }
+    widgetStore.update(value => {
+      return value.map(e => {
+        if (e._id === widgetSelected._id) {
+          e.props = widgetSelected.props;
+        }
+      });
     });
     simplePopup.success('Property deleted successfully!');
   }

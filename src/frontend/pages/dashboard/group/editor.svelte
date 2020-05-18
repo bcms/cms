@@ -12,6 +12,7 @@
   import StringUtil from '../../../string-util.js';
   import UrlQueries from '../../../url-queries.js';
 
+  const queries = UrlQueries.get();
   let groups = [];
   let groupSelected;
   let addGroupModalEvents = {};
@@ -21,8 +22,13 @@
 
   groupStore.subscribe(value => {
     groups = value;
-    if (!groupSelected && groups.length > 0) {
-      groupSelected = groups[0];
+    if (!groupSelected) {
+      if (queries.gid) {
+        groupSelected = groups.find(e => e._id === queries.gid);
+      }
+      if (!groupSelected && groups.length > 0) {
+        groupSelected = groups[0];
+      }
     }
   });
 
