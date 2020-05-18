@@ -764,7 +764,7 @@ export class PropUtil {
             break;
           case PropQuillContentType.CODE:
             {
-              value = `\`\`\`\n${prop.valueAsText}\`\`\`\n\n`;
+              value = `\`\`\`\n${prop.valueAsText}\n\`\`\`\n\n`;
             }
             break;
           case PropQuillContentType.PARAGRAPH:
@@ -791,14 +791,59 @@ export class PropUtil {
                     insert = `[${insert}](${op.attributes.link})`;
                   }
                 }
-                value += insert
-                  .replace('@', op.insert)
-                  .replace(/\*\* /g, ' **')
-                  .replace(/ \*\*/g, '** ')
-                  .replace(/\* /g, ' *')
-                  .replace(/ \*/g, '* ')
-                  .replace(/~~ /g, ' ~~')
-                  .replace(/ ~~/g, '~~ ');
+                const checks = {
+                  end: [
+                    {
+                      from: ' **',
+                      to: '** ',
+                    },
+                    {
+                      from: ' *',
+                      to: '* ',
+                    },
+                    {
+                      from: ' ~~',
+                      to: '~~ ',
+                    },
+                  ],
+                  start: [
+                    {
+                      from: '** ',
+                      to: ' **',
+                    },
+                    {
+                      from: '* ',
+                      to: ' *',
+                    },
+                    {
+                      from: '~~ ',
+                      to: ' ~~',
+                    },
+                  ],
+                };
+                for (const k in checks.end) {
+                  if (insert.endsWith(checks.end[k].from) === true) {
+                    insert = insert.replace(
+                      checks.end[k].from,
+                      checks.end[k].to,
+                    );
+                  }
+                }
+                for (const k in checks.start) {
+                  if (insert.startsWith(checks.start[k].from) === true) {
+                    insert = insert.replace(
+                      checks.start[k].from,
+                      checks.start[k].to,
+                    );
+                  }
+                }
+                value += insert.replace('@', op.insert);
+                // .replace(/ \*\*/g, '** ')
+                // .replace(/\*\* /g, ' **')
+                // .replace(/\* /g, ' *')
+                // .replace(/ \*/g, '* ')
+                // .replace(/~~ /g, ' ~~')
+                // .replace(/ ~~/g, '~~ ');
               }
               value += '\n';
             }
