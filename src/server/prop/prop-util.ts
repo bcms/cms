@@ -775,17 +775,23 @@ export class PropUtil {
                 const op = prop.value.ops[j];
                 let insert: string = '@';
                 if (op.attributes) {
+                  if (insert.endsWith('\n')) {
+                    insert = insert.substring(0, insert.length - 1);
+                  }
                   const spaceAt = {
-                    end: insert.endsWith(' '),
-                    start: insert.startsWith(' '),
+                    end:
+                      typeof op.insert === 'string' && op.insert.endsWith(' '),
+                    start:
+                      typeof op.insert === 'string' &&
+                      op.insert.startsWith(' '),
                   };
                   if (op.attributes.bold === true) {
-                    insert = `${spaceAt.start ? ' ' : ''}**${insert.trim()}**${
+                    insert = `${spaceAt.start ? ' ' : ''}**${insert}**${
                       spaceAt.end ? ' ' : ''
                     }`;
                   }
                   if (op.attributes.italic === true) {
-                    insert = `${spaceAt.start ? ' ' : ''}*${insert.trim()}*${
+                    insert = `${spaceAt.start ? ' ' : ''}*${insert}*${
                       spaceAt.end ? ' ' : ''
                     }`;
                   }
@@ -793,14 +799,14 @@ export class PropUtil {
                     insert = `<u>${insert}</u>`;
                   }
                   if (op.attributes.strike === true) {
-                    insert = `${spaceAt.start ? ' ' : ''}~~${insert.trim()}~~${
+                    insert = `${spaceAt.start ? ' ' : ''}~~${insert}~~${
                       spaceAt.end ? ' ' : ''
                     }`;
                   }
                   if (typeof op.attributes.link !== 'undefined') {
                     insert = `${
                       spaceAt.start ? ' ' : ''
-                    }[${insert.trim()}](${op.attributes.link.trim()})${
+                    }[${insert}](${op.attributes.link.trim()})${
                       spaceAt.end ? ' ' : ''
                     }`;
                   }
@@ -836,17 +842,24 @@ export class PropUtil {
                     value += `${tabs}- ${listItem}\n`;
                     listItem = '';
                   } else {
+                    if (insert.endsWith('\n')) {
+                      insert = insert.substring(0, insert.length - 1);
+                    }
                     const spaceAt = {
-                      end: insert.endsWith(' '),
-                      start: insert.startsWith(' '),
+                      end:
+                        typeof op.insert === 'string' &&
+                        op.insert.endsWith(' '),
+                      start:
+                        typeof op.insert === 'string' &&
+                        op.insert.startsWith(' '),
                     };
                     if (op.attributes.bold === true) {
-                      insert = `${
-                        spaceAt.start ? ' ' : ''
-                      }**${insert.trim()}**${spaceAt.end ? ' ' : ''}`;
+                      insert = `${spaceAt.start ? ' ' : ''}**${insert}**${
+                        spaceAt.end ? ' ' : ''
+                      }`;
                     }
                     if (op.attributes.italic === true) {
-                      insert = `${spaceAt.start ? ' ' : ''}*${insert.trim()}*${
+                      insert = `${spaceAt.start ? ' ' : ''}*${insert}*${
                         spaceAt.end ? ' ' : ''
                       }`;
                     }
@@ -854,21 +867,24 @@ export class PropUtil {
                       insert = `<u>${insert}</u>`;
                     }
                     if (op.attributes.strike === true) {
-                      insert = `${
-                        spaceAt.start ? ' ' : ''
-                      }~~${insert.trim()}~~${spaceAt.end ? ' ' : ''}`;
+                      insert = `${spaceAt.start ? ' ' : ''}~~${insert}~~${
+                        spaceAt.end ? ' ' : ''
+                      }`;
                     }
                     if (typeof op.attributes.link !== 'undefined') {
                       insert = `${
                         spaceAt.start ? ' ' : ''
-                      }[${insert.trim()}](${op.attributes.link.trim()})${
+                      }[${insert}](${op.attributes.link.trim()})${
                         spaceAt.end ? ' ' : ''
                       }`;
                     }
                     listItem += insert.replace('@', op.insert);
+                    // .replace(/ \*\*/g, '** ')
+                    // .replace(/ \*/g, '* ')
+                    // .replace(/ ~~/g, '~~ ');
                   }
                 } else {
-                  insert = this.formatMarkdownInsert(insert);
+                  // insert = this.formatMarkdownInsert(insert);
                   listItem += insert.replace('@', op.insert);
                   // .replace(/\*\* /g, ' **')
                   // .replace(/ \*\*/g, '** ')
@@ -901,7 +917,7 @@ export class PropUtil {
         content.push({
           type: prop.type,
           name,
-          value,
+          value: Buffer.from(value, 'latin1').toString('utf8'),
         });
       }
     }

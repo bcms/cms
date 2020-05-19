@@ -36,6 +36,8 @@ bcms-config.js
 build.sh
 bundle.sh
 publish.sh
+link.sh
+unlink.sh
 /.idea
 .project
 .classpath
