@@ -159,7 +159,7 @@
       cols="500"
       value={Base64.decode(webhookSelected.body)}
       on:input={event => {
-        webhookSelected.body = Base64.encode(event.target.value);
+        webhookSelected.body = Base64.encode(event.detail);
       }} />
   </ManagerLayout>
 </Layout>
