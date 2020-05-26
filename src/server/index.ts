@@ -11,3 +11,4 @@ export * from './user';
 export * from './widget';
 export * from './config';
 export * from './webhook';
+export * from './cache-control';

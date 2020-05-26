@@ -1,6 +1,5 @@
 import { Service } from 'purple-cheetah';
-import { EntryService } from './entry';
-import { EntryServiceCache } from './entry/entry.service.cache';
+import { EntryService, EntryServiceCache } from './entry';
 
 export class CacheControl {
   @Service(EntryService)

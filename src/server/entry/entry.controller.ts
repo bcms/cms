@@ -30,6 +30,7 @@ import { PropType, PropQuill } from '../prop/interfaces/prop.interface';
 import { LanguageService } from '../languages/language.service';
 import { KeyCashService } from '../api/key-cash.service';
 import { Language } from '../languages';
+import { CacheControl } from '../cache-control';
 
 /**
  * Controller that provides CRUD for Entry object.
@@ -39,8 +40,8 @@ export class EntryController {
   @AppLogger(EntryController)
   private logger: Logger;
   /** Service that handles interaction with Entry objects in database. */
-  @Service(EntryService)
-  private entryService: EntryService;
+  // @Service(EntryService)
+  // private entryService: EntryService;
   /** Service that handles interaction with Template objects in database. */
   @Service(TemplateService)
   private templateService: TemplateService;
@@ -69,7 +70,8 @@ export class EntryController {
         throw error.occurred(HttpStatus.UNAUTHORIZED, jwtValid.message);
       }
     }
-    const entries = await this.entryService.findAll();
+    // const entries = await this.entryService.findAll();
+    const entries = await CacheControl.Entry.findAll();
     return {
       entries,
     };
@@ -92,9 +94,10 @@ export class EntryController {
         throw error.occurred(HttpStatus.UNAUTHORIZED, jwtValid.message);
       }
     }
-    const entries = await this.entryService.findAll();
+    // const entries = await this.entryService.findAll();
+    const entries = await CacheControl.Entry.findAll();
     return {
-      entries: entries.map(entry => {
+      entries: entries.map((entry) => {
         return EntryFactory.toLite(entry);
       }),
     };
@@ -147,7 +150,10 @@ export class EntryController {
         `Template with ID or Name '${request.params.templateIdOrName}' does not exist.`,
       );
     }
-    const entries: Entry[] = await this.entryService.findAllById(
+    // const entries: Entry[] = await this.entryService.findAllById(
+    //   template.entryIds,
+    // );
+    const entries: Entry[] = await CacheControl.Entry.findAllById(
       template.entryIds,
     );
     return {
@@ -202,7 +208,10 @@ export class EntryController {
         `Template with ID or Name '${request.params.templateIdOrName}' does not exist.`,
       );
     }
-    const entries: Entry[] = await this.entryService.findAllById(
+    // const entries: Entry[] = await this.entryService.findAllById(
+    //   template.entryIds,
+    // );
+    const entries: Entry[] = await CacheControl.Entry.findAllById(
       template.entryIds,
     );
     const result: any[] = [];
@@ -221,16 +230,6 @@ export class EntryController {
     }
     return {
       entries: result,
-      // entries: await entries.map(async e => {
-      //   return await PropUtil.contentToPrettyJSON(e.content, {
-      //     _id: e._id.toHexString(),
-      //     createdAt: e.createdAt,
-      //     updatedAt: e.updatedAt,
-      //     user: {
-      //       _id: e.userId,
-      //     },
-      //   });
-      // }),
     };
   }
 
@@ -287,13 +286,14 @@ export class EntryController {
         `Template with ID or Name '${request.params.templateIdOrName}' does not exist.`,
       );
     }
-    if (!template.entryIds.find(e => e === request.params.id)) {
+    if (!template.entryIds.find((e) => e === request.params.id)) {
       throw error.occurred(
         HttpStatus.FORBIDDEN,
         `Entry with ID '${request.params.id}' does not belong to Template '${request.params.templateId}'.`,
       );
     }
-    const entry: Entry = await this.entryService.findById(request.params.id);
+    // const entry: Entry = await this.entryService.findById(request.params.id);
+    const entry: Entry = await CacheControl.Entry.findById(request.params.id);
     if (!entry) {
       throw error.occurred(
         HttpStatus.NOT_FOUNT,
@@ -358,13 +358,14 @@ export class EntryController {
         `Template with ID or Name '${request.params.templateIdOrName}' does not exist.`,
       );
     }
-    if (!template.entryIds.find(e => e === request.params.id)) {
+    if (!template.entryIds.find((e) => e === request.params.id)) {
       throw error.occurred(
         HttpStatus.FORBIDDEN,
         `Entry with ID '${request.params.id}' does not belong to Template '${request.params.templateId}'.`,
       );
     }
-    const entry: Entry = await this.entryService.findById(request.params.id);
+    // const entry: Entry = await this.entryService.findById(request.params.id);
+    const entry: Entry = await CacheControl.Entry.findById(request.params.id);
     if (!entry) {
       throw error.occurred(
         HttpStatus.NOT_FOUNT,
@@ -494,7 +495,7 @@ export class EntryController {
       }
       if (template.type === TemplateType.RICH_CONTENT) {
         const quillProp = entry.content[entry.content.length - 1].props.find(
-          e => e.type === PropType.QUILL,
+          (e) => e.type === PropType.QUILL,
         );
         if (!quillProp) {
           throw error.occurred(
@@ -505,7 +506,11 @@ export class EntryController {
           );
         }
         quillProp.value = quillProp.value as PropQuill;
-        const entryWithSameSlug = await this.entryService.findByTemplateIdAndEntrySlug(
+        // const entryWithSameSlug = await this.entryService.findByTemplateIdAndEntrySlug(
+        //   template._id.toHexString(),
+        //   quillProp.value.heading.slug,
+        // );
+        const entryWithSameSlug = await CacheControl.Entry.findByTemplateIdAndEntrySlug(
           template._id.toHexString(),
           quillProp.value.heading.slug,
         );
@@ -514,15 +519,16 @@ export class EntryController {
             const e = entry.content[entry.content.length - 1].props[j];
             if (e.type === PropType.QUILL) {
               e.value = e.value as PropQuill;
-              e.value.heading.slug = `${
-                e.value.heading.slug
-              }-${await this.entryService.count()}`;
+              e.value.heading.slug = `${e.value.heading.slug}-${
+                /*await this.entryService.count()*/ CacheControl.Entry.count()
+              }`;
             }
           }
         }
       }
     }
-    const addEntryResult = await this.entryService.add(entry);
+    // const addEntryResult = await this.entryService.add(entry);
+    const addEntryResult = await CacheControl.Entry.add(entry);
     if (addEntryResult === false) {
       throw error.occurred(
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -532,7 +538,8 @@ export class EntryController {
     template.entryIds.push(entry._id.toHexString());
     const updateTemplateResult = await this.templateService.update(template);
     if (updateTemplateResult === false) {
-      await this.entryService.deleteById(entry._id.toHexString());
+      // await this.entryService.deleteById(entry._id.toHexString());
+      await CacheControl.Entry.deleteById(entry._id.toHexString());
       throw error.occurred(
         HttpStatus.INTERNAL_SERVER_ERROR,
         `Failed to update Template in database.`,
@@ -613,7 +620,8 @@ export class EntryController {
         `Template with ID or Name '${request.params.templateIdOrName}' does not exist.`,
       );
     }
-    const entry = await this.entryService.findById(request.body._id);
+    // const entry = await this.entryService.findById(request.body._id);
+    const entry = await CacheControl.Entry.findById(request.body._id);
     if (entry === null) {
       throw error.occurred(
         HttpStatus.NOT_FOUNT,
@@ -639,8 +647,8 @@ export class EntryController {
             template.entryTemplate,
             `entry[${i}]`,
           );
-          if (entry.content.find(e => e.lng === language.code)) {
-            entry.content.forEach(e => {
+          if (entry.content.find((e) => e.lng === language.code)) {
+            entry.content.forEach((e) => {
               if (e.lng === language.code) {
                 e.props = props;
               }
@@ -656,7 +664,7 @@ export class EntryController {
         }
         if (template.type === TemplateType.RICH_CONTENT) {
           const quillProp = entry.content[entry.content.length - 1].props.find(
-            e => e.type === PropType.QUILL,
+            (e) => e.type === PropType.QUILL,
           );
           if (!quillProp) {
             throw error.occurred(
@@ -667,7 +675,11 @@ export class EntryController {
             );
           }
           quillProp.value = quillProp.value as PropQuill;
-          const entryWithSameSlug = await this.entryService.findByTemplateIdAndEntrySlug(
+          // const entryWithSameSlug = await this.entryService.findByTemplateIdAndEntrySlug(
+          //   template._id.toHexString(),
+          //   quillProp.value.heading.slug,
+          // );
+          const entryWithSameSlug = await CacheControl.Entry.findByTemplateIdAndEntrySlug(
             template._id.toHexString(),
             quillProp.value.heading.slug,
           );
@@ -676,9 +688,9 @@ export class EntryController {
               const e = entry.content[entry.content.length - 1].props[j];
               if (e.type === PropType.QUILL) {
                 e.value = e.value as PropQuill;
-                e.value.heading.slug = `${
-                  e.value.heading.slug
-                }-${await this.entryService.count()}`;
+                e.value.heading.slug = `${e.value.heading.slug}-${
+                  /*await this.entryService.count()*/ await CacheControl.Entry.count()
+                }`;
               }
             }
           }
@@ -686,7 +698,7 @@ export class EntryController {
       };
       if (typeof request.body.onlyLng !== 'undefined') {
         const content = request.body.content.find(
-          e => e.lng === request.body.onlyLng,
+          (e) => e.lng === request.body.onlyLng,
         );
         const language = await this.languageService.findByCode(
           request.body.onlyLng,
@@ -715,7 +727,8 @@ export class EntryController {
     if (changeDetected === false) {
       throw error.occurred(HttpStatus.FORBIDDEN, 'Nothing to update.');
     }
-    const updateEntryResult = await this.entryService.update(entry);
+    // const updateEntryResult = await this.entryService.update(entry);
+    const updateEntryResult = await CacheControl.Entry.update(entry);
     if (updateEntryResult === false) {
       throw error.occurred(
         HttpStatus.INTERNAL_SERVER_ERROR,
@@ -782,14 +795,18 @@ export class EntryController {
         `Template with ID or Name '${request.params.templateIdOrName}' does not exist.`,
       );
     }
-    const entry = await this.entryService.findById(request.params.id);
+    // const entry = await this.entryService.findById(request.params.id);
+    const entry = await CacheControl.Entry.findById(request.params.id);
     if (entry === null) {
       throw error.occurred(
         HttpStatus.NOT_FOUNT,
         `Entry with ID '${request.params.id}' does not exist.`,
       );
     }
-    const deleteEntryResult = await this.entryService.deleteById(
+    // const deleteEntryResult = await this.entryService.deleteById(
+    //   request.params.id,
+    // );
+    const deleteEntryResult = await CacheControl.Entry.deleteById(
       request.params.id,
     );
     if (deleteEntryResult === false) {
@@ -799,7 +816,7 @@ export class EntryController {
       );
     }
     template.entryIds = template.entryIds.filter(
-      e => e !== entry._id.toHexString(),
+      (e) => e !== entry._id.toHexString(),
     );
     const updateTemplateResult = await this.templateService.update(template);
     if (updateTemplateResult === false) {

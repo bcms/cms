@@ -1,7 +1,7 @@
 import { IMongooseEntityService, Entity } from 'purple-cheetah';
 
-export abstract class Cache<T> {
-  protected cache: Entity[] = [];
+export abstract class Cache<T extends Entity> {
+  protected cache: T[] = [];
 
   constructor(protected service: IMongooseEntityService<T>) {
     service.findAll().then((result) => {
@@ -26,7 +26,7 @@ export abstract class Cache<T> {
     return result ? result : null;
   }
 
-  public async add(e: Entity) {
+  public async add(e: T) {
     const result = await this.service.add(e);
     if (result === false) {
       return false;
@@ -35,7 +35,7 @@ export abstract class Cache<T> {
     return true;
   }
 
-  public async update(e: Entity) {
+  public async update(e: T) {
     const result = await this.service.update(e);
     if (result === false) {
       return false;
