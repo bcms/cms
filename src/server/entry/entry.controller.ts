@@ -17,7 +17,6 @@ import {
   Put,
   Delete,
 } from 'purple-cheetah';
-import { EntryService } from './entry.service';
 import { Request } from 'express';
 import { Entry, EntryContent } from './models/entry.model';
 import { TemplateService } from '../template/template.service';
@@ -26,7 +25,12 @@ import { PropUtil } from '../prop/prop-util';
 import { GroupService } from '../group/group.service';
 import { APISecurity } from '../api/api-security';
 import { Template, TemplateType } from '../template/models/template.model';
-import { PropType, PropQuill } from '../prop/interfaces/prop.interface';
+import {
+  PropType,
+  PropQuill,
+  Prop,
+  PropEnum,
+} from '../prop/interfaces/prop.interface';
 import { LanguageService } from '../languages/language.service';
 import { KeyCashService } from '../api/key-cash.service';
 import { Language } from '../languages';
@@ -161,6 +165,179 @@ export class EntryController {
     };
   }
 
+  @Get('/:templateIdOrName/entry/filter')
+  async filter(request: Request): Promise<{ filter: string[] }> {
+    const error = HttpErrorFactory.simple('filter', this.logger);
+    if (request.query.signature) {
+      try {
+        APISecurity.verify(
+          request.query,
+          request.body,
+          request.method.toUpperCase(),
+          request.originalUrl,
+        );
+      } catch (e) {
+        throw error.occurred(HttpStatus.UNAUTHORIZED, e.message);
+      }
+    } else {
+      const jwt = JWTEncoding.decode(request.headers.authorization);
+      if (jwt instanceof Error) {
+        throw error.occurred(HttpStatus.UNAUTHORIZED, jwt.message);
+      } else {
+        const jwtValid = JWTSecurity.validateAndCheckTokenPermissions(
+          jwt,
+          [RoleName.ADMIN, RoleName.USER],
+          PermissionName.READ,
+          JWTConfigService.get('user-token-config'),
+        );
+        if (jwtValid instanceof Error) {
+          throw error.occurred(HttpStatus.UNAUTHORIZED, jwtValid.message);
+        }
+      }
+    }
+    const entries: Entry[] = await CacheControl.Entry.findAllByTemplateId(
+      request.params.templateIdOrName,
+    );
+    interface FilterTypeStringOrNumber {
+      value: string | number;
+      type: string;
+    }
+    interface Filter {
+      name: string;
+      type: string;
+      selected?: string;
+      value?: string | boolean | FilterTypeStringOrNumber;
+    }
+    let filter: string[];
+    if (request.query.filters && request.query.lng) {
+      let filters: Filter[];
+      try {
+        filters = JSON.parse(
+          Buffer.from(request.query.filters, 'base64').toString(),
+        );
+      } catch (e) {
+        throw error.occurred(
+          HttpStatus.BAD_REQUEST,
+          'Invalid query "filters".',
+        );
+      }
+      filter = [];
+      entries.map((entry) => {
+        const content = entry.content.find(
+          (e) => e.lng === `${request.query.lng}`,
+        );
+        if (content) {
+          for (const i in filters) {
+            const f = filters[i];
+            let prop: Prop;
+            if (f.name === 'root_title') {
+              try {
+                prop = {
+                  name: 'root_title',
+                  required: true,
+                  type: PropType.STRING,
+                  value: (content.props.find((p) => p.type === 'QUILL')
+                    .value as PropQuill).heading.title,
+                };
+              } catch (error) {
+                // tslint:disable-next-line:no-console
+                console.error(error);
+              }
+            } else {
+              prop = content.props.find((e) => e.name === f.name);
+            }
+            if (prop) {
+              switch (f.type) {
+                case 'ENUMERATION':
+                  {
+                    if (f.selected) {
+                      if ((prop.value as PropEnum).selected === f.selected) {
+                        filter.push(`${entry._id}`);
+                      }
+                    }
+                  }
+                  break;
+                case 'BOOLEAN':
+                  {
+                    if (prop && prop.value === f.value) {
+                      filter.push(`${entry._id}`);
+                    }
+                  }
+                  break;
+                case 'STRING':
+                  {
+                    if (f.value && typeof prop.value === 'string') {
+                      f.value = f.value as FilterTypeStringOrNumber;
+                      if (typeof f.value.value === 'string') {
+                        if (f.value.type === 'contains') {
+                          if (
+                            prop.value
+                              .toLowerCase()
+                              .indexOf(f.value.value.toLowerCase()) !== -1
+                          ) {
+                            filter.push(`${entry._id}`);
+                          }
+                        } else if (f.value.type === 'regex') {
+                          try {
+                            const regex = new RegExp(f.value.value, 'g');
+                            if (regex.test(prop.value) === true) {
+                              filter.push(`${entry._id}`);
+                            }
+                          } catch (error) {
+                            // tslint:disable-next-line:no-console
+                            console.error(error);
+                          }
+                        }
+                      }
+                    }
+                  }
+                  break;
+                case 'NUMBER':
+                  {
+                    if (f.value && typeof prop.value === 'number') {
+                      f.value = f.value as FilterTypeStringOrNumber;
+                      if (typeof f.value.value === 'number') {
+                        switch (f.value.type) {
+                          case '=':
+                            {
+                              if (prop.value === f.value.value) {
+                                filter.push(`${entry._id}`);
+                              }
+                            }
+                            break;
+                          case '>=':
+                            {
+                              if (prop.value >= f.value.value) {
+                                filter.push(`${entry._id}`);
+                              }
+                            }
+                            break;
+                          case '<=':
+                            {
+                              if (prop.value <= f.value.value) {
+                                filter.push(`${entry._id}`);
+                              }
+                            }
+                            break;
+                        }
+                      }
+                    }
+                  }
+                  break;
+              }
+              if (filter.find((e) => e === `${entry._id}`)) {
+                break;
+              }
+            }
+          }
+        }
+      });
+    }
+    return {
+      filter,
+    };
+  }
+
   /** Returns all Entries for specified Template in prettier format. */
   @Get('/:templateIdOrName/entry/all/compile')
   async getAll(request: Request): Promise<{ entries: any[] }> {
@@ -289,7 +466,7 @@ export class EntryController {
     if (!template.entryIds.find((e) => e === request.params.id)) {
       throw error.occurred(
         HttpStatus.FORBIDDEN,
-        `Entry with ID '${request.params.id}' does not belong to Template '${request.params.templateId}'.`,
+        `Entry with ID '${request.params.id}' does not belong to Template '${request.params.templateIdOrName}'.`,
       );
     }
     // const entry: Entry = await this.entryService.findById(request.params.id);

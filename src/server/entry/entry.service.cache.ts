@@ -17,6 +17,13 @@ export class EntryServiceCache extends Cache<Entry> {
     return result ? result : null;
   }
 
+  findAllByTemplateId(templateId: string) {
+    const result = this.cache.filter(
+      (entry) => entry.templateId === templateId,
+    );
+    return result ? result : null;
+  }
+
   count() {
     return this.cache.length;
   }

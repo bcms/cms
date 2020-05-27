@@ -21,14 +21,16 @@ export class EntryFactory {
 
   public static toLite(entry: Entry): Entry {
     const result: Entry = JSON.parse(JSON.stringify(entry));
-    result.content.forEach(e => {
-      e.props = e.props.map(t => {
-        if (t.type === PropType.QUILL) {
-          t.value = t.value as PropQuill;
-          t.value.content = [];
-        }
-        return t;
-      });
+    result.content.forEach((e) => {
+      e.props = e.props
+        .filter((t) => t.type === PropType.QUILL)
+        .map((t) => {
+          if (t.type === PropType.QUILL) {
+            t.value = t.value as PropQuill;
+            t.value.content = [];
+          }
+          return t;
+        });
     });
     return result;
   }
