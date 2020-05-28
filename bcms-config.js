@@ -30,13 +30,6 @@ module.exports = {
     git: {
       install: false,
       use: false,
-      email: 'user-email',
-      username: 'username',
-      password: '@GIT_PASSWORD',
-      host: 'git-host',
-      repo: 'git-repo',
-      repo_owner: 'git-repo-owner',
-      branch: 'git-repo-branch',
     },
     env: {},
   },

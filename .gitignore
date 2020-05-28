@@ -7,6 +7,7 @@
 /events
 /uploads
 /functions
+/src/frontend/public/bundle
 
 # Sapper
 /src/frontend/node_modules/@sapper/
@@ -36,6 +37,8 @@ bcms-config.js
 build.sh
 bundle.sh
 publish.sh
+link.sh
+unlink.sh
 /.idea
 .project
 .classpath

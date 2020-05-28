@@ -11,9 +11,10 @@
     "baseUrl": "./",
     "incremental": true
   },
+  "include": ["src/server"],
+  "exclude": ["node_modules", "dist", "public", "src/frontend"],
   "typedocOptions": {
     "mode": "file",
     "out": "typedoc"
   },
-  "exclude": ["node_modules", "dist", "public", "lib"]
 }
