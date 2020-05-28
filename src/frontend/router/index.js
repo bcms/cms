@@ -13,11 +13,6 @@ const routes = [
     name: "Login",
     component: () => import(/* webpackChunkName: "login" */ '../views/login.vue')
   },
-  {
-    path: "/dashboard",
-    name: "Test",
-    component: () => import(/* webpackChunkName: "dashboard" */ '../views/test.vue')
-  },
 ];
 const router = new VueRouter({
   mode: "history",
