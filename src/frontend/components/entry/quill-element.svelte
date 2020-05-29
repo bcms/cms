@@ -84,17 +84,17 @@
         //   return op;
         // });
         section.quill.setContents(section.value);
-        if (section.type === 'CODE') {
-          section.quill.setContents([
-            { insert: '' },
-            {
-              attributes: {
-                'code-block': true,
-              },
-              insert: `${section.valueAsText}\n`,
-            },
-          ]);
-        }
+        // if (section.type === 'CODE') {
+        //   section.quill.setContents([
+        //     { insert: '' },
+        //     {
+        //       attributes: {
+        //         'code-block': true,
+        //       },
+        //       insert: `${section.valueAsText}\n`,
+        //     },
+        //   ]);
+        // }
       } else {
         switch (section.type) {
           case 'LIST':

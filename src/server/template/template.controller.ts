@@ -23,11 +23,12 @@ import { Template, TemplateType } from './models/template.model';
 import { TemplateFactory } from './factories/template.factory';
 import { PropUtil } from '../prop/prop-util';
 import { GroupService } from '../group/group.service';
-import { EntryService } from '../entry/entry.service';
+// import { EntryService } from '../entry/entry.service';
 import { APISecurity } from '../api/api-security';
 import { TemplateLite } from './interfaces/template-lite.interface';
 import { TemplateChanges } from './interfaces/changes.interface';
 import { PropChanges } from '../prop/interfaces/prop-changes.interface';
+import { CacheControl } from '../cache-control';
 
 /**
  * Controller that provides CRUD for Template object.
@@ -43,8 +44,8 @@ export class TemplateController {
   @Service(GroupService)
   private groupService: GroupService;
   /** Service that handles interaction with Entry objects in database. */
-  @Service(EntryService)
-  private entryService: EntryService;
+  // @Service(EntryService)
+  // private entryService: EntryService;
 
   /** Return all Template objects. */
   @Get('/all')
@@ -426,7 +427,8 @@ export class TemplateController {
     if (typeof request.body.changes !== 'undefined') {
       const changes = { props: request.body.changes.props as PropChanges[] };
       if (changes.props.length > 0) {
-        const entries = await this.entryService.findAllById(template.entryIds);
+        // const entries = await this.entryService.findAllById(template.entryIds);
+        const entries = await CacheControl.Entry.findAllById(template.entryIds);
         for (const i in entries) {
           const entry = entries[i];
           entry.content.forEach((content) => {
@@ -445,7 +447,8 @@ export class TemplateController {
               }
             });
           });
-          const updateEntryResult = await this.entryService.update(entry);
+          // const updateEntryResult = await this.entryService.update(entry);
+          const updateEntryResult = await CacheControl.Entry.update(entry);
           if (updateEntryResult === false) {
             this.logger.error(
               'update',
@@ -500,7 +503,8 @@ export class TemplateController {
         `Failed to delete Template from database.`,
       );
     }
-    await this.entryService.deleteAllById(template.entryIds);
+    // await this.entryService.deleteAllById(template.entryIds);
+    await CacheControl.Entry.deleteAllById(template.entryIds);
     return {
       message: 'Success.',
     };

@@ -241,21 +241,6 @@ export class LanguageController {
       );
     }
 
-    // const entries = await this.entryService.findAll();
-    // for (const i in entries) {
-    //   const entry = entries[i];
-    //   entry.content = entry.content.filter(e => e.lng !== language.code);
-    //   const updateEntryResult = await this.entryService.update(entry);
-    //   if (updateEntryResult === false) {
-    //     this.logger.error(
-    //       'deleteByIdOrCode',
-    //       `Failed to remove language '${
-    //         language.code
-    //       }' from Entry '${entry._id.toHexString()}'.`,
-    //     );
-    //   }
-    // }
-
     return {
       message: 'Success.',
     };

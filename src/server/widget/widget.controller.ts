@@ -32,6 +32,7 @@ import {
   PropQuillContentType,
   PropQuillContentValueWidget,
 } from '../prop';
+import { CacheControl } from '../cache-control';
 
 @Controller('/widget')
 export class WidgetController {
@@ -371,12 +372,12 @@ export class WidgetController {
       );
     }
     let entries = await this.entryService.findAllByWidgetId(request.params.id);
-    entries = entries.map(entry => {
-      entry.content = entry.content.map(content => {
-        content.props = content.props.map(rootProp => {
+    entries = entries.map((entry) => {
+      entry.content = entry.content.map((content) => {
+        content.props = content.props.map((rootProp) => {
           if (rootProp.type === PropType.QUILL) {
             (rootProp.value as PropQuill).content = (rootProp.value as PropQuill).content.filter(
-              quillContent => {
+              (quillContent) => {
                 if (quillContent.type === PropQuillContentType.WIDGET) {
                   if (
                     (quillContent.value as PropQuillContentValueWidget)._id ===
@@ -395,10 +396,9 @@ export class WidgetController {
       });
       return entry;
     });
-    entries.forEach(entry => {
-      this.entryService
-        .update(entry)
-        .then(result => {
+    entries.forEach((entry) => {
+      CacheControl.Entry.update(entry)
+        .then((result) => {
           if (result === false) {
             this.logger.error(
               '.deleteById - update entry',
@@ -406,7 +406,7 @@ export class WidgetController {
             );
           }
         })
-        .catch(e => {
+        .catch((e) => {
           this.logger.error('.deleteById - update entry', e);
         });
     });

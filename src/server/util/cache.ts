@@ -60,4 +60,13 @@ export abstract class Cache<T extends Entity> {
     this.cache = this.cache.filter((e) => e._id.toHexString() !== id);
     return true;
   }
+
+  public async deleteAllById(ids: string[]) {
+    const result = await this.service.deleteAllById(ids);
+    if (result === false) {
+      return false;
+    }
+    this.cache = this.cache.filter((e) => !ids.includes(e._id.toHexString()));
+    return true;
+  }
 }
