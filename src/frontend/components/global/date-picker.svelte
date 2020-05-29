@@ -11,6 +11,7 @@
   const dateString = `${date.getFullYear()}-${
     date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1
   }-${date.getDate() < 10 ? '0' + date.getDate() : date.getDate()}`;
+  console.log(dateString, value);
   const dispatch = createEventDispatcher();
   let className = '';
 </script>
@@ -38,6 +39,7 @@
     type="date"
     value={dateString}
     on:change={event => {
+      console.log('Date change');
       dispatch('change', !event.target.valueAsNumber ? 0 : event.target.valueAsNumber);
     }} />
 </div>

@@ -9,7 +9,7 @@
 
 <Prop name={prop.name} required={prop.required} type={prop.type} {error}>
   <DatePicker
-    value={prop.value}
+    value={0 + prop.value}
     on:change={event => {
       prop.value = event.detail;
     }} />

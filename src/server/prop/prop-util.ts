@@ -917,10 +917,10 @@ export class PropUtil {
         content.push({
           type: prop.type,
           name,
-          value:
-            typeof value === 'string'
-              ? Buffer.from(value, 'latin1').toString('utf8')
-              : value,
+          value,
+          // typeof value === 'string'
+          //   ? Buffer.from(value, 'latin1').toString('utf8')
+          //   : value,
         });
       }
     }

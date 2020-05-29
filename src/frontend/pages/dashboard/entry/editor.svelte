@@ -95,13 +95,13 @@
   entryStore.subscribe(value => {
     if (value) {
       entries = value;
-      if (initDone === false) {
-        if (queries.eid) {
-          entry = entries.find(e => e._id === queries.eid);
-        }
-        console.log('entries');
-        init();
-      }
+      // if (initDone === false) {
+      //   if (queries.eid) {
+      //     entry = entries.find(e => e._id === queries.eid);
+      //   }
+      //   console.log('entries');
+      //   init();
+      // }
     }
   });
 
@@ -439,6 +439,7 @@
           return;
         }
         entry = result.response.data.entry;
+        console.log(entry);
         init();
       });
   }

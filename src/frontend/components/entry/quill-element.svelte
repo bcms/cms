@@ -66,25 +66,35 @@
         );
       }
       if (section.value) {
-        section.value.ops = section.value.ops.map(op => {
-          op.insert = window.unescape(window.encodeURIComponent(op.insert));
-          if (typeof op.insert === 'string') {
-            let index = 0;
-            while (true) {
-              index = op.insert.indexOf('Â', index);
-              if (index === -1) {
-                break;
-              }
-              op.insert =
-                op.insert.substring(0, index) +
-                '█' +
-                op.insert.substring(index + 2);
-            }
-          }
-          return op;
-        });
-        console.log(section.value);
+        // section.value.ops = section.value.ops.map(op => {
+        //   op.insert = window.unescape(window.encodeURIComponent(op.insert));
+        //   if (typeof op.insert === 'string') {
+        //     let index = 0;
+        //     while (true) {
+        //       index = op.insert.indexOf('Â', index);
+        //       if (index === -1) {
+        //         break;
+        //       }
+        //       op.insert =
+        //         op.insert.substring(0, index) +
+        //         '█' +
+        //         op.insert.substring(index + 2);
+        //     }
+        //   }
+        //   return op;
+        // });
         section.quill.setContents(section.value);
+        if (section.type === 'CODE') {
+          section.quill.setContents([
+            { insert: '' },
+            {
+              attributes: {
+                'code-block': true,
+              },
+              insert: `${section.valueAsText}\n`,
+            },
+          ]);
+        }
       } else {
         switch (section.type) {
           case 'LIST':
