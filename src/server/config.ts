@@ -6,6 +6,7 @@ import { WebhookCashService } from './webhook/webhook-cash.service';
 import { GitUtil } from './media/git-util';
 import { EventManagerService } from './event/event-manager.service';
 import { CacheControl } from './cache-control';
+import { JobsManagerService } from './job/jobs-manager.service';
 
 export class Config {
   public static async init() {
@@ -23,6 +24,7 @@ export class Config {
     await FunctionsConfig.init();
     await EventManagerService.init();
     await WebhookCashService.init();
+    await JobsManagerService.init();
     GitUtil.init();
     CacheControl.init();
   }

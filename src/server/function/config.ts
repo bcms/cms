@@ -16,8 +16,8 @@ export class FunctionsConfig {
     if ((await util.promisify(fs.exists)(p)) === true) {
       const files = await util.promisify(fs.readdir)(p);
       files
-        .filter(file => file.endsWith('.js'))
-        .forEach(file => {
+        .filter((file) => file.endsWith('.js'))
+        .forEach((file) => {
           const fileParts = file.split('.');
           const name = fileParts.slice(0, fileParts.length - 1).join('.');
           const req = require(path.join(p, file));

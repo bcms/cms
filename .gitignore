@@ -7,6 +7,7 @@
 /events
 /uploads
 /functions
+/jobs
 
 # Sapper
 /src/frontend/node_modules/@sapper/
