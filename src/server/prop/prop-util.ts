@@ -811,14 +811,9 @@ export class PropUtil {
                     }`;
                   }
                 }
-                insert = this.formatMarkdownInsert(insert);
-                value += insert.replace('@', op.insert);
-                // .replace(/ \*\*/g, '** ')
-                // .replace(/\*\* /g, ' **')
-                // .replace(/\* /g, ' *')
-                // .replace(/ \*/g, '* ')
-                // .replace(/~~ /g, ' ~~')
-                // .replace(/ ~~/g, '~~ ');
+                value += this.formatMarkdownInsert(
+                  insert.replace('@', op.insert),
+                );
               }
               value += '\n';
             }
@@ -878,20 +873,10 @@ export class PropUtil {
                         spaceAt.end ? ' ' : ''
                       }`;
                     }
-                    listItem += insert.replace('@', op.insert);
-                    // .replace(/ \*\*/g, '** ')
-                    // .replace(/ \*/g, '* ')
-                    // .replace(/ ~~/g, '~~ ');
+                    listItem += this.formatMarkdownInsert(insert.replace('@', op.insert));
                   }
                 } else {
-                  // insert = this.formatMarkdownInsert(insert);
-                  listItem += insert.replace('@', op.insert);
-                  // .replace(/\*\* /g, ' **')
-                  // .replace(/ \*\*/g, '** ')
-                  // .replace(/\* /g, ' *')
-                  // .replace(/ \*/g, '* ')
-                  // .replace(/~~ /g, ' ~~')
-                  // .replace(/ ~~/g, '~~ ');
+                  listItem += this.formatMarkdownInsert(insert.replace('@', op.insert));
                 }
               }
               value += '\n';
@@ -945,6 +930,18 @@ export class PropUtil {
           from: ' ~~',
           to: '~~ ',
         },
+        {
+          from: ' **',
+          to: '** ',
+        },
+        {
+          from: ' *',
+          to: '* ',
+        },
+        {
+          from: ' ~~',
+          to: '~~ ',
+        },
       ],
       start: [
         {
@@ -957,6 +954,18 @@ export class PropUtil {
         },
         {
           from: '~~ ',
+          to: ' ~~',
+        },
+        {
+          from: '** ',
+          to: ' **',
+        },
+        {
+          from: '* ',
+          to: ' *',
+        },
+        {
+          from: '~~ ',
           to: ' ~~',
         },
       ],

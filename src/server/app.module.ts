@@ -83,7 +83,13 @@ if (process.env.DB_CLUSTER && process.env.DB_CLUSTER !== 'undefined') {
   middleware: [
     new CorsMiddleware(),
     new RequestLoggerMiddleware(),
-    new BodyParserMiddleware(),
+    new BodyParserMiddleware(
+      process.env.INCOMING_BODY_LIMIT
+        ? {
+            limit: process.env.INCOMING_BODY_LIMIT,
+          }
+        : undefined,
+    ),
     new MulterMediaMiddleware(),
   ],
   exceptionHandlers: [],
@@ -101,7 +107,7 @@ export class App {
     this.logger = new Logger('App');
     Logger.setLogPath(path.join(process.env.PROJECT_ROOT, 'log'));
 
-    this.controllers.forEach(controller => {
+    this.controllers.forEach((controller) => {
       controller.initRouter();
     });
 
@@ -110,10 +116,10 @@ export class App {
   }
 
   private initializeMiddleware(middleware: Middleware[]) {
-    middleware.forEach(e => {
+    middleware.forEach((e) => {
       if (e.uri) {
         if (e.handler instanceof Array) {
-          e.handler.forEach(h => {
+          e.handler.forEach((h) => {
             this.app.use(e.uri, h);
           });
         } else {
@@ -134,11 +140,11 @@ export class App {
         express.static(path.join(__dirname, '..', 'frontend', 'public')),
       );
     }
-    controllers.forEach(controller => {
+    controllers.forEach((controller) => {
       this.app.use(controller.baseUri, controller.router);
       this.logger.info('.controller', `[${controller.name}] mapping done.`);
     });
-    this.exceptionHandlers.forEach(e => {
+    this.exceptionHandlers.forEach((e) => {
       this.app.use(e.handler);
       this.logger.info('.exceptionHandler', `[${e.name}] mapping done.`);
     });
