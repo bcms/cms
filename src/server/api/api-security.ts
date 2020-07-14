@@ -31,17 +31,14 @@ export class APISecurity {
     const data: APISecurityObject = {
       key: config.key.id,
       timestamp: Date.now(),
-      nonce: crypto
-        .randomBytes(16)
-        .toString('hex')
-        .substring(0, 6),
+      nonce: crypto.randomBytes(16).toString('hex').substring(0, 6),
       signature: '',
     };
     let payloadAsString: string = '';
     if (typeof config.payload === 'object') {
-      payloadAsString = Buffer.from(JSON.stringify(config.payload)).toString(
-        'base64',
-      );
+      payloadAsString = Buffer.from(
+        encodeURIComponent(JSON.stringify(config.payload)),
+      ).toString('base64');
     } else {
       payloadAsString = '' + config.payload;
     }
@@ -88,7 +85,9 @@ export class APISecurity {
     }
     let payloadAsString: string = '';
     if (typeof payload === 'object') {
-      payloadAsString = Buffer.from(JSON.stringify(payload)).toString('base64');
+      payloadAsString = Buffer.from(
+        encodeURIComponent(JSON.stringify(payload)),
+      ).toString('base64');
     } else {
       payloadAsString = '' + payload;
     }
@@ -115,7 +114,7 @@ export class APISecurity {
   public static verifyAccess(key: Key, method: string, path: string): boolean {
     if (path.startsWith('/function')) {
       const p = path.replace('/function/', '');
-      if (key.access.functions.find(e => e.name === p) && method === 'POST') {
+      if (key.access.functions.find((e) => e.name === p) && method === 'POST') {
         return true;
       }
     } else if (path.startsWith('/template')) {
@@ -123,33 +122,33 @@ export class APISecurity {
       if (parts.length > 1) {
         if (parts.length === 3) {
           if (parts[2] === 'all' && method === 'GET') {
-            const templateAccess = key.access.templates.find(e =>
-              e.methods.find(m => m === 'GET_ALL'),
+            const templateAccess = key.access.templates.find((e) =>
+              e.methods.find((m) => m === 'GET_ALL'),
             );
             if (templateAccess) {
               return true;
             }
           } else if (method === 'GET') {
             const templateAccess = key.access.templates.find(
-              e => e._id === parts[2],
+              (e) => e._id === parts[2],
             );
             if (templateAccess) {
-              if (templateAccess.methods.find(e => e === method)) {
+              if (templateAccess.methods.find((e) => e === method)) {
                 return true;
               }
             }
           }
         } else if (parts.length > 2 && parts[3] === 'entry') {
           const templateAccess = key.access.templates.find(
-            e => e._id === parts[2],
+            (e) => e._id === parts[2],
           );
           if (templateAccess) {
             if (parts.length === 5 && parts[4] === 'all') {
-              if (templateAccess.entry.methods.find(e => e === 'GET_ALL')) {
+              if (templateAccess.entry.methods.find((e) => e === 'GET_ALL')) {
                 return true;
               }
             } else {
-              if (templateAccess.entry.methods.find(e => e === method)) {
+              if (templateAccess.entry.methods.find((e) => e === method)) {
                 return true;
               }
             }
