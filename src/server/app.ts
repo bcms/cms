@@ -12,6 +12,8 @@ import {
   MongoDBConfig,
   PurpleCheetah,
 } from '@becomes/purple-cheetah';
+import { SwaggerController } from './swagger/controller';
+import { SwaggerMiddleware } from './swagger/middleware';
 
 let dbConfig: MongoDBConfig;
 if (process.env.DB_CLUSTER && process.env.DB_CLUSTER !== 'undefined') {
@@ -51,11 +53,14 @@ if (process.env.DB_CLUSTER && process.env.DB_CLUSTER !== 'undefined') {
 @EnableMongoDB(dbConfig)
 @Application({
   port: parseInt(process.env.PORT, 10),
-  controllers: [],
+  controllers: [
+    process.env.DEV === 'true' ? new SwaggerController() : undefined,
+  ],
   middleware: [
     new CORSMiddleware(),
     new RequestLoggerMiddleware(),
     new BodyParserMiddleware(),
+    process.env.DEV === 'true' ? new SwaggerMiddleware() : undefined,
   ],
 })
 export class App extends PurpleCheetah {
@@ -74,10 +79,17 @@ export class App extends PurpleCheetah {
     );
   }
 
-  protected middle() {
+  protected finalize() {
     this.app.use(
       '/',
-      async (request: express.Request, response: express.Response) => {
+      async (
+        request: express.Request,
+        response: express.Response,
+        next: express.NextFunction,
+      ) => {
+        if (request.path.startsWith('/api')) {
+          next();
+        }
         if (
           request.path.startsWith('/login') ||
           request.path.startsWith('/dashboard') ||
