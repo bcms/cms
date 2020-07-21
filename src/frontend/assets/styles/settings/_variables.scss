@@ -1,0 +1,40 @@
+/*
+* Fonts:
+*/
+
+/*
+* Breakpoints:
+*/
+
+$desktop: 1190px;
+$tablet: 768px;
+$mobile: 360px;
+
+/*
+* Sizes:
+*/
+
+$wrapper: 1190px;
+$big-wrapper: 1440px;
+$featured-gutter: 20px;
+
+/*
+* Colors:
+*/
+
+:root {
+  --green: #249681;
+  --pink: #ECADA9;
+  --yellow: #FFCD19;
+  --red: #F56B58;
+
+  --dark: #13141A;
+  --grey: #9798AB;
+  --light: #F8F8FC;
+  --white: #FDFDFD;
+  
+  --nav-active: var(--green);
+
+  
+  --vh: 1vh;
+}

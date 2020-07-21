@@ -1,0 +1,9 @@
+#bcms {
+  width: 100%;
+  min-height: calc(100 * var(--vh));
+  display: grid;
+  grid-template-columns: 302px 1fr;
+  background-image: url('/images/gradient-3.png');
+  background-position: top left;
+  background-size: 500px auto;
+}

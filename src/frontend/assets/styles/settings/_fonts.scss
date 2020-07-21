@@ -1,0 +1,300 @@
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk SemiBold'), local('HergonGrotesk-SemiBold'),
+      url('/fonts/HergonGrotesk-SemiBold.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk Bold'), local('HergonGrotesk-Bold'),
+      url('/fonts/HergonGrotesk-Bold.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk ExtraBold'), local('HergonGrotesk-ExtraBold'),
+      url('/fonts/HergonGrotesk-ExtraBold.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-ExtraBold.woff') format('woff');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk ExtraLight Ita';
+  src: local('Hergon Grotesk ExtLt Ita'), local('HergonGrotesk-ExtLtIta'),
+      url('/fonts/HergonGrotesk-ExtLtIta.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-ExtLtIta.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk Regular'), local('HergonGrotesk-Regular'),
+      url('/fonts/HergonGrotesk-Regular.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk Medium'), local('HergonGrotesk-Medium'),
+      url('/fonts/HergonGrotesk-Medium.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk Medium Italic'), local('HergonGrotesk-MediumItalic'),
+      url('/fonts/HergonGrotesk-MediumItalic.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-MediumItalic.woff') format('woff');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk Book';
+  src: local('Hergon Grotesk Book'), local('HergonGrotesk-Book'),
+      url('/fonts/HergonGrotesk-Book.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-Book.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk Bold Italic'), local('HergonGrotesk-BoldItalic'),
+      url('/fonts/HergonGrotesk-BoldItalic.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-BoldItalic.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk ExtraBold Italic'), local('HergonGrotesk-ExtraBoldItalic'),
+      url('/fonts/HergonGrotesk-ExtraBoldItalic.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-ExtraBoldItalic.woff') format('woff');
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk Light'), local('HergonGrotesk-Light'),
+      url('/fonts/HergonGrotesk-Light.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk Light Italic'), local('HergonGrotesk-LightItalic'),
+      url('/fonts/HergonGrotesk-LightItalic.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-LightItalic.woff') format('woff');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk ExtraLight'), local('HergonGrotesk-ExtraLight'),
+      url('/fonts/HergonGrotesk-ExtraLight.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-ExtraLight.woff') format('woff');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk Book';
+  src: local('Hergon Grotesk Book Italic'), local('HergonGrotesk-BookItalic'),
+      url('/fonts/HergonGrotesk-BookItalic.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-BookItalic.woff') format('woff');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk Italic'), local('HergonGrotesk-Italic'),
+      url('/fonts/HergonGrotesk-Italic.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk ExtLt Ita'), local('HergonGrotesk-ExtLtIta'),
+      url('/fonts/HergonGrotesk-ExtLtIta.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-ExtLtIta.woff') format('woff');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk SemiBold'), local('HergonGrotesk-SemiBold'),
+      url('/fonts/HergonGrotesk-SemiBold.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk Light Italic'), local('HergonGrotesk-LightItalic'),
+      url('/fonts/HergonGrotesk-LightItalic.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-LightItalic.woff') format('woff');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk Italic'), local('HergonGrotesk-Italic'),
+      url('/fonts/HergonGrotesk-Italic.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-Italic.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk Book Italic'), local('HergonGrotesk-BookItalic'),
+      url('/fonts/HergonGrotesk-BookItalic.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-BookItalic.woff') format('woff');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk Medium Italic'), local('HergonGrotesk-MediumItalic'),
+      url('/fonts/HergonGrotesk-MediumItalic.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-MediumItalic.woff') format('woff');
+  font-weight: 500;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk Bold Italic'), local('HergonGrotesk-BoldItalic'),
+      url('/fonts/HergonGrotesk-BoldItalic.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-BoldItalic.woff') format('woff');
+  font-weight: bold;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk Book'), local('HergonGrotesk-Book'),
+      url('/fonts/HergonGrotesk-Book.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-Book.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk ExtraLight'), local('HergonGrotesk-ExtraLight'),
+      url('/fonts/HergonGrotesk-ExtraLight.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-ExtraLight.woff') format('woff');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk Regular'), local('HergonGrotesk-Regular'),
+      url('/fonts/HergonGrotesk-Regular.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk ExtraBold Italic'), local('HergonGrotesk-ExtraBoldItalic'),
+      url('/fonts/HergonGrotesk-ExtraBoldItalic.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-ExtraBoldItalic.woff') format('woff');
+  font-weight: 800;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk Bold'), local('HergonGrotesk-Bold'),
+      url('/fonts/HergonGrotesk-Bold.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-Bold.woff') format('woff');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk Medium'), local('HergonGrotesk-Medium'),
+      url('/fonts/HergonGrotesk-Medium.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk ExtraBold'), local('HergonGrotesk-ExtraBold'),
+      url('/fonts/HergonGrotesk-ExtraBold.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-ExtraBold.woff') format('woff');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Hergon Grotesk';
+  src: local('Hergon Grotesk Light'), local('HergonGrotesk-Light'),
+      url('/fonts/HergonGrotesk-Light.woff2') format('woff2'),
+      url('/fonts/HergonGrotesk-Light.woff') format('woff');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+

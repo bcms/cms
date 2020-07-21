@@ -77,6 +77,16 @@ export class App extends PurpleCheetah {
         ),
       ),
     );
+    this.app.use(
+      express.static(
+        path.join(
+          __dirname,
+          process.env.DEV === 'true' ? '..' : '',
+          'frontend',
+          'public'
+        ),
+      ),
+    );
   }
 
   protected finalize() {

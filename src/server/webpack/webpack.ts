@@ -29,6 +29,9 @@ export class Webpack {
       mode,
       resolve: {
         extensions: ['.ts', '.js', '.scss', '.html'],
+        alias: {
+          '@': path.join(process.cwd(), 'src', 'frontend')
+        }
       },
       module: {
         rules: [
