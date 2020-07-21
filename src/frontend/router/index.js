@@ -5,8 +5,8 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "Root-Login",
-    component: () => import(/* webpackChunkName: "login" */ '../views/login.vue')
+    name: "Home",
+    component: () => import(/* webpackChunkName: "login" */ '../views/home.vue')
   },
   {
     path: "/login",

@@ -15,42 +15,42 @@ import {
 import { SwaggerController } from './swagger/controller';
 import { SwaggerMiddleware } from './swagger/middleware';
 
-let dbConfig: MongoDBConfig;
-if (process.env.DB_CLUSTER && process.env.DB_CLUSTER !== 'undefined') {
-  dbConfig = {
-    atlas: {
-      db: {
-        cluster: process.env.DB_CLUSTER,
-        name: process.env.DB_NAME,
-        readWrite: true,
-      },
-      user: {
-        name: process.env.DB_USER,
-        password: process.env.DB_PASS,
-      },
-    },
-  };
-} else {
-  dbConfig = {
-    selfHosted: {
-      db: {
-        host: process.env.DB_HOST,
-        port: parseInt(process.env.DB_PORT, 10),
-        name: process.env.DB_NAME,
-      },
-      user: {
-        name: process.env.DB_USER,
-        password: process.env.DB_PASS,
-      },
-    },
-  };
-}
+// let dbConfig: MongoDBConfig;
+// if (process.env.DB_CLUSTER && process.env.DB_CLUSTER !== 'undefined') {
+//   dbConfig = {
+//     atlas: {
+//       db: {
+//         cluster: process.env.DB_CLUSTER,
+//         name: process.env.DB_NAME,
+//         readWrite: true,
+//       },
+//       user: {
+//         name: process.env.DB_USER,
+//         password: process.env.DB_PASS,
+//       },
+//     },
+//   };
+// } else {
+//   dbConfig = {
+//     selfHosted: {
+//       db: {
+//         host: process.env.DB_HOST,
+//         port: parseInt(process.env.DB_PORT, 10),
+//         name: process.env.DB_NAME,
+//       },
+//       user: {
+//         name: process.env.DB_USER,
+//         password: process.env.DB_PASS,
+//       },
+//     },
+//   };
+// }
 
 /**
  * Application Module that starts all dependencies and
  * handles HTTP requests.
  */
-@EnableMongoDB(dbConfig)
+// @EnableMongoDB(dbConfig)
 @Application({
   port: parseInt(process.env.PORT, 10),
   controllers: [
