@@ -1,17 +1,29 @@
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.5s;
-}
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-  opacity: 0;
+@for $index from 1 to 20 {
+  .nav--list-enter-active:nth-child(#{$index}),
+  .nav--list-leave-active:nth-child(#{$index}) {
+    transition-property: opacity, transform;
+    will-change: opacity, transform;
+    transition-duration: 0.1 + ($index * 0.1s);
+    transition-delay: $index * 0.01;
+    transition-timing-function: ease-in-out;
+  }
 }
 
-.page-enter-active,
-.page-leave-active {
-  transition: opacity 0.5s ease;
-}
-.page-enter,
-.page-leave-active {
+.nav--list-enter,
+.nav--list-leave-to {
   opacity: 0;
-  transition: opacity 0.3s;
+  transform: translateX(-4px);
+}
+
+.nav--listWrapper-enter-active {
+  transition-property: opacity, transform;
+  will-change: opacity, transform;
+  transition-duration: 0.2s;
+  transition-timing-function: ease-in-out;
+}
+
+.nav--listWrapper-enter,
+.nav--listWrapper-leave-to {
+  opacity: 0;
+  transform: translateX(-4px);
 }

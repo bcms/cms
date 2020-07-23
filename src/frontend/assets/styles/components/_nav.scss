@@ -1,0 +1,101 @@
+.nav {
+  &--list {
+    list-style: none;
+    margin-bottom: 25px;
+    &:not(&_0):not(&_1) {
+      padding-right: 20px;
+      padding-left: 20px;
+    }
+    &_2 {
+      position: absolute;
+      top: 0; 
+      left: var(--sidebar-nav-lvl1-width);
+      width: var(--sidebar-nav-lvl2-width);
+      padding-top: var(--sidebar-nav-top-position);
+      border-right: 1px solid var(--grey_03);
+      height: vh(100);
+    }
+    &_3 {
+      position: absolute;
+      top: 0;
+      left: var(--sidebar-nav-lvl2-width);
+      width: var(--sidebar-nav-lvl3-width);
+      padding-top: var(--sidebar-nav-top-position);
+      border-right: 1px solid var(--grey_03);
+      height: vh(100);
+    }
+  }
+  &--item {
+    &:not(:last-child) {
+      margin-bottom: 2px;
+    }
+    &.is-expanded {
+      .nav--item-rootLabel svg {
+        transform: translate3d(0, -50%, 0.1px) rotate(90deg);
+      }
+      & > .nav--item-label {
+        &:before {
+          transform: translate3d(0, -50%, 0.1px) scale(1);
+        }
+      }
+    }
+    &-clickable {
+      padding-left: 20px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      text-decoration: none;
+      position: relative;
+      font-style: normal;
+      font-weight: normal;
+      color: var(--dark);
+    }
+    &-rootLabel {
+      font-size: 12px;
+      line-height: 1.5;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      svg {
+        width: 4px;
+        height: auto;
+        display: block;
+        margin-right: 10px;
+        position: relative;
+        position: absolute;
+        top: 50%;
+        left: -4px;
+        transform: translate3d(0, -50%, 0.1px);
+        path {
+          fill: var(--dark);
+        }
+      }
+    }
+    &-label {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      font-size: 16px;
+      line-height: 1.25;
+      letter-spacing: -0.01em;
+      justify-content: space-between;
+      &:before {
+        content: '';
+        position: absolute;
+        width: 5px;
+        height: 5px;
+        left: 0px;
+        top: 50%;
+        transform: translate3d(0, -50%, 0.1px) scale(0);
+        background: var(--nav-active);
+        border-radius: 50%;
+        transition: .22s ease transform;
+        will-change: transform;
+      }
+      svg {
+        width: 24px; height: auto;
+        path {
+          fill: currentColor;
+        }
+      }
+    }
+  }
+}

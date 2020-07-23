@@ -32,8 +32,17 @@ $featured-gutter: 20px;
   --grey: #9798AB;
   --light: #F8F8FC;
   --white: #FDFDFD;
+
+  --grey_03: rgba(151, 152, 171, 0.3);
   
   --nav-active: var(--green);
+
+
+  // ui:
+
+  --sidebar-nav-lvl1-width: 302px;
+  --sidebar-nav-lvl2-width: 207px;
+  --sidebar-nav-lvl3-width: 240px;
 
   
   --vh: 1vh;

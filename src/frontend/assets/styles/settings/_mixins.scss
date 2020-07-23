@@ -106,3 +106,19 @@
     @content;
   }
 }
+
+/*
+* Vh shorthand
+*/
+@function vh($value) {
+  @return calc(#{$value} * var(--vh));
+}
+
+/*
+
+  * --> usage:
+
+  - Single property:
+  height: vh(100);
+
+*/

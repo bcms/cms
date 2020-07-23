@@ -21,23 +21,30 @@
       </svg>
     </router-link>
     <nav class="sidebar--nav">
-      <ul>
+      <ul class="sidebar--1">
         <li
           class="sidebar--group"
           v-for="(group, index) in navigation"
           :key="group.name"
           :class="{'is-expanded': group.expanded}"
         >
-          <button @click="toggleExpand(index)" class="sidebar--group-name">
+          <button @click="toggleCollapse(index)" class="sidebar--group-name">
             <icon-triangle />
             <span>{{group.name}}</span>
           </button>
-          <ul v-show="group.expanded" class="sidebar--group-list">
+          <ul v-show="group.expanded" class="sidebar--group-list sidebar--2">
             <li class="sidebar--item" v-for="(nav, index) in group.items" :key="index">
               <router-link :to="nav.url">
                 <span>{{nav.label}}</span>
                 <component :is="nav.icon" class="sidebar--item-icon" />
               </router-link>
+              <ul v-if="nav.items" class="sidebar--3">
+                <li v-for="subItem in nav.items" :key="subItem.label">
+                  <pre>
+                    {{ subItem }}
+                  </pre>
+                </li>
+              </ul>
             </li>
           </ul>
         </li>
@@ -87,6 +94,29 @@ export default {
               label: 'Settings',
               icon: 'IconSettings',
               url: '/settings',
+              expanded: false,
+              items: [
+                {
+                  label: 'Language',
+                  icon: 'IconLanguage',
+                  url: '/language'
+                },
+                {
+                  label: 'Users',
+                  icon: 'IconUsers',
+                  url: '/users'
+                },
+                {
+                  label: 'API',
+                  icon: 'IconApi',
+                  url: '/api'
+                },
+                {
+                  label: 'Webhook',
+                  icon: 'IconWebhook',
+                  url: '/webhooks'
+                }
+              ]
             },
             {
               label: 'Custom portal',
@@ -126,7 +156,7 @@ export default {
     };
   },
   methods: {
-    toggleExpand(groupIndex) {
+    toggleCollapse(groupIndex) {
       this.navigation[groupIndex].expanded = !this.navigation[groupIndex]
         .expanded;
     },
