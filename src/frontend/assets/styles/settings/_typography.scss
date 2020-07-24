@@ -1,3 +1,30 @@
 body {
   font-family: 'Hergon Grotesk';
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--dark);
+}
+
+.text-link {
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+.color_green {
+  color: var(--green);
+}
+.color_pink {
+  color: var(--pink);
+}
+.color_yellow {
+  color: var(--yellow);
+}
+.color_red {
+  color: var(--red);
 }
