@@ -51,7 +51,15 @@ export class Webpack {
           },
           {
             test: /\.scss$/,
-            use: ['style-loader', 'css-loader', 'sass-loader'],
+            use: [
+              'vue-style-loader', 'style-loader', 'css-loader' , {
+                loader: 'sass-loader',
+                options: {
+                  sassOptions: {
+                    includePaths: ['@/assets/styles/settings/_variables.scss', '@/assets/styles/settings/_mixins.scss', '@/assets/styles/settings/_test.scss']
+                  }
+                }
+              }],
           },
           {
             test: /\.css$/,
