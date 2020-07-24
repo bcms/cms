@@ -21,7 +21,44 @@ export default {
             {
               label: 'Templates',
               icon: 'IconTemplate',
-              path: '/templates',
+              items: [
+                {
+                  label: 'Language',
+                  icon: 'IconLanguage',
+                  path: '/language',
+                },
+                {
+                  label: 'Users',
+                  icon: 'IconUsers',
+                  items: [
+                    {
+                      label: 'Boris Bošnjak',
+                      path: '/boris-bosnjak',
+                      icon: 'IconAdmin'
+                    },
+                    {
+                      label: 'Branislav Vajagić',
+                      path: '/branislav-vajagic',
+                      icon: 'IconAdmin'
+                    },
+                    {
+                      label: 'Momcilo Popov',
+                      path: '/momcilo-popov',
+
+                    }
+                  ]
+                },
+                {
+                  label: 'API',
+                  icon: 'IconApi',
+                  path: '/api',
+                },
+                {
+                  label: 'Webhook',
+                  icon: 'IconWebhook',
+                  path: '/webhooks',
+                },
+              ],
             },
             {
               label: 'Groups',

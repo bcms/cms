@@ -1,13 +1,15 @@
 <template>
   <li class="nav--item" :class="{'is-expanded': expanded}">
+    
     <router-link
       class="nav--item-label nav--item-clickable"
       v-if="isItemALink"
       :to="item.path"
     >
     {{ item.label }}
-    <component v-if="item.icon" :is="item.icon" class="sidebar--item-icon" />
+      <component v-if="item.icon" :is="item.icon" class="sidebar--item-icon" />
     </router-link>
+
     <button
       v-else
       @click="toggleCollapse()"
@@ -18,6 +20,8 @@
       <span>{{item.label}}</span>
       <component v-if="item.icon" :is="item.icon" class="sidebar--item-icon" />
     </button>
+
+
     <transition name="nav--listWrapper" mode="in-out">
       <transition-group
         v-if="item.items && item.items.length && expanded"
