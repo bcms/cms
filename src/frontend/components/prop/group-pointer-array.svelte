@@ -32,7 +32,6 @@
         return array;
       });
     }
-    console.log('Events', events);
   }
   init();
   onMount(() => {

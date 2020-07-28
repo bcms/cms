@@ -15,12 +15,23 @@ import {
 import { StringUtility, Logger, Service } from 'purple-cheetah';
 import { GroupService } from '../group/group.service';
 import { EntryContent, Entry } from '../entry/models/entry.model';
-import { EntryService } from '../entry';
 import { CacheControl } from '../cache-control';
+import * as Turndown from 'turndown';
+
+interface OP {
+  insert: string;
+  attributes?: {
+    italic?: boolean;
+    bold?: boolean;
+    underline?: boolean;
+    link?: string;
+    list?: string;
+    indent?: number;
+  };
+}
 
 export class PropUtil {
-  // @Service(EntryService)
-  // private static entryService: EntryService;
+  private static td = new Turndown();
 
   public static get changesSchema(): any {
     return {
@@ -286,17 +297,18 @@ export class PropUtil {
             {
               if (typeof prop.value.content !== 'object') {
                 throw new Error(
-                  `Invalid type of 'props[${i}].value'. ` +
+                  `Error in Content. Invalid type of 'props[${i}].value.content'. ` +
                     `Expected 'object' but got '${typeof prop.value.content}'.`,
                 );
               }
               if (!(prop.value.content instanceof Array)) {
                 throw new Error(
-                  `Expected an array for 'props[${i}].value.content'`,
+                  `Error in Content. Expected an array for 'props[${i}].value.content'`,
                 );
               }
               for (const j in prop.value.content) {
                 const content = prop.value.content[j];
+                let errorMsg = `Error in content at section ${content.type}. `;
                 if (typeof content.id !== 'string') {
                   throw new Error(
                     `Invalid type of 'props[${i}].value.content[${j}].id'. ` +
@@ -311,21 +323,24 @@ export class PropUtil {
                 }
                 if (typeof content.valueAsText !== 'string') {
                   throw new Error(
-                    `Invalid type of 'props[${i}].value.content[${j}].valueAsText'. ` +
+                    errorMsg +
+                      `Invalid type of 'props[${i}].value.content[${j}].valueAsText'. ` +
                       `Expected 'string' but got '${typeof content.valueAsText}'.`,
                   );
                 }
                 if (content.type === 'MEDIA') {
                   if (typeof content.value !== 'string') {
                     throw new Error(
-                      `Invalid type of 'props[${i}].value.content[${j}].value'. ` +
+                      errorMsg +
+                        `Invalid type of 'props[${i}].value.content[${j}].value'. ` +
                         `Expected 'string' but got '${typeof content.value}'.`,
                     );
                   }
                 } else {
                   if (typeof content.value !== 'object') {
                     throw new Error(
-                      `Invalid type of 'props[${i}].value.content[${j}].value'. ` +
+                      errorMsg +
+                        `Invalid type of 'props[${i}].value.content[${j}].value'. ` +
                         `Expected 'object' but got '${typeof content.value}'.`,
                     );
                   }
@@ -333,7 +348,9 @@ export class PropUtil {
                 if (content.type !== 'MEDIA' && content.type !== 'WIDGET') {
                   if (!(content.value.ops instanceof Array)) {
                     throw new Error(
-                      `Expected an array for 'props[${i}].value.content[${j}].value.ops'`,
+                      errorMsg +
+                        `Section is probably empty. ` +
+                        `Expected an array for 'props[${i}].value.content[${j}].value.ops'`,
                     );
                   }
                 }
@@ -717,197 +734,202 @@ export class PropUtil {
     lng?: string,
   ): Promise<{
     meta: any;
-    content: Array<{
+    content: {
       type: string;
       name?: string;
       value: any;
-    }>;
+    }[];
   }> {
     const meta = await PropUtil.propsToJSONObject(props, init, lng);
-    const content: Array<{
+    let content: {
       type: string;
       name?: string;
       value: any;
-    }> = [];
+    }[] = [];
     const quillProp = props.find((e) => e.type === PropType.QUILL);
     if (quillProp) {
       quillProp.value = quillProp.value as PropQuill;
-      for (const i in quillProp.value.content) {
-        let value: any;
-        let name: string;
-        const prop = quillProp.value.content[i] as PropQuillContent;
-        switch (prop.type) {
-          case PropQuillContentType.HEADING_1:
-            {
-              value = `## ${prop.valueAsText}\n`;
-            }
-            break;
-          case PropQuillContentType.HEADING_2:
-            {
-              value = `### ${prop.valueAsText}\n`;
-            }
-            break;
-          case PropQuillContentType.HEADING_3:
-            {
-              value = `#### ${prop.valueAsText}\n`;
-            }
-            break;
-          case PropQuillContentType.HEADING_4:
-            {
-              value = `##### ${prop.valueAsText}\n`;
-            }
-            break;
-          case PropQuillContentType.HEADING_5:
-            {
-              value = `###### ${prop.valueAsText}\n`;
-            }
-            break;
-          case PropQuillContentType.CODE:
-            {
-              value = `\`\`\`\n${prop.valueAsText}\n\`\`\`\n\n`;
-            }
-            break;
-          case PropQuillContentType.PARAGRAPH:
-            {
-              value = '';
-              prop.value = prop.value as PropQuillContentValueGeneric;
-              for (const j in prop.value.ops) {
-                const op = prop.value.ops[j];
-                let insert: string = '@';
-                if (op.attributes) {
-                  if (insert.endsWith('\n')) {
-                    insert = insert.substring(0, insert.length - 1);
-                  }
-                  const spaceAt = {
-                    end:
-                      typeof op.insert === 'string' && op.insert.endsWith(' '),
-                    start:
-                      typeof op.insert === 'string' &&
-                      op.insert.startsWith(' '),
-                  };
-                  if (op.attributes.bold === true) {
-                    insert = `${spaceAt.start ? ' ' : ''}**${insert}**${
-                      spaceAt.end ? ' ' : ''
-                    }`;
-                  }
-                  if (op.attributes.italic === true) {
-                    insert = `${spaceAt.start ? ' ' : ''}*${insert}*${
-                      spaceAt.end ? ' ' : ''
-                    }`;
-                  }
-                  if (op.attributes.underline === true) {
-                    insert = `<u>${insert}</u>`;
-                  }
-                  if (op.attributes.strike === true) {
-                    insert = `${spaceAt.start ? ' ' : ''}~~${insert}~~${
-                      spaceAt.end ? ' ' : ''
-                    }`;
-                  }
-                  if (typeof op.attributes.link !== 'undefined') {
-                    insert = `${
-                      spaceAt.start ? ' ' : ''
-                    }[${insert}](${op.attributes.link.trim()})${
-                      spaceAt.end ? ' ' : ''
-                    }`;
-                  }
-                }
-                value += this.formatMarkdownInsert(
-                  insert.replace('@', op.insert),
-                );
-              }
-              value += '\n';
-            }
-            break;
-          case PropQuillContentType.LIST:
-            {
-              let listItem: string = '';
-              value = '';
-              prop.value = prop.value as PropQuillContentValueGeneric;
-              for (const j in prop.value.ops) {
-                const op = prop.value.ops[j];
-                let insert: string = '@';
-                if (op.attributes) {
-                  if (op.attributes.list) {
-                    let tabs: string = '';
-                    if (op.attributes.indent) {
-                      for (let k = 0; k < op.attributes.indent; k = k + 1) {
-                        tabs += '  ';
-                      }
-                    }
-                    value += `${tabs}- ${listItem}\n`;
-                    listItem = '';
-                  } else {
-                    if (insert.endsWith('\n')) {
-                      insert = insert.substring(0, insert.length - 1);
-                    }
-                    const spaceAt = {
-                      end:
-                        typeof op.insert === 'string' &&
-                        op.insert.endsWith(' '),
-                      start:
-                        typeof op.insert === 'string' &&
-                        op.insert.startsWith(' '),
-                    };
-                    if (op.attributes.bold === true) {
-                      insert = `${spaceAt.start ? ' ' : ''}**${insert}**${
-                        spaceAt.end ? ' ' : ''
-                      }`;
-                    }
-                    if (op.attributes.italic === true) {
-                      insert = `${spaceAt.start ? ' ' : ''}*${insert}*${
-                        spaceAt.end ? ' ' : ''
-                      }`;
-                    }
-                    if (op.attributes.underline === true) {
-                      insert = `<u>${insert}</u>`;
-                    }
-                    if (op.attributes.strike === true) {
-                      insert = `${spaceAt.start ? ' ' : ''}~~${insert}~~${
-                        spaceAt.end ? ' ' : ''
-                      }`;
-                    }
-                    if (typeof op.attributes.link !== 'undefined') {
-                      insert = `${
-                        spaceAt.start ? ' ' : ''
-                      }[${insert}](${op.attributes.link.trim()})${
-                        spaceAt.end ? ' ' : ''
-                      }`;
-                    }
-                    listItem += this.formatMarkdownInsert(insert.replace('@', op.insert));
-                  }
-                } else {
-                  listItem += this.formatMarkdownInsert(insert.replace('@', op.insert));
-                }
-              }
-              value += '\n';
-            }
-            break;
-          case PropQuillContentType.WIDGET:
-            {
-              prop.value = prop.value as PropQuillContentValueWidget;
-              name = prop.value.name;
-              value = await PropUtil.propsToJSONObject(
-                prop.value.props,
-                undefined,
-                lng,
-              );
-            }
-            break;
-          case PropQuillContentType.MEDIA:
-            {
-              value = prop.value;
-            }
-            break;
-        }
-        content.push({
-          type: prop.type,
-          name,
-          value,
-          // typeof value === 'string'
-          //   ? Buffer.from(value, 'latin1').toString('utf8')
-          //   : value,
-        });
-      }
+      content = this.contentCompiler(quillProp.value.content);
+      // for (const i in quillProp.value.content) {
+      //   let value: any;
+      //   let name: string;
+      //   const prop = quillProp.value.content[i] as PropQuillContent;
+      //   switch (prop.type) {
+      //     case PropQuillContentType.HEADING_1:
+      //       {
+      //         value = `## ${prop.valueAsText}\n`;
+      //       }
+      //       break;
+      //     case PropQuillContentType.HEADING_2:
+      //       {
+      //         value = `### ${prop.valueAsText}\n`;
+      //       }
+      //       break;
+      //     case PropQuillContentType.HEADING_3:
+      //       {
+      //         value = `#### ${prop.valueAsText}\n`;
+      //       }
+      //       break;
+      //     case PropQuillContentType.HEADING_4:
+      //       {
+      //         value = `##### ${prop.valueAsText}\n`;
+      //       }
+      //       break;
+      //     case PropQuillContentType.HEADING_5:
+      //       {
+      //         value = `###### ${prop.valueAsText}\n`;
+      //       }
+      //       break;
+      //     case PropQuillContentType.CODE:
+      //       {
+      //         value = `\`\`\`\n${prop.valueAsText}\n\`\`\`\n\n`;
+      //       }
+      //       break;
+      //     case PropQuillContentType.PARAGRAPH:
+      //       {
+      //         value = '';
+      //         prop.value = prop.value as PropQuillContentValueGeneric;
+      //         for (const j in prop.value.ops) {
+      //           const op = prop.value.ops[j];
+      //           let insert: string = '@';
+      //           if (op.attributes) {
+      //             if (insert.endsWith('\n')) {
+      //               insert = insert.substring(0, insert.length - 1);
+      //             }
+      //             const spaceAt = {
+      //               end:
+      //                 typeof op.insert === 'string' && op.insert.endsWith(' '),
+      //               start:
+      //                 typeof op.insert === 'string' &&
+      //                 op.insert.startsWith(' '),
+      //             };
+      //             if (op.attributes.bold === true) {
+      //               insert = `${spaceAt.start ? ' ' : ''}**${insert}**${
+      //                 spaceAt.end ? ' ' : ''
+      //               }`;
+      //             }
+      //             if (op.attributes.italic === true) {
+      //               insert = `${spaceAt.start ? ' ' : ''}*${insert}*${
+      //                 spaceAt.end ? ' ' : ''
+      //               }`;
+      //             }
+      //             if (op.attributes.underline === true) {
+      //               insert = `<u>${insert}</u>`;
+      //             }
+      //             if (op.attributes.strike === true) {
+      //               insert = `${spaceAt.start ? ' ' : ''}~~${insert}~~${
+      //                 spaceAt.end ? ' ' : ''
+      //               }`;
+      //             }
+      //             if (typeof op.attributes.link !== 'undefined') {
+      //               insert = `${
+      //                 spaceAt.start ? ' ' : ''
+      //               }[${insert}](${op.attributes.link.trim()})${
+      //                 spaceAt.end ? ' ' : ''
+      //               }`;
+      //             }
+      //           }
+      //           value += this.formatMarkdownInsert(
+      //             insert.replace('@', op.insert),
+      //           );
+      //         }
+      //         value += '\n';
+      //       }
+      //       break;
+      //     case PropQuillContentType.LIST:
+      //       {
+      //         let listItem: string = '';
+      //         value = '';
+      //         prop.value = prop.value as PropQuillContentValueGeneric;
+      //         for (const j in prop.value.ops) {
+      //           const op = prop.value.ops[j];
+      //           let insert: string = '@';
+      //           if (op.attributes) {
+      //             if (op.attributes.list) {
+      //               let tabs: string = '';
+      //               if (op.attributes.indent) {
+      //                 for (let k = 0; k < op.attributes.indent; k = k + 1) {
+      //                   tabs += '  ';
+      //                 }
+      //               }
+      //               value += `${tabs}- ${listItem}\n`;
+      //               listItem = '';
+      //             } else {
+      //               if (insert.endsWith('\n')) {
+      //                 insert = insert.substring(0, insert.length - 1);
+      //               }
+      //               const spaceAt = {
+      //                 end:
+      //                   typeof op.insert === 'string' &&
+      //                   op.insert.endsWith(' '),
+      //                 start:
+      //                   typeof op.insert === 'string' &&
+      //                   op.insert.startsWith(' '),
+      //               };
+      //               if (op.attributes.bold === true) {
+      //                 insert = `${spaceAt.start ? ' ' : ''}**${insert}**${
+      //                   spaceAt.end ? ' ' : ''
+      //                 }`;
+      //               }
+      //               if (op.attributes.italic === true) {
+      //                 insert = `${spaceAt.start ? ' ' : ''}*${insert}*${
+      //                   spaceAt.end ? ' ' : ''
+      //                 }`;
+      //               }
+      //               if (op.attributes.underline === true) {
+      //                 insert = `<u>${insert}</u>`;
+      //               }
+      //               if (op.attributes.strike === true) {
+      //                 insert = `${spaceAt.start ? ' ' : ''}~~${insert}~~${
+      //                   spaceAt.end ? ' ' : ''
+      //                 }`;
+      //               }
+      //               if (typeof op.attributes.link !== 'undefined') {
+      //                 insert = `${
+      //                   spaceAt.start ? ' ' : ''
+      //                 }[${insert}](${op.attributes.link.trim()})${
+      //                   spaceAt.end ? ' ' : ''
+      //                 }`;
+      //               }
+      //               listItem += this.formatMarkdownInsert(
+      //                 insert.replace('@', op.insert),
+      //               );
+      //             }
+      //           } else {
+      //             listItem += this.formatMarkdownInsert(
+      //               insert.replace('@', op.insert),
+      //             );
+      //           }
+      //         }
+      //         value += '\n';
+      //       }
+      //       break;
+      //     case PropQuillContentType.WIDGET:
+      //       {
+      //         prop.value = prop.value as PropQuillContentValueWidget;
+      //         name = prop.value.name;
+      //         value = await PropUtil.propsToJSONObject(
+      //           prop.value.props,
+      //           undefined,
+      //           lng,
+      //         );
+      //       }
+      //       break;
+      //     case PropQuillContentType.MEDIA:
+      //       {
+      //         value = prop.value;
+      //       }
+      //       break;
+      //   }
+      //   content.push({
+      //     type: prop.type,
+      //     name,
+      //     value,
+      //     // typeof value === 'string'
+      //     //   ? Buffer.from(value, 'latin1').toString('utf8')
+      //     //   : value,
+      //   });
+      // }
     }
     return {
       meta,
@@ -1060,5 +1082,287 @@ export class PropUtil {
         content.props = recursive(content.props, oldName, newName);
       });
     });
+  }
+
+  public static contentCompiler(
+    props: PropQuillContent[],
+    toMarkdown?: boolean,
+  ): {
+    type: string;
+    name?: string;
+    value: any;
+  }[] {
+    const content: {
+      type: string;
+      value: string;
+    }[] = [];
+    for (const i in props) {
+      const prop = props[i];
+      let value = '';
+      switch (prop.type) {
+        case PropQuillContentType.HEADING_1:
+          {
+            value += `<h2>${
+              prop.valueAsText.endsWith('\n')
+                ? prop.valueAsText.substring(0, prop.valueAsText.length - 1)
+                : prop.valueAsText
+            }</h2>`;
+          }
+          break;
+        case PropQuillContentType.HEADING_2:
+          {
+            value += `<h3>${
+              prop.valueAsText.endsWith('\n')
+                ? prop.valueAsText.substring(0, prop.valueAsText.length - 1)
+                : prop.valueAsText
+            }</h3>`;
+          }
+          break;
+        case PropQuillContentType.HEADING_3:
+          {
+            value += `<h4>${
+              prop.valueAsText.endsWith('\n')
+                ? prop.valueAsText.substring(0, prop.valueAsText.length - 1)
+                : prop.valueAsText
+            }</h4>`;
+          }
+          break;
+        case PropQuillContentType.HEADING_4:
+          {
+            value += `<h5>${
+              prop.valueAsText.endsWith('\n')
+                ? prop.valueAsText.substring(0, prop.valueAsText.length - 1)
+                : prop.valueAsText
+            }</h5>`;
+          }
+          break;
+        case PropQuillContentType.HEADING_5:
+          {
+            value += `<h6>${
+              prop.valueAsText.endsWith('\n')
+                ? prop.valueAsText.substring(0, prop.valueAsText.length - 1)
+                : prop.valueAsText
+            }</h6>`;
+          }
+          break;
+        case PropQuillContentType.CODE:
+          {
+            value += `<pre><code>${
+              prop.valueAsText.endsWith('\n')
+                ? prop.valueAsText.substring(0, prop.valueAsText.length - 1)
+                : prop.valueAsText
+            }</code></pre>`;
+          }
+          break;
+        case PropQuillContentType.PARAGRAPH:
+          {
+            value += `<p>${this.opsToValue(
+              (prop.value as PropQuillContentValueGeneric).ops,
+            )}</p>`;
+          }
+          break;
+        case PropQuillContentType.LIST:
+          {
+            value += `<ul>${this.opsListToValue(
+              (prop.value as PropQuillContentValueGeneric).ops,
+              true,
+            )}</ul>`;
+          }
+          break;
+      }
+      content.push({
+        type: prop.type,
+        value: toMarkdown === true ? this.td.turndown(value) : value,
+      });
+    }
+    return content;
+  }
+
+  public static opsToValue(ops: OP[], isList?: boolean): string {
+    const checker = {
+      link: false,
+      bold: false,
+      italic: false,
+      underline: false,
+      list: {
+        in: false,
+        level: 0,
+      },
+    };
+    let value = '';
+    let opPointer = 0;
+    while (opPointer < ops.length) {
+      const op: {
+        insert: string;
+        attributes?: {
+          italic?: boolean;
+          bold?: boolean;
+          underline?: boolean;
+          link?: string;
+          list?: string;
+          indent?: number;
+        };
+      } = ops[opPointer];
+      if (!op.attributes) {
+        if (checker.link === true) {
+          checker.link = false;
+          value += '</a>';
+        }
+        if (checker.underline === true) {
+          checker.underline = false;
+          value += '</u>';
+        }
+        if (checker.italic === true) {
+          checker.italic = false;
+          value += '</i>';
+        }
+        if (checker.bold === true) {
+          checker.bold = false;
+          value += '</strong>';
+        }
+        if (checker.list.in === true) {
+          checker.list.in = false;
+          value += '</ul>';
+          for (let k = 0; k < checker.list.level; k = k + 1) {
+            value += '</ul>';
+          }
+          checker.list.level = 0;
+        }
+      } else {
+        if (op.attributes.bold) {
+          if (checker.bold === false) {
+            checker.bold = true;
+            value += '<strong>';
+          }
+        } else {
+          if (checker.bold === true) {
+            checker.bold = false;
+            value += '</strong>';
+          }
+        }
+        if (op.attributes.italic) {
+          if (checker.italic === false) {
+            checker.italic = true;
+            value += '<i>';
+          }
+        } else {
+          if (checker.italic === true) {
+            checker.italic = false;
+            value += '</i>';
+          }
+        }
+        if (op.attributes.underline) {
+          if (checker.underline === false) {
+            checker.underline = true;
+            value += '<u>';
+          }
+        } else {
+          if (checker.underline === true) {
+            checker.underline = false;
+            value += '</u>';
+          }
+        }
+        if (op.attributes.link) {
+          if (checker.link === false) {
+            checker.link = true;
+            value += `<a href="${op.attributes.link}">`;
+          }
+        } else {
+          if (checker.link === true) {
+            checker.link = false;
+            value += '</a>';
+          }
+        }
+      }
+      if (op.insert.endsWith('\n')) {
+        value += op.insert.substring(0, op.insert.length - 1);
+      } else {
+        value += op.insert;
+      }
+      opPointer = opPointer + 1;
+    }
+    if (checker.bold === true) {
+      checker.bold = false;
+      value += '</strong>';
+    }
+    if (checker.italic === true) {
+      checker.italic = false;
+      value += '</i>';
+    }
+    if (checker.underline === true) {
+      checker.underline = false;
+      value += '</u>';
+    }
+    if (checker.link === true) {
+      checker.link = false;
+      value += '</a>';
+    }
+    return value;
+  }
+
+  public static opsListToValue(ops: OP[], unordered?: boolean): string {
+    const topLevelTag = unordered === true ? 'ul' : 'ol';
+    let value = '';
+    let opPointer = 0;
+    const checker = {
+      atIndent: 0,
+    };
+    while (opPointer < ops.length) {
+      const opsChunk: OP[] = [];
+      while (true) {
+        if (opPointer > ops.length - 1) {
+          break;
+        }
+        const op = ops[opPointer];
+        if (op.attributes && op.attributes.list) {
+          if (op.attributes.indent) {
+            if (op.attributes.indent > checker.atIndent) {
+              checker.atIndent = op.attributes.indent;
+              value += `<li><${topLevelTag}>`;
+            }
+          } else {
+            if (checker.atIndent !== 0) {
+              for (let i = 0; i < checker.atIndent; i = i + 1) {
+                value += `</${topLevelTag}></li>`;
+              }
+              checker.atIndent = 0;
+            }
+          }
+          value += '<li>' + this.opsToValue(opsChunk) + '</li>';
+          if (op.attributes.indent) {
+            if (op.attributes.indent - 1 === checker.atIndent) {
+              checker.atIndent = op.attributes.indent;
+              value += `</${topLevelTag}></li>`;
+            } else {
+              for (
+                let i = op.attributes.indent;
+                i < checker.atIndent;
+                i = i + 1
+              ) {
+                value += `</${topLevelTag}></li>`;
+              }
+              checker.atIndent = op.attributes.indent;
+            }
+          } else {
+            for (let i = 0; i < checker.atIndent; i = i + 1) {
+              value += `</${topLevelTag}></li>`;
+            }
+            checker.atIndent = 0;
+          }
+          opPointer = opPointer + 1;
+          break;
+        } else {
+          opsChunk.push(op);
+          opPointer = opPointer + 1;
+        }
+      }
+    }
+    if (checker.atIndent !== 0) {
+      for (let i = 0; i < checker.atIndent; i = i + 1) {
+        value += `</${topLevelTag}></li>`;
+      }
+      checker.atIndent = 0;
+    }
+    return value.replace(/<\/li><li><ul>/g, '<ul>');
   }
 }

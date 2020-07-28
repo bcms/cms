@@ -43,7 +43,6 @@
   };
   events.done = () => {
     if (data.files.length === 1) {
-      console.log('HERE');
       if (!fileName.value) {
         fileName.error = 'File is missing.';
         return;

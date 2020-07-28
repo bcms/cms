@@ -980,9 +980,6 @@ export class EntryController {
         `Entry with ID '${request.params.id}' does not exist.`,
       );
     }
-    // const deleteEntryResult = await this.entryService.deleteById(
-    //   request.params.id,
-    // );
     const deleteEntryResult = await CacheControl.Entry.deleteById(
       request.params.id,
     );

@@ -85,7 +85,7 @@
       },
     });
     if (result.success === false) {
-      console.log(result.error.response.data.message);
+      console.error(result.error.response.data.message);
       simplePopup.error(result.error.response.data.message);
       return;
     }

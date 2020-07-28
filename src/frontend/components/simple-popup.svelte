@@ -20,17 +20,7 @@
   const timeout = 8000;
 
   simplePopup.remove = messageId => {
-    if (messages.find(e => e.id === messageId)) {
-      messages = messages.map(message => {
-        if (message.id === messageId) {
-          message.position = 0;
-        }
-        return message;
-      });
-      setTimeout(() => {
-        messages = messages.filter(message => message.id !== messageId);
-      }, 800);
-    }
+    messages = messages.filter(message => message.id !== messageId);
   };
   simplePopup.error = content => {
     simplePopup.push(MessageType.error, content);

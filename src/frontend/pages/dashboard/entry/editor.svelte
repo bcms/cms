@@ -95,13 +95,6 @@
   entryStore.subscribe(value => {
     if (value) {
       entries = value;
-      // if (initDone === false) {
-      //   if (queries.eid) {
-      //     entry = entries.find(e => e._id === queries.eid);
-      //   }
-      //   console.log('entries');
-      //   init();
-      // }
     }
   });
 

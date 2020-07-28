@@ -257,107 +257,6 @@
       simplePopup.success(`No entries in the result.`);
     }
     entries = bufferEntries;
-    // simplePopup.success(`Entry '${entry._id}' deleted successfully!`);
-
-    // const content = entry.content.find(e => e.lng === languageSelected.code);
-    // if (content) {
-    //   for (const i in filters) {
-    //     const filter = filters[i];
-    //     let prop;
-    //     if (filter.name === 'root_title') {
-    //       try {
-    //         prop = {
-    //           value: content.props.find(p => p.type === 'QUILL').value.heading
-    //             .title,
-    //         };
-    //       } catch (error) {
-    //         console.error(error);
-    //       }
-    //     } else {
-    //       prop = content.props.find(e => e.name === filter.name);
-    //     }
-    //     if (!prop) {
-    //       return false;
-    //     }
-    //     switch (filter.type) {
-    //       case 'ENUMERATION':
-    //         {
-    //           if (prop && prop.value.selected !== filter.selected) {
-    //             return false;
-    //           }
-    //         }
-    //         break;
-    //       case 'BOOLEAN':
-    //         {
-    //           if (prop && prop.value !== filter.value) {
-    //             return false;
-    //           }
-    //         }
-    //         break;
-    //       case 'STRING':
-    //         {
-    //           if (prop) {
-    //             if (filter.value.type === 'contains') {
-    //               if (
-    //                 prop.value
-    //                   .toLowerCase()
-    //                   .indexOf(filter.value.value.toLowerCase()) === -1
-    //               ) {
-    //                 return false;
-    //               }
-    //             } else if (filter.value.type === 'regex') {
-    //               try {
-    //                 const regex = new RegExp(filter.value.value, 'g');
-    //                 if (regex.test(prop.value) === false) {
-    //                   return false;
-    //                 }
-    //               } catch (error) {
-    //                 console.error(error);
-    //                 return false;
-    //               }
-    //             } else {
-    //               return false;
-    //             }
-    //           }
-    //         }
-    //         break;
-    //       case 'NUMBER':
-    //         {
-    //           switch (filter.value.type) {
-    //             case '=':
-    //               {
-    //                 console.log(filter);
-    //                 console.log(prop.value);
-    //                 if (prop.value !== filter.value.value) {
-    //                   console.log('HERE');
-    //                   return false;
-    //                 }
-    //               }
-    //               break;
-    //             case '>=':
-    //               {
-    //                 if (prop.value < filter.value.value) {
-    //                   return false;
-    //                 }
-    //               }
-    //               break;
-    //             case '<=':
-    //               {
-    //                 if (prop.value > filter.value.value) {
-    //                   return false;
-    //                 }
-    //               }
-    //               break;
-    //             default: {
-    //               return false;
-    //             }
-    //           }
-    //         }
-    //         break;
-    //     }
-    //   }
-    // }
-    // return true;
   }
   function setFilter(prop, options) {
     const filter = filters.find(e => e.name === prop.name);
@@ -563,7 +462,6 @@
                     on:change={event => {
                       if (event.eventPhase === 0 && typeof event.detail === 'string') {
                         setFilter(prop, { selected: event.detail });
-                        console.log(filters);
                       }
                     }}>
                     <SelectItem value="" text="- Unselected -" />

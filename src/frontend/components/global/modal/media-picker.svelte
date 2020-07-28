@@ -39,7 +39,9 @@
     events.toggle();
   }}
   on:done={event => {
-    const path = `/media${fileSelected.path}/${fileSelected.name}`;
+    console.log(fileSelected);
+    const path = `/media${fileSelected.path}/${fileSelected.name}`.replace(/\/\//g, '/');
+    console.log(path);
     dispatch('done', path);
     fileSelected = undefined;
     events.toggle();

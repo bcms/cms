@@ -21,7 +21,7 @@ function svelte() {
       console.error(error);
     });
 }
-svelte();
+// svelte();
 
 /**
  * Application Object that starts ExpressJS server.

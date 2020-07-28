@@ -38,19 +38,16 @@
       if (file.type === 'DIR') {
         if (isRoot === true) {
           if (file.type === 'DIR' && file.name === name) {
-            console.log('H0', isRoot, path, file);
             return file;
           }
         } else {
           if (file.path === path) {
             if (file.name === name) {
-              console.log('H1', isRoot, path, file);
               return file;
             }
           } else {
             const foundFile = findDir(filess[i].children, name);
             if (foundFile) {
-              console.log('H2', isRoot, path, foundFile);
               return foundFile;
             }
           }

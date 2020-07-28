@@ -38,7 +38,7 @@
       method: 'GET',
     });
     if (result.success === false) {
-      console.log(result.error);
+      console.error(result.error);
       simplePopup.error(result.error.response.data.message);
       return;
     }
@@ -93,7 +93,7 @@
       },
     });
     if (result.success === false) {
-      console.log(result.error);
+      console.error(result.error);
       simplePopup.error(result.error.response.data.message);
       return;
     }

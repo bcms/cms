@@ -1,6 +1,6 @@
 {
   "name": "@becomes/cms",
-  "version": "1.0.169",
+  "version": "1.0.170",
   "description": "Simple CMS for building APIs.",
   "author": "becomes.co",
   "license": "MIT",
@@ -11,7 +11,8 @@
     "dev": "env-cmd nodemon src/server/main.ts",
     "build-svelte": "env-cmd node dist/build-svelte.js",
     "generate-doc": "typedoc --theme minimal server",
-    "test-bundle": "env-cmd node dist/bin/bcms.js"
+    "test-bundle": "env-cmd node dist/bin/bcms.js",
+    "tt": "ts-node test.ts"
   },
   "dependencies": {
     "arg": "^4.1.3",
@@ -26,6 +27,7 @@
     "multer": "^1.4.2",
     "purple-cheetah": "^1.0.77",
     "quill": "^1.3.7",
+    "turndown": "^6.0.0",
     "uuid": "^3.4.0",
     "yamljs": "^0.3.0"
   },
@@ -41,6 +43,7 @@
     "@types/multer": "^1.4.2",
     "@types/node": "^12.12.30",
     "@types/rollup": "^0.54.0",
+    "@types/turndown": "^5.0.0",
     "@types/uuid": "^3.4.8",
     "@types/yamljs": "^0.2.30",
     "autoprefixer": "^9.7.4",
@@ -48,7 +51,7 @@
     "carbon-components-svelte": "0.3.3",
     "crypto-js": "^3.3.0",
     "env-cmd": "^10.1.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^4.14.1",
     "nodemon": "^2.0.2",
     "rollup": "^1.32.1",
     "rollup-plugin-livereload": "^1.1.0",
