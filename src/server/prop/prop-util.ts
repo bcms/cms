@@ -749,7 +749,7 @@ export class PropUtil {
     const quillProp = props.find((e) => e.type === PropType.QUILL);
     if (quillProp) {
       quillProp.value = quillProp.value as PropQuill;
-      content = this.contentCompiler(quillProp.value.content);
+      content = await this.contentCompiler(quillProp.value.content, lng);
       // for (const i in quillProp.value.content) {
       //   let value: any;
       //   let name: string;
@@ -1084,21 +1084,26 @@ export class PropUtil {
     });
   }
 
-  public static contentCompiler(
+  public static async contentCompiler(
     props: PropQuillContent[],
+    lng: string,
     toMarkdown?: boolean,
-  ): {
-    type: string;
-    name?: string;
-    value: any;
-  }[] {
+  ): Promise<
+    {
+      type: string;
+      name?: string;
+      value: any;
+    }[]
+  > {
     const content: {
       type: string;
-      value: string;
+      name: string;
+      value: any;
     }[] = [];
     for (const i in props) {
       const prop = props[i];
-      let value = '';
+      let value: any = '';
+      let name: string;
       switch (prop.type) {
         case PropQuillContentType.HEADING_1:
           {
@@ -1169,9 +1174,26 @@ export class PropUtil {
             )}</ul>`;
           }
           break;
+        case PropQuillContentType.WIDGET:
+          {
+            prop.value = prop.value as PropQuillContentValueWidget;
+            name = prop.value.name;
+            value = await PropUtil.propsToJSONObject(
+              prop.value.props,
+              undefined,
+              lng,
+            );
+          }
+          break;
+        case PropQuillContentType.MEDIA:
+          {
+            value = prop.value;
+          }
+          break;
       }
       content.push({
         type: prop.type,
+        name,
         value: toMarkdown === true ? this.td.turndown(value) : value,
       });
     }
