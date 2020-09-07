@@ -109,10 +109,11 @@ export class MediaController {
   @Get('/all')
   async getAll(request: Request): Promise<{ media: Media[] }> {
     const error = HttpErrorFactory.simple('getAll', this.logger);
-    if (request.query.signature) {
+    const query: any = request.query;
+    if (query.signature) {
       try {
         APISecurity.verify(
-          request.query,
+          query,
           request.body,
           request.method.toUpperCase(),
           request.originalUrl,
@@ -138,8 +139,8 @@ export class MediaController {
       }
     }
     let media: Media[];
-    if (request.query.ids) {
-      const ids: string[] = request.query.ids.split('-');
+    if (query.ids) {
+      const ids: string[] = query.ids.split('-');
       ids.forEach((id, i) => {
         if (StringUtility.isIdValid(id) === false) {
           throw error.occurred(
@@ -162,10 +163,11 @@ export class MediaController {
     request: Request,
   ): Promise<{ media: MediaAggregate[] }> {
     const error = HttpErrorFactory.simple('getAllAggregate', this.logger);
-    if (request.query.signature) {
+    const query: any = request.query;
+    if (query.signature) {
       try {
         APISecurity.verify(
-          request.query,
+          query,
           request.body,
           request.method.toUpperCase(),
           request.originalUrl,
@@ -204,13 +206,14 @@ export class MediaController {
   @Get('/file')
   async getFile(request: Request, response: Response) {
     const error = HttpErrorFactory.simple('getFile', this.logger);
-    if (!request.query.path) {
+    const query: any = request.query;
+    if (!query.path) {
       throw error.occurred(HttpStatus.BAD_REQUEST, `Missing query 'path'.`);
     }
-    if (request.query.signature) {
+    if (query.signature) {
       try {
         APISecurity.verify(
-          request.query,
+          query,
           request.body,
           request.method.toUpperCase(),
           request.originalUrl,
@@ -220,13 +223,13 @@ export class MediaController {
         throw error.occurred(HttpStatus.UNAUTHORIZED, e.message);
       }
     } else {
-      if (!request.query.access_token) {
+      if (!query.access_token) {
         throw error.occurred(
           HttpStatus.BAD_REQUEST,
           `Missing query 'access_token'.`,
         );
       }
-      const jwt = JWTEncoding.decode(request.query.access_token);
+      const jwt = JWTEncoding.decode(query.access_token);
       if (jwt instanceof Error) {
         throw error.occurred(HttpStatus.UNAUTHORIZED, jwt.message);
       } else {
@@ -241,7 +244,7 @@ export class MediaController {
         }
       }
     }
-    const p = request.query.path.replace(/\.\./g, '').replace(/\/\//g, '/');
+    const p = query.path.replace(/\.\./g, '').replace(/\/\//g, '/');
     const exist = await FSUtil.exist(p);
     if (exist === false) {
       throw error.occurred(
@@ -256,10 +259,11 @@ export class MediaController {
   @Get('/file/index')
   async getFileIndex(request: Request): Promise<{ media: Media }> {
     const error = HttpErrorFactory.simple('.getFileIndex', this.logger);
-    if (request.query.signature) {
+    const query: any = request.query;
+    if (query.signature) {
       try {
         APISecurity.verify(
-          request.query,
+          query,
           request.body,
           request.method.toUpperCase(),
           request.originalUrl,
@@ -284,7 +288,7 @@ export class MediaController {
         }
       }
     }
-    const pathParts = request.query.path.split('/');
+    const pathParts = query.path.split('/');
     const p: string = pathParts.slice(0, pathParts.length - 1).join('/');
     const name: string = pathParts.slice(
       pathParts.length - 1,
@@ -294,7 +298,7 @@ export class MediaController {
     if (media === null) {
       throw error.occurred(
         HttpStatus.NOT_FOUNT,
-        `Media file "${request.query.path}" does not exist.`,
+        `Media file "${query.path}" does not exist.`,
       );
     }
     return {
@@ -305,7 +309,8 @@ export class MediaController {
   @Get('/exist')
   async exist(request: Request): Promise<{ exist: boolean }> {
     const error = HttpErrorFactory.simple('exist', this.logger);
-    if (!request.query.path) {
+    const query: any = request.query;
+    if (!query.path) {
       throw error.occurred(HttpStatus.BAD_REQUEST, `Missing query 'path'.`);
     }
     const jwt = JWTEncoding.decode(request.headers.authorization);
@@ -322,7 +327,7 @@ export class MediaController {
         throw error.occurred(HttpStatus.UNAUTHORIZED, jwtValid.message);
       }
     }
-    const p = request.query.path.replace(/\.\./g, '').replace(/\/\//g, '/');
+    const p = query.path.replace(/\.\./g, '').replace(/\/\//g, '/');
     const exist = await FSUtil.exist(p);
     return {
       exist,
@@ -332,6 +337,7 @@ export class MediaController {
   @Post('/file')
   async addFile(request: Request): Promise<{ media: Media }> {
     const error = HttpErrorFactory.simple('addFile', this.logger);
+    const query: any = request.query;
     if (request.headers.upload_file_error_message) {
       throw error.occurred(
         HttpStatus.FORBIDDEN,
@@ -341,7 +347,7 @@ export class MediaController {
     if (!request.file) {
       throw error.occurred(HttpStatus.FORBIDDEN, 'Missing file in request.');
     }
-    if (!request.query.path) {
+    if (!query.path) {
       throw error.occurred(HttpStatus.BAD_REQUEST, `Missing query 'path'.`);
     }
     const jwt = JWTEncoding.decode(request.headers.authorization);
@@ -364,7 +370,7 @@ export class MediaController {
     media.mimetype = request.file.mimetype;
     media.size = request.file.size;
     media.name = request.file.originalname;
-    media.path = request.query.path.replace(/\.\./g, '').replace(/\/\//g, '/');
+    media.path = query.path.replace(/\.\./g, '').replace(/\/\//g, '/');
     const pathParts = media.path.split('/');
     media.isInRoot = pathParts[1] !== '' ? false : true;
     media.childrenIds = undefined;
@@ -441,7 +447,8 @@ export class MediaController {
   @Post('/folder')
   async addFolder(request: Request): Promise<{ media: Media }> {
     const error = HttpErrorFactory.simple('addFolder', this.logger);
-    if (!request.query.path) {
+    const query: any = request.query;
+    if (!query.path) {
       throw error.occurred(HttpStatus.BAD_REQUEST, `Missing query 'path'.`);
     }
     const jwt = JWTEncoding.decode(request.headers.authorization);
@@ -463,7 +470,7 @@ export class MediaController {
     media.type = MediaType.DIR;
     media.mimetype = 'dir';
     media.size = 0;
-    media.path = request.query.path.replace(/\.\./g, '').replace(/\/\//g, '/');
+    media.path = query.path.replace(/\.\./g, '').replace(/\/\//g, '/');
     const pathParts = media.path.split('/');
     media.name = pathParts[pathParts.length - 1];
     media.isInRoot = pathParts.length > 2 ? false : true;

@@ -48,9 +48,10 @@ export class WidgetController {
   @Get('/all')
   async getAll(request: Request): Promise<{ widgets: Widget[] }> {
     const error = HttpErrorFactory.simple('getAll', this.logger);
+    const query: any = request.query;
     let ids: string[] = [];
-    if (request.query.ids) {
-      ids = request.query.ids.split('-');
+    if (query.ids) {
+      ids = query.ids.split('-');
       ids.forEach((id, i) => {
         if (StringUtility.isIdValid(id) === false) {
           throw error.occurred(

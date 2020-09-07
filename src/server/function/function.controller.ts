@@ -48,6 +48,7 @@ export class FunctionController {
   @Post('/:name')
   async execute(request: Request): Promise<any> {
     const error = HttpErrorFactory.simple('execute', this.logger);
+    const query: any = request.query;
     const fn = FunctionsConfig.functions.find(
       f => f.name === request.params.name,
     );
@@ -57,10 +58,10 @@ export class FunctionController {
         `Function with name '${request.params.name}' does not exist.`,
       );
     }
-    if (request.query.signature) {
+    if (query.signature) {
       try {
         APISecurity.verify(
-          request.query,
+          query,
           request.body,
           request.method.toUpperCase(),
           request.originalUrl,

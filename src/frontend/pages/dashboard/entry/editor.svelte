@@ -539,6 +539,18 @@
           on:keyup={handleTitle} />
       </div>
       <div>
+        <div class="bx--label">Slug</div>
+        <TextArea
+          cols="500"
+          value={data[selectedLanguage.code].slug}
+          placeholder="- Slug -"
+          on:input={event => {
+            if (event.eventPhase === 0) {
+              data[selectedLanguage.code].slug = event.detail;
+            }
+          }} />
+      </div>
+      <div>
         <div class="bx--label">Description</div>
         <TextArea
           cols="500"

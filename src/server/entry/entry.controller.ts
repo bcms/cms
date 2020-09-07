@@ -114,7 +114,7 @@ export class EntryController {
     if (request.query.signature) {
       try {
         APISecurity.verify(
-          request.query,
+          request.query as any,
           request.body,
           request.method.toUpperCase(),
           request.originalUrl,
@@ -168,10 +168,11 @@ export class EntryController {
   @Get('/:templateIdOrName/entry/filter')
   async filter(request: Request): Promise<{ filter: string[] }> {
     const error = HttpErrorFactory.simple('filter', this.logger);
-    if (request.query.signature) {
+    const query = request.query as any;
+    if (query.signature) {
       try {
         APISecurity.verify(
-          request.query,
+          query,
           request.body,
           request.method.toUpperCase(),
           request.originalUrl,
@@ -208,12 +209,50 @@ export class EntryController {
       selected?: string;
       value?: string | boolean | FilterTypeStringOrNumber;
     }
+    if (query.sort) {
+      let sort: any = {};
+      try {
+        sort = JSON.parse(Buffer.from(query.sort, 'base64').toString());
+      } catch (e) {
+        throw error.occurred(HttpStatus.BAD_REQUEST, 'Invalid sort encoding.');
+      }
+      for (const key in sort) {
+        const s = sort[key];
+        entries.sort((a, b) => {
+          const aContent = a.content.find(
+            (e) => e.lng === `${query.lng}`,
+          );
+          const bContent = b.content.find(
+            (e) => e.lng === `${query.lng}`,
+          );
+          if (aContent && bContent) {
+            const aProp = aContent.props.find((e) => e.name === s.name);
+            const bProp = bContent.props.find((e) => e.name === s.name);
+            if (aProp.type === PropType.DATE && bProp.type === PropType.DATE) {
+              if (s.type === 'nf') {
+                return (bProp.value as number) - (aProp.value as number);
+              } else {
+                return (aProp.value as number) - (bProp.value as number);
+              }
+            }
+            return 1;
+          }
+          return 0;
+        });
+        break;
+      }
+      query.sort.split('___').forEach((sortPram) => {
+        const sortParts = sortPram.split('--');
+        if (sortParts.length === 2) {
+        }
+      });
+    }
     let filter: string[];
-    if (request.query.filters && request.query.lng) {
+    if (query.filters && query.lng) {
       let filters: Filter[];
       try {
         filters = JSON.parse(
-          Buffer.from(request.query.filters, 'base64').toString(),
+          Buffer.from(query.filters, 'base64').toString(),
         );
       } catch (e) {
         throw error.occurred(
@@ -224,7 +263,7 @@ export class EntryController {
       filter = [];
       entries.map((entry) => {
         const content = entry.content.find(
-          (e) => e.lng === `${request.query.lng}`,
+          (e) => e.lng === `${query.lng}`,
         );
         if (content) {
           for (const i in filters) {
@@ -342,10 +381,11 @@ export class EntryController {
   @Get('/:templateIdOrName/entry/all/compile')
   async getAll(request: Request): Promise<{ entries: any[] }> {
     const error = HttpErrorFactory.simple('getAll', this.logger);
-    if (request.query.signature) {
+    const query: any = request.query;
+    if (query.signature) {
       try {
         APISecurity.verify(
-          request.query,
+          query,
           request.body,
           request.method.toUpperCase(),
           request.originalUrl,
@@ -414,16 +454,17 @@ export class EntryController {
   @Get('/:templateIdOrName/entry/:id')
   async getById(request: Request): Promise<{ entry: Entry }> {
     const error = HttpErrorFactory.simple('getById', this.logger);
+    const query: any = request.query;
     if (StringUtility.isIdValid(request.params.id) === false) {
       throw error.occurred(
         HttpStatus.FORBIDDEN,
         `Invalid ID '${request.params.id}' was provided.`,
       );
     }
-    if (request.query.signature) {
+    if (query.signature) {
       try {
         APISecurity.verify(
-          request.query,
+          query,
           request.body,
           request.method.toUpperCase(),
           request.originalUrl,
@@ -486,16 +527,17 @@ export class EntryController {
   @Get('/:templateIdOrName/entry/:id/compile')
   async getByIdAndReturnMD(request: Request): Promise<any> {
     const error = HttpErrorFactory.simple('getById', this.logger);
+    const query: any = request.query;
     if (StringUtility.isIdValid(request.params.id) === false) {
       throw error.occurred(
         HttpStatus.FORBIDDEN,
         `Invalid ID '${request.params.id}' was provided.`,
       );
     }
-    if (request.query.signature) {
+    if (query.signature) {
       try {
         APISecurity.verify(
-          request.query,
+          query,
           request.body,
           request.method.toUpperCase(),
           request.originalUrl,
@@ -565,6 +607,7 @@ export class EntryController {
   @Post('/:templateIdOrName/entry')
   async add(request: Request): Promise<{ entry: Entry }> {
     const error = HttpErrorFactory.simple('add', this.logger);
+    const query: any = request.query;
     if (typeof request.body.content === 'undefined') {
       throw error.occurred(
         HttpStatus.BAD_REQUEST,
@@ -594,10 +637,10 @@ export class EntryController {
       );
     }
     let userId: string = '';
-    if (request.query.signature) {
+    if (query.signature) {
       try {
         APISecurity.verify(
-          request.query,
+          query,
           request.body,
           request.method.toUpperCase(),
           request.originalUrl,
@@ -605,7 +648,7 @@ export class EntryController {
       } catch (e) {
         throw error.occurred(HttpStatus.UNAUTHORIZED, e.message);
       }
-      userId = KeyCashService.findById(request.query.key).userId;
+      userId = KeyCashService.findById(query.key).userId;
     } else {
       const jwt = JWTEncoding.decode(request.headers.authorization);
       if (jwt instanceof Error) {
@@ -731,6 +774,7 @@ export class EntryController {
   @Put('/:templateIdOrName/entry')
   async update(request: Request): Promise<{ entry: Entry }> {
     const error = HttpErrorFactory.simple('update', this.logger);
+    const query: any = request.query;
     try {
       ObjectUtility.compareWithSchema(request.body, {
         _id: {
@@ -754,10 +798,10 @@ export class EntryController {
         `Invalid ID '${request.body._id}' was provided.`,
       );
     }
-    if (request.query.signature) {
+    if (query.signature) {
       try {
         APISecurity.verify(
-          request.query,
+          query,
           request.body,
           request.method.toUpperCase(),
           request.originalUrl,
@@ -856,21 +900,21 @@ export class EntryController {
           //   template._id.toHexString(),
           //   quillProp.value.heading.slug,
           // );
-          const entryWithSameSlug = await CacheControl.Entry.findByTemplateIdAndEntrySlug(
-            template._id.toHexString(),
-            quillProp.value.heading.slug,
-          );
-          if (entryWithSameSlug !== null) {
-            for (const j in entry.content[entry.content.length - 1].props) {
-              const e = entry.content[entry.content.length - 1].props[j];
-              if (e.type === PropType.QUILL) {
-                e.value = e.value as PropQuill;
-                e.value.heading.slug = `${e.value.heading.slug}-${
-                  /*await this.entryService.count()*/ await CacheControl.Entry.count()
-                }`;
-              }
-            }
-          }
+          // const entryWithSameSlug = await CacheControl.Entry.findByTemplateIdAndEntrySlug(
+          //   template._id.toHexString(),
+          //   quillProp.value.heading.slug,
+          // );
+          // if (entryWithSameSlug !== null && entry._id.toHexString() !== entryWithSameSlug._id.toHexString()) {
+          //   for (const j in entry.content[entry.content.length - 1].props) {
+          //     const e = entry.content[entry.content.length - 1].props[j];
+          //     if (e.type === PropType.QUILL) {
+          //       e.value = e.value as PropQuill;
+          //       e.value.heading.slug = `${e.value.heading.slug}-${
+          //         /*await this.entryService.count()*/ await CacheControl.Entry.count()
+          //       }`;
+          //     }
+          //   }
+          // }
         }
       };
       if (typeof request.body.onlyLng !== 'undefined') {
@@ -923,16 +967,17 @@ export class EntryController {
   @Delete('/:templateIdOrName/entry/:id')
   async deleteById(request: Request): Promise<{ message: string }> {
     const error = HttpErrorFactory.simple('deleteById', this.logger);
+    const query: any = request.query;
     if (StringUtility.isIdValid(request.params.id) === false) {
       throw error.occurred(
         HttpStatus.FORBIDDEN,
         `Invalid ID '${request.params.id}' was provided.`,
       );
     }
-    if (request.query.signature) {
+    if (query.signature) {
       try {
         APISecurity.verify(
-          request.query,
+          query,
           request.body,
           request.method.toUpperCase(),
           request.originalUrl,

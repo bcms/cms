@@ -15,7 +15,7 @@ export class KeyController {
       request.method,
       request.originalUrl,
       request.body,
-      request.query,
+      request.query as any,
     );
   }
 

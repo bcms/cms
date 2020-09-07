@@ -51,10 +51,11 @@ export class TemplateController {
   @Get('/all')
   async getAll(request: Request): Promise<{ templates: Template[] }> {
     const error = HttpErrorFactory.simple('getAll', this.logger);
-    if (request.query.signature) {
+    const query: any = request.query;
+    if (query.signature) {
       try {
         APISecurity.verify(
-          request.query,
+          query,
           request.body,
           request.method.toUpperCase(),
           request.originalUrl,
@@ -102,10 +103,11 @@ export class TemplateController {
   @Get('/all/lite')
   async getAllLite(request: Request): Promise<{ templates: TemplateLite[] }> {
     const error = HttpErrorFactory.simple('getAll', this.logger);
-    if (request.query.signature) {
+    const query: any = request.query;
+    if (query.signature) {
       try {
         APISecurity.verify(
-          request.query,
+          query,
           request.body,
           request.method.toUpperCase(),
           request.originalUrl,
@@ -153,16 +155,17 @@ export class TemplateController {
   @Get('/:id')
   async getById(request: Request): Promise<{ template: Template }> {
     const error = HttpErrorFactory.simple('getById', this.logger);
+    const query: any = request.query;
     if (StringUtility.isIdValid(request.params.id) === false) {
       throw error.occurred(
         HttpStatus.FORBIDDEN,
         `Invalid ID '${request.params.id}' was provided.`,
       );
     }
-    if (request.query.signature) {
+    if (query.signature) {
       try {
         APISecurity.verify(
-          request.query,
+          query,
           request.body,
           request.method.toUpperCase(),
           request.originalUrl,

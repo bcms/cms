@@ -39,10 +39,11 @@ export class LanguageController {
     isoLanguages: ISOLanguage[];
   }> {
     const error = HttpErrorFactory.simple('getAllAvailable', this.logger);
-    if (request.query.signature) {
+    const query: any = request.query;
+    if (query.signature) {
       try {
         APISecurity.verify(
-          request.query,
+          query,
           request.body,
           request.method.toUpperCase(),
           request.originalUrl,
@@ -72,10 +73,11 @@ export class LanguageController {
   @Get('/all')
   async getAll(request: Request): Promise<{ languages: Language[] }> {
     const error = HttpErrorFactory.simple('getAll', this.logger);
-    if (request.query.signature) {
+    const query: any = request.query;
+    if (query.signature) {
       try {
         APISecurity.verify(
-          request.query,
+          query,
           request.body,
           request.method.toUpperCase(),
           request.originalUrl,
@@ -108,10 +110,11 @@ export class LanguageController {
   @Get('/:idOrCode')
   async getByIdOrName(request: Request): Promise<{ language: Language }> {
     const error = HttpErrorFactory.simple('getByIdOrName', this.logger);
-    if (request.query.signature) {
+    const query: any = request.query;
+    if (query.signature) {
       try {
         APISecurity.verify(
-          request.query,
+          query,
           request.body,
           request.method.toUpperCase(),
           request.originalUrl,

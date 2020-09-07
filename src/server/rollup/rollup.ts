@@ -1,6 +1,7 @@
 import * as chokidar from 'chokidar';
 import * as rup from 'rollup';
-import * as svelte from 'rollup-plugin-svelte';
+// tslint:disable-next-line: no-var-requires
+const svelte =  require('rollup-plugin-svelte');
 import { terser } from 'rollup-plugin-terser';
 // tslint:disable-next-line:no-var-requires
 const resolve = require('@rollup/plugin-node-resolve');
