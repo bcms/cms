@@ -217,7 +217,7 @@ const publish = async () => {
       `Please remove "${path.join(__dirname, 'dist', 'node_modules')}"`,
     );
   }
-  await exec('cd dist && npm publish --access=restricted');
+  await exec('cd dist && npm publish --access=public');
 };
 
 async function main() {
