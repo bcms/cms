@@ -130,7 +130,6 @@
     };
   }
   function sort(filess) {
-    console.log('filess', filess);
     if (!filess) {
       return [];
     }
