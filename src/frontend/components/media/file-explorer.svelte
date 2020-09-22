@@ -41,7 +41,10 @@
   let firstTimeLoad = true;
 
   fileStore.subscribe(value => {
-    files = sort(value);
+    if (value) {
+      files = sort(value);
+      viewerFileStore.update(value => files);
+    }
   });
   pushFile.subscribe(value => {
     if (value) {

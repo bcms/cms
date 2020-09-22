@@ -6,7 +6,7 @@
 </script>
 
 <script>
-  import { createEventDispatcher } from 'svelte';
+  import { onMount, createEventDispatcher } from 'svelte';
   import { axios, Store } from '../../config.svelte';
   import { simplePopup } from '../simple-popup.svelte';
   import { viewerFileStore, fileType } from './file-explorer.svelte';
