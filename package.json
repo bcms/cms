@@ -1,6 +1,6 @@
 {
   "name": "@becomes/cms",
-  "version": "1.0.174",
+  "version": "1.0.176",
   "description": "Simple CMS for building APIs.",
   "author": "becomes.co",
   "license": "MIT",
@@ -84,5 +84,11 @@
   "bugs": {
     "url": "https://github.com/becomesco/cms/issues"
   },
-  "homepage": "https://github.com/becomesco/cms#readme"
+  "homepage": "https://github.com/becomesco/cms#readme",
+  "nodemonConfig": {
+    "watch": [
+      "src/server"
+    ],
+    "ext": "ts"
+  }
 }

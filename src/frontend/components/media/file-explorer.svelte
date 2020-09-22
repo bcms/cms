@@ -130,6 +130,10 @@
     };
   }
   function sort(filess) {
+    console.log('filess', filess);
+    if (!filess) {
+      return [];
+    }
     const dirs = filess.filter(e => e.type === 'DIR');
     const fs = filess.filter(e => e.type !== 'DIR');
     dirs.sort((a, b) => {
