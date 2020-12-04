@@ -1,20 +1,20 @@
-FROM node:10-slim
+FROM becomes/cms:2.0.3
 
 WORKDIR /app
 
-COPY package.json /app
+COPY .eslintrc /app
+COPY .eslintignore /app
+COPY .gitignore /app
+COPY .prettierrc /app
+COPY bcms.config.js /app
 COPY package-lock.json /app
-COPY src/. /app/src
-COPY public/. /app/public
-COPY svelte/. /app/svelte
-COPY assets/. /app/assets
+COPY package.json /app
+COPY tsconfig.backend.json /app
 COPY tsconfig.json /app
+COPY tsconfig.src.json /app
+COPY src/. /app/src
 
 RUN npm install
-RUN npm run install-svelte
-RUN npm run build-svelte
-RUN npm run build
+RUN npm run src:build
 
-EXPOSE 1280
-
-ENTRYPOINT [ "npm","run","start" ]
+ENTRYPOINT [ "npm", "start" ]
