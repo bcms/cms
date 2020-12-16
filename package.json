@@ -15,15 +15,15 @@
   },
   "author": "Becomes",
   "dependencies": {
-    "@becomes/cms-backend": "^2.0.33",
+    "@becomes/cms-backend": "^2.0.34",
     "@becomes/cms-bundler": "^2.0.5",
-    "@becomes/cms-ui": "^2.0.40"
+    "@becomes/cms-ui": "^2.0.41"
   },
   "devDependencies": {
     "@tsconfig/svelte": "^1.0.0",
-    "@types/node": "^14.14.10",
-    "@typescript-eslint/eslint-plugin": "^4.9.0",
-    "@typescript-eslint/parser": "^4.9.0",
+    "@types/node": "^14.14.14",
+    "@typescript-eslint/eslint-plugin": "^4.10.0",
+    "@typescript-eslint/parser": "^4.10.0",
     "eslint": "^7.14.0",
     "svelte": "^3.31.0",
     "svelte-check": "^1.1.18",
