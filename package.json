@@ -15,7 +15,7 @@
   },
   "author": "Becomes",
   "dependencies": {
-    "@becomes/cms-backend": "^2.0.34",
+    "@becomes/cms-backend": "^2.0.35",
     "@becomes/cms-bundler": "^2.0.5",
     "@becomes/cms-ui": "^2.0.41"
   },
