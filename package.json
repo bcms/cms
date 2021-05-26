@@ -15,20 +15,20 @@
   },
   "author": "Becomes",
   "dependencies": {
-    "@becomes/cms-backend": "^2.0.45",
-    "@becomes/cms-bundler": "^2.0.6",
-    "@becomes/cms-ui": "^2.0.51"
+    "@becomes/cms-backend": "^2.0.47",
+    "@becomes/cms-bundler": "^2.0.8",
+    "@becomes/cms-ui": "^2.0.55"
   },
   "devDependencies": {
     "@tsconfig/svelte": "^1.0.0",
-    "@types/node": "^14.14.31",
-    "@typescript-eslint/eslint-plugin": "^4.16.1",
-    "@typescript-eslint/parser": "^4.16.1",
-    "eslint": "^7.21.0",
-    "svelte": "^3.35.0",
-    "svelte-check": "^1.2.1",
-    "tslib": "^2.1.0",
-    "typescript": "^4.2.2"
+    "@types/node": "^14.17.1",
+    "@typescript-eslint/eslint-plugin": "^4.25.0",
+    "@typescript-eslint/parser": "^4.25.0",
+    "eslint": "^7.27.0",
+    "svelte": "^3.38.2",
+    "svelte-check": "^1.6.0",
+    "tslib": "^2.2.0",
+    "typescript": "^4.2.4"
   },
   "repository": {
     "type": "git",
