@@ -1,34 +1,24 @@
 {
   "name": "@becomes/cms",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "description": "BCMS project.",
   "main": "index.js",
-  "scripts": {
-    "start": "bcms",
-    "dev": "bcms --dev",
-    "dev:ui": "bcms --dev --ui",
-    "dev:backend": "bcms --dev --backend",
-    "plugin:build": "npm run lint:plugins && tsc -p tsconfig.backend.json",
-    "src:build": "npm run lint:src && tsc -p tsconfig.src.json",
-    "lint:plugins": "eslint plugins --ext .ts",
-    "lint:src": "eslint src --ext .ts"
-  },
+  "scripts": {},
   "author": "Becomes",
-  "dependencies": {
-    "@becomes/cms-backend": "^2.0.47",
-    "@becomes/cms-bundler": "^2.0.8",
-    "@becomes/cms-ui": "^2.0.55"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "@tsconfig/svelte": "^1.0.0",
-    "@types/node": "^14.17.1",
-    "@typescript-eslint/eslint-plugin": "^4.25.0",
-    "@typescript-eslint/parser": "^4.25.0",
-    "eslint": "^7.27.0",
-    "svelte": "^3.38.2",
-    "svelte-check": "^1.6.0",
-    "tslib": "^2.2.0",
-    "typescript": "^4.2.4"
+    "@becomes/cms-backend": "file:packs/bcms-backend.tgz",
+    "@becomes/cms-ui": "file:packs/bcms-ui.tgz",
+    "@becomes/purple-cheetah": "^3.1.1",
+    "@types/node": "^15.6.2",
+    "@typescript-eslint/eslint-plugin": "^4.28.5",
+    "@typescript-eslint/parser": "^4.28.5",
+    "eslint": "^6.7.2",
+    "eslint-plugin-prettier": "^3.3.1",
+    "eslint-plugin-vue": "^7.14.0",
+    "module-alias": "^2.2.2",
+    "prettier": "^2.3.2",
+    "typescript": "^4.3.5"
   },
   "repository": {
     "type": "git",
@@ -37,5 +27,8 @@
   "bugs": {
     "url": "https://github.com/becomesco/cms/issues"
   },
-  "homepage": "https://github.com/becomesco/cms#readme"
+  "homepage": "https://github.com/becomesco/cms#readme",
+  "_moduleAliases": {
+    "@bcms": "@becomes/cms-backend"
+  }
 }

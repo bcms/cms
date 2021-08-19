@@ -49,7 +49,7 @@ lerna-debug.log*
 /plugins/**/frontend/**/*.js
 /plugins/**/frontend/**/*.js.map
 /plugins/**/frontend/**/*.d.ts
-/db
+/db/*.fsdb.json
 /logs
 /log
 /workspace
