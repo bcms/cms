@@ -42,6 +42,9 @@ services:
       - type: bind
         source: ./src/jobs
         target: /app/jobs
+      - type: bind
+        source: ./plugins
+        target: /app/plugins
     environment:
       - BCMS_LOCAL=true
       - BCMS_INSTANCE_ID=604f489af0db82500f17076d

@@ -1,4 +1,4 @@
-import { createBcmsFunction } from '@bcms/function';
+import {createBcmsFunction} from '@becomes/cms-backend/function'
 
 export default createBcmsFunction(() => {
   return {

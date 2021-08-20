@@ -1,5 +1,5 @@
 require('module-alias/register');
-const { createBcmsConfig } = require('@becomes/cms-backend');
+const { createBcmsConfig } = require('@becomes/cms-backend/config');
 
 module.exports = createBcmsConfig({
   port: process.env.PORT ? parseInt(process.env.PORT, 10) : 1280,

@@ -1,23 +1,30 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "esnext",
-    "strict": true,
-    "jsx": "preserve",
-    "importHelpers": true,
-    "moduleResolution": "node",
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
+    "module": "commonjs",
+    "declaration": true,
+    "declarationMap": true,
     "sourceMap": true,
-    "baseUrl": ".",
-    "lib": ["esnext", "dom", "dom.iterable", "scripthost"],
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strict": true,
+    "target": "ES2020",
+    "outDir": "./dist",
+    "baseUrl": "src",
+    "importsNotUsedAsValues": "error",
     "paths": {
-      "@bcms/*": ["node_modules/@becomes/cms-backend/*"]
+      "@bcms/*": ["./*"],
+      "@becomes/cms-backend/*": ["./*"]
     }
   },
-  "include": [
-    "src/**/*.ts",
-    "tests/**/*.ts"
-  ],
+  "include": ["src/**/*", "plugins/**/*"],
+  "exclude": ["node_modules", "dist", "src/node_modules"],
+  "typedocOptions": {
+    "entryPoints": ["src"],
+    "name": "BCMS | Backend",
+    "theme": "./node_modules/typedoc-neo-theme/bin/default",
+    "plugin": "typedoc-neo-theme",
+    "mode": "file",
+    "out": "doc"
+  }
 }
