@@ -1,4 +1,3 @@
-require('module-alias/register');
 const { createBcmsConfig } = require('@becomes/cms-backend/config');
 
 module.exports = createBcmsConfig({

@@ -1,22 +1,22 @@
 version: '3.9'
 services:
-  proxy:
-    build: 'proxy/.'
-    ports:
-      - '8080:8080'
-    logging:
-      driver: none
-  shim:
-    depends_on:
-      - proxy
-    image: 'becomes/cms-shim-local'
-    ports:
-      - '1282:1282'
-    logging:
-      driver: none
+  # proxy:
+  #   build: 'proxy/.'
+  #   ports:
+  #     - '8080:8080'
+  #   logging:
+  #     driver: none
+  # shim:
+  #   depends_on:
+  #     - proxy
+  #   image: 'becomes/cms-shim-local'
+  #   ports:
+  #     - '1282:1282'
+  #   logging:
+  #     driver: none
   backend:
-    depends_on:
-      - shim
+    # depends_on:
+    #   - shim
     image: 'becomes/cms-backend-local'
     ports:
       - '1280:1280'
