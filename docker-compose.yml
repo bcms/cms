@@ -1,11 +1,11 @@
 version: '3.9'
 services:
-  # proxy:
-  #   build: 'proxy/.'
-  #   ports:
-  #     - '8080:8080'
-  #   logging:
-  #     driver: none
+  proxy:
+    build: 'proxy/.'
+    ports:
+      - '8080:8080'
+    logging:
+      driver: none
   # shim:
   #   depends_on:
   #     - proxy
