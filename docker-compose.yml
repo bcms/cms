@@ -6,17 +6,17 @@ services:
       - '8080:8080'
     logging:
       driver: none
-  # shim:
-  #   depends_on:
-  #     - proxy
-  #   image: 'becomes/cms-shim-local'
-  #   ports:
-  #     - '1282:1282'
-  #   logging:
-  #     driver: none
+  shim:
+    depends_on:
+      - proxy
+    image: 'becomes/cms-shim-local:1.0.2'
+    ports:
+      - '1279:1279'
+    # logging:
+    #   driver: none
   backend:
-    # depends_on:
-    #   - shim
+    depends_on:
+      - shim
     image: 'becomes/cms-backend-local'
     ports:
       - '1280:1280'
@@ -24,6 +24,12 @@ services:
       - type: bind
         source: ./bcms.config.js
         target: /app/bcms.config.js
+      - type: bind
+        source: ./package.json
+        target: /app/custom-package.json
+      - type: bind
+        source: ./shim.json
+        target: /app/shim.json
       - type: bind
         source: ./node_modules/@becomes/cms-ui/public
         target: /app/public
@@ -33,18 +39,17 @@ services:
       - type: bind
         source: ./uploads
         target: /app/uploads
-      - type: bind
-        source: ./src/functions
-        target: /app/functions
-      - type: bind
-        source: ./src/events
-        target: /app/events
-      - type: bind
-        source: ./src/jobs
-        target: /app/jobs
-      - type: bind
-        source: ./plugins
-        target: /app/plugins
+      # - type: bind
+      #   source: ./src/functions
+      #   target: /app/functions
+      # - type: bind
+      #   source: ./src/events
+      #   target: /app/events
+      # - type: bind
+      #   source: ./src/jobs
+      #   target: /app/jobs
+      # - type: bind
+      #   source: ./plugins
+      #   target: /app/plugins
     environment:
       - BCMS_LOCAL=true
-      - BCMS_INSTANCE_ID=604f489af0db82500f17076d

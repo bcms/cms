@@ -1,3 +1,5 @@
 {
-  "code": "local"
+  "code": "local",
+  "local": true,
+  "instanceId": ""
 }
