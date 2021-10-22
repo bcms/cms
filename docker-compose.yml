@@ -39,17 +39,17 @@ services:
       - type: bind
         source: ./uploads
         target: /app/uploads
-      # - type: bind
-      #   source: ./src/functions
-      #   target: /app/functions
-      # - type: bind
-      #   source: ./src/events
-      #   target: /app/events
-      # - type: bind
-      #   source: ./src/jobs
-      #   target: /app/jobs
-      # - type: bind
-      #   source: ./plugins
-      #   target: /app/plugins
+      - type: bind
+        source: ./src/functions
+        target: /app/functions
+      - type: bind
+        source: ./src/events
+        target: /app/events
+      - type: bind
+        source: ./src/jobs
+        target: /app/jobs
+      - type: bind
+        source: ./plugins
+        target: /app/plugins
     environment:
       - BCMS_LOCAL=true

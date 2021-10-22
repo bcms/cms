@@ -10,21 +10,13 @@
     "strict": true,
     "target": "ES2020",
     "outDir": "./dist",
-    "baseUrl": "src",
+    "baseUrl": ".",
+    "rootDir": "src",
     "importsNotUsedAsValues": "error",
     "paths": {
-      "@bcms/*": ["./*"],
-      "@becomes/cms-backend/*": ["./*"]
+      "@bcms/*": ["node_modules/@becomes/cms-backend/src/*"],
+      "@becomes/cms-backend/*": ["node_modules/@becomes/cms-backend/src/*"]
     }
   },
-  "include": ["src/**/*", "plugins/**/*"],
-  "exclude": ["node_modules", "dist", "src/node_modules"],
-  "typedocOptions": {
-    "entryPoints": ["src"],
-    "name": "BCMS | Backend",
-    "theme": "./node_modules/typedoc-neo-theme/bin/default",
-    "plugin": "typedoc-neo-theme",
-    "mode": "file",
-    "out": "doc"
-  }
+  "include": ["src/**/*", "node_modules/@becomes/cms-backend/**/*.ts"]
 }
