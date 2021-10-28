@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "bundle": "bcms --cms --bundle"
+    "bundle": "bcms --cms --bundle",
+    "deploy": "bcms --cms --deploy --cloud-origin http://localhost:8081"
   },
   "author": "Becomes",
   "devDependencies": {
@@ -32,9 +33,5 @@
   "homepage": "https://github.com/becomesco/cms#readme",
   "_moduleAliases": {
     "@bcms": "@becomes/cms-backend"
-  },
-  "dependencies": {
-    "@types/crypto-js": "^4.0.2",
-    "crypto-js": "^4.1.1"
   }
 }
