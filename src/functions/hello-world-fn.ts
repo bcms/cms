@@ -3,7 +3,7 @@ import { createBcmsFunction } from '@becomes/cms-backend/function';
 export default createBcmsFunction(async () => {
   return {
     config: {
-      name: 'test',
+      name: 'hello-world-fn',
       public: true,
     },
     async handler({ request }) {

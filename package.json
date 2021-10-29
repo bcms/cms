@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "bundle": "bcms --cms --bundle",
-    "deploy": "bcms --cms --deploy --cloud-origin http://localhost:8081"
+    "bundle": "bcms --cms bundle --co http://localhost:8081",
+    "deploy": "bcms --cms deploy --co http://localhost:8081"
   },
   "author": "Becomes",
   "devDependencies": {
     "@becomes/cms-backend": "file:packs/bcms-backend.tgz",
+    "@becomes/cms-cli": "file:bcms-cli.tgz",
+    "@becomes/cms-cloud-client": "file:bcms-cloud-client.tgz",
     "@becomes/cms-sdk": "file:packs/bcms-sdk.tgz",
     "@becomes/cms-ui": "file:packs/bcms-ui.tgz",
     "@becomes/purple-cheetah": "^3.1.6",
