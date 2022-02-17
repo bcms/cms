@@ -2,8 +2,8 @@
   "compilerOptions": {
     "module": "commonjs",
     "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
+    "declarationMap": false,
+    "sourceMap": false,
     "removeComments": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
@@ -12,6 +12,7 @@
     "outDir": "./dist",
     "baseUrl": ".",
     "rootDir": "src",
+    "incremental": false,
     "importsNotUsedAsValues": "error",
     "paths": {
       "@bcms/*": ["node_modules/@becomes/cms-backend/src/*"],

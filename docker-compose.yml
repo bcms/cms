@@ -1,15 +1,25 @@
 version: '3.9'
+networks:
+  default:
+    external: true
+    name: bcms
 services:
   proxy:
-    build: 'proxy/.'
+    image: 'becomes/cms-proxy-local:1.0.5'
     ports:
       - '8080:8080'
     logging:
       driver: none
+  # proxy:
+  #   build: 'proxy/.'
+  #   ports:
+  #     - '8080:8080'
+  #   logging:
+  #     driver: none
   shim:
     depends_on:
       - proxy
-    image: 'becomes/cms-shim-local:1.0.2'
+    image: 'becomes/cms-shim-local:1.0.4'
     ports:
       - '1279:1279'
     # logging:
@@ -17,7 +27,7 @@ services:
   backend:
     depends_on:
       - shim
-    image: 'becomes/cms-backend-local'
+    image: 'becomes/cms-backend-local:1.0.11'
     ports:
       - '1280:1280'
     volumes:
@@ -49,7 +59,8 @@ services:
         source: ./src/jobs
         target: /app/jobs
       - type: bind
+        source: ./src/additional
+        target: /app/additional
+      - type: bind
         source: ./plugins
         target: /app/plugins
-    environment:
-      - BCMS_LOCAL=true
