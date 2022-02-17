@@ -5,16 +5,15 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "bundle": "bcms --cms bundle --co http://localhost:8081",
-    "deploy": "bcms --cms deploy --co http://localhost:8081"
+    "bundle": "bcms --cms bundle",
+    "deploy": "bcms --cms deploy",
+    "pull": "bcms --cms pull"
   },
   "author": "Becomes",
   "devDependencies": {
-    "@becomes/cms-backend": "file:packs/bcms-backend.tgz",
-    "@becomes/cms-cli": "file:bcms-cli.tgz",
-    "@becomes/cms-cloud-client": "file:bcms-cloud-client.tgz",
-    "@becomes/cms-sdk": "file:packs/bcms-sdk.tgz",
-    "@becomes/cms-ui": "file:packs/bcms-ui.tgz",
+    "@becomes/cms-backend": "^3.0.0-alpha.2",
+    "@becomes/cms-sdk": "^3.0.0-alpha.1",
+    "@becomes/cms-ui": "^3.0.0-alpha.2",
     "@becomes/purple-cheetah": "^3.1.6",
     "@types/node": "^15.6.2",
     "@typescript-eslint/eslint-plugin": "^5.1.0",
