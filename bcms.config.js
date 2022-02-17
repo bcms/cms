@@ -14,5 +14,5 @@ module.exports = createBcmsConfig({
     prefix: process.env.DB_PRFX || 'bcms',
     fs: true,
   },
-  plugins: ['@becomes/cms-plugin-build-engine'],
+  plugins: [],
 });
