@@ -1,12 +1,12 @@
 # BCMS
 
-BCMS is a CMS (Content Management System) created and developed by a company [Becomes](https://becomes.co). BCMS is a headless CMS and provides a grate API, best in class model builder and intuitive content editor. It was created because of project needs in our company and we decided to make it Open-Source since it solved a lot of problems that we had with other CMS solutions. We hope that you will find it useful in your next project.
+BCMS is a CMS (Content Management System) created and developed by a company [Becomes](https://becomes.co). BCMS is a headless CMS and provides a great API, best in class model builder and intuitive content editor. It was created because of project needs in our company and we decided to make it Open-Source (we provide a free plan) since it solved a lot of problems that we had with other CMS solutions. We hope that you will find it useful in your next project.
 
 ## Table of contents
 
-- [Getting started](#getting-started)
+- [BCMS Cloud](#bcms-cloud)
 - [Terminology](#terminology)
-- [Configuration](#configuration)
+- [Getting started](#getting-started)
 - [Development and customization](development-and-customization)
   - [Functions](#functions)
   - [Events](#events)
@@ -15,71 +15,123 @@ BCMS is a CMS (Content Management System) created and developed by a company [Be
 
 ## Terminology
 
-BCMS is a very complex system and it can be overwhelming to understand it in detail. Because of that, it is created in such a way that this is not required to successfully use and develop custom functionality for it. Depending on type of a thing that one needs to achieve, deeper understanding of the BCMS system might be required.
+BCMS is a very complex system and it can be overwhelming to understand it in detail. Because of that, it is created in such a way that details are not required to successfully use and develop custom functionality for it. Depending on type of a thing that one needs to achieve, deeper understanding of the BCMS system might be required.
 
 If reader of this document is not a developer, it should go to [user manual page]() (not yet available) because this document will not help with using BCMS Dashboard. On the other head, if reader of this document is a developer or would like to better understand behind-the-scenes of the BCMS, this document is a good place to start.
 
-- [BCMS Backend](https://github.com/becomesco/cms-backend) - or the **backend**, refers to a Core BCMS module which handles common and custom backend tasks. Some of those tasks are: communication with a database, database caching, scoping, restrictions and security, object aggregation and relational updates, realtime connections with sockets and many more.
+- [BCMS Backend](https://github.com/becomesco/cms-backend) - or the **backend**, refers to a Core BCMS module which handles common and custom backend tasks. Some of those tasks are: communication with a database, database caching, scoping, restrictions and security, object aggregation and relational updates, realtime connection with sockets and many more.
 - [BCMS UI](https://github.com/becomesco/cms-ui) - or the **dashboard**, refers to a Core BCMS module which provides beautiful user interface and handles interactions.
-- [BCMS SDK](https://github.com/becomesco/cms-sdk) - or the **sdk**, refers to a Core BCMS module which provides a layer of abstraction between the UI and the backend. Among many things, it handles caching, communication with the backend API and data synchronization. If is extended and used by the dashboard.
+- [BCMS SDK](https://github.com/becomesco/cms-sdk) - or the **sdk**, refers to a Core BCMS module which provides a layer of abstraction between the UI and the backend. Among many things, it handles caching, communication with the backend API and data synchronization. It is extended and used by the dashboard.
 
 ## Getting started
 
-BCMS can be as complex or as simple as required. This repository is the BCMS Core which is composed of 3 core packages: [backend](https://github.com/becomesco/cms-backend/), [UI](https://github.com/becomesco/cms-ui/) and [bundler](https://github.com/becomesco/cms-bundler/). Running BCMS locally is as simple as running few command in the terminal.
+Easiest way to get started is using the CLI since it will create a codebase and update it with custom components for specified instance.
 
-- Clone the repository by running `git clone git@github.com:becomesco/cms bcms`,
-- Enter the directory by running `cd bcms` and install dependencies by running `npm i`,
-- And finally start the BCMS in development node by running `npm run dev`. First, backend will be started and few seconds later UI will be started.
-- Open the browser and navigate to `http://localhost:1280`
+> Pre-requirements
 
-## Configuration
+- Make sure that you have account on [BCMS Cloud](https://cloud.thebcms.com) and that you have Admin privileges on at least 1 instance.
+- Make sure that [Node 14+](https://nodejs.org/en/) is installed on your system.
+- Make sure that [Docker](https://www.docker.com/) is installed and running on your system.
+- If you do not have it, install [Docker Compose](https://docs.docker.com/compose/) tool.
 
-BCMS backend expects `bcms.config.js` file to exist at the root of the project. It provides some basic information about the project itself and it is not complex to understand.
+> Installation
 
-- `backend` - an object for BCMS backend configuration.
-  - `port` - at with port should application be available
-  - `security` - an object for specifying security information. Currently, only JWT security mechanism is available and is extended from the [Purple Cheetah JWT Security](https://github.com/becomesco/purple-cheetah/tree/dev/src/security/jwt)
-    - `jwt` - an object which provides an information about JWT tokens. It is important to know that BCMS backend uses only HMAC-SHA256 for generating JWT signature, therefore `secret` in the `jwt` object should be 256-bit string.
-  - `database` - the backend currently supports 2 databases extended from the [Purple Cheetah Database](https://github.com/becomesco/purple-cheetah#database). One is a FSDB (filesystem database) and other is a MongoDB database. FSDB is meant for a development and many staging purposes because, with it, it is easy to share database data between users and machines. MongoDB is more meant for the production environment but it can also be used for staging and development.
-    - `fs` - indicate to the backend that it should use FSDB. String parsed to this property will be used as a collection prefix.
-    - `mongodb` - indicate to the backend that it should use MongoDB. This property is an object with 2 options:
-      - `atlas` - indicate to the backend that it should use [MongoDB Atlas](https://www.mongodb.com/),
-      - `selfHosted` - indicate to the backend that it should use self-hosted MongoDB database.
-- `plugins` - an array of object with a BCMS Plugin configuration. Plugins can be local or from NPM package. To find out more information go to [this section](#plugins).
+- Install CLI globally: `npm i -g @becomes/cms-cli`
+- Open a terminal and navigate to a place where you would like to create the repository.
+- Create repository by running: `bcms --cms clone`
+- You will be asked to select which instance you would like to clone. This command will create directory with name `<organization_name>-<instance_name>` which you can open in your favorite code editor.
+- To start a development server run: `docker-compose up` and the BCMS will be available on http://localhost:8080.
+- Done.
 
 ## Development and customization
 
-Custom features can be added to the BCMS in 2 ways: [by creating a plugin](#plugins) which is more advanced and requires good programing skills, and the other is by creating [functions](#functions), [events](#events) and/or [jobs](#jobs)
+Custom features can be added to the BCMS in 2 ways: [by creating a plugin](#plugins), which is more advanced, and the other is by creating [functions](#functions), [events](#events) and/or [jobs](#jobs). Extending BCMS functionality is limited but powerful. For example, you are not able to modify core BCMS functionality but you can build on top of it.
 
 ### Functions
 
-BCMS Functions are JavaScript function which can be called by sending an HTTP request. Once function is created it will be available at `POST: /api/function/{FUNCTION_NAME}`. One use-case for the function might be a contact form on the website. Function which will send an email using a SMTP server can be created and called from the website using (BCMS Client)[https://github.com/becomesco/cms-client].
+BCMS Functions are JavaScript function which can be executed by sending an HTTP request to the BCMS backend API. Once function is created, it will be available at `POST: /api/function/{FUNCTION_NAME}`. One use-case for the functions might be to create a contact form on a website. This function will send an email using a SMTP client (like [nodemailer](https://nodemailer.com/about/)) and can be called from the website using [BCMS Client](https://github.com/becomesco/cms-client).
 
 > **Example**
 
-Inside of the `src/functions` new file will be created `hello.ts`. In it, simple handler will be created like shown in the snippet bellow.
+Inside of the `src/functions` we will create a new file called `ping-pong.ts`. In of it, we will create a simple handler which will echo a request body and add `pong` property to it.
 
 ```ts
-import {BCMSFunctionBuilder} from '@becomes/cms-backend';
+import { createBcmsFunction } from '@becomes/cms-backend/function';
 
-module.exports = BCMSFunctionBuilder({
-  config: {
-    name: 'hello',
-    public: true,
-  },
-  handler: async (request) => {
-    const name = request.body.name;
-    return `Hello ${name}`;
-  }
-})
+export default createBcmsFunction(async () => {
+  return {
+    config: {
+      name: 'ping-pong',
+      public: true,
+    },
+    async handler({ request }) {
+      return { ...request.body, pong: true };
+    },
+  };
+});
 ```
 
-After saving the file, compile a TypeScript code by running `npm run src:build`, and after that backend development server can be started by running `npm run dev:backend`. From the [Postman](https://www.postman.com/) HTTP request will be sent like shown in Figure 1.
+After saving the file, our function will be available at `POST: http://localhost:8080/api/function/ping-pong`. Now using the [Postman](https://www.postman.com/) we can send a HTTP request like shown in Figure 1.
 
 ![Figure 1](/assets/readme/fig1.png)
 
-*Figure 1 - Calling a BCMS function.*
+_Figure 1 - Calling a BCMS function._
+
+As you can see, BCMS functions are easy to create and simple to call. It is important to note that the function, which we have created above, is public. This means that anyone can call it without any authorization. Private functions (non-public functions) require authorization by signing a requires using a HTTP Signature. You can see how this works in the [BCMS backend](https://github.com/becomesco/cms-backend) repository or how it is implemented in JavaScript i the [BCMS Client](https://github.com/becomesco/cms-client) repository.
 
 ### Events
 
-There might be need to do something when Template is created, maybe sending a Slack notification, or something like that. To do this, one can use BCMS Event. They are simple JavaScript function which are called every time specified event occurs. 
+As mentioned above, there is no direct way to modify a core functionality of the BCMS backend. Because of this, all important features will trigger an internal event called a BCMS Event. It can be an Entry event, Template event, Group event... All that is required to subscribe to an event is to create a file inside of the `src/events` directory.
+
+> **Example**
+
+```ts
+import { createBcmsEvent } from '@becomes/cms-backend/event';
+import {
+  BCMSEventConfigMethod,
+  BCMSEventConfigScope,
+} from '@becomes/cms-backend/types';
+
+export default createBcmsEvent(async () => {
+  return {
+    config: {
+      method: BCMSEventConfigMethod.ALL,
+      scope: BCMSEventConfigScope.TEMPLATE,
+    },
+    async handler(data) {
+      console.log('My event', data);
+    },
+  };
+});
+```
+
+### Jobs
+
+BCMS Jobs are a way to execute a custom code on the BCMS backend at specified interval. Jobs are scheduled using Cron syntax. To create a job, all that is required is to create a file inside of the `src/jobs` directory.
+
+> **Example**
+
+```ts
+import { createBcmsJob } from '@becomes/cms-backend/job';
+
+export default createBcmsJob(async () => {
+  return {
+    cron: {
+      dayOfMonth: '*',
+      dayOfWeek: '*',
+      hour: '*',
+      minute: '*',
+      month: '*',
+    },
+    async handler() {
+      console.log('My job');
+    },
+  };
+});
+```
+
+In example above, **My job** will be printed in the console every minute.
+
+### Plugins
+
+BCMS Plugins are specifically bundled code which can extend functionality of the BCMS backend and BCMS UI. For more information [visit plugin repository](https://github.com/becomesco/cms-plugin-starter).
