@@ -11,7 +11,7 @@
   },
   "author": "Becomes",
   "devDependencies": {
-    "@becomes/cms-backend": "^3.0.0-alpha.2",
+    "@becomes/cms-backend": "next",
     "@becomes/cms-sdk": "^3.0.0-alpha.1",
     "@becomes/cms-ui": "^3.0.0-alpha.2",
     "@becomes/purple-cheetah": "^3.1.6",
