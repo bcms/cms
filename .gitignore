@@ -68,4 +68,4 @@ lerna-debug.log*
 tsconfig.src.tsbuildinfo
 tsconfig.backend.tsbuildinfo
 
-bcms.db.json
+/db
