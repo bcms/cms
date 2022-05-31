@@ -5,12 +5,15 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
+    "setup": "npm-tool --setup",
     "bundle": "bcms --cms bundle",
     "deploy": "bcms --cms deploy",
     "pull": "bcms --cms pull"
   },
   "author": "Becomes",
   "devDependencies": {
+    "@banez/fs": "^1.0.3",
+    "@banez/npm-tool": "^1.1.0",
     "@becomes/cms-backend": "^3.0.0-alpha.4",
     "@becomes/cms-cli": "^2.2.4",
     "@becomes/cms-sdk": "^3.0.0-alpha.5",
