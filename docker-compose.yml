@@ -9,7 +9,7 @@ services:
   cms_shim:
     depends_on:
       - cms_proxy
-    image: 'becomes/cms-shim-local:1.0.5'
+    image: 'becomes/cms-shim-local:1.0.4'
     ports:
       - '1279:1279'
     logging:
