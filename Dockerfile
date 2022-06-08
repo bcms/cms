@@ -1,20 +1,9 @@
-FROM node:10-slim
+FROM node:14-slim
 
 WORKDIR /app
 
-COPY package.json /app
-COPY package-lock.json /app
-COPY src/. /app/src
-COPY public/. /app/public
-COPY svelte/. /app/svelte
-COPY assets/. /app/assets
-COPY tsconfig.json /app
+COPY . /app
 
-RUN npm install
-RUN npm run install-svelte
-RUN npm run build-svelte
-RUN npm run build
+RUN npm i
 
-EXPOSE 1280
-
-ENTRYPOINT [ "npm","run","start" ]
+ENTRYPOINT [ "npm", "run", "dev" ]

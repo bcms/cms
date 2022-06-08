@@ -1,249 +1,158 @@
-# Becomes CMS - In Development
+# BCMS
 
-- [Get started](#get-started)
-- [Introduction](#introduction)
-  - [Terminology](#terminology)
-  - [Short Examples](#short-examples)
-- [Back-end](#back-end)
-  - [User](#user)
-    - [Role]()
-    - [Permission]()
-  - [Security](#security)
-    - [JWT](#jwt)
-    - [API Key](#api-key)
-  - [Template]()
-    - [Properties]()
-  - [Entry]()
-  - [Group]()
-  - [Widget]()
-  - [Media]()
-  - [Function]()
-    - [Webhook function]()
-  - [Webhook]()
-  - [Events]()
-- [Dashboard]()
-  - [Template Manager]()
-  - [Group Manager]()
-  - [Widget Manager]()
-  - [Language Manager]()
-  - [Users Manager]()
-  - [API Manager]()
-  - [Webhook Manager]()
-  - [Webhooks]()
-  - [Entries]()
-    - [Viewing]()
-    - [Editing]()
+BCMS is a CMS (Content Management System) created and developed by a company [Becomes](https://becomes.co). It is a headless CMS which provides a great API, best in class model builder and intuitive content editor. It was created because of project needs in our company and we decided to make it Open-Source (BCMS Cloud provides a free plan) since it solved a lot of problems that we had with other CMS solutions. We hope that you will find it useful in your next project.
 
-<div id="get-started"></div>
+## Table of contents
 
-## Get Started
+- [BCMS Cloud](#bcms-cloud)
+  - [BCMS License](#bcms-license)
+- [Terminology](#terminology)
+- [Getting started](#getting-started)
+- [Development and customization](development-and-customization)
+  - [Functions](#functions)
+  - [Events](#events)
+  - [Jobs](#jobs)
+  - [Plugins](#plugins)
 
-- Instal CMS CLI package globally: `npm i -g @becomes/cms-cli`
-- Setup MongoDB database:
-  - [Self-Hosted](https://docs.mongodb.com/manual/installation/):
-    - After installing and setting up database, create CMS project with `bcms-cli` command and enter database information when prompted.
-  - [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
-    - After setup, create CMS project with `bcms-cli --atlas` command and enter database information.
-    - [Tutorial on how to setup MongoDB Atlas](https://www.youtube.com/watch?v=KKyag6t98g8)
-- Navigate to project and run `npm run dev`
-- Open browser, goto `localhost:1280` and create Admin user.
+## BCMS Cloud
 
-<div id="introduction"></div>
+The BCMS is Open-Source but it is not free (every account on the BCMS Cloud gets 1 free license). The BCMS Cloud is a platform which provides a way to monetize the BCMS instances. It is used for issuing BCMS Licenses, managing BCMS Instances and providing tools for organizations to easily add people and manager roles.
 
-## Introduction
+![Cloud connection](/assets/readme/fig2.png)
 
-This is a small CMS developed by company [Becomes](https://becomes.co) that is specialized for building APIs. It was created because of project needs in our company and we decided to make it Open-Source since it solved a lot of problems that we had with other CMS solutions. We hope that you will find it useful in your next project.
+_Figure 1 - Connection between the BCMS Cloud and BCMS Instance._
 
-- **What Becomes CMS is not?**
-  - It is not replacement for [WordPress](https://wordpress.com/) - WordPress is used for creating websites while Becomes CMS is used for creating APIs that will be consumed by other services. In this regard, they are completely different.
-  - It is not Website generator - As said in previous point, Becomes CMS is used for creating APIs that will be consumed by some other service. You cannot create web pages publicly accessible over Becomes CMS.
-  - It is not replacement for highly specialized APIs - Altho you can create any data model using Becomes CMS and manage them thru interactive dashboard, it is not designed to replace an API where very high performance is required.
-- **What is Becomes CMS?**
-  - In one sentence, it is highly flexible and interactive tool for creating APIs that will be consumed by other services.
+As it can be seen in Figure 1, the BCMS Instance runs outside of the BCMS Cloud. This means that owner of the Instance is also the owner of all the data. The BCMS Cloud only stores necessary data about users and essential data about the Instance, while all other data is stored in your database and the BCMS Cloud does not have access to it.
 
-<div id="terminology"></div>
+In the Figure 1 you can also see that there are 2 arrows connection the BCMS Cloud and the Instance, 1 is pointing from the Shim to the BCMS Cloud API gateway, while other is pointing from the BCMS Cloud API gateway to Nginx proxy on the Instance's server. Those 2 connections are providing a way for the Shim to send data to the BCMS Cloud and the BCMS Cloud to send data to the Shim. This connections are enabled by the BCMS License.
 
-### Terminology
+### BCMS License
 
-In this document, few "special" words will be used and they have specific meaning.
+BCMS License is created by the BCMS Cloud when an Instance is created. License has 2 roles:
 
-- **Template** - It is a _container_ that holds information about how new Entry should be created, it structure and how it should behave. In addition to that, Template is holding pointers to all available Entries. By itself, Template is nothing more then a template for creating Entries and keeping them in sync with each other, therefore the name is as it is. Template also dictates type of an Entry that can be created by it:
-  - **Data Modal** - This type defines that Entry is a "primitive" object, like plane JSON object (not actually but close enough). Example is a web store item, order, subscription or any other object that can be represented using key-value pairs.
-  - **Rich Content** - This type defines that Entry is a "complex" object and it extends Data Model type. This means that in addition to key-value pairs, it also has User editable rich content. Some examples are: blog post, case study post or any other type of content that will be consumed by humans in readable form.
-- **Entry** - It is an object that holds actual data in structured way that is useful to a consumer of the CMS API. The structure is defined by Template.
-- **Group** - It is a placeholder object for creating complex and nested properties in Entry. For example, if it is required for Entry to have object property (non primitive one, like string, number...) Group is used to achieve this.
-- **User** - It is an entity which is authorized to access CMS dashboard. User can have roles: ADMIN or USER (more information in [Users](#users) section).
-- **Widget** - It is a special placeholder object that can be only used in Entries of type Rich Content.
-- **Webhook** - It is a special object that can be configured to trigger CMS API function called webhook.
-- **Function** -
+- Proving the ownership over an Instance,
+- Enabling secure communication between the Shim and the BCMS Cloud.
 
-By showing some examples this terminology might be easier to understand.
+Every request to and from the Shim is first signed (using HMAC-SHA256) and then encrypted (using AES-256-GCM) using the License file. This provides secure data transfer over the HTTP and even safer over HTTPS. If you would like to see how this is implemented, please refer to [this file in the Shim repository](https://github.com/becomesco/cms-shim/blob/next/src/services/security.ts).
 
-<div id="short-examples"></div>
+## Terminology
 
-### Short Examples
+BCMS is a very complex system and it can be overwhelming to understand it in detail. Because of that, it is created in such a way that details are not required to successfully use and develop custom functionality for it. Depending on type of a thing that one needs to achieve, deeper understanding of the BCMS system might be required.
 
-> Example 1 - Using CMS to create a Blog website.
+If reader of this document is not a developer, it should go to [user manual page]() (not yet available) because this document will not help with using BCMS Dashboard. On the other head, if reader of this document is a developer or would like to better understand behind-the-scenes of the BCMS, this document is a good place to start.
 
-The core function of a blog website is a Blog Post. Every blog post on a website follows the same structure: title, cover image, author and content. Only thing that is different between 2 blog posts is the content. Therefore, in this example, Template is defining blog post structure (title property is of type string, cover image is of type string, author is of type Group and so one) while Entry is a single Blog Post and this means that it is holding values for properties defined in Template (title is "My first blog", cover image is "/image.png", author is "{name: "Tom", position: "CEO"}" and so one).
+- [BCMS Backend](https://github.com/becomesco/cms-backend) - or the **backend**, refers to a Core BCMS module which handles common and custom backend tasks. Some of those tasks are: communication with a database, database caching, scoping, restrictions and security, object aggregation and relational updates, realtime connection with sockets and many more.
+- [BCMS UI](https://github.com/becomesco/cms-ui) - or the **dashboard**, refers to a Core BCMS module which provides beautiful user interface and handles interactions.
+- [BCMS SDK](https://github.com/becomesco/cms-sdk) - or the **sdk**, refers to a Core BCMS module which provides a layer of abstraction between the UI and the backend. Among many things, it handles caching, communication with the backend API and data synchronization. It is extended and used by the dashboard.
 
-> Example 2 - Using CMS to create a simple web store.
+## Getting started
 
-The core function of a web store is an Item. To make it as simple as possible this online store is selling 2 Item types: Books and Makers. Books will be defined by creating a Template with properties: name `<string>`, title `<string>` and author `<string>` while Markers will be defined by creating a new Template with properties: name `<string>`, price `<number>` and quantity `<number>`. With this done Book Entry and Marker Entry can be added since structure is defined by Books Template and Markers Template respectively.
+> Pre-requirements
 
-<div id="back-end"></div>
+- Make sure that [Node 14+](https://nodejs.org/en/) is installed on your system.
+- Make sure that [Docker](https://www.docker.com/) is installed and running on your system.
+- If you do not have it, install [Docker Compose](https://docs.docker.com/compose/) tool.
 
-## Back-end
+> Installation
 
-Becomes CMS can be split into 2 parts, Back-end part that is built using [Purple Cheetah](https://purple-cheetah.com) framework and Front-end part that is built using [Svelte](https://svelte.dev).
+- Install BCMS CLI: `npm i -g @becomes/cms-cli`
+- Open a terminal and navigate to a place where you would like to create a project.
+- Create a project by running: `bcms --cms create`.
+- CD into the project and run `docker-compose up`.
+- BCMS will be available on post 8080: http://localhost:8080
+- Done.
 
-<div id="user"></div>
+## Development and customization
 
-### User
+Custom features can be added to the BCMS in 2 ways: [by creating a plugin](#plugins), which is more advanced, or by creating [functions](#functions), [events](#events) and/or [jobs](#jobs). Extending BCMS functionality is limited but powerful. For example, you are not able to modify core BCMS functionality but you can build on top of it.
 
-It is a special model used to describe a CMS user which is a person. If it is required for service or robot to be able to access CMS content, it is highly recommended to use [API Key]() for that since its access level can be restricted. Every User must have unique email and strong password. Email does not have to be valid but it has to be unique.
+### Functions
 
-<div id="auth"></div>
+BCMS Functions are JavaScript function which can be executed by sending an HTTP request to the BCMS backend API. Once function is created, it will be available at `POST: /api/function/{FUNCTION_NAME}`. One use-case for functions might be to create a contact form on a website. This function will send an email using a SMTP client (like [nodemailer](https://nodemailer.com/about/)) and can be called from the website using [BCMS Client](https://github.com/becomesco/cms-client).
 
-### Security
+> **Example**
 
-Back-end uses 2 types of security:
-
-<div id="jwt"></div>
-
-#### JWT
-
-JWTs are used for dashboard and for other services that want to take full control over Core CMS API. If full access to Core API is not required for consumer, it is recommended to use [Key Security](#api-key).
-
-To obtain JWT Access Token and Refresh Token for a User (created using dashboard), Basic Authorization flow is used with User email and password for endpoint `/auth/user`. If authorization is successful, API will respond with token 
+Inside of the `src/functions` we will create a new file called `ping-pong.ts`. Inside of it, we will create a simple handler which will echo a request body and add `pong` property to it.
 
 ```ts
-  Response {
-    accessToken: string,
-    refreshToken: string,
-  }
-```
+import { createBcmsFunction } from '@becomes/cms-backend/function';
 
-<div id="api-key"></div>
-
-#### API Key
-
-API Key is created using dashboard, while HTTP Signature is used for authentication when calling Core API. Function below can be used to create HTTP Signature for a request using API Key.
-
-```ts
-const crypto = require('crypto');
-
-exports.sign = (payload) => {
-  const data = {
-    key: process.env.API_KEY,
-    timestamp: Date.now(),
-    nonce: crypto.randomBytes(3).toString("hex"),
-    signature: ""
+export default createBcmsFunction(async () => {
+  return {
+    config: {
+      name: 'ping-pong',
+      public: true,
+    },
+    async handler({ request }) {
+      return { ...request.body, pong: true };
+    },
   };
-  let payloadAsString = "";
-  if (typeof payload === "object") {
-    payloadAsString = Buffer.from(JSON.stringify(payload)).toString(
-      "base64"
-    );
-  } else {
-    payloadAsString = "" + payload;
-  }
-  data.signature = crypto
-    .createHmac("sha256", process.env.API_SECRET)
-    .update(data.nonce + data.timestamp + data.key + payloadAsString)
-    .digest('hex');
-  return data;
-};
-```
-
-Generated parameters are parsed in a query with same name.
-<!-- ## API
-
-All routes are protected via API Security mechanism which uses sort of HTTP signature for authentication.
-
-In CMS dashboard (if User is logged in as admin), in API Manager section, User is able to create API Key. Also, User can assign level for every Key. For a client to make successful request to the Core API, every request must be signed using API Key. Authentication is done via query parameters and they are:
-
-- **key** - ID of the key that is used to create signature,
-- **nonce** - Random string,
-- **timestamp** - Current time in milliseconds,
-- **signature** - HMAC-SHA256 hash that is constructed from request parameters.
-
-Those values are parsed in a request as a query parameters while values can be created using package (`npm i --save @becomes/cms-client`) or by doing it yourself as explained below.
-
-> Using package
-
-More information can be found in [NPM Repository]() but in short, `@becomes/cms-client` provides a class classed **BCCSecurity** with methods **sign** and **signAndSend**. Sign method will return object with all information required to send a request to an API, while signAndSend will create signature, send request to an API and return a response.
-
-```js
-const reqQueryObject = BCCSecurity.sign({
-  key: {
-    id: 'KEY_ID',
-    secret: 'KEY_SECRET',
-  },
-  payload: {
-    // Some payload
-  },
 });
-console.log(reqQueryObject);
-// {
-//  key: string,
-//  nonce: string,
-//  timestamp: number,
-//  signature: string
-// }
 ```
 
-> Creating signature
+After saving the file, our function will be available at `POST: http://localhost:8080/api/function/ping-pong`. Now, using the [Postman](https://www.postman.com/) we can send an HTTP request like shown in Figure 2.
 
-To create valid signature, few steps must be followed.
+![Figure 2](/assets/readme/fig1.png)
 
-- Create a nonce - this can be done using [CryptoJS]() package: `CryptoJS.lib.WordArray.random(6).toString()`,
-- Create **payload** string - This string is created by converting payload into BASE64 string.
-  - If there is no payload - `payloadAsString = Base64(Stringify({}))`,
-  - If payload is object - `payloadAsString = Base64(Stringify(payload))`,
-  - If payload is string - `payloadAsString = Base64(payload)`,
-- Create a string that will be hashed - this is done by concatenating string is specific order: `nonce + timestamp + KEY_ID + payloadAsString`,
-- Create a signature hash - This is done using HMAC-SHA256 algorithm with Key Secret.
+_Figure 2 - Calling a BCMS function._
 
-With this done, request can be successfully send. Bellow is TypeScript code for creating signature.
+As you can see, BCMS functions are easy to create and simple to call. It is important to note that the function, which we have created above, is public. This means that anyone can call it without any authorization. Private functions (non-public functions) require authorization by signing a requires using an HTTP Signature. You can see how this works in the [BCMS Backend repository](https://github.com/becomesco/cms-backend/blob/master/src/security/api.ts) or how it is implemented in JavaScript in the [BCMS Client repository](https://github.com/becomesco/cms-client/blob/master/src/util/security.ts).
+
+### Events
+
+As mentioned above, there is no direct way to modify a core functionality of the BCMS Backend. Because of this, all important features will trigger an internal event called a BCMS Event. It can be an Entry event, Template event, Group event ([full list of events](https://github.com/becomesco/cms-backend/blob/master/src/types/event/config.ts))... All that is required to subscribe to an event is to create a file inside of the `src/events` directory.
+
+> **Example**
 
 ```ts
-function sign(config: {
-  key: {
-    id: string;
-    secret: string;
+import { createBcmsEvent } from '@becomes/cms-backend/event';
+import {
+  BCMSEventConfigMethod,
+  BCMSEventConfigScope,
+} from '@becomes/cms-backend/types';
+
+export default createBcmsEvent(async () => {
+  return {
+    config: {
+      method: BCMSEventConfigMethod.ALL,
+      scope: BCMSEventConfigScope.TEMPLATE,
+    },
+    async handler(data) {
+      console.log('My event', data);
+    },
   };
-  payload: any;
-}): APISecurityObject {
-  const data: APISecurityObject = {
-    key: config.key.id,
-    timestamp: Date.now(),
-    nonce: crypto
-      .randomBytes(16)
-      .toString('hex')
-      .substring(0, 6),
-    signature: '',
-  };
-  let payloadAsString: string = '';
-  if (typeof config.payload === 'object') {
-    payloadAsString = Buffer.from(JSON.stringify(config.payload)).toString(
-      'base64',
-    );
-  } else {
-    payloadAsString = '' + config.payload;
-  }
-  const hmac = crypto.createHmac('sha256', config.key.secret);
-  hmac.update(data.nonce + data.timestamp + data.key + payloadAsString);
-  data.signature = hmac.digest('hex');
-  return data;
-}
+});
 ```
 
-### Routes
+It is important to know that you can emit custom event using [BCMS Event Manager](https://github.com/becomesco/cms-backend/blob/master/src/types/event/manager.ts).
 
-> Get all templates
+### Jobs
 
-```text
-  Method: GET
-  URI:    /template/all
-``` -->
+BCMS Jobs are a way to execute a custom code on the BCMS Backend at specified interval. Jobs are scheduled using Cron syntax. To create a job, all that is required is to create a file inside of the `src/jobs` directory.
+
+> **Example**
+
+```ts
+import { createBcmsJob } from '@becomes/cms-backend/job';
+
+export default createBcmsJob(async () => {
+  return {
+    cron: {
+      dayOfMonth: '*',
+      dayOfWeek: '*',
+      hour: '*',
+      minute: '*',
+      month: '*',
+    },
+    async handler() {
+      console.log('My job');
+    },
+  };
+});
+```
+
+In example above, **My job** will be printed in the console every minute.
+
+### Plugins
+
+BCMS Plugins are specifically bundled code which can extend functionality of the BCMS backend and BCMS UI. For more information [visit plugin repository](https://github.com/becomesco/cms-plugin-starter).

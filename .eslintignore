@@ -1,0 +1,13 @@
+/node_modules
+/public
+/uploads
+
+/functions
+/jobs
+/events
+/util
+/email
+/scripts
+
+bcms.config.js
+/npm-tool.js
