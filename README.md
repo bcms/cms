@@ -1,10 +1,11 @@
 # BCMS
 
-BCMS is a CMS (Content Management System) created and developed by a company [Becomes](https://becomes.co). BCMS is a headless CMS and provides a great API, best in class model builder and intuitive content editor. It was created because of project needs in our company and we decided to make it Open-Source (we provide a free plan) since it solved a lot of problems that we had with other CMS solutions. We hope that you will find it useful in your next project.
+BCMS is a CMS (Content Management System) created and developed by a company [Becomes](https://becomes.co). It is a headless CMS which provides a great API, best in class model builder and intuitive content editor. It was created because of project needs in our company and we decided to make it Open-Source (BCMS Cloud provides a free plan) since it solved a lot of problems that we had with other CMS solutions. We hope that you will find it useful in your next project.
 
 ## Table of contents
 
 - [BCMS Cloud](#bcms-cloud)
+  - [BCMS License](#bcms-license)
 - [Terminology](#terminology)
 - [Getting started](#getting-started)
 - [Development and customization](development-and-customization)
@@ -12,6 +13,27 @@ BCMS is a CMS (Content Management System) created and developed by a company [Be
   - [Events](#events)
   - [Jobs](#jobs)
   - [Plugins](#plugins)
+
+## BCMS Cloud
+
+The BCMS is Open-Source but it is not free (every account on the BCMS Cloud gets 1 free license). The BCMS Cloud is a platform which provides a way to monetize the BCMS instances. It is used for issuing BCMS Licenses, managing BCMS Instances and providing tools for organizations to easily add people and manager roles.
+
+![Cloud connection](/assets/readme/fig2.png)
+
+_Figure 1 - Connection between the BCMS Cloud and BCMS Instance._
+
+As it can be seen in Figure 1, the BCMS Instance runs outside of the BCMS Cloud. This means that owner of the Instance is also the owner of all the data. The BCMS Cloud only stores necessary data about users and essential data about the Instance, while all other data is stored in your database and the BCMS Cloud does not have access to it.
+
+In the Figure 1 you can also see that there are 2 arrows connection the BCMS Cloud and the Instance, 1 is pointing from the Shim to the BCMS Cloud API gateway, while other is pointing from the BCMS Cloud API gateway to Nginx proxy on the Instance's server. Those 2 connections are providing a way for the Shim to send data to the BCMS Cloud and the BCMS Cloud to send data to the Shim. This connections are enabled by the BCMS License.
+
+### BCMS License
+
+BCMS License is created by the BCMS Cloud when an Instance is created. License has 2 roles:
+
+- Proving the ownership over an Instance,
+- Enabling secure communication between the Shim and the BCMS Cloud.
+
+Every request to and from the Shim is first signed (using HMAC-SHA256) and then encrypted (using AES-256-GCM) using the License file. This provides secure data transfer over the HTTP and even safer over HTTPS. If you would like to see how this is implemented, please refer to [this file in the Shim repository](https://github.com/becomesco/cms-shim/blob/next/src/services/security.ts).
 
 ## Terminology
 
@@ -25,35 +47,32 @@ If reader of this document is not a developer, it should go to [user manual page
 
 ## Getting started
 
-Easiest way to get started is using the CLI since it will create a codebase and update it with custom components for specified instance.
-
 > Pre-requirements
 
-- Make sure that you have account on [BCMS Cloud](https://cloud.thebcms.com) and that you have Admin privileges on at least 1 instance.
 - Make sure that [Node 14+](https://nodejs.org/en/) is installed on your system.
 - Make sure that [Docker](https://www.docker.com/) is installed and running on your system.
 - If you do not have it, install [Docker Compose](https://docs.docker.com/compose/) tool.
 
 > Installation
 
-- Install CLI globally: `npm i -g @becomes/cms-cli`
-- Open a terminal and navigate to a place where you would like to create the repository.
-- Create repository by running: `bcms --cms clone`
-- You will be asked to select which instance you would like to clone. This command will create directory with name `<organization_name>-<instance_name>` which you can open in your favorite code editor.
-- To start a development server run: `docker-compose up` and the BCMS will be available on http://localhost:8080.
+- Install BCMS CLI: `npm i -g @becomes/cms-cli`
+- Open a terminal and navigate to a place where you would like to create a project.
+- Create a project by running: `bcms --cms create`.
+- CD into the project and run `docker-compose up`.
+- BCMS will be available on post 8080: http://localhost:8080
 - Done.
 
 ## Development and customization
 
-Custom features can be added to the BCMS in 2 ways: [by creating a plugin](#plugins), which is more advanced, and the other is by creating [functions](#functions), [events](#events) and/or [jobs](#jobs). Extending BCMS functionality is limited but powerful. For example, you are not able to modify core BCMS functionality but you can build on top of it.
+Custom features can be added to the BCMS in 2 ways: [by creating a plugin](#plugins), which is more advanced, or by creating [functions](#functions), [events](#events) and/or [jobs](#jobs). Extending BCMS functionality is limited but powerful. For example, you are not able to modify core BCMS functionality but you can build on top of it.
 
 ### Functions
 
-BCMS Functions are JavaScript function which can be executed by sending an HTTP request to the BCMS backend API. Once function is created, it will be available at `POST: /api/function/{FUNCTION_NAME}`. One use-case for the functions might be to create a contact form on a website. This function will send an email using a SMTP client (like [nodemailer](https://nodemailer.com/about/)) and can be called from the website using [BCMS Client](https://github.com/becomesco/cms-client).
+BCMS Functions are JavaScript function which can be executed by sending an HTTP request to the BCMS backend API. Once function is created, it will be available at `POST: /api/function/{FUNCTION_NAME}`. One use-case for functions might be to create a contact form on a website. This function will send an email using a SMTP client (like [nodemailer](https://nodemailer.com/about/)) and can be called from the website using [BCMS Client](https://github.com/becomesco/cms-client).
 
 > **Example**
 
-Inside of the `src/functions` we will create a new file called `ping-pong.ts`. In of it, we will create a simple handler which will echo a request body and add `pong` property to it.
+Inside of the `src/functions` we will create a new file called `ping-pong.ts`. Inside of it, we will create a simple handler which will echo a request body and add `pong` property to it.
 
 ```ts
 import { createBcmsFunction } from '@becomes/cms-backend/function';
@@ -71,17 +90,17 @@ export default createBcmsFunction(async () => {
 });
 ```
 
-After saving the file, our function will be available at `POST: http://localhost:8080/api/function/ping-pong`. Now using the [Postman](https://www.postman.com/) we can send a HTTP request like shown in Figure 1.
+After saving the file, our function will be available at `POST: http://localhost:8080/api/function/ping-pong`. Now, using the [Postman](https://www.postman.com/) we can send an HTTP request like shown in Figure 2.
 
-![Figure 1](/assets/readme/fig1.png)
+![Figure 2](/assets/readme/fig1.png)
 
-_Figure 1 - Calling a BCMS function._
+_Figure 2 - Calling a BCMS function._
 
-As you can see, BCMS functions are easy to create and simple to call. It is important to note that the function, which we have created above, is public. This means that anyone can call it without any authorization. Private functions (non-public functions) require authorization by signing a requires using a HTTP Signature. You can see how this works in the [BCMS backend](https://github.com/becomesco/cms-backend) repository or how it is implemented in JavaScript i the [BCMS Client](https://github.com/becomesco/cms-client) repository.
+As you can see, BCMS functions are easy to create and simple to call. It is important to note that the function, which we have created above, is public. This means that anyone can call it without any authorization. Private functions (non-public functions) require authorization by signing a requires using an HTTP Signature. You can see how this works in the [BCMS Backend repository](https://github.com/becomesco/cms-backend/blob/master/src/security/api.ts) or how it is implemented in JavaScript in the [BCMS Client repository](https://github.com/becomesco/cms-client/blob/master/src/util/security.ts).
 
 ### Events
 
-As mentioned above, there is no direct way to modify a core functionality of the BCMS backend. Because of this, all important features will trigger an internal event called a BCMS Event. It can be an Entry event, Template event, Group event... All that is required to subscribe to an event is to create a file inside of the `src/events` directory.
+As mentioned above, there is no direct way to modify a core functionality of the BCMS Backend. Because of this, all important features will trigger an internal event called a BCMS Event. It can be an Entry event, Template event, Group event ([full list of events](https://github.com/becomesco/cms-backend/blob/master/src/types/event/config.ts))... All that is required to subscribe to an event is to create a file inside of the `src/events` directory.
 
 > **Example**
 
@@ -105,9 +124,11 @@ export default createBcmsEvent(async () => {
 });
 ```
 
+It is important to know that you can emit custom event using [BCMS Event Manager](https://github.com/becomesco/cms-backend/blob/master/src/types/event/manager.ts).
+
 ### Jobs
 
-BCMS Jobs are a way to execute a custom code on the BCMS backend at specified interval. Jobs are scheduled using Cron syntax. To create a job, all that is required is to create a file inside of the `src/jobs` directory.
+BCMS Jobs are a way to execute a custom code on the BCMS Backend at specified interval. Jobs are scheduled using Cron syntax. To create a job, all that is required is to create a file inside of the `src/jobs` directory.
 
 > **Example**
 
