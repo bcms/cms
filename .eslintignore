@@ -8,6 +8,7 @@
 /util
 /email
 /scripts
+/dist
 
 bcms.config.js
 /npm-tool.js
