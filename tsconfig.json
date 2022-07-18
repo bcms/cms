@@ -14,11 +14,7 @@
     "rootDir": "src",
     "incremental": false,
     "importsNotUsedAsValues": "error",
-    "skipLibCheck": true,
-    "paths": {
-      "@bcms/*": ["node_modules/@becomes/cms-backend/src/*"],
-      "@becomes/cms-backend/*": ["node_modules/@becomes/cms-backend/src/*"]
-    }
+    "skipLibCheck": true
   },
   "include": ["src/**/*", "node_modules/@becomes/cms-backend/**/*.ts"]
 }
