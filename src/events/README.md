@@ -5,7 +5,7 @@ As mentioned above, there is no direct way to modify a core functionality of the
 > **Example**
 
 ```ts
-import { createBcmsEvent } from '@becomes/cms-backend/event';
+import { createBcmsEvent } from '@becomes/cms-backend/src/event';
 import {
   BCMSEventConfigMethod,
   BCMSEventConfigScope,

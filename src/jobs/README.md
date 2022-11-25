@@ -5,7 +5,7 @@ BCMS Jobs are a way to execute a custom code on the BCMS backend at specified in
 > **Example**
 
 ```ts
-import { createBcmsJob } from '@becomes/cms-backend/job';
+import { createBcmsJob } from '@becomes/cms-backend/src/job';
 
 export default createBcmsJob(async () => {
   return {

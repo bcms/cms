@@ -7,7 +7,7 @@ BCMS Functions are JavaScript function which can be executed by sending an HTTP 
 Inside of the `src/functions` we will create a new file called `ping-pong.ts`. In of it, we will create a simple handler which will echo a request body and add `pong` property to it.
 
 ```ts
-import { createBcmsFunction } from '@becomes/cms-backend/function';
+import { createBcmsFunction } from '@becomes/cms-backend/src/function';
 
 export default createBcmsFunction(async () => {
   return {
