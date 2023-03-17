@@ -8,16 +8,17 @@
     "setup": "npm-tool --setup",
     "bundle": "bcms --cms bundle",
     "deploy": "bcms --cms deploy",
-    "pull": "bcms --cms pull"
+    "pull": "bcms --cms pull",
+    "db:dump": "bcms --cms dump"
   },
   "author": "Becomes",
   "devDependencies": {
     "@banez/fs": "^1.0.3",
     "@banez/npm-tool": "^1.1.0",
-    "@becomes/cms-backend": "^3.1.3",
-    "@becomes/cms-cli": "^2.3.8",
-    "@becomes/cms-sdk": "^3.3.5",
-    "@becomes/cms-ui": "^3.2.9",
+    "@becomes/cms-backend": "^3.1.7",
+    "@becomes/cms-cli": "^2.5.0",
+    "@becomes/cms-sdk": "^3.4.0",
+    "@becomes/cms-ui": "^3.2.17",
     "@becomes/purple-cheetah": "^3.5.4",
     "@types/node": "^15.6.2",
     "@typescript-eslint/eslint-plugin": "^4.28.2",
