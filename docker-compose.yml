@@ -7,6 +7,8 @@ services:
     logging:
       driver: none
   cms_shim:
+    container_name: bcms-shim
+    hostname: bcms-shim
     depends_on:
       - cms_proxy
     image: 'becomes/cms-shim-local:1.0.5'
@@ -17,7 +19,7 @@ services:
   cms_backend:
     depends_on:
       - cms_shim
-    image: 'becomes/cms-backend-local:1.0.32'
+    image: 'becomes/cms-backend-local:1.0.35'
     ports:
       - '1280:8080'
     volumes:
