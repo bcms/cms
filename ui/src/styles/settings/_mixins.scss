@@ -1,0 +1,99 @@
+/*
+* Fluid values
+*/
+
+@mixin fluid($properties, $min-vw, $max-vw, $min-value, $max-value) {
+  @each $property in $properties {
+    #{$property}: $min-value;
+  }
+  @media screen and (min-width: $min-vw) {
+    @each $property in $properties {
+      #{$property}: calc(
+        #{$min-value} +
+          #{strip-unit($max-value - $min-value)} *
+          (100vw - #{$min-vw}) /
+          #{strip-unit($max-vw - $min-vw)}
+      );
+    }
+  }
+  @media screen and (min-width: $max-vw) {
+    @each $property in $properties {
+      #{$property}: $max-value;
+    }
+  }
+}
+
+@function strip-unit($value) {
+  @return $value / ($value * 0 + 1);
+}
+
+/*
+  * --> usage:
+  - Single property:
+  @include fluid(font-size, 320px, 1366px, 14px, 18px);
+  - Multiple properties with same values:
+  @include fluid(padding-bottom padding-top, 20em, 70em, 2em, 4em);
+*/
+
+/*
+* Breakpoints
+*/
+
+// $breakpoints: (
+//   'mobile':  $mobile,
+//   'tablet': $tablet,
+//   'desktop':  $desktop
+// ) !default;
+
+@mixin media($breakpoints, $minMax: 'min') {
+  $min: nth($breakpoints, 1);
+
+  @if length($breakpoints) > 1 {
+    $max: nth($breakpoints, 2);
+    @media screen and (min-width: $min) and (max-width: $max) {
+      @content;
+    }
+  } @else {
+    @media screen and (#{$minMax}-width: $min) {
+      @content;
+    }
+  }
+}
+
+/*
+  * --> usage:
+  - Single property:
+  @include media($mobile, 'min') {}
+  or
+  @include media($mobile, 'max') {}
+  - Multiple properties:
+  @include media($mobile $tablet) {}
+*/
+
+/*
+* Input Placeholder
+*/
+
+@mixin optional-at-root($sel) {
+  @at-root #{if(not &, $sel, selector-append(&, $sel))} {
+    @content;
+  }
+}
+
+@mixin placeholder {
+  @include optional-at-root('::-webkit-input-placeholder') {
+    @content;
+  }
+
+  @include optional-at-root(':-moz-placeholder') {
+    @content;
+  }
+
+  @include optional-at-root('::-moz-placeholder') {
+    @content;
+  }
+
+  @include optional-at-root(':-ms-input-placeholder') {
+    @content;
+  }
+}

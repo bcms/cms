@@ -1,0 +1,10 @@
+.managerInfo {
+  .bcmsInput {
+    &--label {
+      @apply mb-[15px];
+    }
+  }
+  .bcmsDropdown {
+    @apply max-w-xs;
+  }
+}

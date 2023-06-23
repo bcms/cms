@@ -1,0 +1,9 @@
+/_src
+/dist
+/logs
+/node_modules
+
+/package-lock.json
+/docker-compose.yml
+/Dockerfile
+/tools.js

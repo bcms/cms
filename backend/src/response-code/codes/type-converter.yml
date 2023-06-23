@@ -1,0 +1,6 @@
+tc001:
+  msg: Item type "%itemType%" is not allowed.
+tc002:
+  msg: Item with ID "%itemId%" does not exist.
+tc003:
+  msg: Item cannot be converted to "%type%."

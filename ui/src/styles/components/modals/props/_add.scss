@@ -1,0 +1,7 @@
+.bcmsModal_addProp {
+  .bcmsModal {
+    &--body {
+      @apply px-0 #{!important};
+    }
+  }
+}

@@ -1,0 +1,28 @@
+.bcmsLayout {
+  grid-template-areas:
+    'sidenav1 sidenav2 main'
+    'sidenav1 sidenav2 main'
+    'sidenav1 sidenav2 main';
+  @apply grid-cols-1 grid-rows-[auto,1fr,auto] desktop:grid-cols-[250px,180px,1fr] desktop:grid-rows-[50px,1fr,50px] lg:grid-cols-[300px,240px,1fr];
+
+  &--body {
+    grid-area: main;
+  }
+
+  #managerNav {
+    &:empty {
+      @apply hidden;
+      & ~ .bcmsLayout--body {
+        @apply desktop:col-start-2 col-end-4;
+      }
+    }
+  }
+
+  @include media(899px, 'max') {
+    grid-template-areas: unset;
+    &--body {
+      grid-area: unset;
+      grid-column: 1 / -1;
+    }
+  }
+}

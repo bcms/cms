@@ -1,0 +1,90 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import './settings/index';
+@import './components/index';
+@import './dark';
+
+*,
+*::before,
+*::after {
+  @apply font-bcmsFont;
+}
+
+html,
+body {
+  @apply h-full m-0 p-0;
+}
+
+html {
+  @apply overflow-hidden;
+}
+
+.bcmsBody {
+  @apply relative box-border text-base leading-snug overflow-x-hidden overflow-y-auto bg-white bg-no-repeat dark:bg-dark;
+  -webkit-overflow-scrolling: touch;
+  background-image: url('/assets/gradients/gradient-small.png');
+  background-position: top left;
+  @include fluid(background-size, 375px, 900px, 450px, 622px);
+}
+
+::-moz-selection {
+  @apply bg-green bg-opacity-30 text-dark select-none dark:text-dark dark:bg-yellow;
+  text-shadow: none;
+}
+
+::selection {
+  @apply bg-green bg-opacity-30 text-dark select-none dark:text-dark dark:bg-yellow;
+  text-shadow: none;
+}
+
+/* Give a remote user a caret */
+.collaboration-cursor__caret {
+  position: relative;
+  margin-left: -1px;
+  margin-right: -1px;
+  border-left: 1px solid #0d0d0d;
+  border-right: 1px solid #0d0d0d;
+  word-break: normal;
+  pointer-events: none;
+}
+
+/* Render the username above the caret */
+.collaboration-cursor__label {
+  position: absolute;
+  top: -1.4em;
+  left: -1px;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  user-select: none;
+  color: #0d0d0d;
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px 3px 3px 0;
+  white-space: nowrap;
+}
+
+.uppy-Dashboard {
+  &-inner {
+    @apply bg-transparent border-grey border-opacity-50 overflow-hidden;
+  }
+  &-AddFiles {
+    @apply border-0;
+    &-title {
+      @apply text-light;
+    }
+  }
+  &-browse {
+    @apply text-yellow;
+    &:hover {
+      @apply border-0 underline;
+    }
+  }
+  &-innerWrap {
+    @apply rounded-none;
+  }
+}
+
+

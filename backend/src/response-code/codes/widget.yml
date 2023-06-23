@@ -1,0 +1,14 @@
+wid001:
+  msg: Widget with ID "%id%" does not exist.
+wid002:
+  msg: Widget with name "%name%" already exist.
+wid003:
+  msg: Failed to add Widget to the database.
+wid004:
+  msg: Changes to prop "%prop%" are not valid --> %msg%
+wid005:
+  msg: Failed to update Widget in the database.
+wid006:
+  msg: Failed to delete widget from the database.
+wid007:
+  msg: Failed to update Entries after Widget update. %msg%

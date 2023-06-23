@@ -1,0 +1,47 @@
+.vc-colorpicker {
+  @apply mb-5 pb-0 shadow-none #{!important};
+  &--container {
+    @apply p-0 #{!important};
+    .vc-chrome-colorPicker {
+      @apply bg-transparent;
+      .vc-saturation {
+        @apply mb-5 h-[250px] rounded-3.5 overflow-hidden #{!important};
+        &__cursor {
+          @apply w-5 h-5 #{!important};
+          div {
+            @apply w-5 h-5 shadow-none border-[3px] #{!important};
+          }
+        }
+      }
+      .chrome-sliders {
+        @apply ml-0 #{!important};
+      }
+    }
+    .vc-hue-slider {
+      &__bar {
+        background: linear-gradient(
+          to right,
+          red 0%,
+          yellow 16.66%,
+          lime 33.33%,
+          aqua 50%,
+          blue 66.66%,
+          fuchsia 83.33%,
+          red 100%
+        );
+      }
+      &.small-slider {
+        @apply mb-0 h-5 #{!important};
+        .vc-hue-slider__bar-handle {
+          @apply box-content -translate-x-1.5 translate-y-0 bg-transparent border-[3px] border-white shadow-none #{!important};
+        }
+      }
+    }
+    .chrome-color-wrap {
+      @apply hidden;
+    }
+    .vc-display {
+      @apply hidden;
+    }
+  }
+}

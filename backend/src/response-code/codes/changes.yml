@@ -1,0 +1,6 @@
+chg001:
+  msg: Change with ID "%id%" does not exist.
+chg002:
+  msg: Change with name "%name%" already exist.
+chg003:
+  msg: Failed to add Change to the database

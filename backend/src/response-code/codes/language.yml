@@ -1,0 +1,17 @@
+lng001:
+  msg: Language with ID "%id%" does not exist.
+lng002:
+  msg: Language with code "%code%" already exist.
+lng003:
+  msg: Failed to add Language to the database.
+lng004:
+  msg: Changes to prop "%prop%" are not valid --> %msg%
+lng005:
+  msg: Failed to update Language in the database.
+lng006:
+  msg: Failed to delete Language from the database.
+lng007:
+  msg: Default Language cannot be deleted.
+lng008:
+  msg: Cannot perform request since there will be no languages left.
+

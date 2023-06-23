@@ -1,0 +1,12 @@
+sts001:
+  msg: Status with ID "%id%" does not exist.
+sts002:
+  msg: Status with name "%name%" already exist.
+sts003:
+  msg: Failed to add Status to the database.
+sts004:
+  msg: Failed to update Status in the database.
+sts005:
+  msg: Failed to delete Status from the database.
+sts006:
+  msg: Invalid color value "%color%" was provided.

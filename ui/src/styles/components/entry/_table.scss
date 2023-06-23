@@ -1,0 +1,20 @@
+.list-none {
+  .bcmsEntryTable {
+    @include media(768px, 'max') {
+
+    }
+    @include media(768px, 'min') {
+      grid-template-columns: minmax(100px, 0.1fr) minmax(100px, 0.1fr) 0.8fr 145px !important;
+      &_wi {
+        grid-template-columns: 80px minmax(100px, 0.1fr) minmax(100px, 0.1fr) 0.8fr 145px !important;
+      }
+      &_ws {
+        grid-template-columns: minmax(100px, 0.1fr) minmax(100px, 0.1fr) 100px 0.8fr 145px !important;
+      }
+      &_wi_ws {
+        grid-template-columns: 80px minmax(100px, 0.1fr) minmax(100px, 0.1fr) 100px 0.8fr 145px !important;
+      }
+    }
+    
+  }
+}

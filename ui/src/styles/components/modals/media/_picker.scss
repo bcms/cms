@@ -1,0 +1,15 @@
+.bcmsModal_mediaPicker {
+  .bcmsModal {
+    &--inner {
+      max-width: 700px !important;
+      header {
+        @apply mb-7.5 #{!important};
+        .bcmsButton {
+          &:first-of-type {
+            @apply mr-0 mb-2.5 xs:mr-5 #{!important};
+          }
+        }
+      }
+    }
+  }
+}

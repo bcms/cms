@@ -1,0 +1,12 @@
+.bcmsModal {
+  &--actions {
+    background: linear-gradient(
+      0deg,
+      rgba(255, 255, 255, 1) 80%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    .bcmsButton_ghost {
+      @apply text-pink hover:text-red hover:shadow-none focus:text-red focus:shadow-none #{!important};
+    }
+  }
+}

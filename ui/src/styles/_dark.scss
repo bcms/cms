@@ -1,0 +1,115 @@
+html.dark {
+  .managerLayout--sideNav-footer {
+    @apply bg-none #{!important};
+  }
+  .bcmsModal--actions {
+    @apply bg-none #{!important};
+  }
+  .help--btn {
+    &:hover,
+    &:focus {
+      box-shadow: rgba(255, 205, 25, 1) 0px 0px 0px 1px,
+        rgba(15, 15, 15, 0.1) 0px 2px 4px;
+    }
+  }
+  .uppy-Dashboard {
+    &-inner {
+      @apply bg-transparent border-grey border-opacity-50;
+    }
+    &-AddFiles {
+      @apply border-0;
+      &-title {
+        @apply text-light;
+      }
+    }
+    &-browse {
+      @apply text-yellow;
+      &:hover {
+        @apply border-0 underline;
+      }
+    }
+    &-Item {
+      &-name {
+        @apply text-white;
+      }
+      &-statusSize {
+        @apply text-grey;
+      }
+      &-action {
+        @apply text-white ml-2 #{!important};
+        svg {
+          @apply w-[18px] h-[18px];
+        }
+        path,
+        rect {
+          @apply fill-current;
+        }
+        &--edit {
+          &:hover {
+            @apply text-dark #{!important};
+          }
+        }
+        &--remove {
+          path {
+            &:nth-child(1) {
+              @apply fill-current;
+            }
+            &:nth-child(2) {
+              @apply fill-[#0d0d0d];
+            }
+          }
+          &:hover {
+            path {
+              &:nth-child(1) {
+                @apply fill-[#0d0d0d];
+              }
+              &:nth-child(2) {
+                @apply fill-[#fff];
+              }
+            }
+          }
+        }
+      }
+    }
+    &Content {
+      &-back {
+        @apply text-yellow;
+        &:hover {
+          @apply text-yellow underline;
+        }
+      }
+      &-bar {
+        @apply bg-transparent border-b-0 bg-grey bg-opacity-50;
+      }
+      &-title {
+        @apply text-white;
+      }
+      &-addMore {
+        svg {
+          @apply text-white;
+          path {
+            @apply fill-current;
+          }
+        }
+      }
+    }
+  }
+  .CodeMirror-scroll {
+    @apply bg-darkGrey text-pink;
+    .cm {
+      &-string {
+        @apply text-light;
+      }
+      &-number {
+        @apply text-yellow;
+      }
+      &-atom {
+        @apply text-pink;
+      }
+    }
+  }
+  // Entry editor - dragging division line
+  *[style*='position: absolute; z-index: 50; pointer-events: none;'] {
+    background-color: rgba(248, 248, 252) !important;
+  }
+}

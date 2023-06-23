@@ -1,0 +1,33 @@
+.bcmsScrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+  transition: scrollbar-color 0.3s;
+  &::-webkit-scrollbar {
+    @apply w-2;
+  }
+  &::-webkit-scrollbar-track {
+    @apply rounded-2.5;
+  }
+  &::-webkit-scrollbar-thumb {
+    @apply rounded-2.5 bg-grey bg-opacity-0 transition-colors duration-300;
+  }
+  &:hover {
+    scrollbar-color: rgba(151, 152, 171, 0.2) transparent;
+    &::-webkit-scrollbar-thumb {
+      @apply bg-grey bg-opacity-20;
+    }
+  }
+}
+
+@for $i from 1 through 3 {
+  .line-clamp-#{$i} {
+    display: -webkit-box;
+    -webkit-line-clamp: $i;
+    -webkit-box-orient: vertical;
+    @apply overflow-hidden;
+  }
+}
+
+.line-break-anywhere {
+  line-break: anywhere;
+}

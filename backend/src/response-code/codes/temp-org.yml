@@ -1,0 +1,8 @@
+tpo001:
+  msg: Template organizer with ID "%id%" does not exist.
+tpo002:
+  msg: Failed to update template organizer in the database.
+tpo003:
+  msg: Failed to add template organizer to the database.
+tpo004:
+  msg: Failed to remove template organizer from the database.

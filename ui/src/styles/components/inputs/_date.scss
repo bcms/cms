@@ -1,0 +1,16 @@
+._bcmsInput {
+  &--date {
+    .date,
+    .time {
+      &::-webkit-inner-spin-button,
+      &::-webkit-clear-button,
+      &::-webkit-calendar-picker-indicator {
+        @apply hidden;
+        -webkit-appearance: none;
+      }
+      &::-webkit-calendar-picker-indicator {
+        @apply absolute top-0 left-0 right-0 bottom-0 w-auto h-auto text-transparent bg-transparent;
+      }
+    }
+  }
+}

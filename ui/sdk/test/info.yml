@@ -1,0 +1,517 @@
+tests:
+  unit:
+    date_util:
+      - it: should check if prettyElapsedTimeSince output is "just now"
+        completed: true
+      - it: should check if prettyElapsedTimeSince output is "2 minutes ago"
+        completed: true
+      - it: should check if prettyElapsedTimeSince output is "2 hours ago"
+        completed: true
+      - it: should check if prettyElapsedTimeSince output is "2 days ago"
+        completed: true
+      - it: should convert "1636011806484" to human readable format "04 Nov, 2021 07:43"
+        complete: true
+        description: 'Have in mind that output is in local time so when writing
+          test, make sure that HOURS parts is tested correctly (we don`t know
+          where will server, which will run the tests, be located).'
+    string_util:
+      - it: should convert "test_string" into "Test String" - toPretty
+        completed: true
+      - it: should convert "#test-string" into "Test String" - toPretty
+        completed: true
+      - it: should convert "Test@ String" into "test-string" - toSlug
+        completed: true
+      - it: should convert "Test@ String" into "test_string" - toSlugUnderscore
+        completed: true
+      - it: should convert "Test@ String" into "TEST_STRING" - toEnum
+        completed: true
+      - it: should convert "This is test string" into "Thi ... ing" - toShort
+        completed: true
+      - it: should get text between 2 string - textBetween
+        completed: true
+      - it: should get all text between 2 string - allTextBetween
+        completed: true
+        description: 'This is, some example text, that can be used to test,
+          allTextBetween function.'
+      - it: should convert number 9 to "009" - addZerosAtBeginning
+        completed: true
+    throwable_util:
+      - it: should call success function
+        completed: true
+      - it: should call error function
+        completed: true
+  integration:
+    media:
+      - it: should upload "image.jpeg" to root
+        complete: true
+        description: 'Upload `image.jpeg` from `./test/assets/*` to root in
+          the CMS'
+      - it: should upload "image.jpeg" again to the root - name should change.
+        complete: true
+        description: 'Do the same as in previous test. Resulting media name
+          should be != "image.jpeg"'
+      - it: should delete media from previous steps.
+        complete: true
+      - it: should create DIR called "p1" in root
+        complete: true
+      - it: should delete DIR called "p1"
+        complete: true
+      - it: should create DIR called "p1" and upload "image.jpeg" and "video.mp4" to it
+        complete: true
+        description: 'Steps to take:
+
+          1. Create DIR "p1" in root
+          2. Upload "image.jpeg" from `/test/assets` to "p1"
+          3. Try to get "image.jpeg" and it should have parentId of "p1"
+          4. Try to get "p1" DIR.
+          '
+      - it: should get all media from "p1" DIR
+        complete: true
+        description: 'Call "getAllByParentId" and pass "p1" DIR media ID.
+          Response should contain 2 items. 1 should be "image.jpeg" and other
+          should be "video.mp4"'
+      - it: should delete "image.jpeg"
+        complete: true
+        description: 'Call API to delete "image.jpeg" and check if it was
+          really deleted. This should be done by:
+
+          1. Try to get "image.jpeg" media by its ID - expect NOT_FOUND.
+          2. Get all media for "p1" - expect 1 item and it should be "video.mp4" media.'
+      - it: should delete "p1" DIR
+        completed: true
+        description: 'Make sure that DIR is deleted and all its child media.'
+      - it: should check if Image thumbnail is created
+        completed: true
+        description: 'Steps:
+
+          1. Upload "image.jpeg".
+          2. Get its thumbnail.
+          3. Delete "image.jpeg".'
+      - it: should check if Video thumbnail is created
+        completed: true
+        description: 'Steps:
+
+          1. Upload "video.mp4".
+          2. Get its thumbnail.
+          3. Delete "video.mp4".'
+      - it: should get many media by IDs
+        completed: true
+        description: 'Upload "image.jpeg" and "video.mp4" files and use
+          `.getMany` to retrieve them.'
+      - it: should update "image.jpeg" to have name "new-image.jpeg"
+        completed: true
+      - it: should duplicate "video.mp4" to "p1" DIR
+        completed: true
+        description: 'Steps:
+
+          1. Create "p1".
+          2. Duplicate "video.mp4" to "p1"
+          3. Try to get duplicated media'
+      - it: should move "new-image.jpeg" to "p2" DIR
+        completed: true
+        description: 'Steps:
+
+          1. Create "p2" DIR.
+          2. Upload "image.jpeg" to the root.
+          3. Move "image.jpeg" to "p2".
+          4. Try to get "image.jpeg" and check parentId.'
+      - it: should clear data from tests
+        completed: true
+        description: 'Delete all data from previous tests.'
+    color:
+      - it: should create new color
+        completed: true
+      - it: should get a color
+        completed: true
+      - it: should fail when trying to get a color which does not exist
+        completed: true
+      - it: should be able to update color
+        completed: true
+      - it: should get many colors in 1 request
+        completed: true
+      - it: should get how many colors are available
+        completed: true
+      - it: should be to get all colors
+        completed: true
+      - it: should be able to delete a color
+        completed: true
+      - it: should clear test data
+        completed: true
+    status:
+      - it: should create new status
+        completed: true
+      - it: should get a status
+        completed: true
+      - it: should fail when trying to get a status which does not exist
+        completed: true
+      - it: should be able to update status
+        completed: true
+      - it: should get how many statuses are available
+        completed: true
+      - it: should get all statuses
+        completed: true
+      - it: should delete a status
+        completed: true
+      - it: should clear test data
+        completed: true
+    language:
+      - it: should create new language
+        completed: true
+      - it: should be able to get language
+        completed: true
+      - it: should fail when trying to get a language which does not exist
+        completed: true
+      - it: should get how many languages are available
+        completed: true
+      - it: should get all languages
+        completed: true
+      - it: should delete a language
+        completed: true
+      - it: should clear test data
+        completed: true
+    apiKey:
+      - it: should create new API Key
+        completed: true
+      - it: should get an API Key
+        completed: true
+      - it: should fail when trying to get an API Key which does not exist
+        completed: true
+      - it: should be able to update API Key
+        completed: true
+      - it: should get how many API Key are available
+        completed: true
+      - it: should get all API Keys
+        completed: true
+      - it: should delete a API Key
+        completed: true
+      - it: should clear test data
+        completed: true
+    group:
+      - it: should be able to create a group
+        completed: true
+      - it: should be able to get a group
+        completed: true
+      - it: should be able to update group
+        completed: true
+      - it: should be able to get a lite group
+        completed: true
+      - it: should get all groups
+        completed: true
+      - it: should get where is use group
+        completed: true
+      - it: should get how many groups are available
+        completed: true
+      - it: should be able to get many groups in 1 request
+        completed: true
+      - it: should be able to add STRING prop to a group
+        completed: true
+      - it: should be able to add STRING Array prop to a group
+        completed: true
+      - it: should be able to add NUMBER prop to a group
+        completed: true
+      - it: should be able to add NUMBER Array prop to a group
+        completed: true
+      - it: should be able to add BOOLEAN prop to a group
+        completed: true
+      - it: should be able to add BOOLEAN Array prop to a group
+        completed: true
+        # Do not work DATE, ENUM and MEDIA
+      - it: should be able to add DATE prop to a group
+        completed: false
+      - it: should be able to add DATE Array prop to a group
+        completed: false
+      - it: should be able to add ENUM prop to a group
+        completed: false
+        # ENUM Array do not exist
+      - it: should be able to add ENUM Array prop to a group
+        completed: false
+      - it: should be able to add MEDIA prop to a group
+        completed: false
+      - it: should be able to add MEDIA Array prop to a group
+        completed: false
+      - it: should be able to add COLOR_PICKER prop to a group
+        completed: true
+      - it: should be able to add COLOR_PICKER Array prop to a group
+        completed: true
+      - it: should be able to add RICH_TEXT prop to a group
+        completed: true
+      - it: should be able to add RICH_TEXT Array prop to a group
+        completed: true
+      - it: should be able to add GROUP_POINTER prop to a group
+        completed: true
+      - it: should be able to add GROUP_POINTER Array prop to a group
+        completed: true
+      - it: 'should check if GROUP_POINTER prop is removed if target group is
+          deleted'
+        completed: true
+        description: 'Steps:
+
+          1. Create child/target group, call it Child.
+          2. Create parent and call it Parent.
+          3. Add GROUP_POINTER prop to Parent group which is pointing to Child group.
+          4. Get Parent group to make sure that prop was added.
+          5. Delete Child group.
+          6. Get Parent group to make sure that GROUP_POINTER does not exist in it.'
+      - it: should check where is a group used
+        completed: true
+        description: 'Steps:
+
+          1. Create child group called Child.
+          2. Create parent group called Parent.
+          3. Add GROUP_POINTER prop to Parent group which is pointing to Child group.
+          4. Call whereIsItUsed method for Child group.
+          5. Check if Parent group ID is present in groupIds array.'
+      - it: should be able to delete a group
+        completed: true
+      - it: should clear test data
+        completed: true
+    widget:
+      - it: should create a widget
+        completed: true
+      - it: should be able to get a widget
+        completed: true
+      - it: should fail when trying to get a widget that does not exist
+        completed: true
+      - it: should update a widget
+        completed: true
+      - it: should show all widget
+        completed: true
+      - it: should get many widgets in 1 request
+        completed: true
+      - it: should get how many widgets are available
+        completed: true
+      - it: should be able to add STRING prop to a widget
+        completed: true
+      - it: should be able to add STRING Array prop to a widget
+        completed: true
+      - it: should be able to add NUMBER prop to a widget
+        completed: true
+      - it: should be able to add NUMBER Array prop to a widget
+        completed: true
+      - it: should be able to add BOOLEAN prop to a widget
+        completed: true
+      - it: should be able to add BOOLEAN Array prop to a widget
+        completed: true
+      - it: should be able to add DATE prop to a widget
+        completed: false
+      - it: should be able to add DATE Array prop to a widget
+        completed: false
+      - it: should be able to add ENUM prop to a widget
+        completed: false
+      - it: should be able to add ENUM Array prop to a widget
+        completed: false
+      - it: should be able to add MEDIA prop to a widget
+        completed: false
+      - it: should be able to add MEDIA Array prop to a widget
+        completed: false
+      - it: should be able to add COLOR_PICKER prop to a widget
+        completed: true
+      - it: should be able to add COLOR_PICKER Array prop to a widget
+        completed: true
+      - it: should be able to add RICH_TEXT prop to a widget
+        completed: true
+      - it: should be able to add RICH_TEXT Array prop to a widget
+        completed: true
+      - it: should be able to add GROUP_POINTER prop to a widget
+        completed: true
+      - it: should be able to add GROUP_POINTER Array prop to a widget
+        completed: true
+      - it: 'should check if GROUP_POINTER prop is removed if target group is
+          deleted'
+        completed: true
+        description: 'Steps:
+
+          1. Create child/target group, call it Child.
+          2. Create a widget called Parent.
+          3. Add GROUP_POINTER prop to Parent widget which is pointing to Child group.
+          4. Get Parent widget to make sure that prop was added.
+          5. Delete Child group.
+          6. Get Parent widget to make sure that GROUP_POINTER does not exist in it.'
+      - it: should be able to delete a widget
+        completed: true
+      - it: should clear test data
+        completed: true
+    template:
+      - it: should create a template
+        completed: true
+      - it: should get a template
+        completed: true
+      - it: should fail when trying to get a template that does not exist
+        completed: true
+      - it: should update a template
+        completed: true
+      - it: should get many templates in 1 request
+        completed: true
+      - it: should show all template
+        completed: true
+      - it: should get how many templates are available
+        completed: true
+      - it: should be able to add STRING prop to a template
+        completed: true
+      - it: should be able to add STRING Array prop to a template
+        completed: true
+      - it: should be able to add NUMBER prop to a template
+        completed: true
+      - it: should be able to add NUMBER Array prop to a template
+        completed: true
+      - it: should be able to add BOOLEAN prop to a template
+        completed: true
+      - it: should be able to add BOOLEAN Array prop to a template
+        completed: true
+      - it: should be able to add DATE prop to a template
+        completed: false
+      - it: should be able to add DATE Array prop to a template
+        completed: false
+      - it: should be able to add ENUM prop to a template
+        completed: false
+      - it: should be able to add ENUM Array prop to a template
+        completed: false
+      - it: should be able to add MEDIA prop to a template
+        completed: false
+      - it: should be able to add MEDIA Array prop to a template
+        completed: false
+      - it: should be able to add COLOR_PICKER prop to a template
+        completed: true
+      - it: should be able to add COLOR_PICKER Array prop to a template
+        completed: true
+      - it: should be able to add RICH_TEXT prop to a template
+        completed: true
+      - it: should be able to add RICH_TEXT Array prop to a template
+        completed: true
+      - it: should be able to add GROUP_POINTER prop to a template
+        completed: true
+      - it: should be able to add GROUP_POINTER Array prop to a template
+        completed: true
+      - it: 'should check if GROUP_POINTER prop is removed if target group is
+          deleted'
+        completed: true
+        description: 'Steps:
+
+          1. Create child/target group, call it Child.
+          2. Create a template called Parent.
+          3. Add GROUP_POINTER prop to Parent template which is pointing to Child group.
+          4. Get Parent template to make sure that prop was added.
+          5. Delete Child group.
+          6. Get Parent template to make sure that GROUP_POINTER does not exist in it.'
+      - it: should be able to add ENTRY_POINTER prop to a template
+        completed: true
+      - it: should be able to add ENTRY_POINTER Array prop to a template
+        completed: true
+      - it: should check if ENTRY_POINTER prop is removed if target template is deleted
+        completed: true
+        description: 'Steps:
+
+          1. Create a child/target template, called Child.
+          2. Create a parent template, called Parent.
+          3. Add ENTRY_POINTER prop to Parent template which is pointing to Child template.
+          4. Get Parent template to make sure that prop was added.
+          5. Delete Child template.
+          6. Get Parent template to make sure that ENTRY_POINTER prop does not exist in it.'
+      - it: should be able to delete a template
+        completed: true
+      - it: should clear test data
+        completed: true
+    templateOrganizer:
+      - it: should create new TO (template organizer)
+        completed: true
+      - it: should get a TO
+        completed: true
+      - it: should fail when trying to get a TO which does not exist
+        completed: true
+      - it: should update TO
+        completed: true
+        # TO do not have cid
+      - it: should get many TOs in 1 request
+        completed: false
+      - it: should get how many TOs are available
+        completed: true
+      - it: should get all TOs
+        completed: true
+      - it: should delete a TO
+        completed: true
+        # ID exist in TO after delete template.
+      - it: should check if TO is updated after deleting a template
+        completed: false
+        description: 'Steps:
+
+          1. Create TO called Test.
+          2. Create template called Temp.
+          3. Add Temp template to Test TO.
+          4. Get Test TO to make sure that Temp template was added to it.
+          5. Delete Temp template.
+          6. Get Test TO to make sure that Temp template does not exists in it.
+          7. Delete Test TO.'
+      - it: should clear test data
+        completed: false
+    entry:
+      - it: should create an entry
+        completed: true
+      - it: should get an entry
+        completed: true
+      - it: should get an entry with Lite model
+        completed: true
+      - it: should get many entries with Lite models in 1 request
+        completed: false
+        # Do't have this method in SDK
+      - it: should get all entries by template ID
+        completed: false
+      - it: should get all entries with Lite models by template ID
+        completed: true
+        #  change entry count
+      - it: should get number of entries by template ID
+        completed: true
+      - it: should be able to update an entry
+        completed: true
+      - it: should be able to delete an entry
+        completed: true
+      - it: should create a data which will be used in next tests
+        completed: true
+        description: 'Steps:
+
+          1. Create a group called G1 and add STRING prop to it.
+          2. Create a template called T2 (additional props are not required).
+          3. Create a template called T1 and add all props to it. Use G1 as
+          GROUP_POINTER and T2 as ENTRY_POINTER.
+          4. Add 2 entries to T2 template.
+          5. Create a widget called W1 and add STRING prop to it.'
+      - it: should create an entry with all props
+        completed: true
+        description: 'Add entry to T1 template.'
+      - it: should get all parsed entries by template ID
+        completed: true
+    tag:
+      - it: should create new tag
+        completed: true
+      - it: should get a tag by ID
+        completed: true
+      - it: should get a tag by value
+        completed: true
+      - it: should fail when trying to get a tag which does not exist
+        completed: true
+      - it: should be able to update tag
+        completed: true
+      - it: should get many tags in 1 request
+        completed: true
+      - it: should be to get all tags
+        completed: true
+      - it: should be able to delete a tag
+        completed: true
+      - it: should check if groups, templates and widgets are updated after deleting a tag.
+        completed: true
+        description: 'Steps:
+
+          1. Create tag call "test-tag".
+          2. Create template called "t3".
+          3. Add test-tag to template t3.
+          4. Create group called "g2".
+          5. Add test-tag to group g2.
+          6. Create widget called "w2".
+          7. Add test-tag to widget w2.
+          8. Delete "test-tag".
+          9. Check if t3, g1 and w2 are updated.
+          '
+      - it: should clear test data
+        completed: true
+    typeConverter:
+      - it: should get all types converted to typescript
+        completed: false

@@ -1,53 +1,82 @@
 version: '3.9'
+networks:
+  default:
+    external: true
+    name: bcms
 services:
-  cms_proxy:
-    build: 'proxy/.'
-    ports:
-      - '8080:8080'
-    logging:
-      driver: none
-  cms_shim:
-    depends_on:
-      - cms_proxy
+  shim:
+    hostname: 'bcms-shim'
     image: 'becomes/cms-shim-local:1.0.5'
-    ports:
-      - '1279:1279'
     logging:
       driver: none
-  cms_backend:
+  backend:
+    hostname: 'bcms-backend'
     depends_on:
-      - cms_shim
-    image: 'becomes/cms-backend-local:1.0.32'
-    ports:
-      - '1280:8080'
+      - shim
+    build:
+      context: './backend'
+      dockerfile: Dockerfile.dev
+    env_file:
+      - ./backend/.env
     volumes:
       - type: bind
-        source: ./bcms.config.js
+        source: ./backend/bcms.config.js
         target: /app/bcms.config.js
       - type: bind
-        source: ./package.json
-        target: /app/custom-package.json
+        source: ./backend/src
+        target: /app/src
       - type: bind
-        source: ./shim.json
-        target: /app/shim.json
-      - type: bind
-        source: ./db
+        source: ./backend/db
         target: /app/db
       - type: bind
-        source: ./uploads
+        source: ./backend/uploads
         target: /app/uploads
+  db:
+    hostname: bcms-db
+    image: mongo:6
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=test
+      - MONGO_INITDB_ROOT_PASSWORD=test1234
+    volumes:
       - type: bind
-        source: ./src/functions
-        target: /app/functions
+        source: ./backend/db/mongo
+        target: /data/db
+    logging:
+      driver: none
+  ui:
+    hostname: 'bcms-ui'
+    build:
+      context: './ui'
+      dockerfile: Dockerfile.dev
+    volumes:
       - type: bind
-        source: ./src/events
-        target: /app/events
+        source: ./ui/public
+        target: /app/public
       - type: bind
-        source: ./src/jobs
-        target: /app/jobs
+        source: ./ui/src
+        target: /app/src
       - type: bind
-        source: ./src/additional
-        target: /app/additional
+        source: ./ui/tailwind.config.cjs
+        target: /app/tailwind.config.cjs
       - type: bind
-        source: ./plugins
-        target: /app/plugins
+        source: ./ui/postcss.config.cjs
+        target: /app/postcss.config.cjs
+      - type: bind
+        source: ./ui/vite.config.ts
+        target: /app/vite.config.ts
+      - type: bind
+        source: ./ui/sdk/src
+        target: /app/sdk/src
+  proxy:
+    hostname: 'bcms-proxy'
+    depends_on:
+      - shim
+      - backend
+      - db
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
+    ports:
+      - '8080:8080'
+    # logging:
+    #   driver: none

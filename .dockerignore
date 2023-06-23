@@ -1,6 +1,5 @@
 /node_modules
-/dist
-/uploads
-/proxy
-/db
-/uploads
+/backend/node_modules
+/ui/node_modules
+/ui/sdk/node_modules
+/backend/dist
