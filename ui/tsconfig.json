@@ -10,7 +10,8 @@
       "@becomes/cms-sdk/*": ["./sdk/src/*"]
     },
     "noUnusedLocals": true,
-    "noUnusedParameters": true
+    "noUnusedParameters": true,
+    "importsNotUsedAsValues": "error"
   },
   "references": [
     {

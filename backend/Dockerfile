@@ -2,7 +2,7 @@ FROM becomes/cms-backend-base-image:2.0.0
 
 WORKDIR /app
 
-COPY ./lib/ /app/
+COPY . /app/
 
 RUN npm i
 

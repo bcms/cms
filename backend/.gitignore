@@ -12,6 +12,7 @@
 /plugins
 /dockerfile-local/dist
 /local-dev-dist
+/dev-dist
 /public
 /_test
 /_jsDoc

@@ -21,7 +21,7 @@
       "@becomes/cms-ui/*": ["../ui/src/*"]
     }
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "_index.ts"],
   "typedocOptions": {
     "entryPoints": [
       "src/api",

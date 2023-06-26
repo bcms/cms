@@ -5,7 +5,7 @@ import type {
   BCMSSdkCache,
   SendFunction,
 } from '../types';
-import * as FormData from 'form-data';
+import FormData from 'form-data';
 
 export function createBcmsBackupHandler({
   send,

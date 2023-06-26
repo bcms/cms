@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "declarationMap": false,
+    "sourceMap": false,
+    "removeComments": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strict": true,
+    "target": "ES2020",
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "rootDir": "./src",
+    "importsNotUsedAsValues": "error",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@becomes/cms-client": ["./src"],
+      "@becomes/cms-client/*": ["./src/*"]
+    }
+  },
+  "typedocOptions": {
+    "entryPoints": ["src/main.ts", "src/types/index.ts"],
+    "name": "BCMS | Client",
+    "out": "doc"
+  },
+  "include": ["src"]
+}

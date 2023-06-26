@@ -1,4 +1,4 @@
-import Axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import Axios, { type AxiosError, type AxiosRequestConfig } from 'axios';
 import { Buffer } from 'buffer';
 import {
   createBcmsApiKeyHandler,
@@ -25,11 +25,11 @@ import {
 } from './handlers';
 import { createBcmsStorage } from './storage';
 import {
-  BCMSJwt,
-  BCMSSdk,
-  BCMSSdkCache,
+  type BCMSJwt,
+  type BCMSSdk,
+  type BCMSSdkCache,
   BCMSSdkCacheDataNames,
-  BCMSSdkConfig,
+  type BCMSSdkConfig,
 } from './types';
 import {
   createBcmsDateUtility,

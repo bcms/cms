@@ -5,7 +5,19 @@
   "description": "",
   "scripts": {
     "postinstall": "npm-tool --postinstall",
-    "build:types": "npm-tool --build-types"
+    "build:types": "npm-tool --build-types",
+    "bundle:ui": "npm-tool --bundle-ui",
+    "bundle:sdk": "npm-tool --bundle-sdk",
+    "bundle:backend": "npm-tool --bundle-backend",
+    "bundle:backend:dev": "npm-tool --bundle-backend-dev",
+    "bundle:client": "npm-tool --bundle-client",
+    "create:docker:backend:image": "npm-tool --create-docker-backend-image",
+    "create:docker:backend:image:dev": "npm-tool --create-docker-backend-image-dev",
+    "bundle": "npm-tool --bundle",
+    "publish:ui": "npm-tool --publish-ui",
+    "publish:sdk": "npm-tool --publish-sdk",
+    "publish:backend": "npm-tool --publish-backend",
+    "publish:client": "npm-tool --publish-client"
   },
   "repository": {
     "type": "git",

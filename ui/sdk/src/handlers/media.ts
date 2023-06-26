@@ -4,7 +4,7 @@ import type {
   BCMSMediaHandlerConfig,
 } from '../types';
 import { Buffer } from 'buffer';
-import * as FormData from 'form-data';
+import FormData from 'form-data';
 
 export function createBcmsMediaHandler({
   send,

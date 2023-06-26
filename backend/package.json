@@ -6,6 +6,7 @@
   "license": "MIT",
   "main": "src/main.js",
   "scripts": {
+    "start": "node src/main.js",
     "dev": "nodemon -L -r tsconfig-paths/register src/main.ts",
     "build": "tsc --project tsconfig.json",
     "generate-doc": "typedoc",

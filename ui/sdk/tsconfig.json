@@ -17,6 +17,7 @@
     "skipLibCheck": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "allowSyntheticDefaultImports": true,
     "paths": {
       "@becomes/cms-sdk": ["./src"],
       "@becomes/cms-sdk/*": ["./src/*"],
@@ -26,5 +27,5 @@
       "@becomes/cms-ui/*": ["../src/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "test"]
 }

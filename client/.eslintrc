@@ -1,0 +1,22 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "rules": {
+    "no-console": "warn",
+    "no-debugger": "warn",
+    "no-shadow": "error",
+    "@typescript-eslint/no-unused-vars": [
+      2,
+      { "args": "all", "argsIgnorePattern": "^_" }
+    ],
+    "no-unused-labels": "error",
+    "no-unused-expressions": "error",
+    "no-duplicate-imports": "error"
+  }
+}
