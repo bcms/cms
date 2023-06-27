@@ -1,0 +1,18 @@
+tmp001:
+  msg: Template with ID "%id%" does not exist.
+tmp002:
+  msg: Template with name "%name%" already exist.
+tmp003:
+  msg: Failed to add Template to the database.
+tmp004:
+  msg: Changes to prop "%prop%" are not valid --> %msg%
+tmp005:
+  msg: Failed to update Template in the database.
+tmp006:
+  msg: Failed to delete Template from the database.
+tmp007:
+  msg: Invalid propChange was provided as position "%pos%".
+tmp008:
+  msg: Failed to update Entries after Template update. %msg%
+tmp009:
+  msg: Property with name "%name%" is reserved and cannot me modified.

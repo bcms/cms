@@ -1,0 +1,45 @@
+{
+  "name": "@becomes/cms",
+  "version": "3.0.0",
+  "description": "BCMS project.",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "setup": "npm-tool --setup",
+    "bundle": "bcms --cms bundle",
+    "deploy": "bcms --cms deploy",
+    "pull": "bcms --cms pull",
+    "db:dump": "bcms --cms dump",
+    "post:cms-create": "npm-tool --post-cms-create",
+    "post:cms-create:cleanup": "npm-tool --post-cms-create-cleanup"
+  },
+  "author": "Becomes",
+  "devDependencies": {
+    "@banez/fs": "^1.0.3",
+    "@banez/npm-tool": "^1.1.0",
+    "@becomes/cms-backend": "^3.1.8",
+    "@becomes/cms-cli": "^3.0.0",
+    "@becomes/cms-sdk": "^3.4.0",
+    "@becomes/cms-ui": "^3.3.1",
+    "@becomes/purple-cheetah": "^3.5.4",
+    "@types/node": "^15.6.2",
+    "@typescript-eslint/eslint-plugin": "^4.28.2",
+    "@typescript-eslint/parser": "^4.28.2",
+    "eslint": "^7.32.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "^2.4.1",
+    "tsconfig-paths": "^4.0.0",
+    "typescript": "^4.4.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/becomesco/cms.git"
+  },
+  "bugs": {
+    "url": "https://github.com/becomesco/cms/issues"
+  },
+  "homepage": "https://github.com/becomesco/cms#readme",
+  "_moduleAliases": {
+    "@bcms": "@becomes/cms-backend"
+  }
+}

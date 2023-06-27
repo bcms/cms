@@ -1,0 +1,20 @@
+col001:
+  msg: Color with ID "%id%" does not exist.
+col002:
+  msg: Color with name "%name%" already exist.
+col003:
+  msg: Failed to add Color to the database.
+col004:
+  msg: Changes to prop "%prop%" are not valid --> %msg%
+col005:
+  msg: Failed to update Color in the database.
+col006:
+  msg: Failed to delete Color from the database.
+col007:
+  msg: Invalid propChange was provided as position "%pos%".
+col008:
+  msg: Failed to update Entries after Color update. %msg%
+col009:
+  msg: Property with name "%name%" is reserved and cannot be modified.
+col010:
+  msg: Color value does not have valid format, HEX value expected.

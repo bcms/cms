@@ -1,0 +1,10 @@
+.tippy-box {
+  @apply bg-transparent;
+
+  .tippy-content {
+    @apply p-0;
+  }
+  .tippy-arrow {
+    @apply hidden;
+  }
+}

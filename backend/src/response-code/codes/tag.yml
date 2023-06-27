@@ -1,0 +1,20 @@
+tag001:
+  msg: Tag with ID "%id%" does not exist.
+tag002:
+  msg: Tag with value "%value%" already exist.
+tag003:
+  msg: Failed to add Tag to the database.
+tag004:
+  msg: Changes to prop "%prop%" are not valid --> %msg%
+tag005:
+  msg: Failed to update Tag in the database.
+tag006:
+  msg: Failed to delete Tag from the database.
+tag007:
+  msg: Invalid propChange was provided as position "%pos%".
+tag008:
+  msg: Failed to update Entries after Tag update. %msg%
+tag009:
+  msg: Tag property value cannot be empty string
+tag010:
+  msg: Tag with value "%value%" does not exist.

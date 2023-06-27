@@ -1,0 +1,20 @@
+g001: # JWT unauthorized
+  msg: '%msg%'
+g002: # Object compare failed
+  msg: '%msg%'
+g003:
+  msg: Nothing to update.
+g004:
+  msg: Invalid ID "%id%" was provided.
+g005:
+  msg: Prop of type "%type%" is not allowed.
+g006:
+  msg: 'Failed to create Props schema with error: %error%'
+g007:
+  msg: 'Prop check failed with: %msg%'
+g008: # Infinite loop detected
+  msg: '%msg%'
+g009:
+  msg: 'Failed to update props. %msg%'
+g010:
+  msg: Missing parameter "%param%".

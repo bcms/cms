@@ -1,0 +1,61 @@
+.entryEditor {
+  &--prop {
+    &_RICH_TEXT {
+      .bcmsContentEditor {
+        &--content {
+          &_meta {
+            .ProseMirror {
+              @apply bg-white border border-grey rounded-3.5 transition-colors duration-300  min-h-[44px] pt-3 pb-[9px] pl-4.5 pr-6 hover:shadow-input hover:border-grey hover:border-opacity-50 focus-within:shadow-input focus-within:border-grey focus-within:border-opacity-50 dark:bg-darkGrey #{!important};
+              .paragraph,
+              .heading {
+                @apply text-base before:hidden after:absolute after:top-1/2 after:-translate-y-1/2 after:left-0 after:pointer-events-none after:text-grey after:content-[attr(data-placeholder)] #{!important};
+              }
+              .heading {
+                &:is(h1) {
+                  @apply text-4xl #{!important};
+                }
+                &:is(h2) {
+                  @apply text-3xl #{!important};
+                }
+                &:is(h3) {
+                  @apply text-2xl #{!important};
+                }
+                &:is(h4) {
+                  @apply text-xl #{!important};
+                }
+                &:is(h5) {
+                  @apply text-lg #{!important};
+                }
+                &:is(h6) {
+                  @apply text-base #{!important};
+                }
+              }
+              .orderedList,
+              .unorderedList {
+                @apply before:hidden #{!important};
+                .listItem {
+                  @apply mb-2 #{!important};
+                }
+              }
+              & > * {
+                @apply mb-4 last:mb-0 #{!important};
+              }
+            }
+          }
+          &_error {
+            .ProseMirror {
+              @apply border-red hover:border-red hover:border-opacity-100 focus-within:border-red focus-within:border-opacity-100 #{!important};
+            }
+          }
+        }
+      }
+    }
+    &_ENTRY_POINTER {
+      label {
+        button {
+          @apply dark:bg-darkGrey;
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,163 @@
+.ProseMirror {
+  @apply focus:outline-none;
+  & > .paragraph {
+    @apply mb-12 md:mb-10;
+  }
+  & * {
+    &:not(div) {
+      &::before {
+        @apply hidden;
+      }
+    }
+  }
+  & > * {
+    &:not(div) {
+      &::before {
+        content: '';
+        @apply absolute top-0 left-0 w-8 h-8 block bg-no-repeat bg-center -translate-x-1.5 -translate-y-full md:-translate-x-full md:translate-y-[-20%];
+        background-size: 65%;
+      }
+    }
+  }
+}
+.bcmsContentEditor {
+  &--content {
+    .heading {
+      &:is(h1) {
+        @apply text-4xl -tracking-0.03;
+        &::before {
+          background-image: url('/assets/icons/editor/heading/h1-fill.svg');
+        }
+      }
+      &:is(h2) {
+        @apply text-3xl -tracking-0.03;
+        &::before {
+          background-image: url('/assets/icons/editor/heading/h2-fill.svg');
+        }
+      }
+      &:is(h3) {
+        @apply text-2xl -tracking-0.01;
+        &::before {
+          background-image: url('/assets/icons/editor/heading/h3-fill.svg');
+        }
+      }
+      &:is(h4) {
+        @apply text-xl -tracking-0.01;
+        &::before {
+          background-image: url('/assets/icons/editor/heading/h4-fill.svg');
+        }
+      }
+      &:is(h5) {
+        @apply text-lg -tracking-0.01;
+        &::before {
+          background-image: url('/assets/icons/editor/heading/h5-fill.svg');
+        }
+      }
+      &:is(h6) {
+        @apply text-base -tracking-0.01;
+        &::before {
+          background-image: url('/assets/icons/editor/heading/h6-fill.svg');
+        }
+      }
+    }
+    .paragraph {
+      &::before {
+        background-image: url('/assets/icons/editor/text-fill.svg');
+      }
+      &.is-empty {
+        &:first-child {
+          &::after {
+            content: attr(data-placeholder);
+            @apply absolute top-0 left-0 flex text-grey pointer-events-none;
+          }
+        }
+      }
+    }
+    .unorderedList {
+      &::before {
+        background-image: url('/assets/icons/editor/list-ul-fill.svg');
+      }
+      .listItem {
+        @apply dark:after:bg-pink;
+        &::after {
+          content: '';
+          @apply absolute top-1.5 left-0 w-1 h-1 rounded-full bg-dark bg-opacity-50;
+        }
+      }
+      .unorderedList {
+        @apply mb-0 mt-3 #{!important};
+      }
+    }
+    .orderedList {
+      counter-reset: item;
+      &::before {
+        background-image: url('/assets/icons/editor/list-ol-fill.svg');
+      }
+      .listItem {
+        @apply grid grid-cols-[auto,1fr];
+        &::before {
+          counter-increment: item;
+          content: counter(item) '.';
+          @apply inline-block text-xs font-semibold text-dark text-opacity-50 mr-2 mt-0.5 -ml-2 dark:text-pink;
+        }
+      }
+      .orderedList {
+        @apply mb-0 mt-3 col-span-2 #{!important};
+        .listItem {
+          &::before {
+            content: counters(item, '.') ' ';
+          }
+        }
+      }
+    }
+    .code {
+      @apply text-4xl -tracking-0.03;
+      &::before {
+        background-image: url('/assets/icons/editor/code-fill.svg');
+      }
+    }
+    .inlineCode {
+      @apply text-xs bg-grey/30 dark:bg-pink/30 rounded-md px-[6px] py-[2px] whitespace-nowrap;
+    }
+  }
+  .textDropdown {
+    &--inner {
+      &::before {
+        content: '';
+        @apply absolute top-0 left-4 w-3 h-3 bg-white rotate-45 -translate-y-1/2;
+      }
+    }
+  }
+}
+.bcmsUrlPreview {
+  // position: relative;
+
+  // &--hover {
+  //   @apply bg-dark text-white rounded-sm py-[2px] px-[2px] desktop:text-xs opacity-50 dark:bg-grey dark:opacity-100 whitespace-nowrap block absolute;
+  //   &_error {
+  //     @apply text-red;
+  //   }
+  //   &-img {
+  //     @apply rounded-sm overflow-hidden w-36 h-36;
+  //     img {
+  //       @apply w-full h-full object-cover;
+  //     }
+  //   }
+
+  //   &-text {
+  //     @apply px-[10px];
+  //   }
+  // }
+  // &:hover {
+  //   &::after {
+  //     position: absolute;
+  //     bottom: 150%;
+  //     left: 50%;
+  //     transform: translate3d(-50%, 0, 0.1px);
+  //     content: attr(href);
+  //     display: block;
+  //     white-space: nowrap;
+  //     @apply bg-dark text-white rounded-3xl py-[5px] px-[15px] desktop:text-xs opacity-50;
+  //   }
+  // }
+}

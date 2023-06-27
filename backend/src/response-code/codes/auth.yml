@@ -1,0 +1,14 @@
+a001:
+  msg: Missing authorization.
+a002:
+  msg: Bad authorization encoding.
+a003:
+  msg: Invalid email and/or password.
+a004:
+  msg: Failed to update User in the database.
+a005:
+  msg: Invalid authorization.
+a006:
+  msg: No permission to access "%path%".
+a007:
+  msg: You do not have permission to access "%resource%".

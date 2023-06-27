@@ -1,0 +1,4 @@
+{
+  "typescript.tsdk": "backend/node_modules/typescript/lib",
+  "recommendations": ["Vue.volar", "Vue.vscode-typescript-vue-plugin"]
+}

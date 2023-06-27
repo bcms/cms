@@ -1,0 +1,26 @@
+mda001:
+  msg: Media with ID "%id%" does not exist.
+mda002:
+  msg: Media with name "%name%" already exist.
+mda003:
+  msg: Failed to add Media to the database.
+mda004:
+  msg: Changes to prop "%prop%" are not valid --> %msg%
+mda005:
+  msg: Failed to update Media in the database.
+mda006:
+  msg: Failed to delete Media from the database.
+mda007:
+  msg: Media with ID "%id%" is a directory and it cannot be returned as a binary.
+mda008:
+  msg: Media with ID "%id%" is indexed in database but cannot be wound in FS. Please contact a support. 
+mda009:
+  msg: Missing file.
+mda010:
+  msg: Invalid Media ID "%id%" was provided.
+mda011:
+  msg: Missing "act" query.
+mda012:
+  msg: Unauthorized.
+mda013:
+  msg: Failed to set dimensions on image.

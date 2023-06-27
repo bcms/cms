@@ -1,0 +1,13 @@
+ak001:
+  msg: API Key with ID "%id%" does not exist.
+ak003:
+  msg: Failed to add API Key to the database.
+ak004:
+  msg: Changes to prop "%prop%" are not valid --> %msg%
+ak005:
+  msg: Failed to update API Key in the database.
+ak006:
+  msg: Failed to delete API Key from the database.
+# Invalid authorization for Api Key
+ak007:
+  msg: '%msg%'

@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "declaration": true,
+    "declarationMap": false,
+    "removeComments": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "target": "esnext",
+    "sourceMap": false,
+    "outDir": "./dist",
+    "baseUrl": "./",
+    "incremental": false,
+    "importsNotUsedAsValues": "error",
+    "strict": true,
+    "strictNullChecks": true,
+    "skipLibCheck": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@becomes/cms-sdk": ["./src"],
+      "@becomes/cms-sdk/*": ["./src/*"],
+      "@backend-types": ["./src/backend-types"],
+      "@backend-types/*": ["./src/backend-types/*"],
+      "@becomes/cms-backend/*": ["../../backend/src/*"],
+      "@becomes/cms-ui/*": ["../src/*"]
+    }
+  },
+  "include": ["src", "test"]
+}

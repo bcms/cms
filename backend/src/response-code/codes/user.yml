@@ -1,0 +1,30 @@
+u001:
+  msg: Failed to find a User in database.
+u002:
+  msg: User with ID "%id%" does not exist.
+u003:
+  msg: You do not have permission to edit other Users.
+u004:
+  msg: Failed to find a User in database.
+u005:
+  msg: Failed to delete User form database.
+u006:
+  msg: User with email "%email%" already exist.
+u007:
+  msg: Invalid current password.
+u008:
+  msg: You do not have permission to change users policy.
+u009:
+  msg: Nothing to update.
+u010:
+  msg: Failed to update the User in database.
+u011:
+  msg: Failed to add User to the database.
+u012:
+  msg: Invalid security code.
+u013:
+  msg: Invalid ID "%id%" was provided.
+u014:
+  msg: You do not have permission to delete other users.
+u015:
+  msg: Admin exist.

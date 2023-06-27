@@ -1,0 +1,22 @@
+{
+  "extends": "@vue/tsconfig/tsconfig.web.json",
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@ui/*": ["./src/*"],
+      "@becomes/cms-backend/*": ["../backend/src/*"],
+      "@becomes/cms-sdk": ["./sdk/src"],
+      "@becomes/cms-sdk/*": ["./sdk/src/*"]
+    },
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "importsNotUsedAsValues": "error"
+  },
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    }
+  ],
+  "exclude": ["./tailwind.config.cjs"]
+}
