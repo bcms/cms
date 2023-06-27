@@ -2,6 +2,7 @@ const { ChildProcess } = require('@banez/child_process');
 const { createConfig, createTasks } = require('@banez/npm-tool');
 const path = require('path');
 const { createFS } = require('@banez/fs');
+const nodeFs = require('fs/promises');
 
 const fs = createFS({
   base: process.cwd(),
@@ -466,6 +467,23 @@ module.exports = createConfig({
           stdio: 'inherit',
         }
       );
+    },
+
+    '--publish-client': async () => {
+      if (await fs.exist('client', 'dist', 'node_modules')) {
+        throw new Error(
+          `Please remove "${path.join(
+            __dirname,
+            'client',
+            'dist',
+            'node_modules'
+          )}"`
+        );
+      }
+      await ChildProcess.spawn('npm', ['publish', '--access=public'], {
+        cwd: path.join(process.cwd(), 'client', 'dist'),
+        stdio: 'inherit',
+      });
     },
   },
 });
