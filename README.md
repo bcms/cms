@@ -4,6 +4,8 @@
 [![NPM Version][npm-image-sdk]][npm-url-sdk]
 [![NPM Version][npm-image-backend]][npm-url-backend]
 [![NPM Version][npm-image-client]][npm-url-client]
+[![NPM Version][npm-image-cli]][npm-url-cli]
+[![NPM Version][npm-image-most]][npm-url-most]
 
 [npm-image-client]: https://img.shields.io/npm/v/@becomes/cms-client.svg?label=@becomes/cms-client
 [npm-url-client]: https://npmjs.org/package/@becomes/cms-client
@@ -13,6 +15,10 @@
 [npm-url-sdk]: https://npmjs.org/package/@becomes/cms-sdk
 [npm-image-backend]: https://img.shields.io/npm/v/@becomes/cms-backend.svg?label=@becomes/cms-backend
 [npm-url-backend]: https://npmjs.org/package/@becomes/cms-backend
+[npm-image-cli]: https://img.shields.io/npm/v/@becomes/cms-cli.svg?label=@becomes/cms-cli
+[npm-url-cli]: https://npmjs.org/package/@becomes/cms-cli
+[npm-image-most]: https://img.shields.io/npm/v/@becomes/cms-most.svg?label=@becomes/cms-most
+[npm-url-most]: https://npmjs.org/package/@becomes/cms-most
 
 [BCMS](https://thebcms.com) is a Headless CMS (Content Management System). It provides a powerful API, best-in-class model builder, and intuitive content editor. BCMS platform consists of 2 major parts: [BCMS Cloud](https://cloud.thebcms.com) and BCMS Instance. The BCMS Cloud is a platform that provides a way to create and manage BCMS instances. It is used for issuing BCMS Licenses, managing BCMS Instances, and providing tools for organizations to manage teams and permissions efficiently. The BCMS is an Open-Source and has both free and paid plans.
 
