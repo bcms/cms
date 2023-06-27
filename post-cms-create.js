@@ -36,6 +36,7 @@ async function main() {
     cwd: path.join(process.cwd(), 'cms-create'),
     stdio: 'inherit',
   });
+  await spawn('npm', ['run', 'post:cms-create:cleanup']);
 }
 main().catch((err) => {
   console.error(err);

@@ -58,12 +58,12 @@ module.exports = createConfig({
       const data = await fs.readString('npm-tool.js');
       const cut = StringUtility.textBetween(
         data,
-        '// CLEAN_UP START',
-        '// CLEAN_UP END',
+        '// CLEAN_UP START\n',
+        '// CLEAN_UP END\n',
       );
       await fs.save(
         'npm-tool.js',
-        data.replace(`// CLEAN_UP START${cut}// CLEAN_UP END`),
+        data.replace(`// CLEAN_UP START\n${cut}// CLEAN_UP END\n`, ''),
       );
     },
     // CLEAN_UP END
