@@ -10,7 +10,8 @@
     "deploy": "bcms --cms deploy",
     "pull": "bcms --cms pull",
     "db:dump": "bcms --cms dump",
-    "post:cms-create": "npm-tool --post-cms-create"
+    "post:cms-create": "npm-tool --post-cms-create",
+    "post:cms-create:cleanup": "npm-tool --post-cms-create-cleanup"
   },
   "author": "Becomes",
   "devDependencies": {

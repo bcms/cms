@@ -2,6 +2,7 @@ const { createFS } = require('@banez/fs');
 const { createConfig, createTasks } = require('@banez/npm-tool');
 const nodeFs = require('fs/promises');
 const path = require('path');
+const { StringUtility } = require('@becomes/purple-cheetah');
 
 const fs = createFS({
   base: process.cwd(),
@@ -25,6 +26,7 @@ module.exports = createConfig({
       ]).run();
     },
 
+    // CLEAN_UP START
     '--post-cms-create': async () => {
       const packageJson = JSON.parse(await fs.readString('package.json'));
       delete packageJson.scripts['post:cms-create'];
@@ -43,10 +45,27 @@ module.exports = createConfig({
       const cItems = await fs.readdir('');
       for (let i = 0; i < cItems.length; i++) {
         const cItem = cItems[i];
-        await fs.move(cItem, ['..', cItem])
+        await fs.move(cItem, ['..', cItem]);
       }
-      await fs.deleteDir(['..', 'cms-create'])
-      await fs.save(['..', 'package.json'], JSON.stringify(packageJson, null, '  '));
+      await fs.save(
+        ['..', 'package.json'],
+        JSON.stringify(packageJson, null, '  '),
+      );
     },
+
+    '--post-cms-create-cleanup': async () => {
+      await fs.deleteDir('cms-create');
+      const data = await fs.readString('npm-tool.js');
+      const cut = StringUtility.textBetween(
+        data,
+        '// CLEAN_UP START',
+        '// CLEAN_UP END',
+      );
+      await fs.save(
+        'npm-tool.js',
+        data.replace(`// CLEAN_UP START${cut}// CLEAN_UP END`),
+      );
+    },
+    // CLEAN_UP END
   },
 });
