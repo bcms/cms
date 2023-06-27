@@ -28,6 +28,9 @@ module.exports = createConfig({
 
     // CLEAN_UP START
     '--post-cms-create': async () => {
+      await fs.copy(['..', 'README.md'], 'README.md');
+      await fs.copy(['..', 'LICENSE'], 'LICENSE');
+      await fs.copy(['..', 'assets'], 'assets');
       const packageJson = JSON.parse(await fs.readString('package.json'));
       delete packageJson.scripts['post:cms-create'];
       const items = await fs.readdir('..');
