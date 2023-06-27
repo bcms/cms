@@ -86,8 +86,11 @@ module.exports = createConfig({
         cwd: path.join(process.cwd(), 'backend'),
         stdio: 'inherit',
       });
-      if (await fs.exist(['sdk', 'src', 'backend-types'])) {
-        await fs.deleteDir(['sdk', 'src', 'backend-types']);
+      if (await fs.exist(['ui', 'sdk', 'src', 'backend-types'])) {
+        await fs.deleteDir(['ui', 'sdk', 'src', 'backend-types']);
+      }
+      if (await fs.exist(['client', 'src', 'backend-types'])) {
+        await fs.deleteDir(['client', 'src', 'backend-types']);
       }
       await fileReplacer({
         basePath: '',
