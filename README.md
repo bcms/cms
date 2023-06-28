@@ -40,7 +40,7 @@
 - Open a terminal and navigate to a place where you would like to create a project.
 - Create a project by running: `bcms --cms create`.
 - CD into the project and run `docker-compose up`.
-- BCMS will be available on post 8080: http://localhost:8080
+- BCMS will be available on port 8080: http://localhost:8080
 - Done.
 
 ## Connection
