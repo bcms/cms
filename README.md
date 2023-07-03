@@ -20,7 +20,7 @@
 [npm-image-most]: https://img.shields.io/npm/v/@becomes/cms-most.svg?label=@becomes/cms-most
 [npm-url-most]: https://npmjs.org/package/@becomes/cms-most
 
-[BCMS](https://thebcms.com) is a Headless CMS (Content Management System). It provides a powerful API, best-in-class model builder, and intuitive content editor. BCMS platform consists of 2 major parts: [BCMS Cloud](https://cloud.thebcms.com) and BCMS Instance. The BCMS Cloud is a platform that provides a way to create and manage BCMS instances. It is used for issuing BCMS Licenses, managing BCMS Instances, and providing tools for organizations to manage teams and permissions efficiently. The BCMS is an Open-Source and has both free and paid plans.
+[BCMS](https://thebcms.com) is a Headless CMS (Content Management System). It provides an intuitive content editor and a powerful API. The BCMS platform consists of 2 major parts: [BCMS Cloud](https://cloud.thebcms.com) and BCMS Instance. The BCMS Cloud is a platform that provides a way to create and manage BCMS instances. It is used for issuing BCMS Licenses, managing BCMS Instances, and providing tools for organizations to manage teams and permissions efficiently. BCMS is open-source and offers both free and paid plans.
 
 <div style="margin-bottom: 20px; margin-top: 20px;">
   <a href="https://thebcms.com/pricing" style="padding: 5px 20px; font-size: 20px; background-color: #eee; border-radius: 5px;">See pricing and plans</a>
@@ -39,7 +39,7 @@
 - Install BCMS CLI: `npm i -g @becomes/cms-cli@latest`
 - Open a terminal and navigate to a place where you would like to create a project.
 - Create a project by running: `bcms --cms create`.
-- CD into the project and run `docker-compose up`.
+- Navigate into the project directory and execute the command `docker-compose up`.
 - BCMS will be available on port 8080: http://localhost:8080
 - Done.
 
@@ -50,12 +50,12 @@
 _Figure 1 - Connection between the BCMS Cloud and BCMS Instance._
 
 1. User connection to `https://<instance_name>.yourbcms.com` domain name.
-2. CloudFlare proxy request to Nginx controlled by [BCMS Shim](https://github.com/bcms/shim)
-3. Nginx proxy request to [BCMS Backend]('backend')
-4. BCMS Cloud request to BCMS Shim on port 3000 with secure connection.
-5. BCMS Cloud to BCMS Shim proxy request.
-6. BCMS Shim to BCMS Cloud request via secure channel.
-7. Internal communication between BCMS Shim and Backend.
-8. Connection between BCMS Backend and Database.
+2. CloudFlare sends a proxy request to Nginx controlled by [BCMS Shim](https://github.com/bcms/shim)
+3. Nginx sends a proxy request to [BCMS Backend]('backend')
+4. The BCMS Cloud sends requests to the BCMS Shim on port 3000, utilizing a secure connection.
+5. The BCMS Cloud sends a proxy request to the BCMS Shim.
+6. The BCMS Shim sends requests to the BCMS Cloud via a secure channel.
+7. Internal communication takes place between the BCMS Shim and the Backend.
+8. A connection is established between the BCMS Backend and the Database.
 
 ## [Documentation](https://docs.thebcms.com)
