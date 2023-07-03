@@ -51,7 +51,7 @@ _Figure 1 - Connection between the BCMS Cloud and BCMS Instance._
 
 1. User connection to `https://<instance_name>.yourbcms.com` domain name.
 2. CloudFlare sends a proxy request to Nginx controlled by [BCMS Shim](https://github.com/bcms/shim)
-3. Nginx sends a proxy request to [BCMS Backend]('backend')
+3. Nginx sends a proxy request to [BCMS Backend](/backend)
 4. The BCMS Cloud sends requests to the BCMS Shim on port 3000, utilizing a secure connection.
 5. The BCMS Cloud sends a proxy request to the BCMS Shim.
 6. The BCMS Shim sends requests to the BCMS Cloud via a secure channel.
