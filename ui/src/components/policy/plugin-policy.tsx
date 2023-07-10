@@ -146,7 +146,10 @@ const component = defineComponent({
                       {window.bcms.util.string.toPretty(schema.name)}
                     </div>
                     <div class="grid grid-cols-1 gap-3 mb-5">
-                      {((policyOption?.value || []).length > 0 ? policyOption?.value : ['false'])?.map((_, i) => {
+                      {((policyOption?.value || []).length > 0
+                        ? policyOption?.value
+                        : ['false']
+                      )?.map((_, i) => {
                         return (
                           <div key={i} class="flex items-end gap-4">
                             <BCMSSelect
@@ -167,8 +170,8 @@ const component = defineComponent({
                                 policyOption ? policyOption.value[i] : ''
                               }
                               onChange={(option) => {
-                                const value = policyOption?.value || []
-                                value[i] = option.value
+                                const value = policyOption?.value || [];
+                                value[i] = option.value;
                                 handleOptionChange(schema, {
                                   name: schema.name,
                                   value,
@@ -176,6 +179,24 @@ const component = defineComponent({
                               }}
                               class="flex-1"
                             />
+                            {policyOption?.value &&
+                              policyOption.value.length > 1 && (
+                                <button
+                                  class="flex group"
+                                  onClick={() => {
+                                    policyOption?.value.splice(i, 1);
+                                    handleOptionChange(schema, {
+                                      name: schema.name,
+                                      value: policyOption?.value || [],
+                                    });
+                                  }}
+                                >
+                                  <BCMSIcon
+                                    src="/trash"
+                                    class="text-dark fill-current w-6 h-6 mb-3 transition-colors duration-200 group-hover:text-red group-focus-visible:text-red dark:text-light dark:group-hover:text-red dark:group-focus-visible:text-red"
+                                  />
+                                </button>
+                              )}
                             {i === (policyOption?.value || [])?.length - 1 && (
                               <button
                                 class="flex group"
@@ -226,8 +247,8 @@ const component = defineComponent({
                               )}
                               value={policyOption ? policyOption.value[i] : ''}
                               onInput={(value) => {
-                                const val = policyOption?.value || []
-                                val[i] = value
+                                const val = policyOption?.value || [];
+                                val[i] = value;
                                 handleOptionChange(schema, {
                                   name: schema.name,
                                   value: val,
@@ -235,11 +256,29 @@ const component = defineComponent({
                               }}
                               class="flex-1"
                             />
+                            {policyOption?.value &&
+                              policyOption.value.length > 1 && (
+                                <button
+                                  class="flex group"
+                                  onClick={() => {
+                                    policyOption?.value.splice(i, 1);
+                                    handleOptionChange(schema, {
+                                      name: schema.name,
+                                      value: policyOption?.value || [],
+                                    });
+                                  }}
+                                >
+                                  <BCMSIcon
+                                    src="/trash"
+                                    class="text-dark fill-current w-6 h-6 mb-3 transition-colors duration-200 group-hover:text-red group-focus-visible:text-red dark:text-light dark:group-hover:text-red dark:group-focus-visible:text-red"
+                                  />
+                                </button>
+                              )}
                             {i === (policyOption?.value || [])?.length - 1 && (
                               <button
                                 class="flex group"
                                 onClick={() => {
-                                  policyOption?.value?.push('false');
+                                  policyOption?.value.push('');
                                 }}
                               >
                                 <BCMSIcon
