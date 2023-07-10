@@ -2,7 +2,7 @@ const { ChildProcess } = require('@banez/child_process');
 const { createConfig, createTasks } = require('@banez/npm-tool');
 const path = require('path');
 const { createFS } = require('@banez/fs');
-const nodeFs = require('fs/promises');
+const { StringUtility } = require('@banez/string-utility');
 
 const fs = createFS({
   base: process.cwd(),
@@ -65,6 +65,77 @@ module.exports = createConfig({
       });
     },
 
+    '--pre-commit': async () => {
+      const whatToCheck = {
+        backend: false,
+        client: false,
+        ui: false,
+        sdk: false,
+      };
+      let gitOutput = '';
+      await ChildProcess.advancedExec('git status', {
+        cwd: process.cwd(),
+        doNotThrowError: true,
+        onChunk(type, chunk) {
+          gitOutput += chunk;
+          process[type].write(chunk);
+        },
+      }).awaiter;
+      const paths = StringUtility.allTextBetween(gitOutput, '   ', '\n');
+      for (let i = 0; i < paths.length; i++) {
+        const p = paths[i];
+        if (p.startsWith('backend/')) {
+          whatToCheck.backend = true;
+        } else if (p.startsWith('ui/sdk/')) {
+          whatToCheck.sdk = true;
+        } else if (p.startsWith('ui/')) {
+          whatToCheck.ui = true;
+        } else if (p.startsWith('client/')) {
+          whatToCheck.client;
+        }
+      }
+      if (whatToCheck.backend) {
+        await ChildProcess.spawn('npm', ['run', 'lint'], {
+          cwd: path.join(process.cwd(), 'backend'),
+          stdio: 'inherit',
+        });
+        await ChildProcess.spawn('npm', ['run', 'build:noEmit'], {
+          cwd: path.join(process.cwd(), 'backend'),
+          stdio: 'inherit',
+        });
+      }
+      if (whatToCheck.ui) {
+        await ChildProcess.spawn('npm', ['run', 'lint'], {
+          cwd: path.join(process.cwd(), 'ui'),
+          stdio: 'inherit',
+        });
+        await ChildProcess.spawn('npm', ['run', 'type-check'], {
+          cwd: path.join(process.cwd(), 'ui'),
+          stdio: 'inherit',
+        });
+      }
+      if (whatToCheck.client) {
+        await ChildProcess.spawn('npm', ['run', 'lint'], {
+          cwd: path.join(process.cwd(), 'client'),
+          stdio: 'inherit',
+        });
+        await ChildProcess.spawn('npm', ['run', 'build:noEmit'], {
+          cwd: path.join(process.cwd(), 'client'),
+          stdio: 'inherit',
+        });
+      }
+      if (whatToCheck.sdk) {
+        await ChildProcess.spawn('npm', ['run', 'lint'], {
+          cwd: path.join(process.cwd(), 'ui', 'sdk'),
+          stdio: 'inherit',
+        });
+        await ChildProcess.spawn('npm', ['run', 'build:ts:noEmit'], {
+          cwd: path.join(process.cwd(), 'ui', 'sdk'),
+          stdio: 'inherit',
+        });
+      }
+    },
+
     '--setup': async () => {
       const dirs = [
         ['db'],
@@ -79,6 +150,7 @@ module.exports = createConfig({
           await fs.mkdir(['backend', ...dir]);
         }
       }
+      await fs.save(['backend', '.env'], '');
     },
 
     '--build-types': async () => {
