@@ -17,7 +17,9 @@
     "publish:ui": "npm-tool --publish-ui",
     "publish:sdk": "npm-tool --publish-sdk",
     "publish:backend": "npm-tool --publish-backend",
-    "publish:client": "npm-tool --publish-client"
+    "publish:client": "npm-tool --publish-client",
+    "prepare": "husky install",
+    "pre:commit": "npm-tool --pre-commit"
   },
   "repository": {
     "type": "git",
@@ -33,6 +35,8 @@
   "devDependencies": {
     "@banez/child_process": "^1.0.3",
     "@banez/fs": "^1.0.3",
-    "@banez/npm-tool": "^1.1.1"
+    "@banez/npm-tool": "^1.1.1",
+    "@banez/string-utility": "^1.0.1",
+    "husky": "^8.0.3"
   }
 }
