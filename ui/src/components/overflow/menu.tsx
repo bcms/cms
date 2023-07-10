@@ -1,4 +1,11 @@
-import { computed, defineComponent, type PropType, ref, Teleport } from 'vue';
+import {
+  computed,
+  defineComponent,
+  type PropType,
+  ref,
+  Teleport,
+  nextTick,
+} from 'vue';
 import { DefaultComponentProps } from '../_default';
 import BCMSIcon from '../icon';
 import { useTranslation } from '../../translations';
@@ -40,9 +47,11 @@ const component = defineComponent({
         const el = listRef.value;
         const style: string[] = [];
         if (parentBB.top + el.offsetHeight > window.innerHeight) {
+          const viewportOffset =
+            parentBB.top + el.offsetHeight - window.innerHeight;
           style.push(
             `top: ${
-              parentBB.top - el.offsetHeight + document.body.scrollTop
+              parentBB.bottom - 50 + document.body.scrollTop - viewportOffset
             }px !important;`,
           );
         } else {
@@ -63,6 +72,8 @@ const component = defineComponent({
         }
         if (props.optionsWidth) {
           style.push(`width: ${props.optionsWidth}px !important;`);
+        } else {
+          style.push(`width: 215px !important;`);
         }
         el.setAttribute('style', style.join(' '));
       }
@@ -71,9 +82,9 @@ const component = defineComponent({
     function handleClick() {
       if (!show.value) {
         show.value = true;
-        setTimeout(() => {
+        nextTick(() => {
           calcPosition();
-        }, 20);
+        });
       } else {
         show.value = false;
       }
@@ -108,7 +119,12 @@ const component = defineComponent({
               <Teleport to="#bcmsOverflowList">
                 <div
                   ref={listRef}
-                  class="z-[1000000] flex flex-col absolute top-full bg-white shadow-cardLg overflow-hidden w-[215px] select-none rounded-2.5 dark:bg-darkGrey"
+                  class="z-[1000000] flex flex-col absolute top-full bg-white shadow-cardLg overflow-hidden select-none rounded-2.5 dark:bg-darkGrey"
+                  style={{
+                    width: props.optionsWidth
+                      ? `${props.optionsWidth}px`
+                      : '215px',
+                  }}
                   v-clickOutside={() => (show.value = false)}
                   onClick={() => {
                     show.value = false;
