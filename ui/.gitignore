@@ -30,5 +30,3 @@ coverage
 *.sw?
 
 /src/bcms-ui
-/public/assets
-/public/webfonts

@@ -1,0 +1,17 @@
+<svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24">
+    <path
+            fill-rule="evenodd"
+            d="M10 12a2 2 0 114 0 2 2 0 01-4 0z"
+            clip-rule="evenodd"/>
+    <path
+            fill-rule="evenodd"
+            d="M17 12a2 2 0 114 0 2 2 0 01-4 0z"
+            clip-rule="evenodd"/>
+    <path
+            fill-rule="evenodd"
+            d="M3 12a2 2 0 114 0 2 2 0 01-4 0z"
+            clip-rule="evenodd"/>
+</svg>
