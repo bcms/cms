@@ -5,6 +5,7 @@
   "description": "",
   "scripts": {
     "postinstall": "npm-tool --postinstall",
+    "setup": "npm-tool --setup",
     "build:types": "npm-tool --build-types",
     "bundle:ui": "npm-tool --bundle-ui",
     "bundle:sdk": "npm-tool --bundle-sdk",

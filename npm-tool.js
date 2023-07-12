@@ -65,6 +65,27 @@ module.exports = createConfig({
       });
     },
 
+    '--setup': async () => {
+      const dirs = [
+        ['backend', 'db'],
+        ['backend', 'db', 'mongo'],
+        ['backend', 'uploads'],
+      ];
+      for (let i = 0; i < dirs.length; i++) {
+        const dir = dirs[i];
+        if (!(await fs.exist(dir))) {
+          await fs.mkdir(dir);
+        }
+      }
+      const files = [['backend', '.env']];
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        if (!(await fs.exist(file, true))) {
+          await fs.save(file, '');
+        }
+      }
+    },
+
     '--pre-commit': async () => {
       const whatToCheck = {
         backend: false,
