@@ -18,12 +18,14 @@ export const homeTranslationsEn = {
     entry: {
       label: 'Entry',
       dropdown: {
-        title: 'Select template',
+        title: 'Select a template',
         seeAll: 'See all',
+        noTemplates: 'To create an entry, you need to have at least one template.',
+        createATemplate: 'Create a template.',
       },
     },
   },
-  search: 'Search',
+  search: 'Search for anything',
   stats: {
     title: 'Your stats',
     entries: 'Entries created',
@@ -37,7 +39,7 @@ export const homeTranslationsEn = {
   uploads: {
     title: 'Recently uploaded',
     seeAll: 'See all files',
-    noRecentUploads: 'You don’t have any file or document',
+    noRecentUploads: 'Upload first files to see them here.',
     cta: 'Upload files',
     dropzone: {
       drop: 'Drop files here to upload or',

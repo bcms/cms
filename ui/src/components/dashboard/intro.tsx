@@ -83,9 +83,16 @@ const component = defineComponent({
     });
 
     const firstName = computed(() => {
-      const fullName = userMe.value?.customPool.personal.firstName;
-      const firstWord = fullName ? fullName.split(' ')[0] : '';
-      return firstWord !== undefined ? firstWord : fullName || '';
+      if (userMe.value?.customPool.personal.firstName) {
+        return userMe.value?.customPool.personal.firstName;
+      }
+      let firstWord = userMe.value?.username.split(' ')[0];
+      if (firstWord) {
+        firstWord =
+          firstWord.charAt(0).toUpperCase() + firstWord.slice(1).toLowerCase();
+        return firstWord;
+      }
+      return '';
     });
 
     // TODO: Extract to a directive or similar
@@ -136,13 +143,15 @@ const component = defineComponent({
               <div class="flex items-center justify-between max-w-[445px]">
                 <div>
                   <div class="text-[38px] leading-tight font-light tracking-[-0.02em] mb-1 dark:text-light">
-                    {translations.value.page.home.greeting.title(firstName.value)}
+                    {translations.value.page.home.greeting.title(
+                      firstName.value,
+                    )}
                   </div>
                   <div class="leading-tight font-light tracking-[-0.01em] dark:text-light">
                     {translations.value.page.home.greeting.wish}
                   </div>
                 </div>
-                <div class="relative">
+                <div class="relative shrink-0">
                   <BCMSButton
                     onClick={() => {
                       showCreateNewDropdown.value =
@@ -156,7 +165,7 @@ const component = defineComponent({
                       <BCMSIcon src="/plus" class="fill-current w-4 h-4" />
                     </span>
                   </BCMSButton>
-                  <Transition name="fade">
+                  <Transition name="createNew">
                     {showCreateNewDropdown.value && (
                       <div
                         v-clickOutside={() => {
@@ -212,7 +221,7 @@ const component = defineComponent({
                                 }}
                                 ref={entriesDropdownDOM}
                                 class="absolute w-[320px] max-w-[100vw] translate-x-full translate-y-full pt-5 pb-2.5 rounded-2.5 shadow-cardLg bg-white dark:bg-[#504F54]"
-                                style="right: -8px; bottom: 80px"
+                                style="right: 14px; bottom: 80px"
                               >
                                 <div class="text-xs leading-normal tracking-0.06 font-light uppercase px-5 mb-2.5 dark:text-[#D1D2D3]">
                                   {
@@ -221,26 +230,42 @@ const component = defineComponent({
                                   }
                                 </div>
                                 <div class="grid grid-cols-1 max-h-[250px] overflow-y-auto">
-                                  {filteredTemplates.value
-                                    .slice(
-                                      0,
-                                      showAllEntries.value
-                                        ? filteredTemplates.value.length
-                                        : 4,
-                                    )
-                                    .map((template, index) => {
-                                      return (
-                                        <BCMSLink
-                                          key={index}
-                                          href={`/dashboard/t/${template.cid}/e/create`}
-                                          class="flex items-center px-5 py-3.5 transition-colors duration-300 hover:text-green hover:bg-light dark:text-[#D1D2D3] dark:hover:text-yellow dark:hover:bg-[#38373C]"
-                                        >
-                                          <span class="leading-tight -tracking-0.01">
-                                            {template.label}
-                                          </span>
-                                        </BCMSLink>
-                                      );
-                                    })}
+                                  {filteredTemplates.value.length > 0 ? (
+                                    filteredTemplates.value
+                                      .slice(
+                                        0,
+                                        showAllEntries.value
+                                          ? filteredTemplates.value.length
+                                          : 4,
+                                      )
+                                      .map((template, index) => {
+                                        return (
+                                          <BCMSLink
+                                            key={index}
+                                            href={`/dashboard/t/${template.cid}/e/create`}
+                                            class="flex items-center px-5 py-3.5 transition-colors duration-300 hover:text-green hover:bg-light dark:text-[#D1D2D3] dark:hover:text-yellow dark:hover:bg-[#38373C]"
+                                          >
+                                            <span class="leading-tight -tracking-0.01">
+                                              {template.label}
+                                            </span>
+                                          </BCMSLink>
+                                        );
+                                      })
+                                  ) : (
+                                    <div class="text-xs leading-normal tracking-0.06 font-light px-5 mb-2.5 dark:text-[#D1D2D3]">
+                                      {
+                                        translations.value.page.home.newOptions
+                                          .entry.dropdown.noTemplates
+                                      }
+                                      <BCMSLink class='ml-1 underline hover:no-underline' href={'/dashboard/t'}>
+                                        {
+                                          translations.value.page.home
+                                            .newOptions.entry.dropdown
+                                            .createATemplate
+                                        }
+                                      </BCMSLink>
+                                    </div>
+                                  )}
                                   <button
                                     class={`flex items-center px-5 py-3.5 transition-colors duration-300 ${
                                       filteredTemplates.value.length > 4 &&
