@@ -69,7 +69,9 @@ module.exports = createConfig({
       const dirs = [
         ['backend', 'db'],
         ['backend', 'db', 'mongo'],
+        ['backend', 'db', 'bcms'],
         ['backend', 'uploads'],
+        ['backend', 'logs'],
       ];
       for (let i = 0; i < dirs.length; i++) {
         const dir = dirs[i];
@@ -155,23 +157,6 @@ module.exports = createConfig({
           stdio: 'inherit',
         });
       }
-    },
-
-    '--setup': async () => {
-      const dirs = [
-        ['db'],
-        ['db', 'bcms'],
-        ['db', 'mongo'],
-        ['logs'],
-        ['uploads'],
-      ];
-      for (let i = 0; i < dirs.length; i++) {
-        const dir = dirs[i];
-        if (await fs.exist(['backend', ...dir])) {
-          await fs.mkdir(['backend', ...dir]);
-        }
-      }
-      await fs.save(['backend', '.env'], '');
     },
 
     '--build-types': async () => {
