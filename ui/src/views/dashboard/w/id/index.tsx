@@ -15,10 +15,7 @@ import {
 import type { BCMSWhereIsItUsedItem } from '../../../../types';
 import { useRoute, useRouter } from 'vue-router';
 import { useTranslation } from '../../../../translations';
-
-const lastState = {
-  wid: '',
-};
+import { BCMSLastRoute } from '@ui/util';
 
 const component = defineComponent({
   setup() {
@@ -71,6 +68,7 @@ const component = defineComponent({
                 });
               },
               async (result) => {
+                BCMSLastRoute.templates = result.cid;
                 await router.push(`/dashboard/w/${result.cid}`);
               },
             );
@@ -95,11 +93,11 @@ const component = defineComponent({
               await window.bcms.sdk.widget.deleteById(target._id);
             },
             async () => {
-              lastState.wid = widget.value.items[0]
+              BCMSLastRoute.widgets = widget.value.items[0]
                 ? widget.value.items[0].cid
                 : '';
               await router.push({
-                path: `/dashboard/w/${lastState.wid}`,
+                path: `/dashboard/w/${BCMSLastRoute.widgets}`,
                 replace: true,
               });
             },
@@ -241,11 +239,11 @@ const component = defineComponent({
       },
     };
     async function redirect() {
-      if (!lastState.wid && route.params.wid) {
-        lastState.wid = route.params.wid as string;
+      if (route.params.wid) {
+        BCMSLastRoute.widgets = route.params.wid as string;
       }
-      const targetId = lastState.wid
-        ? lastState.wid
+      const targetId = BCMSLastRoute.widgets
+        ? BCMSLastRoute.widgets
         : widget.value.items[0].cid;
       if (targetId) {
         await router.push({
@@ -328,7 +326,7 @@ const component = defineComponent({
                   link: `/dashboard/w/${e.cid}`,
                   selected: widget.value.target?.cid === e.cid,
                   onClick: () => {
-                    lastState.wid = e.cid;
+                    BCMSLastRoute.widgets = e.cid;
                     router.push({
                       path: `/dashboard/w/${e.cid}`,
                       replace: true,

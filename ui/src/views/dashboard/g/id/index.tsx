@@ -15,10 +15,7 @@ import {
 import type { BCMSWhereIsItUsedItem } from '../../../../types';
 import { useRoute, useRouter } from 'vue-router';
 import { useTranslation } from '../../../../translations';
-
-const lastState = {
-  gid: '',
-};
+import { BCMSLastRoute } from '@ui/util';
 
 const component = defineComponent({
   setup() {
@@ -36,7 +33,7 @@ const component = defineComponent({
       target?: BCMSGroup;
     }>(() => {
       const target = store.getters.group_findOne(
-        (e) => e.cid === (route.params.gid as string)
+        (e) => e.cid === (route.params.gid as string),
       );
       if (target) {
         meta.set({
@@ -46,9 +43,9 @@ const component = defineComponent({
         });
       }
       return {
-        items: store.getters.group_items.slice(0).sort((a, b) =>
-          a.name < b.name ? -1 : 1
-        ),
+        items: store.getters.group_items
+          .slice(0)
+          .sort((a, b) => (a.name < b.name ? -1 : 1)),
         target,
       };
     });
@@ -69,7 +66,7 @@ const component = defineComponent({
               },
               async (result) => {
                 await router.push(`/dashboard/g/${result.cid}`);
-              }
+              },
             );
           },
         });
@@ -84,7 +81,7 @@ const component = defineComponent({
             translations.value.page.group.confirm.remove.description({
               label: target.label,
             }),
-            target.name
+            target.name,
           )
         ) {
           await throwable(
@@ -92,14 +89,14 @@ const component = defineComponent({
               await window.bcms.sdk.group.deleteById(target._id);
             },
             async () => {
-              lastState.gid = group.value.items[0]
+              BCMSLastRoute.groups = group.value.items[0]
                 ? group.value.items[0].cid
                 : '';
               await router.push({
-                path: `/dashboard/g/${lastState.gid}`,
+                path: `/dashboard/g/${BCMSLastRoute.groups}`,
                 replace: true,
               });
-            }
+            },
           );
         }
       },
@@ -132,16 +129,21 @@ const component = defineComponent({
             location: 'group',
             entityId: target._id,
             async onDone(data) {
-              await throwable(async () => {
-                await window.bcms.sdk.group.update({
-                  _id: target._id,
-                  propChanges: [
-                    {
-                      add: data,
-                    },
-                  ],
-                });
-              });
+              await throwable(
+                async () => {
+                  return await window.bcms.sdk.group.update({
+                    _id: target._id,
+                    propChanges: [
+                      {
+                        add: data,
+                      },
+                    ],
+                  });
+                },
+                async (result) => {
+                  BCMSLastRoute.groups = result.cid;
+                },
+              );
             },
           });
         },
@@ -174,7 +176,7 @@ const component = defineComponent({
               }),
               translations.value.page.group.confirm.removeProperty.description({
                 label: prop.label,
-              })
+              }),
             )
           ) {
             await throwable(async () => {
@@ -234,10 +236,12 @@ const component = defineComponent({
       },
     };
     async function redirect() {
-      if (!lastState.gid && route.params.gid) {
-        lastState.gid = route.params.gid as string;
+      if (route.params.gid) {
+        BCMSLastRoute.groups = route.params.gid as string;
       }
-      const targetId = lastState.gid ? lastState.gid : group.value.items[0].cid;
+      const targetId = BCMSLastRoute.groups
+        ? BCMSLastRoute.groups
+        : group.value.items[0].cid;
       if (targetId) {
         await router.push({
           path: '/dashboard/g/' + targetId,
@@ -249,16 +253,16 @@ const component = defineComponent({
       await throwable(
         async () => {
           const result = await window.bcms.sdk.group.whereIsItUsed(
-            (group.value.target as BCMSGroup)._id
+            (group.value.target as BCMSGroup)._id,
           );
           const templates = await window.bcms.sdk.template.getMany(
-            result.templateIds.map((e) => e._id)
+            result.templateIds.map((e) => e._id),
           );
           const groups = await window.bcms.sdk.group.getMany(
-            result.groupIds.map((e) => e._id)
+            result.groupIds.map((e) => e._id),
           );
           const widgets = await window.bcms.sdk.widget.getMany(
-            result.widgetIds.map((e) => e._id)
+            result.widgetIds.map((e) => e._id),
           );
           return {
             templates,
@@ -302,7 +306,7 @@ const component = defineComponent({
             }),
             items,
           });
-        }
+        },
       );
     }
 
@@ -333,7 +337,8 @@ const component = defineComponent({
                   link: `/dashboard/g/${e.cid}`,
                   selected: group.value.target?.cid === e.cid,
                   onClick: () => {
-                    lastState.gid = e.cid;
+                    BCMSLastRoute.groups = e.cid;
+                    console.log(BCMSLastRoute.groups);
                     router.push({
                       path: `/dashboard/g/${e.cid}`,
                       replace: true,
