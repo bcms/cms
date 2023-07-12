@@ -37,9 +37,9 @@ const component = defineComponent({
       <li
         class={`media--item media--item_${
           props.item.type
-        } overflow-hidden self-start transition-shadow duration-300 hover:shadow-inputHover focus-within:shadow-inputHover ${
+        } self-start transition-shadow duration-300 hover:shadow-inputHover focus-within:shadow-inputHover ${
           props.mode === 'select' ? 'rounded-lg' : 'rounded-3xl shadow-input'
-        } ${props.selected ? 'outline-green dark:outline-yellow' : ''} ${
+        } ${props.selected ? 'outline outline-green/100 dark:outline-yellow/100' : ''} ${
           props.mode === 'select' && props.item.type === BCMSMediaType.DIR
             ? 'col-span-2 shadow-input'
             : ''
@@ -70,7 +70,9 @@ const component = defineComponent({
               }`}
             >
               <div
-                class={`absolute top-0 left-0 flex items-center justify-center w-full h-full bg-light`}
+                class={`absolute top-0 left-0 flex items-center justify-center w-full h-full bg-light ${
+                  props.mode === 'select' ? 'rounded-lg' : 'rounded-t-3xl'
+                }`}
               >
                 {props.item.type === BCMSMediaType.IMG ||
                 props.item.type === BCMSMediaType.VID ||
@@ -90,7 +92,7 @@ const component = defineComponent({
                     } text-grey fill-current mt-2`}
                   />
                 )}
-                <div class="absolute bottom-0 left-0 py-0.5 px-2.5 rounded-tr-2.5 bg-dark bg-opacity-40 text-white text-center font-medium">
+                <div class={`absolute bottom-0 left-0 py-0.5 px-2.5 rounded-tr-2.5 bg-dark bg-opacity-40 text-white text-center font-medium ${props.mode === 'select' ? 'rounded-bl-lg' : ''}`}>
                   {props.item.type}
                 </div>
               </div>
@@ -102,8 +104,8 @@ const component = defineComponent({
             class={`flex items-center bg-white relative ${
               props.mode === 'select' && props.item.type !== BCMSMediaType.DIR
                 ? 'hidden'
-                : ''
-            } dark:bg-darkGrey`}
+                : 'rounded-b-3xl'
+            } ${props.mode === 'select' && props.item.type === BCMSMediaType.DIR ? 'rounded-t-lg' : ''} ${props.mode !== 'select' && props.item.type === BCMSMediaType.DIR ? 'rounded-t-3xl' : ''} dark:bg-darkGrey`}
           >
             {props.item.type === BCMSMediaType.DIR ? (
               <BCMSIcon
@@ -124,8 +126,8 @@ const component = defineComponent({
               class={`${
                 props.mode === 'select'
                   ? 'hidden'
-                  : 'group p-5 flex ml-auto bg-white relative z-20 flex-shrink-0 dark:bg-darkGrey'
-              } disabled:cursor-not-allowed`}
+                  : 'group p-5 flex ml-auto bg-white relative z-20 flex-shrink-0 rounded-br-3xl dark:bg-darkGrey'
+              } ${props.mode !== 'select' && props.item.type === BCMSMediaType.DIR ? 'rounded-t-3xl' : ''} disabled:cursor-not-allowed`}
               disabled={props.disableRemove}
               onClick={(event) => {
                 event.stopPropagation();
