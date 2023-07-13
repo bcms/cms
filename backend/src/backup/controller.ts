@@ -212,7 +212,7 @@ export const BCMSBackupController = createController({
             for (const _key in BCMSRepo) {
               const key = _key as keyof BCMSRepoType;
               await fs.save(
-                [outputDir, 'db', `${BCMSRepo[key]}.json`],
+                [outputDir, 'db', `${BCMSRepo[key].collection}.json`],
                 JSON.stringify(await BCMSRepo[key].findAll()),
               );
             }
