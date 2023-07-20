@@ -233,7 +233,7 @@ const component = defineComponent({
           <div>
             <BCMSSelect
               label={translations.value.modal.contentLink.input.type.label}
-              selected={type.value}
+              selected={[type.value]}
               options={translations.value.modal.contentLink.input.type.options.map(
                 (e) => {
                   return {

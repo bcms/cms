@@ -24,8 +24,12 @@ const component = defineComponent({
       default: false,
     },
     selected: {
-      type: String,
-      default: '',
+      type: Array as PropType<string[]>,
+      default: () => [],
+    },
+    multiple: {
+      type: Boolean,
+      default: false,
     },
     options: {
       type: Array as PropType<BCMSSelectOption[]>,
@@ -38,7 +42,7 @@ const component = defineComponent({
     propPath: String,
   },
   emits: {
-    change: (_option: BCMSSelectOption) => {
+    change: (_options: BCMSSelectOption) => {
       return true;
     },
   },
@@ -130,7 +134,11 @@ const component = defineComponent({
           : selectedOption.value;
       },
       isItemSelected(item: BCMSSelectOption) {
-        return item.value === props.selected;
+        if (props.multiple) {
+          return props.selected.includes(item.value);
+        } else {
+          return props.selected[0] === item.value;
+        }
       },
     };
     function eventListeners(event: KeyboardEvent) {
@@ -228,9 +236,9 @@ const component = defineComponent({
               aria-haspopup="listbox"
               aria-labelledby="bcmsSelect_label bcmsSelect_button"
               type="button"
-              class={`bg-white w-full h-11 justify-between rounded-3.5 py-1.5 pl-5 text-base leading-normal -tracking-0.01 whitespace-normal no-underline border shadow-none select-none flex items-center transition-all duration-300 hover:shadow-input focus:shadow-input active:shadow-input disabled:cursor-not-allowed disabled:opacity-50 disabled:border-grey disabled:border-opacity-50 disabled:hover:shadow-none ${
+              class={`bg-white w-full justify-between rounded-3.5 py-1.5 pl-5 text-base leading-normal -tracking-0.01 whitespace-normal no-underline border shadow-none select-none flex items-center transition-all duration-300 hover:shadow-input focus:shadow-input active:shadow-input disabled:cursor-not-allowed disabled:opacity-50 disabled:border-grey disabled:border-opacity-50 disabled:hover:shadow-none ${
                 props.showSearch ? 'pr-2.5' : 'pr-5'
-              } ${
+              } ${ctx.slots.option ? 'min-h-[44px]' : 'h-11'} ${
                 props.invalidText
                   ? 'border border-red hover:border-red focus-within:border-red'
                   : 'border-grey hover:border-grey hover:border-opacity-50 focus:border-grey active:border-grey focus:border-opacity-50 active:border-opacity-50'
@@ -241,15 +249,55 @@ const component = defineComponent({
               disabled={props.disabled}
               ref={toggler}
             >
-              <span
-                class={`pr-3.5 whitespace-nowrap overflow-hidden pointer-events-none relative overflow-ellipsis z-10 ${
-                  !props.selected ? 'text-grey' : ''
-                }`}
-              >
-                {logic.getPlaceholderText(props.selected)}
-              </span>
+              {props.multiple ? (
+                <div class="flex items-center flex-wrap gap-2.5 mr-2.5">
+                  {props.selected.length === 0 ? (
+                    <span class="pr-3.5 whitespace-nowrap text-grey overflow-hidden pointer-events-none relative overflow-ellipsis translate-y-0.5 z-10">
+                      {props.placeholder}
+                    </span>
+                  ) : (
+                    <>
+                      {props.selected.map((e, index) => {
+                        return (
+                          <div
+                            key={index}
+                            class="flex items-center cursor-default pl-2.5 pr-0.5 py-0.5 bg-[#D1D2D3] border border-[#CBCBD5] rounded-[5px] dark:bg-[#5A5B5E] dark:border-[#656571]"
+                          >
+                            <span class="leading-normal -tracking-0.01 pt-1 font-light text-dark line-clamp-2 text-left dark:text-light">
+                              {logic.getPlaceholderText(e)}
+                            </span>
+                            <button
+                              class="flex cursor-pointer bg-transparent ml-1"
+                              aria-label="Remove"
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                // TODO: Handle remove
+                              }}
+                            >
+                              <BCMSIcon
+                                src="/close"
+                                class="w-6 h-6 text-red fill-current translate-y-px"
+                              />
+                            </button>
+                          </div>
+                        );
+                      })}
+                    </>
+                  )}
+                </div>
+              ) : (
+                <span
+                  class={`pr-3.5 whitespace-nowrap overflow-hidden pointer-events-none relative overflow-ellipsis translate-y-0.5 z-10 ${
+                    !props.selected || props.selected.length === 0
+                      ? 'text-grey'
+                      : ''
+                  }`}
+                >
+                  {logic.getPlaceholderText(props.selected[0])}
+                </span>
+              )}
               <div
-                class={`transition-transform duration-300 ${
+                class={`flex-shrink-0 transition-transform duration-300 ${
                   isDropdownActive.value && !props.disabled
                     ? 'transform -rotate-180'
                     : ''
@@ -277,14 +325,22 @@ const component = defineComponent({
                 inputRef={toggler}
                 options={filteredOptions.value}
                 selected={props.selected}
+                multiple={props.multiple}
                 invalidText={props.invalidText}
                 showSearch={props.showSearch}
-                onChange={(payload: BCMSSelectOption) => {
-                  ctx.emit('change', payload);
-                  isDropdownActive.value = false;
+                onChange={(payload) => {
+                  if (props.multiple) {
+                    ctx.emit('change', payload);
+                  } else {
+                    ctx.emit('change', payload);
+                    isDropdownActive.value = false;
+                  }
                 }}
                 onHide={() => {
                   isDropdownActive.value = false;
+                }}
+                v-slots={{
+                  ...ctx.slots,
                 }}
               />
             </div>
@@ -295,15 +351,23 @@ const component = defineComponent({
               ref={bcmsDropdownList}
               options={filteredOptions.value}
               selected={props.selected}
+              multiple={props.multiple}
               invalidText={props.invalidText}
               showSearch={props.showSearch}
               inputRef={container}
-              onChange={(payload: BCMSSelectOption) => {
-                ctx.emit('change', payload);
-                isDropdownActive.value = false;
+              onChange={(payload) => {
+                if (props.multiple) {
+                  ctx.emit('change', payload);
+                } else {
+                  ctx.emit('change', payload);
+                  isDropdownActive.value = false;
+                }
               }}
               v-clickOutside={() => {
                 isDropdownActive.value = false;
+              }}
+              v-slots={{
+                ...ctx.slots,
               }}
             />
           ) : (

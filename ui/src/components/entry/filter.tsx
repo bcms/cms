@@ -243,7 +243,7 @@ const component = defineComponent({
           {props.languages.length > 1 && !isEmpty.value && (
             <BCMSSelect
               cyTag="select-lang"
-              selected={props.visibleLanguage.data._id}
+              selected={[props.visibleLanguage.data._id]}
               options={props.languages.map((e) => {
                 return { label: `${e.name}`, value: e._id };
               })}

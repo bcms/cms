@@ -1,21 +1,21 @@
-import { computed, defineComponent, onMounted, ref } from 'vue';
-import type { BCMSStatus } from '@becomes/cms-sdk/types';
-import { BCMSJwtRoleName } from '@becomes/cms-sdk/types';
-import { DefaultComponentProps } from '../_default';
-import { BCMSSelect } from '../input';
-import type { BCMSSelectOption, BCMSStatusUpdateData } from '../../types';
-import { useTranslation } from '../../translations';
+import { computed, defineComponent, onMounted, ref } from "vue";
+import type { BCMSStatus } from "@becomes/cms-sdk/types";
+import { BCMSJwtRoleName } from "@becomes/cms-sdk/types";
+import { DefaultComponentProps } from "../_default";
+import { BCMSSelect } from "../input";
+import type { BCMSSelectOption, BCMSStatusUpdateData } from "../../types";
+import { useTranslation } from "../../translations";
 
 const component = defineComponent({
   props: {
     ...DefaultComponentProps,
     selected: {
       type: String,
-      default: '',
+      default: "",
     },
     placeholder: {
       type: String,
-      default: 'Select a status',
+      default: "Select a status",
     },
     invalidText: String,
   },
@@ -36,8 +36,8 @@ const component = defineComponent({
       const editOption: BCMSSelectOption[] = isUserAdmin.value
         ? [
             {
-              label: 'Edit statuses',
-              value: '___edit___',
+              label: "Edit statuses",
+              value: "___edit___",
             },
           ]
         : [];
@@ -83,7 +83,7 @@ const component = defineComponent({
     async function doUpdates(updates: BCMSStatusUpdateData[]) {
       for (const i in updates) {
         const update = updates[i];
-        if (update.type === 'remove' && update._id) {
+        if (update.type === "remove" && update._id) {
           await deleteStatus(update._id);
         } else {
           await createStatus({
@@ -109,10 +109,10 @@ const component = defineComponent({
         <BCMSSelect
           placeholder={props.placeholder}
           invalidText={props.invalidText}
-          selected={props.selected}
+          selected={[props.selected]}
           options={status.value.options}
           onChange={(option) => {
-            if (option.value === '___edit___') {
+            if (option.value === "___edit___") {
               window.bcms.modal.entry.status.show({
                 title: translations.value.modal.entryStatus.updateTitle,
                 onDone: async (data) => {
@@ -120,7 +120,7 @@ const component = defineComponent({
                 },
               });
             } else {
-              ctx.emit('change', option.value);
+              ctx.emit("change", option.value);
             }
           }}
         />

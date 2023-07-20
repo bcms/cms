@@ -625,7 +625,7 @@ const component = defineComponent({
               {language.value.items.length > 1 ? (
                 <BCMSSelect
                   cyTag="select-lang"
-                  selected={language.value.target._id}
+                  selected={[language.value.target._id]}
                   options={language.value.items.map((e) => {
                     return { label: `${e.name}`, value: e._id };
                   })}
@@ -710,7 +710,7 @@ const component = defineComponent({
                       data-bcms-prop-path="m1.0"
                       class="rounded-4.5 border border-grey bg-white px-4.5 flex items-center transition-all duration-300 hover:border-opacity-50 outline-none hover:outline-none hover:shadow-input focus-within:border-opacity-50 focus-within:shadow-input dark:bg-darkGrey"
                     >
-                      <span class="p-0 m-0 leading-tight border-0 outline-none text-dark placeholder-dark placeholder-opacity-60 dark:text-light">
+                      <span class="p-0 pt-0.5 m-0 leading-tight border-0 outline-none text-dark placeholder-dark placeholder-opacity-60 dark:text-light">
                         /
                       </span>
                       <input
@@ -727,7 +727,7 @@ const component = defineComponent({
                         }
                         onChange={handleSlugInput}
                         onKeyup={handleSlugInput}
-                        class="flex-grow py-2 leading-tight bg-transparent outline-none placeholder-dark placeholder-opacity-60 dark:text-light dark:placeholder-light dark:placeholder-opacity-50 h-11"
+                        class="flex-grow pt-2.5 pb-2 leading-tight bg-transparent outline-none placeholder-dark placeholder-opacity-60 dark:text-light dark:placeholder-light dark:placeholder-opacity-50 h-11"
                       />
                     </label>
                   </div>

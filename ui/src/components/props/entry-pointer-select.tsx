@@ -8,13 +8,14 @@ import {
   ref,
 } from 'vue';
 import { DefaultComponentProps } from '../_default';
-import { BCMSPropWrapper } from './_wrapper';
-import { BCMSEntryPointerOption, BCMSSelect } from '../input';
+import {
+  BCMSPropWrapper,
+} from './_wrapper';
+import { BCMSSelect } from '../input';
 import type {
   BCMSArrayPropMoveEventData,
   BCMSMultiSelectItem,
   BCMSPropValueExtended,
-  BCMSSelectOption,
 } from '../../types';
 import type {
   BCMSMedia,
@@ -22,7 +23,6 @@ import type {
 } from '@becomes/cms-sdk/types';
 import { BCMSPropType } from '@becomes/cms-sdk/types';
 import { useTranslation } from '../../translations';
-import { BCMSButton } from '..';
 
 type PropValueType = BCMSPropValueEntryPointer[];
 
@@ -147,21 +147,6 @@ const component = defineComponent({
       }
       return isOk;
     });
-    const templateNames = computed(() => {
-      const output: string[] = [];
-      if (props.templateIds) {
-        for (let i = 0; i < props.templateIds.length; i++) {
-          const templateId = props.templateIds[i];
-          const template = store.getters.template_findOne(
-            (e) => e._id === templateId,
-          );
-          if (template) {
-            output.push(template.name);
-          }
-        }
-      }
-      return output;
-    });
 
     onMounted(async () => {
       await throwable(async () => {
@@ -191,101 +176,89 @@ const component = defineComponent({
         cyTag="prop-entry-pointer"
         class={props.class}
         style={props.style}
-        prop={{
-          ...props.prop,
-          array: false,
-        }}
+        prop={props.prop}
       >
         <div class="flex flex-wrap items-center justify-between w-full gap-2.5">
           {props.prop.array ? (
-            <div class="w-full">
-              {(props.prop.data as PropValueType).length > 0 ? (
-                <div>
-                  <BCMSSelect
-                    placeholder={`Select${
-                      templateNames.value.length === 1
-                        ? ` ${templateNames.value[0]}`
-                        : ' entries'
-                    }`}
-                    invalidText={errors.value[0]}
-                    multiple
-                    selected={propsValue.value
-                      .filter((e) => e?.tid && e?.eid)
-                      .map((e) => {
+            <div
+            >
+              {(props.prop.data as PropValueType).map((_, entryIdIndex) => {
+                return (
+                  // <BCMSPropWrapperArrayItem
+                  //   arrayLength={propsValue.value.length}
+                  //   itemPositionInArray={entryIdIndex}
+                  //   onMove={(data) => {
+                  //     ctx.emit('move', props.basePropPath + '.data', data);
+                  //   }}
+                  //   onRemove={(index) => {
+                  //     ctx.emit('remove', props.basePropPath + '.data.' + index);
+                  //   }}
+                  // >
+                    <BCMSSelect
+                      placeholder="Select"
+                      invalidText={errors.value[entryIdIndex]}
+                      multiple
+                      selected={propsValue.value.map((e) => {
                         return `${e.tid}-${e.eid}`;
                       })}
-                    options={entriesData.value
-                      .map((e) => {
-                        if (
-                          propsValue.value[0] &&
-                          e.id ===
-                            `${propsValue.value[0].tid}-${propsValue.value[0].eid}`
-                        ) {
-                          return {
-                            label: e.title,
-                            value: e.id,
-                            subtitle: e.subtitle,
-                            imageId: e.imageId,
-                          };
-                        } else {
-                          return {
-                            label: e.title,
-                            value: e.id,
-                            subtitle: e.subtitle,
-                            imageId: e.imageId,
-                          };
-                        }
-                      })
-                      .sort((a, b) => (b.label > a.label ? -1 : 1))}
-                    onChange={(item) => {
-                      // TODO: Handle selecting multiple options
-                      const value = {
-                        tid: '',
-                        eid: '',
-                      };
-                      const [tid, eid] = item.value.split('-');
-                      value.tid = tid;
-                      value.eid = eid;
-                      ctx.emit(
-                        'update',
-                        value,
-                        props.basePropPath + '.data.' + 0,
-                      );
-                    }}
-                    v-slots={{
-                      option: ({ option }: { option: BCMSSelectOption }) => {
-                        return <BCMSEntryPointerOption option={option} />;
-                      },
-                    }}
-                  />
-                </div>
-              ) : (
-                <BCMSButton
-                  size="m"
-                  onClick={(event) => {
-                    event.stopPropagation();
-                    ctx.emit('add', props.basePropPath + '.data');
-                  }}
-                >
-                  {translations.value.prop.wrapperArray.actionName({
-                    label: props.prop.label,
-                  })}
-                </BCMSButton>
-              )}
+                      options={entriesData.value
+                        .map((e) => {
+                          if (
+                            propsValue.value[0] &&
+                            e.id ===
+                              `${propsValue.value[0].tid}-${propsValue.value[0].eid}`
+                          ) {
+                            return {
+                              label: e.title,
+                              value: e.id,
+                            };
+                          } else {
+                            return {
+                              label: e.title,
+                              value: e.id,
+                            };
+                          }
+                        })
+                        .sort((a, b) => (b.label > a.label ? -1 : 1))}
+                      onChange={(item) => {
+                        const value = {
+                          tid: '',
+                          eid: '',
+                        };
+                        const [tid, eid] = item.value.split('-');
+                        value.tid = tid;
+                        value.eid = eid;
+                        ctx.emit(
+                          'update',
+                          // TODO: Vidi sa Banetom kako da saljemo array kao "value", za multiple select
+                          value,
+                          props.basePropPath + '.data.' + entryIdIndex,
+                        );
+                      }}
+                      // v-slots={{
+                      //   list: () => {
+                      //     return (
+                      //       <ul>
+                      //         <li>1</li>
+                      //         <li>2</li>
+                      //       </ul>
+                      //     );
+                      //   },
+                      // }}
+                    />
+                  // </BCMSPropWrapperArrayItem>
+                );
+              })}
             </div>
           ) : (
             <BCMSSelect
-              placeholder={`Select${
-                templateNames.value.length === 1
-                  ? ` ${templateNames.value[0]}`
-                  : ' entries'
-              }`}
+              placeholder="Select"
               invalidText={errors.value[0]}
-              selected={propsValue.value
-                .filter((e) => e.eid && e.tid)
-                .map((e) => {
+              selected={
+                propsValue.value.filter(e => e.eid && e.tid).map(e => {
                   return `${e.tid}-${e.eid}`;
-                })}
+                })
+              }
               options={entriesData.value
                 .map((e) => {
                   if (
@@ -296,15 +269,11 @@ const component = defineComponent({
                     return {
                       label: e.title,
                       value: e.id,
-                      subtitle: e.subtitle,
-                      imageId: e.imageId,
                     };
                   } else {
                     return {
                       label: e.title,
                       value: e.id,
-                      subtitle: e.subtitle,
-                      imageId: e.imageId,
                     };
                   }
                 })
@@ -314,18 +283,23 @@ const component = defineComponent({
                   tid: '',
                   eid: '',
                 };
-                if (item.value) {
+                if(item.value) {
                   const [tid, eid] = item.value.split('-');
                   value.tid = tid;
                   value.eid = eid;
                 }
                 ctx.emit('update', value, props.basePropPath + '.data.0');
               }}
-              v-slots={{
-                option: ({ option }: { option: BCMSSelectOption }) => {
-                  return <BCMSEntryPointerOption option={option} />;
-                },
-              }}
+              // v-slots={{
+              //   list: () => {
+              //     return (
+              //       <ul>
+              //         <li>1</li>
+              //         <li>2</li>
+              //       </ul>
+              //     );
+              //   },
+              // }}
             />
           )}
         </div>

@@ -53,7 +53,7 @@ const component = defineComponent({
         options={templates.value.map((e) => {
           return { label: e.label, value: e._id };
         })}
-        selected={props.selected ? props.selected : ''}
+        selected={[props.selected ? props.selected : '']}
         disabled={templates.value.length === 0}
         onChange={(value) => {
           ctx.emit('change', value);

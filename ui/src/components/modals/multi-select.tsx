@@ -1,17 +1,16 @@
-import { v4 as uuidv4 } from 'uuid';
-import { search } from '@banez/search';
-import { computed, defineComponent, ref } from 'vue';
-import Modal from './_modal';
+import { v4 as uuidv4 } from "uuid";
+import { search } from "@banez/search";
+import { computed, defineComponent, ref } from "vue";
+import Modal from "./_modal";
 import type {
   BCMSModalInputDefaults,
   BCMSMultiSelectItem,
   BCMSMultiSelectItemExtended,
   BCMSMultiSelectModalInputData,
   BCMSMultiSelectModalOutputData,
-} from '../../types';
-import { BCMSTextInput } from '../input';
-import BCMSImage from '../image';
-import { useTranslation } from '../../translations';
+} from "../../types";
+import { BCMSEntryPointerOption, BCMSTextInput } from "../input";
+import { useTranslation } from "../../translations";
 
 interface Data extends BCMSModalInputDefaults<BCMSMultiSelectModalOutputData> {
   onlyOne: boolean;
@@ -26,7 +25,7 @@ const component = defineComponent({
     });
     const show = ref(false);
     const modalData = ref<Data>(getData());
-    const searchTerm = ref('');
+    const searchTerm = ref("");
     const store = window.bcms.vue.store;
     const items = computed<BCMSMultiSelectItemExtended[]>(() =>
       modalData.value.items.map((item) => {
@@ -50,8 +49,8 @@ const component = defineComponent({
               id: item.id,
               data: [
                 item.title.toLowerCase(),
-                item.subtitle?.toLowerCase() || '_________',
-                item.image ? item.image.name : '_________',
+                item.subtitle?.toLowerCase() || "_________",
+                item.image ? item.image.name : "_________",
               ],
             };
           }),
@@ -119,7 +118,7 @@ const component = defineComponent({
     }
 
     function flush() {
-      searchTerm.value = '';
+      searchTerm.value = "";
     }
 
     function cancel() {
@@ -165,17 +164,14 @@ const component = defineComponent({
               onInput={(value) => {
                 searchTerm.value = value.toLowerCase();
               }}
+              class="mb-1.5"
             />
-
-            <div class="grid gap-2 py-3 overflow-y-auto">
-              {filteredItems.value.map((item) => (
+            <div class="grid grid-cols-1 overflow-y-auto border border-[#CBCBD5] rounded-3.5 dark:border-[#5A5B5E]">
+              {filteredItems.value.map((item, index) => (
                 <button
                   id={item.id}
-                  class={`select-none mx-[5px] w-[calc(100%-10px)] rounded-3.5 border-none shadow relative text-left py-5 md:py-[15px] grid grid-cols-[1fr,auto] gap-y-1 gap-x-5 px-2.5 hover:shadow-inputHover transition-all ${
-                    item.selected
-                      ? 'bcmsModalMultiSelect--item_selected bg-green text-white dark:bg-yellow dark:text-dark'
-                      : 'bg-light hover:bg-light dark:hover:bg-dark dark:hover:bg-opacity-20 dark:bg-grey'
-                  }`}
+                  key={index}
+                  class="group select-none w-full text-left focus:outline-none"
                   onClick={() => {
                     for (let i = 0; i < modalData.value.items.length; i++) {
                       const target = modalData.value.items[i];
@@ -196,35 +192,15 @@ const component = defineComponent({
                     }
                   }}
                 >
-                  <div
-                    class={`text-base leading-tight -tracking-0.01 col-start-1 truncate text-dark dark:text-light ${
-                      item.selected ? 'text-light dark:text-dark' : ''
-                    }`}
-                  >
-                    {item.title}
-                  </div>
-                  {item.subtitle && (
-                    <div
-                      class={`text-base leading-tight -tracking-0.01 col-start-1 row-start-2 ${
-                        item.selected
-                          ? 'text-light dark:text-darkGrey'
-                          : 'text-grey dark:text-light dark:text-opacity-80'
-                      }`}
-                    >
-                      {item.subtitle}
-                    </div>
-                  )}
-                  {item.image ? (
-                    <div class="bcmsMultiSelect--item-image w-20 h-20 overflow-hidden rounded-2.5 row-start-1 row-end-3 relative">
-                      <BCMSImage
-                        class="absolute w-full h-full t-0 l-0 object-cover"
-                        media={item.image}
-                        alt={item.title}
-                      />
-                    </div>
-                  ) : (
-                    ''
-                  )}
+                  <BCMSEntryPointerOption
+                    option={{
+                      label: item.title,
+                      value: item.id,
+                      imageId: item.imageId,
+                      subtitle: item.subtitle,
+                    }}
+                    key={index}
+                  />
                 </button>
               ))}
             </div>

@@ -128,7 +128,7 @@ const component = defineComponent({
                           })
                         : []
                     }
-                    selected={policyOption ? policyOption.value[0] : ''}
+                    selected={[policyOption ? policyOption.value[0] : '']}
                     onChange={(option) => {
                       if (option.value) {
                         ctx.emit('changeAccess', true);

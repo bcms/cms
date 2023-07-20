@@ -1,17 +1,12 @@
-import {
-  computed,
-  defineComponent,
-  onMounted,
-  type PropType,
-} from 'vue';
+import { computed, defineComponent, onMounted, type PropType } from 'vue';
 import type {
   BCMSMultiSelectItem,
   BCMSMultiSelectItemExtended,
 } from '../../types';
 import { DefaultComponentProps } from '../_default';
 import InputWrapper from './_input';
-import BCMSImage from '../image';
 import { useTranslation } from '../../translations';
+import { BCMSEntryPointerOption } from './select';
 
 const component = defineComponent({
   props: {
@@ -45,7 +40,7 @@ const component = defineComponent({
             e.image = store.getters.media_findOne((m) => m._id === e.imageId);
           }
           return e;
-        })
+        }),
     );
 
     onMounted(async () => {
@@ -62,7 +57,7 @@ const component = defineComponent({
         helperText={props.helperText}
       >
         <button
-          class={`w-full grid grid-cols-[auto] gap-2.5 border rounded-3.5 pt-3 pr-6 pb-2.5 pl-4.5 ${
+          class={`w-full border rounded-3.5 overflow-hidden ${
             props.invalidText ? 'border-red' : 'border-grey'
           }`}
           onClick={() => {
@@ -80,41 +75,16 @@ const component = defineComponent({
             <>
               {props.items
                 .filter((item) => item.selected)
-                .map((item) => (
-                  <div class="text-left">
-                    {item.image ? (
-                      <div class="grid grid-cols-[auto,80px] gap-5">
-                        <div>
-                          <div class="dark:text-light">{item.title}</div>
-                          {item.subtitle ? (
-                            <div class="text-grey text-xs mt-2.5">
-                              {item.subtitle}
-                            </div>
-                          ) : (
-                            ''
-                          )}
-                        </div>
-                        <div class="w-20 h-20 overflow-hidden rounded-3.5">
-                          <BCMSImage
-                            media={item.image}
-                            alt={item.title}
-                            class="w-full h-full object-cover"
-                          />
-                        </div>
-                      </div>
-                    ) : (
-                      <>
-                        <div class="dark:text-light">{item.title}</div>
-                        {item.subtitle ? (
-                          <div class="text-grey text-xs mt-2.5">
-                            {item.subtitle}
-                          </div>
-                        ) : (
-                          ''
-                        )}
-                      </>
-                    )}
-                  </div>
+                .map((item, index) => (
+                  <BCMSEntryPointerOption
+                    option={{
+                      label: item.title,
+                      value: item.id,
+                      imageId: item.imageId,
+                      subtitle: item.subtitle,
+                    }}
+                    key={index}
+                  />
                 ))}
             </>
           ) : (

@@ -5,15 +5,15 @@ import {
   onMounted,
   ref,
   Transition,
-} from 'vue';
-import { BCMSMediaType } from '@becomes/cms-sdk/types';
-import { DefaultComponentProps } from '../_default';
-import type { BCMSMediaControlFilters } from '../../types';
-import BCMSIcon from '../icon';
-import BCMSButton from '../button';
-import { BCMSSelect, BCMSDateInput } from '../input';
-import { useRoute } from 'vue-router';
-import { useTranslation } from '../../translations';
+} from "vue";
+import { BCMSMediaType } from "@becomes/cms-sdk/types";
+import { DefaultComponentProps } from "../_default";
+import type { BCMSMediaControlFilters } from "../../types";
+import BCMSIcon from "../icon";
+import BCMSButton from "../button";
+import { BCMSSelect, BCMSDateInput } from "../input";
+import { useRoute } from "vue-router";
+import { useTranslation } from "../../translations";
 
 const component = defineComponent({
   props: {
@@ -44,12 +44,12 @@ const component = defineComponent({
       };
     });
     let searchDebounceTimer: any;
-    let searchQueryBuffer = '';
+    let searchQueryBuffer = "";
 
     function getFilters(): BCMSMediaControlFilters {
       return {
         search: {
-          name: '',
+          name: "",
         },
         isOpen: false,
         options: [
@@ -72,7 +72,7 @@ const component = defineComponent({
               ],
               selected: {
                 label: translations.value.page.media.filters.type.placeholder,
-                value: '',
+                value: "",
               },
             },
           },
@@ -93,17 +93,17 @@ const component = defineComponent({
     }
 
     onMounted(() => {
-      if (query.value.search && route.path.startsWith('/dashboard/media')) {
+      if (query.value.search && route.path.startsWith("/dashboard/media")) {
         searchQueryBuffer = query.value.search;
         filters.value.search.name = query.value.search;
-        ctx.emit('filter', filters.value);
+        ctx.emit("filter", filters.value);
       }
     });
     onBeforeUpdate(() => {
       if (searchQueryBuffer !== query.value.search) {
         searchQueryBuffer = query.value.search;
         filters.value.search.name = query.value.search;
-        ctx.emit('filter', filters.value);
+        ctx.emit("filter", filters.value);
       }
     });
 
@@ -125,12 +125,12 @@ const component = defineComponent({
             onKeyup={async () => {
               clearTimeout(searchDebounceTimer);
               searchDebounceTimer = setTimeout(() => {
-                ctx.emit('filter', filters.value);
+                ctx.emit("filter", filters.value);
               }, 300);
             }}
           />
           <button
-            v-cy={'open-filters'}
+            v-cy={"open-filters"}
             onClick={() => {
               filters.value.isOpen = !filters.value.isOpen;
             }}
@@ -138,7 +138,7 @@ const component = defineComponent({
           >
             <div
               class={`flex transition-transform duration-300 ${
-                filters.value.isOpen ? 'rotate-180' : ''
+                filters.value.isOpen ? "rotate-180" : ""
               }`}
             >
               <BCMSIcon
@@ -165,11 +165,11 @@ const component = defineComponent({
                           }
                           label={filterOption.label}
                           options={filterOption.dropdown.items}
-                          selected={filterOption.dropdown.selected.value}
+                          selected={[filterOption.dropdown.selected.value]}
                           onChange={async (option) => {
                             if (filterOption.dropdown) {
                               filterOption.dropdown.selected = option;
-                              ctx.emit('filter', filters.value);
+                              ctx.emit("filter", filters.value);
                             }
                           }}
                         />
@@ -197,19 +197,19 @@ const component = defineComponent({
                                 filterOption.date.month = date.getMonth() + 1;
                                 filterOption.date.day = date.getDate();
                               }
-                              ctx.emit('filter', filters.value);
+                              ctx.emit("filter", filters.value);
                             }
                           }}
                         />
                       ) : (
-                        ''
+                        ""
                       )}
                     </div>
                   );
                 })}
               </div>
             ) : (
-              ''
+              ""
             )}
           </Transition>
         </div>
@@ -218,7 +218,7 @@ const component = defineComponent({
             disabled={props.disableUploadFile}
             class="mr-5 mb-5 xs:mb-0"
             onClick={() => {
-              ctx.emit('uploadFile');
+              ctx.emit("uploadFile");
             }}
           >
             {translations.value.page.media.actions.upload}
@@ -227,7 +227,7 @@ const component = defineComponent({
             disabled={props.disableCreateFolder}
             kind="secondary"
             onClick={() => {
-              ctx.emit('createFolder');
+              ctx.emit("createFolder");
             }}
           >
             {translations.value.page.media.actions.createFolder}

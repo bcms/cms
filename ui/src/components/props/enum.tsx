@@ -64,7 +64,7 @@ const component = defineComponent({
         <div>
           <BCMSSelect
             propPath={props.basePropPath + '.data.0'}
-            selected={propsValue.value[0]}
+            selected={[propsValue.value[0]]}
             placeholder={props.prop.label}
             invalidText={error.value}
             options={(props.prop.enumItems as string[]).map((item) => {

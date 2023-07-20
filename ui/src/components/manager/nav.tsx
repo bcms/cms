@@ -82,10 +82,10 @@ const component = defineComponent({
                   options={props.items.map((e) => {
                     return { label: e.name, value: e.link };
                   })}
-                  selected={
+                  selected={[
                     props.items.find((e) => e.selected)
-                      ? props.items.find((e) => e.selected)?.link
-                      : ''
+                      ? props.items.find((e) => e.selected)?.link || ''
+                      : '']
                   }
                   onChange={(event) => {
                     router.push(event.value);
