@@ -68,7 +68,7 @@ export const App = defineComponent({
         }
       }
       await window.bcms.util.throwable(async () => {
-        await bcmsFeatureLoader(['content_sync']);
+        await bcmsFeatureLoader();
       });
     });
     return () => (

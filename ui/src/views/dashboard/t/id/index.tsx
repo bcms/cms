@@ -14,10 +14,7 @@ import {
 } from '../../../../components';
 import { useRoute, useRouter } from 'vue-router';
 import { useTranslation } from '../../../../translations';
-
-const lastState = {
-  tid: '',
-};
+import { BCMSLastRoute } from '@ui/util';
 
 const component = defineComponent({
   setup() {
@@ -34,7 +31,7 @@ const component = defineComponent({
       target?: BCMSTemplate;
     }>(() => {
       const target = store.getters.template_findOne(
-        (e) => e.cid === (route.params.tid as string)
+        (e) => e.cid === (route.params.tid as string),
       );
       if (target) {
         meta.set({
@@ -44,9 +41,9 @@ const component = defineComponent({
         });
       }
       return {
-        items: store.getters.template_items.slice(0).sort((a, b) =>
-          a.name < b.name ? -1 : 1
-        ),
+        items: store.getters.template_items
+          .slice(0)
+          .sort((a, b) => (a.name < b.name ? -1 : 1)),
         target,
       };
     });
@@ -68,8 +65,9 @@ const component = defineComponent({
                 });
               },
               async (result) => {
+                BCMSLastRoute.templates = result.cid;
                 await router.push(`/dashboard/t/${result.cid}`);
-              }
+              },
             );
           },
         });
@@ -84,7 +82,7 @@ const component = defineComponent({
             translations.value.page.template.confirm.remove.description({
               label: target.label,
             }),
-            target.name
+            target.name,
           )
         ) {
           await throwable(
@@ -92,14 +90,14 @@ const component = defineComponent({
               await window.bcms.sdk.template.deleteById(target._id);
             },
             async () => {
-              lastState.tid = template.value.items[0]
+              BCMSLastRoute.templates = template.value.items[0]
                 ? template.value.items[0].cid
                 : '';
               await router.push({
-                path: `/dashboard/t/${lastState.tid}`,
+                path: `/dashboard/t/${BCMSLastRoute.templates}`,
                 replace: true,
               });
-            }
+            },
           );
         }
       },
@@ -177,8 +175,8 @@ const component = defineComponent({
               translations.value.page.template.confirm.removeProperty.description(
                 {
                   label: prop.label,
-                }
-              )
+                },
+              ),
             )
           ) {
             await throwable(async () => {
@@ -238,11 +236,11 @@ const component = defineComponent({
       },
     };
     async function redirect() {
-      if (!lastState.tid && route.params.tid) {
-        lastState.tid = route.params.tid as string;
+      if (route.params.tid) {
+        BCMSLastRoute.templates = route.params.tid + '';
       }
-      const targetId = lastState.tid
-        ? lastState.tid
+      const targetId = BCMSLastRoute.templates
+        ? BCMSLastRoute.templates
         : template.value.items[0].cid;
       if (targetId) {
         await router.push({
@@ -279,7 +277,7 @@ const component = defineComponent({
                   link: `/dashboard/t/${e.cid}`,
                   selected: template.value.target?.cid === e.cid,
                   onClick: () => {
-                    lastState.tid = e.cid;
+                    BCMSLastRoute.templates = e.cid;
                     router.push({
                       path: `/dashboard/t/${e.cid}`,
                       replace: true,

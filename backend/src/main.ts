@@ -341,6 +341,10 @@ async function initialize() {
         output: 'logs',
       },
     },
+    onReady(pc) {
+      const ex = pc.getExpress();
+      ex.disable('x-powered-by');
+    },
   });
 }
 initialize().catch((error) => {

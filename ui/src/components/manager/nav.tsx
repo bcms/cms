@@ -33,9 +33,7 @@ const component = defineComponent({
     const extended = ref(true);
     const router = useRouter();
     const items = computed(() => {
-      return (
-        JSON.parse(JSON.stringify(props.items)) as BCMSManagerNavItemType[]
-      ).sort((a, b) => {
+      return [...props.items].sort((a, b) => {
         if (a.name < b.name) {
           return -1;
         } else if (a.name > b.name) {

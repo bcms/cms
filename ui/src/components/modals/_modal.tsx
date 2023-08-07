@@ -25,6 +25,12 @@ const component = defineComponent({
       type: Boolean,
       default: true,
     },
+    confirmButtonKind: {
+      type: String as PropType<
+        'primary' | 'secondary' | 'alternate' | 'ghost' | 'danger'
+      >,
+      required: false,
+    },
     confirmDisabledButton: {
       type: Boolean,
       required: false,
@@ -101,7 +107,7 @@ const component = defineComponent({
 
     return () => {
       return (
-        <Transition name="modal" mode='out-in'>
+        <Transition name="modal" mode="out-in">
           {props.show && (
             <div
               data-bcms-info="modal"
@@ -169,6 +175,7 @@ const component = defineComponent({
                         <BCMSButton
                           onClick={done}
                           disabled={props.confirmDisabledButton}
+                          kind={props.confirmButtonKind}
                         >
                           <span>
                             {props.actionName

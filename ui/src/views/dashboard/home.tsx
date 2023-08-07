@@ -39,16 +39,21 @@ const component = defineComponent({
       {
         label: translations.value.page.home.docsAndResources.tutorials,
         icon: '/tutorials',
-        href: 'https://docs.thebcms.com/',
+        href: 'https://thebcms.com/blog/tags/tutorials',
       },
       {
         label: translations.value.page.home.docsAndResources.codeStarters,
         icon: '/code-starters',
-        href: 'https://docs.thebcms.com/',
+        href: 'https://github.com/bcms/starters',
       },
     ]);
 
     const supportAndCommunity = ref([
+      {
+        label: 'GiHub',
+        icon: '/github',
+        href: 'https://github.com/bcms/cms/',
+      },
       {
         label: 'Slack',
         icon: '/slack',

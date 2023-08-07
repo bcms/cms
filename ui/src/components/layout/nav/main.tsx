@@ -12,6 +12,7 @@ import BCMSNavItem from './item';
 import { useRoute, useRouter } from 'vue-router';
 import BCMSLogo from './logo';
 import { useTranslation } from '../../../translations';
+import { BCMSLastRoute } from '@ui/util';
 
 interface OrganizerExtended extends BCMSTemplateOrganizer {
   templates: BCMSTemplate[];
@@ -36,15 +37,21 @@ const component = defineComponent({
     }> = computed(() => {
       if (user.value) {
         const path = route.path;
-        let templatePath = '/dashboard/t';
+        let templatePath = `/dashboard/t${
+          BCMSLastRoute.templates ? '/' + BCMSLastRoute.templates : ''
+        }`;
         if (path.startsWith('/dashboard/t') && route.name === 'TemplateId') {
           templatePath = path;
         }
-        let groupPath = '/dashboard/g';
+        let groupPath = `/dashboard/g${
+          BCMSLastRoute.groups ? '/' + BCMSLastRoute.groups : ''
+        }`;
         if (path.startsWith('/dashboard/g')) {
           groupPath = path;
         }
-        let widgetPath = '/dashboard/w';
+        let widgetPath = `/dashboard/w${
+          BCMSLastRoute.widgets ? '/' + BCMSLastRoute.widgets : ''
+        }`;
         if (path.startsWith('/dashboard/w')) {
           // const parts = path.split('/');
           // if (parts.length === 4) {

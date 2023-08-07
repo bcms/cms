@@ -60,3 +60,15 @@
 .help-leave-to {
   @apply opacity-0 transition-opacity duration-75 ease-linear;
 }
+
+
+
+.createNew-enter-active,
+.createNew-leave-active {
+  @apply transition-[opacity,transform] duration-200 ease-linear;
+}
+
+.createNew-enter-from,
+.createNew-leave-to {
+  @apply opacity-0 translate-y-2;
+}
