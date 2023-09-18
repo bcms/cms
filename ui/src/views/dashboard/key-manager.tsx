@@ -24,10 +24,7 @@ import {
 } from '../../components';
 import { useBcmsModalService } from '../../services';
 import { useTranslation } from '../../translations';
-
-const lastState = {
-  kid: '',
-};
+import { BCMSLastRoute } from '@ui/util';
 
 const component = defineComponent({
   setup() {
@@ -43,7 +40,7 @@ const component = defineComponent({
     const changes = ref(false);
     const templates = computed(() => {
       const items: BCMSTemplate[] = JSON.parse(
-        JSON.stringify(store.getters.template_items)
+        JSON.stringify(store.getters.template_items),
       );
       return items.sort((a, b) => (a.name < b.name ? -1 : 1));
     });
@@ -75,7 +72,7 @@ const component = defineComponent({
         window.bcms
           .confirm(
             translations.value.page.keyManager.confirm.pageLeave.title,
-            translations.value.page.keyManager.confirm.pageLeave.description
+            translations.value.page.keyManager.confirm.pageLeave.description,
           )
           .then((result) => {
             if (result) {
@@ -101,7 +98,7 @@ const component = defineComponent({
               target: result,
             };
             router.push(`/dashboard/key-manager/${result._id}`);
-          }
+          },
         );
       },
       async remove() {
@@ -113,7 +110,7 @@ const component = defineComponent({
             translations.value.page.keyManager.confirm.remove.title,
             translations.value.page.keyManager.confirm.remove.description({
               label: key.value.target?.name,
-            })
+            }),
           ))
         ) {
           await window.bcms.util.throwable(
@@ -123,15 +120,16 @@ const component = defineComponent({
             async () => {
               changes.value = false;
               key.value.items = key.value.items.filter(
-                (e) => e._id !== currentKey._id
+                (e) => e._id !== currentKey._id,
               );
 
               window.bcms.notification.success(
-                translations.value.page.keyManager.notification.keyDeleteSuccess
+                translations.value.page.keyManager.notification
+                  .keyDeleteSuccess,
               );
 
               if (key.value.items.length === 0) {
-                lastState.kid = '';
+                BCMSLastRoute.keyManager = '';
                 key.value.target = undefined;
                 router.push('/dashboard/key-manager');
               } else {
@@ -140,24 +138,24 @@ const component = defineComponent({
                   replace: true,
                 });
               }
-            }
+            },
           );
         }
       },
-      async redirect() {
-        if (!lastState.kid && params.value.kid) {
-          lastState.kid = params.value.kid as string;
-        }
-        const targetId = lastState.kid
-          ? lastState.kid
-          : key.value.items[0]?._id;
-        if (targetId) {
-          await router.push({
-            path: '/dashboard/key-manager/' + targetId,
-            replace: true,
-          });
-        }
-      },
+      // async redirect() {
+      //   if (!BCMS.kid && params.value.kid) {
+      //     lastState.kid = params.value.kid as string;
+      //   }
+      //   const targetId = lastState.kid
+      //     ? lastState.kid
+      //     : key.value.items[0]?._id;
+      //   if (targetId) {
+      //     await router.push({
+      //       path: '/dashboard/key-manager/' + targetId,
+      //       replace: true,
+      //     });
+      //   }
+      // },
       edit() {
         const target = key.value.target;
 
@@ -209,18 +207,15 @@ const component = defineComponent({
               target: JSON.parse(JSON.stringify(target)),
             };
           }
-        }
+        },
       );
-      if (!key.value.target) {
-        await window.bcms.util.throwable(async () => {
-          return await window.bcms.sdk.apiKey.getAll();
-        });
-        if (key.value.items.length > 0) {
-          await logic.redirect();
-        }
-      } else {
-        await logic.redirect();
-      }
+      // if (!key.value.target) {
+      //   if (key.value.items.length > 0) {
+      //     await redirect();
+      //   }
+      // } else {
+      //   await redirect();
+      // }
 
       if (templates.value.length === 0) {
         await window.bcms.util.throwable(async () => {
@@ -239,18 +234,18 @@ const component = defineComponent({
                 public: e.public as never,
                 selected: key.value.target
                   ? !!key.value.target.access.functions.find(
-                      (f) => f.name === e.name
+                      (f) => f.name === e.name,
                     )
                   : false,
               };
             });
-          }
+          },
         );
       } else {
         functions.value.forEach((fn) => {
           fn.selected = key.value.target
             ? !!key.value.target.access.functions.find(
-                (f) => f.name === fn.name
+                (f) => f.name === fn.name,
               )
             : false;
         });
@@ -267,32 +262,45 @@ const component = defineComponent({
                 selected:
                   key.value.target && key.value.target.access.plugins
                     ? !!key.value.target.access.plugins.find(
-                        (e) => e.name === plugin.name
+                        (e) => e.name === plugin.name,
                       )
                     : false,
               };
             });
-          }
+          },
         );
       } else {
         plugins.value = plugins.value.map((plugin) => {
           plugin.selected =
             key.value.target && key.value.target.access.plugins
               ? !!key.value.target.access.plugins.find(
-                  (e) => e.name === plugin.name
+                  (e) => e.name === plugin.name,
                 )
               : false;
           return plugin;
         });
       }
     }
-
+    async function redirect() {
+      BCMSLastRoute.keyManager = route.params.kid as string;
+      const targetId = BCMSLastRoute.keyManager
+        ? BCMSLastRoute.keyManager
+        : key.value.items[0]._id;
+      if (targetId) {
+        console.log("HERE", targetId)
+        // await router.push({
+        //   path: '/dashboard/key-manager/' + targetId,
+        //   replace: true,
+        // });
+      }
+    }
     onMounted(async () => {
       window.onbeforeunload = () => {
         if (changes.value) {
           return true;
         }
       };
+      // await redirect();
       await init();
       mounted.value = true;
     });
@@ -305,8 +313,8 @@ const component = defineComponent({
       }
     });
     onBeforeUpdate(async () => {
-      if (key.value.target && lastState.kid !== params.value.kid) {
-        lastState.kid = params.value.kid as string;
+      if (key.value.target && BCMSLastRoute.keyManager !== params.value.kid) {
+        await redirect();
         await init();
       }
     });
@@ -324,7 +332,6 @@ const component = defineComponent({
                   link: `/dashboard/key-manager/${e._id}`,
                   selected: key.value.target?._id === e._id,
                   onClick: () => {
-                    lastState.kid = e._id;
                     router.push({
                       path: `/dashboard/key-manager/${e._id}`,
                       replace: true,
@@ -397,7 +404,7 @@ const component = defineComponent({
                       templates.value.map((template) => {
                         const target = key.value.target as BCMSApiKey;
                         let templateIndex = target.access.templates.findIndex(
-                          (e) => e._id === template._id
+                          (e) => e._id === template._id,
                         );
 
                         let data = {
@@ -477,7 +484,7 @@ const component = defineComponent({
                       </h2>
                       {functions.value.map((fn) => {
                         const data = key.value.target?.access.functions.find(
-                          (e) => e.name === fn.name
+                          (e) => e.name === fn.name,
                         );
                         if (fn.public) {
                           return (
@@ -518,7 +525,7 @@ const component = defineComponent({
                               changes.value = true;
                               const target = key.value.target as BCMSApiKey;
                               const fnAvailable = target.access.functions.find(
-                                (e) => e.name === fn.name
+                                (e) => e.name === fn.name,
                               );
 
                               if (event[0].selected && !fnAvailable) {
@@ -526,7 +533,7 @@ const component = defineComponent({
                               } else if (!event[0].selected && fnAvailable) {
                                 target.access.functions =
                                   target.access.functions.filter(
-                                    (e) => e.name !== fn.name
+                                    (e) => e.name !== fn.name,
                                   );
                               }
                             }}
@@ -545,7 +552,7 @@ const component = defineComponent({
                       </h2>
                       {plugins.value.map((plugin) => {
                         const data = key.value.target?.access.plugins?.find(
-                          (e) => e.name === plugin.name
+                          (e) => e.name === plugin.name,
                         );
                         return (
                           <BCMSCheckboxArrayInput
@@ -567,7 +574,7 @@ const component = defineComponent({
                               const target = key.value.target as BCMSApiKey;
                               const pluginAvailable =
                                 target.access.plugins?.find(
-                                  (e) => e.name === plugin.name
+                                  (e) => e.name === plugin.name,
                                 );
                               if (event[0].selected && !pluginAvailable) {
                                 if (!target.access.plugins) {
@@ -582,7 +589,7 @@ const component = defineComponent({
                               ) {
                                 target.access.plugins =
                                   target.access.plugins?.filter(
-                                    (e) => e.name !== plugin.name
+                                    (e) => e.name !== plugin.name,
                                   );
                               }
                             }}
@@ -612,10 +619,10 @@ const component = defineComponent({
                           async () => {
                             window.bcms.notification.success(
                               translations.value.page.keyManager.notification
-                                .keyUpdateSuccess
+                                .keyUpdateSuccess,
                             );
                             changes.value = false;
-                          }
+                          },
                         );
                       }}
                     >

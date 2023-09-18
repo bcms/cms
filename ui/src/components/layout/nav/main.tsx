@@ -65,7 +65,9 @@ const component = defineComponent({
           mediaPath = path;
         }
         const settingsPath = '/dashboard/settings';
-        let keyManagerPath = '/dashboard/key-manager';
+        let keyManagerPath = `/dashboard/key-manager${
+          BCMSLastRoute.keyManager ? '/' + BCMSLastRoute.keyManager : ''
+        }`;
         if (path.startsWith(keyManagerPath)) {
           keyManagerPath = path;
         }
