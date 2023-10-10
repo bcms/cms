@@ -290,6 +290,7 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
 <br><br>
 <h2 align="center">Important Links 📌</h2>
 <p align="center">
+  <a href="https://cloud.thebcms.com">Sign up</a><br>
   <a href="https://docs.thebcms.com">Documentation</a><br>
   <a href="https://thebcms.com">Website</a>
 </p>
