@@ -78,13 +78,51 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
         >
       </td>
     </tr>
+    <tr>
+      <td>
+        <strong>⌨️ A mind-blowing TypeScript support</strong> <br />
+        Everything in BCMS is typed. <br />Even the dynamic content you create,
+        BCMS automatically generates types for it. <br />
+        <a href="https://github.com/bcms/cms/tree/master/backend/src/types"
+          >TypeScript files</a
+        >
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>🌷 Beautifuuul code starters</strong> <br />
+        Well-designed code starters for Next.js, Nuxt.js, and Gatsby.js<br />
+        <a href="https://github.com/bcms/starters/"
+          > BCMS starters</a
+        >
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>🔑 API keys with fine-grained permissions</strong> <br />
+        API keys come with out-of-the-box, built-in, fine-grained access permissions.<br />
+        <a href="https://docs.thebcms.com/inside-bcms/key-manager"
+          > Key manager docs</a
+        >
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>🏰 Each project is deployed in its own dedicated server</strong> <br />
+        When you are using BCMS Cloud, each BCMS instance is deployed on a dedicated server.<br />
+        <a href="https://docs.thebcms.com/cloud"
+          > Cloud docs</a
+        >
+      </td>
+    </tr>
   </tbody>
 </table>
 <br>
 <h2 align="center">
   A cut above: Features BCMS shares with just a few 🎩
 </h2>
-<p align="center">TBH, even when one of these features is available in another tool, sometimes it's a headache. <br>We tried to make it smooth.</p>
+<p align="center">TBH, even when one of these features is available in another tool, sometimes it's a headache. <br>We make it smooth.</p>
+
 
 <table align="center">
   <tbody>
@@ -130,11 +168,46 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
     </tr>
     <tr>
       <td>
-        <strong>⌨️ A mind-blowing TypeScript support</strong> <br />
-        Everything in BCMS is typed. <br />Even the dynamic content you create,
-        BCMS automatically generates types for it. <br />
-        <a href="https://github.com/bcms/cms/tree/master/backend/src/types"
-          >TypeScript files</a
+        <strong>🫂 Collaborative</strong> <br />
+        Multiple team members can edit the same entry simultaneously<br />
+        <a href="https://docs.thebcms.com/inside-bcms/settings#invite-team-members" rel="nofollow"
+          >Team docs</a
+        >
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>👩‍💻 Next.js integration</strong> <br />
+        Out-of-the-box integration with Next.js<br />
+        <a href="https://docs.thebcms.com/integrations/next-js" rel="nofollow"
+          >Next.js docs</a
+        >
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>👨‍💻 Gatsby.js integration</strong> <br />
+        Out-of-the-box integration with Gatsby.js<br />
+        <a href="https://docs.thebcms.com/integrations/gatsby-js" rel="nofollow"
+          >Gatsby.js docs</a
+        >
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>🧑‍💻 Nuxt.js integration</strong> <br />
+        Out-of-the-box integration with Nuxt.js<br />
+        <a href="https://docs.thebcms.com/integrations/nuxt-js" rel="nofollow"
+          >Nuxt.js docs</a
+        >
+      </td>
+    </tr>
+    <tr>
+      <td>
+        <strong>🏴‍☠️ Multilingual CMS</strong> <br />
+        Add content in any number of languages. No restrictions.<br />
+        <a href="https://docs.thebcms.com/inside-bcms/settings#adding-languages" rel="nofollow"
+          >Languages docs</a
         >
       </td>
     </tr>
