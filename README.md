@@ -290,8 +290,8 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
 <br><br>
 <h2 align="center">Important Links 📌</h2>
 <p align="center">
-  <a href="docs.thebcms.com">Documentation</a><br>
-  <a href="thebcms.com">Website</a>
+  <a href="https://docs.thebcms.com">Documentation</a><br>
+  <a href="https://thebcms.com">Website</a>
 </p>
 <br>
 <h2 align="center">Support ❤️</h2>
@@ -301,8 +301,8 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
 <br>
 <h2 align="center">Stay in touch 🌐</h2>
 <p align="center">
-  <a href="twitter.com/thebcms">X (twitter)</a><br>
-  <a href="thebcms.com">Website</a>
+  <a href="https://twitter.com/thebcms">X (twitter)</a><br>
+  <a href="https://thebcms.com">Website</a>
 </p>
 <br>
 <h2 align="center">License 📄</h2>
