@@ -214,17 +214,25 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
     </tr>
   </tbody>
 </table>
-
-## Important Links 📌
-[Documentation](docs.thebcms.com)
-[Website](thebcms.com)
-
-## Support ❤️
-If you like the project, hit that ⭐ button !!1
-
-## Stay in touch 🌐
-[Twitter](twitter.com/thebcms)
-[Website](thebcms.com)
-
-## License 📄
-[MIT](https://github.com/bcms/cms/blob/master/LICENSE)
+<br><br>
+<h2 align="center">Important Links 📌</h2>
+<p align="center">
+  <a href="docs.thebcms.com">Documentation</a><br>
+  <a href="thebcms.com">Website</a>
+</p>
+<br>
+<h2 align="center">Support ❤️</h2>
+<p align="center">
+  If you like the project, hit that ⭐ button !!1
+</p>
+<br>
+<h2 align="center">Stay in touch 🌐</h2>
+<p align="center">
+  <a href="twitter.com/thebcms">X (twitter)</a><br>
+  <a href="thebcms.com">Website</a>
+</p>
+<br>
+<h2 align="center">License 📄</h2>
+<p align="center">
+  <a href="https://github.com/bcms/cms/blob/master/LICENSE">MIT</a><br>
+</p>
