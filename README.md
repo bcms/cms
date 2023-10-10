@@ -18,14 +18,14 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
 <br>
 <p align="center">
   BCMS is an open-source Contentful alternative. Built with Node.js, MongoDB, Vue 3 and Tailwind. <br>
-  Design your content structure without living the browser. <br> Consume content via APIs. Works nicely with Next.js, Nuxt.js & Gatsby.js.<br>
+  Design your content structure without leaving the browser. <br> Consume content via APIs. Works nicely with Next.js, Nuxt.js & Gatsby.js.<br>
 </p>
 <br>
 <h2 align="center">
   Things only BCMS can do  🦄
 </h2>
 <p align="center">
-  Advanced stuff, nicely put together for a smooth use.
+  Advanced stuff, nicely put together for smooth use.
 </p>
 
 <table align="center">
@@ -33,7 +33,7 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
     <tr>
       <td>
         <strong>🏋️&zwj;♀️ Your custom Functions</strong> <br />
-        Deploy and host custom, native serverless-ish functions, that you can
+        Deploy and host custom, native serverless-ish functions that you can
         trigger from anywhere. <br />Great for handling form submissions, for
         example.<br />
         <a
@@ -63,14 +63,14 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
     </tr>
     <tr>
       <td>
-        <strong>🔏 Granular persmissions, by default</strong> <br />
-        Enterprise-level granular permissions, available for everyone.
+        <strong>🔏 Granular permissions, by default</strong> <br />
+        Enterprise-level granular permissions - available for everyone.
       </td>
     </tr>
     <tr>
       <td>
         <strong>⭐️ Custom pages inside BCMS</strong> <br />
-        Develop custom pages, that have access to all your data from BCMS.
+        Develop custom pages that have access to all your data from BCMS.
         <br />Great when you want to display carts, custom reporting, or extend
         BCMS functionality in any way.<br />
         <a href="https://docs.thebcms.com/customization/plugins" rel="nofollow"
@@ -84,7 +84,7 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
 <h2 align="center">
   A cut above: Features BCMS shares with just a few 🎩
 </h2>
-<p align="center">TBH, even when one of these feautres is available in another tool, sometimes it's a headacke. <br>We tried to make it smooth.</p>
+<p align="center">TBH, even when one of these features is available in another tool, sometimes it's a headache. <br>We tried to make it smooth.</p>
 
 <table align="center">
   <tbody>
@@ -100,7 +100,7 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
     <tr>
       <td>
         <strong>🤞 Widgets in content</strong><br />
-        Ability to add structured content, anywhere in the content. <br />In
+        Ability to add structured content anywhere in the content. <br />In
         between two paragraphs? No problem. Great for image galleries in a blog
         post, embeds, etc. <br />
         <a href="https://docs.thebcms.com/inside-bcms/widgets" rel="nofollow"
@@ -121,7 +121,7 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
     <tr>
       <td>
         <strong>🛜 A truly browser-based CMS</strong> <br />
-        Design content structure without leaving browser. No need to learn
+        Design content structure without leaving the browser. No need to learn
         complex syntax, and code<br /> interface on your own.<br />
         <a href="https://docs.thebcms.com/inside-bcms/templates" rel="nofollow"
           >Templates docs</a
@@ -146,7 +146,7 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
 <h2 align="center">
   The essentials: Features BCMS has in common with most CMSs  🛠️
 </h2>
-<p align="center">Don't worry, we didn't skipt the basics. Here's what BCMS offers that you'd expect <br> from any self-respecting headless CMS</p>
+<p align="center">Don't worry, we didn't skip the basics. Here's what BCMS offers that you'd expect <br> from any self-respecting headless CMS</p>
 
 <table align="center">
   <tbody>
@@ -164,7 +164,7 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
     <tr>
       <td>
         <strong>🎬 Media manager</strong><br />
-        Upload any and all kinds of files. If it's digital, BCMS can handle it <br>
+        Upload any and all kinds of files. If it's digital, BCMS can handle it. <br>
         <a href="https://docs.thebcms.com/inside-bcms/media" rel="nofollow"
           >Media docs</a
         >
@@ -173,7 +173,7 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
     <tr>
       <td>
         <strong>👫 Team collaboration</strong><br />
-        Invite other team members, give them permissions, work simolutanuosly 
+        Invite other team members, give them permissions, and work simultaneously 
         across the entire BCMS. <br />
         <a
           href="https://docs.thebcms.com/inside-bcms/settings#invite-team-members"
@@ -186,7 +186,7 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
       <td>
         <strong>🚩 🏳️ Statuses for entries</strong> <br />
         Drafts, production, and everything in between. Keep your content <br />
-        lifecycle as organized as whatever in world is organized these days.<br />
+        lifecycle as organized as whatever in the world is organized these days.<br />
         <a
           href="https://docs.thebcms.com/inside-bcms/entries#setting-the-entry-status"
           rel="nofollow"
@@ -205,7 +205,7 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
     <tr>
       <td>
         <strong>🚿 Ever-growing docs and tutorials base</strong> <br />
-        We writing about BCMS. <br /><a
+        We love writing about BCMS. <br /><a
           href="https://docs.thebcms.com"
           rel="nofollow"
           >BCMS docs</a
