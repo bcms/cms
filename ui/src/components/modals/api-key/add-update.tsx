@@ -118,11 +118,14 @@ const component = defineComponent({
             label={
               translations.value.modal.addUpdateApiKey.input.description.label
             }
-            v-model={modalData.value.desc}
+            value={modalData.value.desc}
             placeholder={
               translations.value.modal.addUpdateApiKey.input.description
                 .placeholder
             }
+            onInput={(val) => {
+              modalData.value.desc = val;
+            }}
           />
         </Modal>
       );

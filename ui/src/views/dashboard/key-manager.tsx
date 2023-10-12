@@ -167,13 +167,19 @@ const component = defineComponent({
             name: target.name,
             desc: target.desc,
             async onDone(data) {
-              await window.bcms.util.throwable(async () => {
-                await window.bcms.sdk.apiKey.update({
-                  _id: target._id,
-                  name: data.name,
-                  desc: data.desc,
-                });
-              });
+              await window.bcms.util.throwable(
+                async () => {
+                  return await window.bcms.sdk.apiKey.update({
+                    _id: target._id,
+                    name: data.name,
+                    desc: data.desc,
+                  });
+                },
+                async (k) => {
+                  target.name = k.name;
+                  target.desc = k.desc;
+                },
+              );
             },
           });
         }
@@ -287,7 +293,7 @@ const component = defineComponent({
         ? BCMSLastRoute.keyManager
         : key.value.items[0]._id;
       if (targetId) {
-        console.log("HERE", targetId)
+        console.log('HERE', targetId);
         // await router.push({
         //   path: '/dashboard/key-manager/' + targetId,
         //   replace: true,
