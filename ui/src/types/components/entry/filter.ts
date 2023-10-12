@@ -19,3 +19,5 @@ export interface BCMSEntryFilters {
   isOpen: boolean;
   options: BCMSEntryFiltersOption[];
 }
+
+export type BCMSEntryView = 'kanban' | 'list';

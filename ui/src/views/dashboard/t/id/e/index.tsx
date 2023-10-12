@@ -12,7 +12,7 @@ import {
   BCMSEntryFilter,
   BCMSEntryTable,
 } from '../../../../../components';
-import type { BCMSEntryFilters } from '../../../../../types';
+import type { BCMSEntryFilters, BCMSEntryView } from '../../../../../types';
 import { useRoute, useRouter } from 'vue-router';
 import { useTranslation } from '../../../../../translations';
 import { search } from '@banez/search';
@@ -47,6 +47,7 @@ const component = defineComponent({
       }
       return { items: langs, target: langs[langIndex], targetIndex: langIndex };
     });
+    const view = ref<BCMSEntryView>('kanban');
     const template = computed(() => {
       const tmp = store.getters.template_findOne(
         (e) => e.cid === params.value.tid,
@@ -304,6 +305,7 @@ const component = defineComponent({
                 index: language.value.targetIndex,
                 data: language.value.target,
               }}
+              activeView={view.value}
               onFilter={(eventFilters) => {
                 filters.value = eventFilters;
               }}
@@ -312,6 +314,9 @@ const component = defineComponent({
                 router.push(route.path + '/create');
               }}
               onSelectLanguage={selectLanguage}
+              onSelectView={(v) => {
+                view.value = v;
+              }}
             />
             <div>
               <BCMSEntryTable
@@ -319,6 +324,7 @@ const component = defineComponent({
                 policy={policy.value}
                 template={template.value}
                 entries={entriesInView.value}
+                activeView={view.value}
                 visibleLanguage={{
                   index: language.value.targetIndex,
                   data: language.value.target,

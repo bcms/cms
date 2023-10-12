@@ -24,6 +24,9 @@ const component = defineComponent({
     mouseDown: (_event: MouseEvent) => {
       return true;
     },
+    mouseEnter: (_event: MouseEvent) => {
+      return true;
+    },
   },
   setup(props, ctx) {
     const router = useRouter();
@@ -69,6 +72,9 @@ const component = defineComponent({
         }}
         onMousedown={(event) => {
           ctx.emit('mouseDown', event);
+        }}
+        onMouseenter={(event) => {
+          ctx.emit('mouseEnter', event);
         }}
         v-tooltip={props.tooltip}
       >

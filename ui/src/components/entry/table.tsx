@@ -20,9 +20,9 @@ import BCMSTimestampDisplay from '../timestamp-display';
 import BCMSLink from '../link';
 import BCMSIcon from '../icon';
 import { BCMSOverflowMenu, BCMSOverflowMenuItem } from '../overflow';
-import { BCMSEmptyState, BCMSImage } from '..';
+import { BCMSButton, BCMSEmptyState, BCMSImage } from '..';
 import { useTranslation } from '../../translations';
-import type { BCMSWhereIsItUsedItem } from '../../types';
+import type { BCMSEntryView, BCMSWhereIsItUsedItem } from '../../types';
 import { BCMSUserAvatar } from '../user-avatar';
 import { userLocations } from '../../util';
 
@@ -33,6 +33,7 @@ const component = defineComponent({
     template: { type: Object as PropType<BCMSTemplate>, required: true },
     entries: { type: Array as PropType<BCMSEntryLite[]>, required: true },
     lng: String,
+    activeView: { type: String as PropType<BCMSEntryView>, required: true },
     visibleLanguage: {
       type: Object as PropType<{ data: BCMSLanguage; index: number }>,
       required: true,
@@ -51,6 +52,7 @@ const component = defineComponent({
     },
   },
   setup(props, ctx) {
+    const throwable = window.bcms.util.throwable;
     const translations = computed(() => {
       return useTranslation();
     });
@@ -58,6 +60,9 @@ const component = defineComponent({
     const showToIndex = ref(CHUNK_SIZE);
     let tidBuffer = '';
     const store = window.bcms.vue.store;
+    const statuses = computed(() => {
+      return store.getters.status_items;
+    });
     const entries = computed(() => {
       if (props.entries.length === 0) {
         return [];
@@ -112,6 +117,133 @@ const component = defineComponent({
         status: !!entries.value.find((e) => e.status),
       };
     });
+
+    const entriesByStatus = computed(() => {
+      return statuses.value.reduce(
+        (acc, status) => {
+          acc[status.label] = [];
+
+          entries.value.forEach((entry) => {
+            if (entry.status === status.label) {
+              acc[status.label].push(entry);
+            }
+          });
+
+          return acc;
+        },
+        {} as {
+          [key: string]: (BCMSEntryLite & {
+            title: string;
+          })[];
+        },
+      );
+    });
+
+    const draggingObj = ref({
+      isDragging: false,
+      statusFrom: '',
+      indexFrom: undefined as number | undefined,
+      statusTo: '',
+      indexTo: undefined as number | undefined,
+      entry: {} as BCMSEntryLite,
+      height: 0,
+    });
+
+    async function handleDrop() {
+      const { statusFrom, indexFrom, statusTo, indexTo, entry } =
+        draggingObj.value;
+
+      if (
+        statusFrom &&
+        statusTo &&
+        indexFrom !== undefined &&
+        indexTo !== undefined
+      ) {
+        console.log({ statusFrom, indexFrom, statusTo, indexTo, entry });
+        // TODO: Update entry status and/or reordering
+      }
+    }
+
+    function showTopDragPlaceholder(status: string) {
+      return (
+        draggingObj.value.indexTo === -1 &&
+        (draggingObj.value.statusFrom === draggingObj.value.statusTo
+          ? draggingObj.value.statusFrom === status &&
+            draggingObj.value.indexFrom !== 0
+          : draggingObj.value.statusTo === status)
+      );
+    }
+
+    function showBottomDragPlaceholder(status: string, index: number) {
+      return (
+        draggingObj.value.statusTo === status &&
+        (draggingObj.value.statusTo === draggingObj.value.statusFrom
+          ? draggingObj.value.indexFrom !== draggingObj.value.indexTo &&
+            draggingObj.value.indexTo === index &&
+            ((draggingObj.value.indexFrom || 0) < draggingObj.value.indexTo
+              ? true
+              : Math.abs(
+                  (draggingObj.value.indexFrom || 0) -
+                    draggingObj.value.indexTo,
+                ) > 1)
+          : draggingObj.value.indexTo === index)
+      );
+    }
+
+    function handleGhostStart(event: MouseEvent) {
+      // TODO: Handle roles to be able to drag and drop
+      event.preventDefault();
+      draggingObj.value.isDragging = true;
+      const target = event.currentTarget as HTMLElement;
+      const rect = target.getBoundingClientRect();
+
+      const ghost = target.cloneNode(true) as HTMLElement;
+      ghost.setAttribute(
+        'class',
+        'bcmsEntryTableGhost fixed z-[9999] top-0 left-0 px-6 py-4.5 rounded-3.5 bg-green/20 border border-dashed border-green opacity-50 pointer-events-none dark:bg-yellow/20 dark:border-yellow',
+      );
+      ghost.style.width = rect.width + 'px';
+      ghost.style.height = rect.height + 'px';
+      document.body.appendChild(ghost);
+
+      document.addEventListener('mousemove', handleGhostMove);
+      document.addEventListener('mouseup', handleGhostEnd);
+    }
+
+    function handleGhostMove(event: MouseEvent) {
+      const ghost = document.querySelector(
+        '.bcmsEntryTableGhost',
+      ) as HTMLElement;
+
+      if (ghost) {
+        const rect = ghost.getBoundingClientRect();
+
+        ghost.style.transform = `translate(${
+          event.clientX - rect.width / 2
+        }px, ${event.clientY - rect.height / 2}px) rotate(3deg)`;
+      }
+    }
+
+    function handleGhostEnd() {
+      const ghost = document.querySelector('.bcmsEntryTableGhost');
+
+      if (ghost) {
+        ghost.remove();
+      }
+
+      draggingObj.value = {
+        isDragging: false,
+        statusFrom: '',
+        indexFrom: undefined,
+        statusTo: '',
+        indexTo: undefined,
+        entry: {} as BCMSEntryLite,
+        height: 0,
+      };
+
+      document.removeEventListener('mouseup', handleGhostEnd);
+      document.removeEventListener('mousemove', handleGhostMove);
+    }
 
     function loadMore() {
       visibleChunks++;
@@ -183,8 +315,13 @@ const component = defineComponent({
 
     document.body.addEventListener('scroll', onScroll);
 
-    onMounted(() => {
+    onMounted(async () => {
       tidBuffer = props.template._id;
+      if (statuses.value.length === 0) {
+        await throwable(async () => {
+          return await window.bcms.sdk.status.getAll();
+        });
+      }
     });
     onBeforeUpdate(() => {
       if (tidBuffer !== props.template._id) {
@@ -201,7 +338,115 @@ const component = defineComponent({
     return () => (
       <>
         {props.entries.length > 0 ? (
-          <>
+          props.activeView === 'kanban' ? (
+            <div
+              class="flex gap-5 w-[calc(100%+40px)] -translate-x-5 overflow-x-auto px-5 pb-5 desktop:w-[calc(100%+120px)] desktop:-translate-x-15 desktop:px-15"
+              onDragover={(event) => {
+                event.preventDefault();
+              }}
+            >
+              {Object.keys(entriesByStatus.value).map((status) => {
+                return (
+                  <div
+                    class="w-[250px] flex-shrink-0 desktop:w-[300px]"
+                    onMouseenter={() => {
+                      draggingObj.value.statusTo = status;
+                    }}
+                    onMouseup={() => {
+                      if (draggingObj.value.isDragging) {
+                        handleDrop();
+                      }
+                    }}
+                  >
+                    <div
+                      class="text-xs leading-normal tracking-0.06 font-light text-grey uppercase pb-4"
+                      onMouseenter={() => {
+                        if (draggingObj.value.isDragging) {
+                          draggingObj.value.indexTo = -1;
+                        }
+                      }}
+                    >
+                      {status}
+                    </div>
+                    {showTopDragPlaceholder(status) && (
+                      <div
+                        class="px-6 py-4.5 rounded-3.5 border border-dashed border-darkGrey/80 min-h-12 mb-4"
+                        style={{
+                          height: draggingObj.value.height + 'px',
+                        }}
+                      />
+                    )}
+                    <div key={status} class="flex flex-col gap-4">
+                      {entriesByStatus.value[status].map((entryLite, index) => {
+                        return (
+                          <>
+                            <BCMSLink
+                              key={entryLite._id}
+                              href={`/dashboard/t/${props.template.cid}/e/${entryLite.cid}`}
+                              onMouseEnter={() => {
+                                if (draggingObj.value.isDragging) {
+                                  draggingObj.value.indexTo = index;
+                                }
+                              }}
+                              onMouseDown={(event) => {
+                                const target =
+                                  event.currentTarget as HTMLElement;
+
+                                draggingObj.value.statusFrom = status;
+                                draggingObj.value.indexFrom = index;
+                                draggingObj.value.entry = entryLite;
+                                draggingObj.value.height = target.offsetHeight;
+
+                                handleGhostStart(event);
+                              }}
+                              class={`px-6 py-4.5 rounded-3.5 border transition-all duration-300 ${
+                                draggingObj.value.indexFrom === index &&
+                                draggingObj.value.statusFrom === status
+                                  ? 'bg-green/20 border-green dark:bg-yellow/20 dark:border-yellow'
+                                  : 'bg-[#323237] border-darkGrey'
+                              } active:cursor-grabbing hover:bg-[#3c3c42e5]`}
+                            >
+                              <div class="-tracking-0.01 font-light text-light leading-tightr">
+                                {entryLite.title}
+                              </div>
+                            </BCMSLink>
+                            {showBottomDragPlaceholder(status, index) && (
+                              <div
+                                class="px-6 py-4.5 rounded-3.5 border border-dashed border-darkGrey/80 min-h-12"
+                                style={{
+                                  height: draggingObj.value.height + 'px',
+                                }}
+                              />
+                            )}
+                          </>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+              <div class="flex-shrink-0">
+                <BCMSButton
+                  kind="primary"
+                  onClick={() => {
+                    window.bcms.modal.entry.status.show({
+                      title: translations.value.modal.entryStatus.updateTitle,
+                      onDone: async (data) => {
+                        await throwable(async () => {
+                          return await window.bcms.sdk.status.create({
+                            label: data.updates[0].label,
+                            color: data.updates[0].color,
+                          });
+                        });
+                      },
+                    });
+                  }}
+                >
+                  Add another status
+                </BCMSButton>
+              </div>
+            </div>
+          ) : (
             <ul v-cy={'entries-list'} class="list-none">
               <li
                 class={`bcmsEntryTable bcmsEntryTable${
@@ -406,7 +651,7 @@ const component = defineComponent({
                 );
               })}
             </ul>
-          </>
+          )
         ) : (
           <BCMSEmptyState
             src="/entries.png"
@@ -419,4 +664,5 @@ const component = defineComponent({
     );
   },
 });
+
 export default component;

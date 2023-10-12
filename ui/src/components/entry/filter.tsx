@@ -1,7 +1,11 @@
 import { computed, defineComponent, type PropType, ref } from 'vue';
 import type { BCMSLanguage, BCMSTemplate } from '@becomes/cms-sdk/types';
 import BCMSIcon from '../icon';
-import type { BCMSEntryFilters, BCMSEntryFiltersOption } from '../../types';
+import type {
+  BCMSEntryFilters,
+  BCMSEntryFiltersOption,
+  BCMSEntryView,
+} from '../../types';
 import BCMSButton from '../button';
 import { BCMSSelect } from '../input';
 import pluralize from 'pluralize';
@@ -14,6 +18,7 @@ const component = defineComponent({
       required: true,
     },
     languages: { type: Array as PropType<BCMSLanguage[]>, required: true },
+    activeView: { type: String as PropType<BCMSEntryView>, required: true },
     visibleLanguage: {
       type: Object as PropType<{ data: BCMSLanguage; index: number }>,
       required: true,
@@ -32,6 +37,9 @@ const component = defineComponent({
       return true;
     },
     filter: (_filter: BCMSEntryFilters) => {
+      return true;
+    },
+    selectView: (_view: BCMSEntryView) => {
       return true;
     },
   },
@@ -112,32 +120,33 @@ const component = defineComponent({
                   pluralEntry: pluralize('entry', props.entryCount),
                 })}
           </p>
-          {(!isEmpty.value || isFiltering.value) && (
-            <div class="relative flex border-b border-dark transition-colors duration-300 mb-5 mr-5 w-[500px] max-w-full hover:border-green focus-within:border-green dark:border-light dark:hover:border-yellow dark:focus-within:border-yellow">
-              <BCMSIcon
-                src="/search"
-                class="absolute top-1/2 left-0 -translate-y-1/2 w-[18px] mr-2.5 text-dark fill-current dark:text-light"
-              />
-              <input
-                v-cy={'search'}
-                class="w-full py-2.5 pl-[35px] text-base outline-none bg-transparent dark:text-light"
-                type="text"
-                placeholder={
-                  translations.value.page.entries.filters.input.search
-                    .placeholder
-                }
-                v-model={filters.value.search.name}
-                onInput={async () => {
-                  clearTimeout(searchDebounceTimer);
-                  searchDebounceTimer = setTimeout(() => {
-                    ctx.emit(
-                      'filter',
-                      window.bcms.util.object.instance(filters.value),
-                    );
-                  }, 300);
-                }}
-              />
-              {/* <Transition name="fade">
+          {(!isEmpty.value || isFiltering.value) &&
+            props.activeView !== 'kanban' && (
+              <div class="relative flex border-b border-dark transition-colors duration-300 mb-5 mr-5 w-[500px] max-w-full hover:border-green focus-within:border-green dark:border-light dark:hover:border-yellow dark:focus-within:border-yellow">
+                <BCMSIcon
+                  src="/search"
+                  class="absolute top-1/2 left-0 -translate-y-1/2 w-[18px] mr-2.5 text-dark fill-current dark:text-light"
+                />
+                <input
+                  v-cy={'search'}
+                  class="w-full py-2.5 pl-[35px] text-base outline-none bg-transparent dark:text-light"
+                  type="text"
+                  placeholder={
+                    translations.value.page.entries.filters.input.search
+                      .placeholder
+                  }
+                  v-model={filters.value.search.name}
+                  onInput={async () => {
+                    clearTimeout(searchDebounceTimer);
+                    searchDebounceTimer = setTimeout(() => {
+                      ctx.emit(
+                        'filter',
+                        window.bcms.util.object.instance(filters.value),
+                      );
+                    }, 300);
+                  }}
+                />
+                {/* <Transition name="fade">
                 {filters.value.isOpen ? (
                   <div
                     class="bg-white shadow-cardLg rounded-2.5 absolute w-full top-[120%] z-100 p-5 dark:bg-darkGrey"
@@ -217,7 +226,7 @@ const component = defineComponent({
                   ''
                 )}
               </Transition> */}
-              {/* <button
+                {/* <button
                 v-cy={'open-filters'}
                 onClick={() => {
                   filters.value.isOpen = !filters.value.isOpen;
@@ -236,8 +245,8 @@ const component = defineComponent({
                   />
                 </div>
               </button> */}
-            </div>
-          )}
+              </div>
+            )}
         </div>
         <div class="flex flex-col gap-5 xs:flex-row">
           {props.languages.length > 1 && !isEmpty.value && (
@@ -253,6 +262,36 @@ const component = defineComponent({
               class="xs:max-w-[200px]"
             />
           )}
+          <button
+            class={`flex items-center gap-2 ${
+              props.activeView === 'kanban'
+                ? 'text-green dark:text-yellow'
+                : 'text-dark'
+            } transition-colors duration-300 hover:text-green dark:text-light dark:hover:text-yellow`}
+            onClick={() => {
+              ctx.emit('selectView', 'kanban');
+            }}
+          >
+            <BCMSIcon src="/entries/kanban" class="w-6 h-6 fill-current" />
+            <span class="font-medium leading-normal -tracking-0.01">
+              Kanban view
+            </span>
+          </button>
+          <button
+            class={`flex items-center gap-2 ${
+              props.activeView === 'list'
+                ? 'text-green dark:text-yellow'
+                : 'text-dark'
+            } transition-colors duration-300 hover:text-green dark:text-light dark:hover:text-yellow`}
+            onClick={() => {
+              ctx.emit('selectView', 'list');
+            }}
+          >
+            <BCMSIcon src="/editor/list-ul" class="w-6 h-6 fill-current" />
+            <span class="font-medium leading-normal -tracking-0.01">
+              List view
+            </span>
+          </button>
           <BCMSButton
             cyTag="add-new"
             disabled={props.disableAddEntry}
