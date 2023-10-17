@@ -292,8 +292,8 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
 <p align="center">
   <a href="https://cloud.thebcms.com">Try out BCMS</a><br>
   <a href="https://docs.thebcms.com">Documentation</a><br>
-  <a href="https://thebcms.com/blog">Blog</a>
-  <a href="https://github.com/bcms/cms/issues">Report a bug</a>
+  <a href="https://thebcms.com/blog">Blog</a><br>
+  <a href="https://github.com/bcms/cms/issues">Report a bug</a><br>
   <a href="https://github.com/orgs/bcms/discussions">Request a feature</a>
 </p>
 <br>
@@ -305,8 +305,7 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
 <h2 align="center">Stay in touch 🌐</h2>
 <p align="center">
   <a href="https://twitter.com/thebcms">Follow on X (twitter)</a><br>
-  <a href="https://www.linkedin.com/company/thebcms/">Follow on LinkedIn</a>
-  <a href="https://discord.gg/ZZwZPYhv">Join Discord</a>
+  <a href="https://www.linkedin.com/company/thebcms/">Follow on LinkedIn</a><br>
 </p>
 <br>
 <h2 align="center">License 📄</h2>
