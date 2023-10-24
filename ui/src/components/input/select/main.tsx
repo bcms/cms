@@ -377,14 +377,7 @@ const component = defineComponent({
                 showSearch={props.showSearch}
                 onChange={(payload) => {
                   if (props.multiple) {
-                    const index = props.selected.findIndex(
-                      (e) => e === payload.value,
-                    );
-
-                    ctx.emit('change', {
-                      ...payload,
-                      index,
-                    });
+                    ctx.emit('change', payload);
                   } else {
                     ctx.emit('change', payload);
                     isDropdownActive.value = false;
@@ -411,14 +404,7 @@ const component = defineComponent({
               inputRef={container}
               onChange={(payload) => {
                 if (props.multiple) {
-                  const index = props.selected.findIndex(
-                    (e) => e === payload.value,
-                  );
-
-                  ctx.emit('change', {
-                    ...payload,
-                    index,
-                  });
+                  ctx.emit('change', payload);
                 } else {
                   ctx.emit('change', payload);
                   isDropdownActive.value = false;

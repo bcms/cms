@@ -74,10 +74,12 @@ const component = defineComponent({
       selectOption(option: BCMSSelectOption) {
         if (props.multiple) {
           if (props.selected.includes(option.value)) {
+            const removeIndex = props.selected.indexOf(option.value);
+
             ctx.emit('change', {
               label: '',
               value: '',
-              index: option.index,
+              index: removeIndex,
             });
           } else {
             ctx.emit('change', option);
