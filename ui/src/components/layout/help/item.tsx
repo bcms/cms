@@ -70,8 +70,8 @@ const component = defineComponent({
             href={props.url}
             target={Tag === 'a' ? '_blank' : undefined}
             class={`group text-dark dark:text-light py-1.5 px-3.5 w-full text-left no-underline items-center
-              ${props.level === 1 ? 'flex' : ''}
-              ${props.level === 2 ? 'flex' : ''}
+              ${props.level === 1 ? 'flex items-center gap-2' : ''}
+              ${props.level === 2 ? 'flex items-center gap-2' : ''}
               ${
                 props.level === 3
                   ? 'text-opacity-50 font-normal text-sm block dark:font-thin'
