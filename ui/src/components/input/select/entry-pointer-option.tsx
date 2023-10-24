@@ -39,8 +39,10 @@ const component = defineComponent({
     return () => (
       <div
         class={`flex items-center justify-between gap-5 w-full ${
-          props.size === 'sm' ? 'p-2' : 'p-4.5'
-        } text-left border-b border-[#CBCBD5] dark:border-[#5A5B5E] transition-colors duration-300 group-hover:bg-dark/5 group-focus:bg-dark/5 dark:group-hover:bg-dark/10 dark:group-focus:bg-dark/10`}
+          props.size === 'sm'
+            ? 'p-2'
+            : 'p-4.5 border-b border-[#CBCBD5] dark:border-[#5A5B5E]'
+        } text-left transition-colors duration-300 group-hover:bg-dark/5 group-focus:bg-dark/5 dark:group-hover:bg-dark/10 dark:group-focus:bg-dark/10`}
       >
         <div>
           <div class="leading-tight -tracking-0.01 font-semibold truncate dark:text-light">

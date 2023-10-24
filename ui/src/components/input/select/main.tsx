@@ -284,7 +284,11 @@ const component = defineComponent({
                         return (
                           <div
                             key={index}
-                            class="flex items-center cursor-default pl-2.5 pr-0.5 py-0.5 bg-[#D1D2D3] border border-[#CBCBD5] rounded-[5px] dark:bg-[#5A5B5E] dark:border-[#656571]"
+                            class={`flex items-center cursor-default pl-2.5 pr-0.5 py-0.5 ${
+                              props.multiple
+                                ? 'bg-darkGrey/10'
+                                : 'bg-[#D1D2D3] border border-[#CBCBD5]'
+                            } rounded-[5px] dark:bg-[#5A5B5E] dark:border-[#656571]`}
                           >
                             {logic.getSelectedOption(selectedOption) && (
                               <BCMSEntryPointerOption
