@@ -7,9 +7,12 @@ import {
   ref,
   type Ref,
   Teleport,
+  computed,
+  nextTick,
 } from 'vue';
 import * as uuid from 'uuid';
 import type { BCMSSelectOption } from '../../../types';
+import { BCMSIcon } from '@ui/components';
 
 const component = defineComponent({
   props: {
@@ -53,7 +56,11 @@ const component = defineComponent({
       top: '0 !important',
       left: '0 !important',
       width: '100px !important',
+      maxHeight: '250px !important',
     });
+
+    const searchVal = ref('');
+    const searchInput = ref<HTMLInputElement | null>(null);
 
     const logic = {
       isItemSelected(option: BCMSSelectOption) {
@@ -69,6 +76,7 @@ const component = defineComponent({
             ctx.emit('change', {
               label: '',
               value: '',
+              index: option.index,
             });
           } else {
             ctx.emit('change', option);
@@ -78,6 +86,7 @@ const component = defineComponent({
             ctx.emit('change', {
               label: '',
               value: '',
+              index: 0,
             });
           } else {
             ctx.emit('change', option);
@@ -96,8 +105,12 @@ const component = defineComponent({
               positionStyles.value.top = `${
                 bb.top - 10 - container.value.offsetHeight
               }px !important`;
+              positionStyles.value.maxHeight = `${bb.top - 40}px !important`;
             } else {
               positionStyles.value.top = `${bb.bottom + 10}px !important`;
+              positionStyles.value.maxHeight = `${
+                window.innerHeight - bb.bottom - 40
+              }px !important`;
             }
             positionStyles.value.width = `${parentEl.clientWidth}px !important`;
             positionStyles.value.left = `${bb.left}px !important`;
@@ -113,7 +126,21 @@ const component = defineComponent({
         }
       },
     };
-    logic.updatePosition();
+
+    nextTick(() => {
+      logic.updatePosition();
+    });
+
+    const filteredOptions = computed(() => {
+      if (!props.multiple) return props.options;
+
+      return props.options.filter((option) => {
+        return `${option.label} ${option.subtitle || ''}`
+          .toLowerCase()
+          .includes(searchVal.value.toLowerCase());
+      });
+    });
+
     const scrollableParents: HTMLElement[] = [];
     const obs = new IntersectionObserver(
       (entries) => {
@@ -124,7 +151,7 @@ const component = defineComponent({
         });
       },
       {
-        threshold: 1,
+        threshold: 0.5,
       },
     );
 
@@ -157,6 +184,9 @@ const component = defineComponent({
       }
       logic.updatePosition();
       scrollToSelectedOptionElement();
+      if (props.multiple) {
+        searchInput.value?.focus();
+      }
     });
 
     onUnmounted(() => {
@@ -174,23 +204,39 @@ const component = defineComponent({
         <div>
           <Teleport to="#bcmsSelectList">
             <div
-              class={`fixed w-full  z-[1000000]  left-0`}
+              class={`fixed w-full z-[1000000] left-0`}
               style={positionStyles.value}
             >
+              {props.multiple && (
+                <div class="relative z-[1000001] flex border-b border-grey border-opacity-50 transition-all duration-300 w-full rounded-t-2.5 mt-px overflow-hidden focus-within:border-pink dark:focus-within:border-yellow">
+                  <BCMSIcon
+                    src="/search"
+                    class="absolute top-1/2 left-4 -translate-y-1/2 w-4 mr-2.5 text-grey text-opacity-50 fill-current dark:text-light"
+                  />
+                  <input
+                    ref={searchInput}
+                    v-model={searchVal.value}
+                    type="search"
+                    placeholder="Search"
+                    class="w-full flex-1 pt-3.5 pb-2.5 pl-10 text-sm bg-white placeholder-grey dark:bg-darkGrey dark:text-light focus:outline-none"
+                  />
+                </div>
+              )}
               <ul
                 id={scrollerId}
                 ref={container}
                 tabindex="-1"
                 role="listbox"
                 aria-labelledby="bcmsSelect_label"
-                class={`bcmsScrollbar fixed max-h-[200px] min-w-[150px] list-none w-full bg-white border border-grey border-opacity-20 z-[1000000] rounded-2.5 transition-shadow duration-300 left-0 overflow-auto shadow-cardLg dark:bg-darkGrey
+                class={`bcmsScrollbar fixed min-w-[150px] list-none w-full bg-white border border-grey border-opacity-20 z-[1000000] rounded-2.5 transition-shadow duration-300 left-0 overflow-auto shadow-cardLg dark:bg-darkGrey
                 ${props.showSearch ? 'border-none dark:border-solid' : ''}
                 ${props.invalidText ? 'border-red' : ''}
                 ${props.options.length === 0 ? 'hidden' : ''}
+                ${props.multiple ? 'pt-12' : ''}
               `}
                 style={positionStyles.value}
               >
-                {props.options.map((option) => (
+                {filteredOptions.value.map((option) => (
                   <li
                     role="option"
                     aria-selected={logic.isItemSelected(option)}

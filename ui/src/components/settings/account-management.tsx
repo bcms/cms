@@ -46,7 +46,6 @@ const component = defineComponent({
             </div>
           </div>
         )}
-        {/* TODO: Account settings is not a page, but a modal */}
         <BCMSButton
           href="https://cloud.thebcms.com/dashboard?modal=account-settings"
           newTab={true}

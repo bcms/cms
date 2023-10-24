@@ -5,12 +5,14 @@ import {
   type PropType,
   ref,
   type ComponentPublicInstance,
+  reactive,
 } from 'vue';
 import type { BCMSSelectOption } from '../../../types';
 import BCMSIcon from '../../icon';
 import InputWrapper from '../_input';
 import { DefaultComponentProps } from '../../_default';
 import BCMSSelectList from './list';
+import { BCMSEntryPointerOption } from '.';
 
 const component = defineComponent({
   props: {
@@ -32,7 +34,13 @@ const component = defineComponent({
       default: false,
     },
     options: {
-      type: Array as PropType<BCMSSelectOption[]>,
+      type: Array as PropType<
+        Array<
+          Omit<BCMSSelectOption, 'index'> & {
+            index?: number;
+          }
+        >
+      >,
       default: () => [],
     },
     showSearch: {
@@ -47,6 +55,7 @@ const component = defineComponent({
     },
   },
   setup(props, ctx) {
+    reactive(props.options);
     const bcmsDropdownList = ref<ComponentPublicInstance | null>(null);
     const search = ref('');
     const searchInput = ref<HTMLInputElement | null>(null);
@@ -56,11 +65,20 @@ const component = defineComponent({
     });
     const container = ref<HTMLElement | null>(null);
 
+    const options = computed(() => {
+      return props.options.map((option, optionIndex) => {
+        return {
+          ...option,
+          index: optionIndex,
+        };
+      });
+    });
+
     const filteredOptions = computed<BCMSSelectOption[]>(() => {
       if (!props.showSearch) {
-        return props.options;
+        return options.value;
       }
-      return props.options.filter((option) =>
+      return options.value.filter((option) =>
         search.value
           ? option.value.toLowerCase().includes(search.value) ||
             option.label.toLowerCase().includes(search.value)
@@ -86,16 +104,16 @@ const component = defineComponent({
           return;
         }
 
-        const options = Array.from(
+        const listEls = Array.from(
           bcmsDropdownList.value.$el.querySelectorAll('li'),
         ) as HTMLLIElement[];
-        if (!options) {
+        if (!listEls) {
           return;
         }
-        options.forEach((option) => {
-          const optionText = option.textContent?.toLowerCase();
+        listEls.forEach((el) => {
+          const optionText = el.textContent?.toLowerCase();
           if (optionText && optionText.includes(value.toLowerCase())) {
-            option.scrollIntoView({
+            el.scrollIntoView({
               behavior: 'smooth',
               block: 'start',
             });
@@ -125,13 +143,18 @@ const component = defineComponent({
         if (!_selected) {
           return props.placeholder;
         }
-        const selectedOption = props.options.find((e) => e.value === _selected);
+        const selectedOption = options.value.find((e) => e.value === _selected);
         if (!selectedOption) {
           return props.placeholder;
         }
         return selectedOption.label
           ? selectedOption.label
           : selectedOption.value;
+      },
+      getSelectedOption(_selected: string) {
+        const selectedOption = options.value.find((e) => e.value === _selected);
+
+        return selectedOption;
       },
       isItemSelected(item: BCMSSelectOption) {
         if (props.multiple) {
@@ -257,26 +280,46 @@ const component = defineComponent({
                     </span>
                   ) : (
                     <>
-                      {props.selected.map((e, index) => {
+                      {props.selected.map((selectedOption, index) => {
                         return (
                           <div
                             key={index}
                             class="flex items-center cursor-default pl-2.5 pr-0.5 py-0.5 bg-[#D1D2D3] border border-[#CBCBD5] rounded-[5px] dark:bg-[#5A5B5E] dark:border-[#656571]"
                           >
-                            <span class="leading-normal -tracking-0.01 pt-1 font-light text-dark line-clamp-2 text-left dark:text-light">
-                              {logic.getPlaceholderText(e)}
-                            </span>
+                            {logic.getSelectedOption(selectedOption) && (
+                              <BCMSEntryPointerOption
+                                option={
+                                  logic.getSelectedOption(
+                                    selectedOption,
+                                  ) as BCMSSelectOption
+                                }
+                                size="sm"
+                              />
+                            )}
                             <button
-                              class="flex cursor-pointer bg-transparent ml-1"
+                              class="flex cursor-pointer bg-transparent text-grey ml-1 transition-colors duration-300 hover:text-red focus-visible:text-red"
                               aria-label="Remove"
                               onClick={(event) => {
                                 event.stopPropagation();
-                                // TODO: Handle remove
+                                const option = options.value.find(
+                                  (e) => e.value === selectedOption,
+                                );
+                                if (option) {
+                                  const removeIndex = props.selected.findIndex(
+                                    (e) => e === selectedOption,
+                                  );
+
+                                  ctx.emit('change', {
+                                    value: '',
+                                    label: '',
+                                    index: removeIndex,
+                                  });
+                                }
                               }}
                             >
                               <BCMSIcon
                                 src="/close"
-                                class="w-6 h-6 text-red fill-current translate-y-px"
+                                class="w-6 h-6 fill-current translate-y-px"
                               />
                             </button>
                           </div>
@@ -330,7 +373,14 @@ const component = defineComponent({
                 showSearch={props.showSearch}
                 onChange={(payload) => {
                   if (props.multiple) {
-                    ctx.emit('change', payload);
+                    const index = props.selected.findIndex(
+                      (e) => e === payload.value,
+                    );
+
+                    ctx.emit('change', {
+                      ...payload,
+                      index,
+                    });
                   } else {
                     ctx.emit('change', payload);
                     isDropdownActive.value = false;
@@ -357,7 +407,14 @@ const component = defineComponent({
               inputRef={container}
               onChange={(payload) => {
                 if (props.multiple) {
-                  ctx.emit('change', payload);
+                  const index = props.selected.findIndex(
+                    (e) => e === payload.value,
+                  );
+
+                  ctx.emit('change', {
+                    ...payload,
+                    index,
+                  });
                 } else {
                   ctx.emit('change', payload);
                   isDropdownActive.value = false;

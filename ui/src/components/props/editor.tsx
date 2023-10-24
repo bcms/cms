@@ -61,7 +61,7 @@ const component = defineComponent({
 
     function isSingleCol(
       currentProp: BCMSPropValueExtended,
-      nextProp?: BCMSPropValueExtended
+      nextProp?: BCMSPropValueExtended,
     ): boolean {
       if (!checkNextType) {
         checkNextType = true;

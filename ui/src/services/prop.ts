@@ -68,7 +68,7 @@ export function createBcmsPropService(): void {
             ] as BCMSPropValueMediaData[];
           } else {
             output.data = window.bcms.util.object.instance(
-              value.data as BCMSPropValueMediaData[]
+              value.data as BCMSPropValueMediaData[],
             );
             output.data.forEach((item) => {
               if (!item.alt_text) {
@@ -102,7 +102,7 @@ export function createBcmsPropService(): void {
         }
       } else if (prop.type === BCMSPropType.ENTRY_POINTER) {
         const propData = window.bcms.util.object.instance(
-          prop.defaultData as BCMSPropEntryPointerData[]
+          prop.defaultData as BCMSPropEntryPointerData[],
         );
         output.templateIds = propData.map((e) => e.templateId);
         if (value && value.data) {
@@ -116,7 +116,7 @@ export function createBcmsPropService(): void {
         }
       } else if (prop.type === BCMSPropType.GROUP_POINTER) {
         const propData = window.bcms.util.object.instance(
-          prop.defaultData as BCMSPropGroupPointerData
+          prop.defaultData as BCMSPropGroupPointerData,
         );
         output.groupId = propData._id;
         let group: BCMSGroup;
@@ -309,7 +309,7 @@ export function createBcmsPropService(): void {
         return service.findLastDataPropFromPath(
           obj[path[0]],
           path.slice(1),
-          data
+          data,
         );
       } else {
         return data;
@@ -330,7 +330,7 @@ export function createBcmsPropService(): void {
               obj[path[0]],
               group.props,
               path.slice(1),
-              schema
+              schema,
             );
           }
         } else {
@@ -338,7 +338,7 @@ export function createBcmsPropService(): void {
             obj[path[0]],
             schemaHolder,
             path.slice(1),
-            schema
+            schema,
           );
         }
       }
@@ -377,7 +377,7 @@ export function createBcmsPropService(): void {
       reorderArrayItems(obj, path, info) {
         if (path.length === 0) {
           const value = window.bcms.util.object.instance(
-            obj[info.currentItemPosition]
+            obj[info.currentItemPosition],
           );
           obj.splice(info.currentItemPosition, 1);
           obj.splice(info.currentItemPosition + info.direction, 0, value);
@@ -388,14 +388,14 @@ export function createBcmsPropService(): void {
           service.mutateValue.reorderArrayItems(
             obj[path[0]],
             path.slice(1),
-            info
+            info,
           );
         }
       },
 
       async addArrayItem(obj, baseSchema, path, lang) {
         const propSchema = window.bcms.util.object.instance(
-          await window.bcms.prop.findSchemaFromPath(obj, baseSchema, path)
+          await window.bcms.prop.findSchemaFromPath(obj, baseSchema, path),
         );
         if (propSchema) {
           const value = window.bcms.util.object.instance(
@@ -403,19 +403,19 @@ export function createBcmsPropService(): void {
               prop: propSchema,
               lang,
               groupRequired: propSchema.type === BCMSPropType.GROUP_POINTER,
-            })
+            }),
           );
           if (value) {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const propValue: any[] = window.bcms.prop.getValueFromPath(
               obj,
-              path
+              path,
             );
             if (propValue) {
               propValue.push(
                 value.data instanceof Array
                   ? (value.data as string[])[0]
-                  : (value.data as BCMSPropValueGroupPointerData).items[0]
+                  : (value.data as BCMSPropValueGroupPointerData).items[0],
               );
             }
           }

@@ -326,8 +326,7 @@ const component = defineComponent({
         }),
         Link.configure({
           openOnClick: false,
-          validate(url) {
-            console.log(url);
+          validate() {
             return true;
           },
           HTMLAttributes: {

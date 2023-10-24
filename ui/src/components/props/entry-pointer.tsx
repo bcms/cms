@@ -215,42 +215,55 @@ const component = defineComponent({
                         return `${e.tid}-${e.eid}`;
                       })}
                     options={entriesData.value
-                      .map((e) => {
+                      .map((entryData, entryDataIndex) => {
                         if (
                           propsValue.value[0] &&
-                          e.id ===
+                          entryData.id ===
                             `${propsValue.value[0].tid}-${propsValue.value[0].eid}`
                         ) {
                           return {
-                            label: e.title,
-                            value: e.id,
-                            subtitle: e.subtitle,
-                            imageId: e.imageId,
+                            label: entryData.title,
+                            value: entryData.id,
+                            subtitle: entryData.subtitle,
+                            imageId: entryData.imageId,
+                            index: entryDataIndex,
                           };
                         } else {
                           return {
-                            label: e.title,
-                            value: e.id,
-                            subtitle: e.subtitle,
-                            imageId: e.imageId,
+                            label: entryData.title,
+                            value: entryData.id,
+                            subtitle: entryData.subtitle,
+                            imageId: entryData.imageId,
+                            index: entryDataIndex,
                           };
                         }
                       })
                       .sort((a, b) => (b.label > a.label ? -1 : 1))}
                     onChange={(item) => {
-                      // TODO: Handle selecting multiple options
                       const value = {
                         tid: '',
                         eid: '',
                       };
+
                       const [tid, eid] = item.value.split('-');
                       value.tid = tid;
                       value.eid = eid;
-                      ctx.emit(
-                        'update',
-                        value,
-                        props.basePropPath + '.data.' + 0,
-                      );
+
+                      if (value.eid && value.tid) {
+                        ctx.emit(
+                          'update',
+                          value,
+                          props.basePropPath +
+                            '.data.' +
+                            propsValue.value.filter((e) => e?.tid && e?.eid)
+                              .length,
+                        );
+                      } else {
+                        ctx.emit(
+                          'remove',
+                          props.basePropPath + '.data.' + item.index,
+                        );
+                      }
                     }}
                     v-slots={{
                       option: ({ option }: { option: BCMSSelectOption }) => {
@@ -287,24 +300,26 @@ const component = defineComponent({
                   return `${e.tid}-${e.eid}`;
                 })}
               options={entriesData.value
-                .map((e) => {
+                .map((entryData, entryDataIndex) => {
                   if (
                     propsValue.value[0] &&
-                    e.id ===
+                    entryData.id ===
                       `${propsValue.value[0].tid}-${propsValue.value[0].eid}`
                   ) {
                     return {
-                      label: e.title,
-                      value: e.id,
-                      subtitle: e.subtitle,
-                      imageId: e.imageId,
+                      label: entryData.title,
+                      value: entryData.id,
+                      subtitle: entryData.subtitle,
+                      imageId: entryData.imageId,
+                      index: entryDataIndex,
                     };
                   } else {
                     return {
-                      label: e.title,
-                      value: e.id,
-                      subtitle: e.subtitle,
-                      imageId: e.imageId,
+                      label: entryData.title,
+                      value: entryData.id,
+                      subtitle: entryData.subtitle,
+                      imageId: entryData.imageId,
+                      index: entryDataIndex,
                     };
                   }
                 })
