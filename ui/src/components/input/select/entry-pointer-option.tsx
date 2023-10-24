@@ -45,17 +45,17 @@ const component = defineComponent({
         } text-left transition-colors duration-300 group-hover:bg-dark/5 group-focus:bg-dark/5 dark:group-hover:bg-dark/10 dark:group-focus:bg-dark/10`}
       >
         <div>
-          <div class="leading-tight -tracking-0.01 font-semibold truncate dark:text-light">
-            {props.option.label}
-          </div>
+          <div
+            class="leading-tight -tracking-0.01 font-semibold truncate dark:text-light"
+            innerHTML={props.option.label}
+          />
           {props.option.subtitle && (
             <div
               class={`leading-tight -tracking-0.01 font-light ${
                 props.size === 'sm' ? 'mt-1.5' : 'mt-2.5'
               } line-clamp-2 dark:text-light`}
-            >
-              {props.option.subtitle}
-            </div>
+              innerHTML={props.option.subtitle}
+            />
           )}
         </div>
         {image.value && (

@@ -13,6 +13,7 @@ import {
 import * as uuid from 'uuid';
 import type { BCMSSelectOption } from '../../../types';
 import { BCMSIcon } from '@ui/components';
+import { textHighlight } from '@ui/util';
 
 const component = defineComponent({
   props: {
@@ -134,11 +135,25 @@ const component = defineComponent({
     const filteredOptions = computed(() => {
       if (!props.multiple) return props.options;
 
-      return props.options.filter((option) => {
-        return `${option.label} ${option.subtitle || ''}`
-          .toLowerCase()
-          .includes(searchVal.value.toLowerCase());
-      });
+      return props.options
+        .filter((option) => {
+          return `${option.label} ${option.subtitle || ''}`
+            .toLowerCase()
+            .includes(searchVal.value.toLowerCase());
+        })
+        .map((option) => {
+          const highlightedLabel = textHighlight(option.label, searchVal.value);
+          const highlightedSubtitle = textHighlight(
+            option.subtitle || '',
+            searchVal.value,
+          );
+
+          return {
+            ...option,
+            label: highlightedLabel,
+            subtitle: highlightedSubtitle,
+          };
+        });
     });
 
     const scrollableParents: HTMLElement[] = [];
