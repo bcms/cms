@@ -39,7 +39,11 @@ const component = defineComponent({
           props.item.type
         } self-start transition-shadow duration-300 hover:shadow-inputHover focus-within:shadow-inputHover ${
           props.mode === 'select' ? 'rounded-lg' : 'rounded-3xl shadow-input'
-        } ${props.selected ? 'outline outline-green/100 dark:outline-yellow/100' : ''} ${
+        } ${
+          props.selected
+            ? 'outline outline-green/100 dark:outline-yellow/100'
+            : ''
+        } ${
           props.mode === 'select' && props.item.type === BCMSMediaType.DIR
             ? 'col-span-2 shadow-input'
             : ''
@@ -70,7 +74,7 @@ const component = defineComponent({
               }`}
             >
               <div
-                class={`absolute top-0 left-0 flex items-center justify-center w-full h-full bg-light ${
+                class={`absolute top-0 left-0 flex items-center justify-center w-full h-full bg-light overflow-hidden ${
                   props.mode === 'select' ? 'rounded-lg' : 'rounded-t-3xl'
                 }`}
               >
@@ -92,7 +96,11 @@ const component = defineComponent({
                     } text-grey fill-current mt-2`}
                   />
                 )}
-                <div class={`absolute bottom-0 left-0 py-0.5 px-2.5 rounded-tr-2.5 bg-dark bg-opacity-40 text-white text-center font-medium ${props.mode === 'select' ? 'rounded-bl-lg' : ''}`}>
+                <div
+                  class={`absolute bottom-0 left-0 py-0.5 px-2.5 rounded-tr-2.5 bg-dark bg-opacity-40 text-white text-center font-medium ${
+                    props.mode === 'select' ? 'rounded-bl-lg' : ''
+                  }`}
+                >
                   {props.item.type}
                 </div>
               </div>
@@ -105,7 +113,15 @@ const component = defineComponent({
               props.mode === 'select' && props.item.type !== BCMSMediaType.DIR
                 ? 'hidden'
                 : 'rounded-b-3xl'
-            } ${props.mode === 'select' && props.item.type === BCMSMediaType.DIR ? 'rounded-t-lg' : ''} ${props.mode !== 'select' && props.item.type === BCMSMediaType.DIR ? 'rounded-t-3xl' : ''} dark:bg-darkGrey`}
+            } ${
+              props.mode === 'select' && props.item.type === BCMSMediaType.DIR
+                ? 'rounded-t-lg'
+                : ''
+            } ${
+              props.mode !== 'select' && props.item.type === BCMSMediaType.DIR
+                ? 'rounded-t-3xl'
+                : ''
+            } dark:bg-darkGrey`}
           >
             {props.item.type === BCMSMediaType.DIR ? (
               <BCMSIcon
@@ -127,7 +143,11 @@ const component = defineComponent({
                 props.mode === 'select'
                   ? 'hidden'
                   : 'group p-5 flex ml-auto bg-white relative z-20 flex-shrink-0 rounded-br-3xl dark:bg-darkGrey'
-              } ${props.mode !== 'select' && props.item.type === BCMSMediaType.DIR ? 'rounded-t-3xl' : ''} disabled:cursor-not-allowed`}
+              } ${
+                props.mode !== 'select' && props.item.type === BCMSMediaType.DIR
+                  ? 'rounded-t-3xl'
+                  : ''
+              } disabled:cursor-not-allowed`}
               disabled={props.disableRemove}
               onClick={(event) => {
                 event.stopPropagation();

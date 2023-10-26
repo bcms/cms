@@ -294,7 +294,8 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
   <a href="https://docs.thebcms.com">Documentation</a><br>
   <a href="https://thebcms.com/blog">Blog</a><br>
   <a href="https://github.com/bcms/cms/issues">Report a bug</a><br>
-  <a href="https://github.com/orgs/bcms/discussions">Request a feature</a>
+  <a href="https://github.com/orgs/bcms/discussions">Request a feature</a><br>
+  <a href="https://github.com/bcms/starters">Code starters for Nuxt.js & Next.js</a><br>
 </p>
 <br>
 <h2 align="center">Support ❤️</h2>
