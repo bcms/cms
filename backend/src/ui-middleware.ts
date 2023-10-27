@@ -108,9 +108,9 @@ export const BCMSUiAssetMiddleware = createMiddleware({
         if (await fs.exist(filePath, true)) {
           res.sendFile(filePath);
         } else {
-          if (req.originalUrl !== '/') {
-            markIp(ip);
-          }
+          // if (req.originalUrl !== '/') {
+          //   markIp(ip);
+          // }
           res.sendFile(path.join(process.cwd(), 'public', 'index.html'));
         }
       }

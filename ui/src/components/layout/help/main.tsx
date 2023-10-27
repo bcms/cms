@@ -77,7 +77,7 @@ const component = defineComponent({
           <Transition name="help">
             {show.value === true && (
               <div
-                class="help--container absolute top-0 left-0 -translate-x-full -translate-y-full min-w-max bg-white rounded-2.5 py-1.5 dark:bg-darkGrey dark:border dark:border-grey dark:border-opacity-20"
+                class="help--container absolute top-0 left-0 -translate-x-full -translate-y-full min-w-max max-h-[80vh] overflow-y-auto bg-white rounded-2.5 py-1.5 dark:bg-darkGrey dark:border dark:border-grey dark:border-opacity-20"
                 ref={helpContainer}
                 v-clickOutside={() => (show.value = false)}
               >

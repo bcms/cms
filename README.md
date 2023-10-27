@@ -290,9 +290,12 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
 <br><br>
 <h2 align="center">Important Links 📌</h2>
 <p align="center">
-  <a href="https://cloud.thebcms.com">Sign up</a><br>
+  <a href="https://cloud.thebcms.com">Try out BCMS</a><br>
   <a href="https://docs.thebcms.com">Documentation</a><br>
-  <a href="https://thebcms.com">Website</a>
+  <a href="https://thebcms.com/blog">Blog</a><br>
+  <a href="https://github.com/bcms/cms/issues">Report a bug</a><br>
+  <a href="https://github.com/orgs/bcms/discussions">Request a feature</a><br>
+  <a href="https://github.com/bcms/starters">Code starters for Nuxt.js & Next.js</a><br>
 </p>
 <br>
 <h2 align="center">Support ❤️</h2>
@@ -302,8 +305,8 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
 <br>
 <h2 align="center">Stay in touch 🌐</h2>
 <p align="center">
-  <a href="https://twitter.com/thebcms">X (twitter)</a><br>
-  <a href="https://thebcms.com">Website</a>
+  <a href="https://twitter.com/thebcms">Follow on X (twitter)</a><br>
+  <a href="https://www.linkedin.com/company/thebcms/">Follow on LinkedIn</a><br>
 </p>
 <br>
 <h2 align="center">License 📄</h2>
