@@ -8,9 +8,7 @@ import {
   ref,
 } from 'vue';
 import { DefaultComponentProps } from '../_default';
-import {
-  BCMSPropWrapper,
-} from './_wrapper';
+import { BCMSPropWrapper } from './_wrapper';
 import { BCMSSelect } from '../input';
 import type {
   BCMSArrayPropMoveEventData,
@@ -180,73 +178,50 @@ const component = defineComponent({
       >
         <div class="flex flex-wrap items-center justify-between w-full gap-2.5">
           {props.prop.array ? (
-            <div
-            >
+            <div>
               {(props.prop.data as PropValueType).map((_, entryIdIndex) => {
                 return (
-                  // <BCMSPropWrapperArrayItem
-                  //   arrayLength={propsValue.value.length}
-                  //   itemPositionInArray={entryIdIndex}
-                  //   onMove={(data) => {
-                  //     ctx.emit('move', props.basePropPath + '.data', data);
-                  //   }}
-                  //   onRemove={(index) => {
-                  //     ctx.emit('remove', props.basePropPath + '.data.' + index);
-                  //   }}
-                  // >
-                    <BCMSSelect
-                      placeholder="Select"
-                      invalidText={errors.value[entryIdIndex]}
-                      multiple
-                      selected={propsValue.value.map((e) => {
-                        return `${e.tid}-${e.eid}`;
-                      })}
-                      options={entriesData.value
-                        .map((e) => {
-                          if (
-                            propsValue.value[0] &&
-                            e.id ===
-                              `${propsValue.value[0].tid}-${propsValue.value[0].eid}`
-                          ) {
-                            return {
-                              label: e.title,
-                              value: e.id,
-                            };
-                          } else {
-                            return {
-                              label: e.title,
-                              value: e.id,
-                            };
-                          }
-                        })
-                        .sort((a, b) => (b.label > a.label ? -1 : 1))}
-                      onChange={(item) => {
-                        const value = {
-                          tid: '',
-                          eid: '',
-                        };
-                        const [tid, eid] = item.value.split('-');
-                        value.tid = tid;
-                        value.eid = eid;
-                        ctx.emit(
-                          'update',
-                          // TODO: Vidi sa Banetom kako da saljemo array kao "value", za multiple select
-                          value,
-                          props.basePropPath + '.data.' + entryIdIndex,
-                        );
-                      }}
-                      // v-slots={{
-                      //   list: () => {
-                      //     return (
-                      //       <ul>
-                      //         <li>1</li>
-                      //         <li>2</li>
-                      //       </ul>
-                      //     );
-                      //   },
-                      // }}
-                    />
-                  // </BCMSPropWrapperArrayItem>
+                  <BCMSSelect
+                    placeholder="Select"
+                    invalidText={errors.value[entryIdIndex]}
+                    multiple
+                    selected={propsValue.value.map((e) => {
+                      return `${e.tid}-${e.eid}`;
+                    })}
+                    options={entriesData.value
+                      .map((e) => {
+                        if (
+                          propsValue.value[0] &&
+                          e.id ===
+                            `${propsValue.value[0].tid}-${propsValue.value[0].eid}`
+                        ) {
+                          return {
+                            label: e.title,
+                            value: e.id,
+                          };
+                        } else {
+                          return {
+                            label: e.title,
+                            value: e.id,
+                          };
+                        }
+                      })
+                      .sort((a, b) => (b.label > a.label ? -1 : 1))}
+                    onChange={(item) => {
+                      const value = {
+                        tid: '',
+                        eid: '',
+                      };
+                      const [tid, eid] = item.value.split('-');
+                      value.tid = tid;
+                      value.eid = eid;
+                      ctx.emit(
+                        'update',
+                        value,
+                        props.basePropPath + '.data.' + entryIdIndex,
+                      );
+                    }}
+                  />
                 );
               })}
             </div>
@@ -254,11 +229,11 @@ const component = defineComponent({
             <BCMSSelect
               placeholder="Select"
               invalidText={errors.value[0]}
-              selected={
-                propsValue.value.filter(e => e.eid && e.tid).map(e => {
+              selected={propsValue.value
+                .filter((e) => e.eid && e.tid)
+                .map((e) => {
                   return `${e.tid}-${e.eid}`;
-                })
-              }
+                })}
               options={entriesData.value
                 .map((e) => {
                   if (
@@ -283,23 +258,13 @@ const component = defineComponent({
                   tid: '',
                   eid: '',
                 };
-                if(item.value) {
+                if (item.value) {
                   const [tid, eid] = item.value.split('-');
                   value.tid = tid;
                   value.eid = eid;
                 }
                 ctx.emit('update', value, props.basePropPath + '.data.0');
               }}
-              // v-slots={{
-              //   list: () => {
-              //     return (
-              //       <ul>
-              //         <li>1</li>
-              //         <li>2</li>
-              //       </ul>
-              //     );
-              //   },
-              // }}
             />
           )}
         </div>
