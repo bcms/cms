@@ -19,7 +19,7 @@ services:
   cms_backend:
     depends_on:
       - cms_shim
-    image: 'becomes/cms-backend-local:1.0.36'
+    image: 'becomes/cms-backend-local:1.0.37'
     ports:
       - '1280:8080'
     volumes:
