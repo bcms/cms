@@ -156,12 +156,28 @@ export class BCMSTypeConverter {
       }
       if (outputTypes.length > 0) {
         if (cType === 'gql') {
-          output = `${toCamelCase(prop.name)}Union`;
-          additional.push(
-            `union ${toCamelCase(prop.name)}Union = ${outputTypes.join(
-              ' | ',
-            )}\n\n`,
-          );
+          if (outputTypes.length > 1) {
+            output = `${toCamelCase(prop.name)}Union`;
+            additional.push(
+              [
+                `type ${toCamelCase(prop.name)}Union {`,
+                ...outputTypes.map((type) => {
+                  const name = type.replace('Entry', '');
+                  return `  ${
+                    name.slice(0, 1).toLowerCase() + name.slice(1)
+                  }: ${type}`;
+                }),
+                '}',
+              ].join('\n'),
+            );
+            // additional.push(
+            //   `union ${toCamelCase(prop.name)}Union = ${outputTypes.join(
+            //     ' | ',
+            //   )}\n\n`,
+            // );
+          } else {
+            output = outputTypes[0];
+          }
         } else {
           output = outputTypes.join(' | ');
         }
@@ -170,7 +186,7 @@ export class BCMSTypeConverter {
     return {
       type: prop.array
         ? cType === 'gql'
-          ? `[${output}!]`
+          ? `[${output}]`
           : `Array<${output}>`
         : output,
       additional,
@@ -583,7 +599,7 @@ export class BCMSTypeConverter {
       '',
       'type BCMSEntryContentType {',
       ...(await BCMSRepo.language.findAll()).map(
-        (lng) => `  ${lng.code}: [BCMSEntryContentParsedItem!]!`,
+        (lng) => `  ${lng.code}: [BCMSEntryContentParsedItem]!`,
       ),
       '}',
     ].join('\n');
