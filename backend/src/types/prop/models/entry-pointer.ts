@@ -18,6 +18,7 @@ export interface BCMSPropEntryPointerDataParsed {
   createdAt: number;
   updatedAt: number;
   templateId: string;
+  templateName: string;
   userId: string;
   status?: string;
   meta: { [lng: string]: BCMSPropParsed };
