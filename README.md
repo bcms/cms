@@ -1,11 +1,15 @@
 https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
 
-<h1 align="center">
+<h2 align="center">
   BCMS - Open-source Headless CMS
 </h1>
-
+<p align="center">
+  BCMS is an open-source Contentful alternative. Built with Node.js, MongoDB, Vue 3, and Tailwind. <br>
+  Design your content structure without leaving the browser. <br> Consume content via APIs. Works nicely with Next.js, Nuxt.js & Gatsby.js.<br>
+</p>
+<p align="center">🌐 <a href="https://thebcms.com">Website</a> · 📚 <a href="https://docs.thebcms.com">Documentation</a> · 💻 <a href="https://cloud.thebcms.com/">Demo</a> · 💬 <a href="https://discord.gg/Rr4kTKpU">Discord</a> · 🤓 <a href="https://github.com/bcms/starters">Code starters</a> · 🤓 <p>
+<br />
 <!--
-
 [![NPM Version][npm-image-ui]][npm-url-ui]
 [![NPM Version][npm-image-sdk]][npm-url-sdk]
 [![NPM Version][npm-image-backend]][npm-url-backend]
@@ -14,12 +18,6 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
 [![NPM Version][npm-image-most]][npm-url-most]
 [![X](https://img.shields.io/twitter/follow/thebcms?style=social&logo=x)](https://twitter.com/thebcms)
 [![Website](https://img.shields.io/badge/Website-Visit-blue)](https://www.thebcms.com) -->
-
-<br>
-<p align="center">
-  BCMS is an open-source Contentful alternative. Built with Node.js, MongoDB, Vue 3 and Tailwind. <br>
-  Design your content structure without leaving the browser. <br> Consume content via APIs. Works nicely with Next.js, Nuxt.js & Gatsby.js.<br>
-</p>
 <br>
 <h2 align="center">
   Things only BCMS can do  🦄
@@ -288,16 +286,6 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
   </tbody>
 </table>
 <br><br>
-<h2 align="center">Important Links 📌</h2>
-<p align="center">
-  <a href="https://cloud.thebcms.com">Try out BCMS</a><br>
-  <a href="https://docs.thebcms.com">Documentation</a><br>
-  <a href="https://thebcms.com/blog">Blog</a><br>
-  <a href="https://github.com/bcms/cms/issues">Report a bug</a><br>
-  <a href="https://github.com/orgs/bcms/discussions">Request a feature</a><br>
-  <a href="https://github.com/bcms/starters">Code starters for Nuxt.js & Next.js</a><br>
-</p>
-<br>
 <h2 align="center">Support ❤️</h2>
 <p align="center">
   If you like the project, hit that ⭐ button !!1
