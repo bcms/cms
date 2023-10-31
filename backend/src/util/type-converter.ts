@@ -156,28 +156,28 @@ export class BCMSTypeConverter {
       }
       if (outputTypes.length > 0) {
         if (cType === 'gql') {
-          if (outputTypes.length > 1) {
-            output = `${toCamelCase(prop.name)}Union`;
-            additional.push(
-              [
-                `type ${toCamelCase(prop.name)}Union {`,
-                ...outputTypes.map((type) => {
-                  const name = type.replace('Entry', '');
-                  return `  ${
-                    name.slice(0, 1).toLowerCase() + name.slice(1)
-                  }: ${type}`;
-                }),
-                '}',
-              ].join('\n'),
-            );
-            // additional.push(
-            //   `union ${toCamelCase(prop.name)}Union = ${outputTypes.join(
-            //     ' | ',
-            //   )}\n\n`,
-            // );
-          } else {
-            output = outputTypes[0];
-          }
+          // if (outputTypes.length > 1) {
+          output = `${toCamelCase(prop.name)}Union`;
+          additional.push(
+            [
+              `type ${toCamelCase(prop.name)}Union {`,
+              ...outputTypes.map((type) => {
+                const name = type.replace('Entry', '');
+                return `  ${
+                  name.slice(0, 1).toLowerCase() + name.slice(1)
+                }: ${type}`;
+              }),
+              '}',
+            ].join('\n'),
+          );
+          // additional.push(
+          //   `union ${toCamelCase(prop.name)}Union = ${outputTypes.join(
+          //     ' | ',
+          //   )}\n\n`,
+          // );
+          // } else {
+          //   output = outputTypes[0];
+          // }
         } else {
           output = outputTypes.join(' | ');
         }
