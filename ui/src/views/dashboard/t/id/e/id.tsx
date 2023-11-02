@@ -174,6 +174,7 @@ const component = defineComponent({
           .then((result) => {
             if (result) {
               entrySync.unsync();
+              changes.value = false;
               next();
             } else {
               next(route.path);
