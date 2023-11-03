@@ -559,6 +559,7 @@ export class BCMSTypeConverter {
       `height: Float!`,
       `caption: String`,
       `alt_text: String`,
+      'svg: String',
       '}',
       '',
       `type BCMSMediaExtended {`,
