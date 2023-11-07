@@ -38,6 +38,7 @@
     "@banez/fs": "^1.0.3",
     "@banez/npm-tool": "^1.1.1",
     "@banez/string-utility": "^1.0.1",
+    "@becomes/purple-cheetah": "^3.7.4",
     "husky": "^8.0.3"
   }
 }

@@ -1,0 +1,485 @@
+openapi: '3.0.2'
+
+info:
+  x-logoUri: 'assets/bcms-w-logo.svg'
+  x-name: bcms-backend
+  version: '3.2.0'
+  title: 'BCMS'
+  description:
+    $ref: '../README.md'
+  contact:
+    name: 'Becomes'
+    url: 'https://thebcms.com/contact'
+    email: 'dev@thebcms.com'
+
+servers:
+  - url: 'http://localhost:8080'
+    description: 'Local development'
+
+paths:
+  /api/shim/user/verify/otp:
+    post:
+      tags:
+        - Shim
+      summary: Exchange BCMS Cloud OTP code for access and refresh tokens
+      description: 'In development mode, any string can be used as OTP code. In
+        production, OTP code is not accessible because of predefined
+        allowed callback URLs for specified instance. If in production, access
+        and refresh tokens must be obtained directly from the BCMS UI after
+        successful login.'
+      parameters:
+        - in: 'query'
+          name: 'user'
+          description: 'User ID'
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - otp
+              properties:
+                otp:
+                  type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - accessToken
+                  - refreshToken
+                properties:
+                  accessToken:
+                    type: string
+                  refreshToken:
+                    type: string
+
+  /api/auth/token/refresh/{userId}:
+    post:
+      tags:
+        - Auth
+      summary: Refresh access with for specified user.
+      description: 'It is important to know that user ID and refresh token
+        must be paired, which means that specified refresh token belongs to
+        specified user.'
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User ID
+      security:
+        - RefreshToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - accessToken
+                properties:
+                  accessToken:
+                    type: string
+  /api/auth/logout/{userId}:
+    post:
+      tags:
+        - Auth
+      summary: Logout specified user.
+      description: 'After calling this method, specified refresh token will be
+        invalidated (deleted) for specified user.'
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User ID
+      security:
+        - RefreshToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - ok
+                properties:
+                  ok:
+                    type: boolean
+
+  /api/user/count:
+    get:
+      tags:
+        - User
+      security:
+        - AccessToken: []
+      summary: 'Get number of users in the BCMS'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - count
+                properties:
+                  count:
+                    type: number
+  /api/user:
+    get:
+      tags:
+        - User
+      summary: Get current user
+      description: 'Which user will be returned is determent using access token.'
+      security:
+        - AccessToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - item
+                properties:
+                  item:
+                    $ref: '#/components/schemas/BCMSUserProtected'
+    put:
+      tags:
+        - User
+      summary: Update user
+      description: 'Only user with an ADMIN role is able to call this endpoint.'
+      security:
+        - AccessToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BCMSUserUpdateData'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - item
+                properties:
+                  item:
+                    $ref: '#/components/schemas/BCMSUserProtected'
+  /api/user/all:
+    get:
+      tags:
+        - User
+      summary: Get all users
+      security:
+        - AccessToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - items
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/BCMSUserProtected'
+  /api/user/{userId}:
+    get:
+      tags:
+        - User
+      summary: Get a specific user
+      parameters:
+        - in: path
+          name: userId
+          schema:
+            type: string
+          required: true
+          description: User ID
+      security:
+        - AccessToken: []
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - item
+                properties:
+                  item:
+                    $ref: '#/components/schemas/BCMSUserProtected'
+
+components:
+  schemas:
+    JWTRoleName:
+      type: string
+      enum:
+        - ADMIN
+        - USER
+    JWTPermissionName:
+      type: string
+      enum:
+        - READ
+        - WRITE
+        - DELETE
+        - EXECUTE
+    JWTPermission:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          $ref: '#/components/schemas/JWTPermissionName'
+    JWTRole:
+      type: object
+      required:
+        - name
+        - permissions
+      properties:
+        name:
+          $ref: '#/components/schemas/JWTRoleName'
+        permissions:
+          type: array
+          items:
+            $ref: '#/components/schemas/JWTPermission'
+
+    BCMSUserPersonal:
+      type: object
+      required:
+        - firstName
+        - lastName
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        avatarUri:
+          type: string
+    BCMSUserAddress:
+      type: object
+      properties:
+        country:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        zip:
+          type: string
+        street:
+          type: object
+          required:
+            - name
+            - number
+          properties:
+            name:
+              type: string
+            number:
+              type: string
+    BCMSUserPolicyCRUD:
+      type: object
+      required:
+        - get
+        - post
+        - put
+        - delete
+      properties:
+        get:
+          type: boolean
+        post:
+          type: boolean
+        put:
+          type: boolean
+        delete:
+          type: boolean
+    BCMSUserPolicyTemplate:
+      type: object
+      required:
+        - _id
+        - get
+        - post
+        - put
+        - delete
+      properties:
+        _id:
+          type: string
+        get:
+          type: boolean
+        post:
+          type: boolean
+        put:
+          type: boolean
+        delete:
+          type: boolean
+    BCMSUserPolicyPluginOption:
+      type: object
+      required:
+        - name
+        - value
+      properties:
+        name:
+          type: string
+        value:
+          type: array
+          items:
+            type: string
+    BCMSUserPolicyPlugin:
+      type: object
+      required:
+        - name
+        - allowed
+        - fullAccess
+        - options
+      properties:
+        name:
+          type: string
+        allowed:
+          type: boolean
+        fullAccess:
+          type: boolean
+        options:
+          type: array
+          items:
+            $ref: '#/components/schemas/BCMSUserPolicyPluginOption'
+    BCMSUserPolicy:
+      type: object
+      required:
+        - media
+        - templates
+      properties:
+        media:
+          $ref: '#/components/schemas/BCMSUserPolicyCRUD'
+        templates:
+          type: array
+          items:
+            $ref: '#/components/schemas/BCMSUserPolicyTemplate'
+        plugins:
+          type: array
+          items:
+            $ref: '#/components/schemas/BCMSUserPolicyPlugin'
+    BCMSUserCustomPool:
+      type: object
+      required:
+        - personal
+        - address
+        - policy
+      properties:
+        personal:
+          $ref: '#/components/schemas/BCMSUserPersonal'
+        address:
+          $ref: '#/components/schemas/BCMSUserAddress'
+        policy:
+          $ref: '#/components/schemas/BCMSUserPolicy'
+    BCMSUserProtected:
+      type: object
+      required:
+        - _id
+        - createdAt
+        - updatedAt
+        - username
+        - email
+        - roles
+        - customPool
+      properties:
+        _id:
+          type: string
+        createdAt:
+          type: number
+          format: milliseconds
+        updatedAt:
+          type: number
+          format: milliseconds
+        username:
+          type: string
+        email:
+          type: string
+        roles:
+          type: array
+          items:
+            $ref: '#/components/schemas/JWTRole'
+        customPool:
+          $ref: '#/components/schemas/BCMSUserCustomPool'
+    BCMSUserUpdateData:
+      type: object
+      required:
+        - _id
+      properties:
+        _id:
+          type: string
+        customPool:
+          type: object
+          properties:
+            policy:
+              type: object
+              properties:
+                media:
+                  $ref: '#/components/schemas/BCMSUserPolicyCRUD'
+                customPortal:
+                  $ref: '#/components/schemas/BCMSUserPolicyCRUD'
+                templates:
+                  type: array
+                  items:
+                    allOf:
+                      - $ref: '#/components/schemas/BCMSUserPolicyCRUD'
+                      - type: object
+                        required:
+                          - _id
+                        properties:
+                          _id:
+                            type: string
+                webhooks:
+                  type: array
+                  items:
+                    allOf:
+                      - $ref: '#/components/schemas/BCMSUserPolicyCRUD'
+                      - type: object
+                        required:
+                          - _id
+                        properties:
+                          _id:
+                            type: string
+                plugins:
+                  type: array
+                  items:
+                    allOf:
+                      - $ref: '#/components/schemas/BCMSUserPolicyCRUD'
+                      - type: object
+                        required:
+                          - name
+                        properties:
+                          name:
+                            type: string
+  securitySchemes:
+    AccessToken:
+      type: http
+      scheme: bearer
+    RefreshToken:
+      type: http
+      scheme: bearer
+    HttpSignature:
+      type: http
+      scheme: custom
+      x-handler: /bcms/http-signature.js
+      description: 'API key ID and secret split by `-` character.'

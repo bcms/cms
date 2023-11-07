@@ -1,0 +1,49 @@
+.segmentLoader {
+  position: relative;
+  width: 13px;
+  height: 13px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2px;
+  $move: 50%;
+  transform: rotate(45deg);
+
+  &--segment {
+    position: relative;
+    background-color: white;
+    border-radius: 50%;
+    opacity: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    transition: all 0.5s;
+
+    &_0 {
+      left: $move;
+    }
+    &_1 {
+      top: $move;
+    }
+    &_2 {
+      left: $move;
+    }
+    &_3 {
+      left: -$move;
+    }
+
+    &_true {
+      left: 0;
+      top: 0;
+      opacity: 1;
+    }
+  }
+
+  &_light {
+    .segmentLoader {
+      &--segment {
+        background-color: black;
+      }
+    }
+  }
+}

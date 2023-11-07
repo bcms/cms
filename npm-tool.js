@@ -63,6 +63,10 @@ module.exports = createConfig({
         cwd: path.join(process.cwd(), 'client'),
         stdio: 'inherit',
       });
+      await ChildProcess.spawn('npm', ['i'], {
+        cwd: path.join(process.cwd(), 'rest-apis'),
+        stdio: 'inherit',
+      });
     },
 
     '--setup': async () => {

@@ -1,0 +1,35 @@
+{
+  "name": "rest-apis",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@banez/browser-storage": "^1.0.0",
+    "@banez/object-utility": "^1.0.1",
+    "@banez/string-utility": "^1.0.1",
+    "remarkable": "^2.0.1",
+    "uuid": "^9.0.1",
+    "vue": "^3.3.4",
+    "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.8.10",
+    "@types/remarkable": "^2.0.7",
+    "@types/uuid": "^9.0.6",
+    "@types/yamljs": "^0.2.33",
+    "@vitejs/plugin-vue": "^4.2.3",
+    "@vitejs/plugin-vue-jsx": "^3.0.2",
+    "autoprefixer": "^10.4.16",
+    "postcss": "^8.4.31",
+    "sass": "^1.69.5",
+    "tailwindcss": "^3.3.5",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5",
+    "vue-tsc": "^1.8.5"
+  }
+}
