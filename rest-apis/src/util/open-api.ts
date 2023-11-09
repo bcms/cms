@@ -24,7 +24,7 @@ export const VisualSchemaWrap = {
   },
   collapse(id: string, value: string): string {
     // blockCollapseScript(id);
-    return `<span class="colBtn" title="Collapse" onclick="toggleSection('${id}')">${value}</span>`;
+    return `<span class="colBtn" title="Collapse" onclick="bcmsRestApisToggleSection('${id}')">${value}</span>`;
   },
   colGroupStart(id: string): string {
     return `<span id="col${id}" class="colBlock">`;
@@ -33,13 +33,13 @@ export const VisualSchemaWrap = {
     return `</span>`;
   },
   link(href: string, value: string): string {
-    let h = '';
-    if (href.startsWith('#')) {
-      h = window.location.pathname + href;
-    } else {
-      h = href;
-    }
-    return `<a class="link" ref="prefetch" href="${h}">( ${value} )</a>`;
+    // let h = '';
+    // if (href.startsWith('#')) {
+    //   h = window.location.pathname + href;
+    // } else {
+    //   h = href;
+    // }
+    return `<a class="link" ref="prefetch" href="${href}" onclick="bcmsRestApisLinkClick(event, '${href}')" >( ${value} )</a>`;
   },
   or() {
     return `<span class="or">or</span>`;

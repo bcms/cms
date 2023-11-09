@@ -1,1 +1,58 @@
 @import './components';
+
+:root {
+  --c-get: #7b36ca;
+  --c-get-bg: #f5f3f7;
+  --c-post: #36ca91;
+  --c-post-bg: #f3f7f6;
+  --c-put: #cab436;
+  --c-put-bg: #f7f7f3;
+  --c-delete: #ca3636;
+  --c-delete-bg: #f7f3f3;
+
+  --c-nav-split: #cccccc;
+  --c-nav-parent: #f1f2f7;
+  --c-nav-child: #f1f2f7;
+  --c-nav-grad-from: #17052e;
+  --c-nav-grad-to: #1a0938;
+  --c-nav-child-active: #ffffff;
+
+  --c-accent: #530fa0;
+  --c-accent-shadow: #530fa01a;
+  --c-grey-dark: #808080;
+  --c-grey-light: #b9b9b9;
+  --c-code-bg: #eeeeee;
+  --c-codeblock-bg: #eeeeee;
+  --c-link: #2391c4;
+  --c-link-visited: #1c7097;
+
+  --c-modal-cancel-btn-bg: #eeeeee;
+  --c-modal-cancel-btn-bg-hover: #dfdfdf;
+  --c-modal-cancel-btn-text: #202020;
+  --c-modal-cancel-btn-text-hover: #202020;
+
+  --c-modal-done-btn-bg: #17052e;
+  --c-modal-done-btn-bg-hover: #230d49;
+  --c-modal-done-btn-text: #eeeeee;
+  --c-modal-done-btn-text-hover: #eeeeee;
+
+  --c-code-editor-bg: #eeeeee;
+  --c-code-editor-text: #2e383c;
+  --c-code-editor-comment: #75787b;
+  --c-code-editor-keyword: #1d75b3;
+  --c-code-editor-atom: #75438a;
+  --c-code-editor-node: #9c3328;
+  --c-code-editor-string: #b35e14;
+  --c-code-editor-variable: #047d65;
+  --c-code-editor-line-num: #ced0d4;
+  --c-code-editor-cursor-bg: #9b9da25e;
+
+  --c-notif-err: #881508;
+  --c-notif-info: #e4d8f1;
+
+  --c-scroll-bg: #9798ab00;
+  --c-scroll: #c5c7e27a;
+
+  --c-bg: #f3f3f3;
+  --c-input-bg: #fafafa;
+}

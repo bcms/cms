@@ -1,0 +1,74 @@
+.visualSchema {
+  background-color: var(--c-codeblock-bg);
+  font-size: 12px;
+  padding: 20px;
+  overflow: auto;
+  max-height: 350px;
+  height: 100%;
+
+  * {
+    font-family: monospace !important;
+  }
+
+  &--wrapper {
+    border-radius: 5px;
+    overflow: hidden;
+    height: 100%;
+  }
+
+  .line {
+    line-height: 1.8em;
+  }
+  .symbol {
+    font-weight: 600;
+  }
+  .primitiveType {
+    color: var(--c-accent);
+
+    &--format {
+      font-weight: 300;
+      font-style: italic;
+      color: var(--c-grey-light);
+    }
+  }
+  .link {
+    display: inline;
+    text-decoration: none;
+    font-style: italic;
+    color: var(--c-link);
+    &:visited {
+      color: var(--c-link-visited);
+    }
+  }
+  .colBlock {
+    &_hide {
+      display: none;
+    }
+  }
+  .colBtn {
+    transition: all 0.3s;
+    cursor: pointer;
+    &:hover {
+      color: var(--c-accent);
+      text-shadow: 0px 0px 2px var(--c-accent-shadow);
+    }
+  }
+  .res {
+    &--title {
+      display: block;
+      font-size: 16px;
+
+      &_body,
+      &_headers {
+        margin-top: 30px;
+      }
+    }
+  }
+  .or {
+    font-style: italic;
+    color: var(--c-grey-light);
+  }
+  img {
+    width: 300px;
+  }
+}

@@ -1,8 +1,10 @@
+import { DefaultComponentProps } from '@ui/components/_default';
 import { Remarkable } from 'remarkable';
 import { computed, defineComponent } from 'vue';
 
 export const Markdown = defineComponent({
   props: {
+    ...DefaultComponentProps,
     text: {
       type: String,
       required: true,
@@ -14,6 +16,13 @@ export const Markdown = defineComponent({
     });
     const markdown = computed(() => md.render(props.text));
 
-    return () => <div v-html={markdown.value} />;
+    return () => (
+      <div
+        id={props.id}
+        class={props.class}
+        style={props.style}
+        v-html={markdown.value}
+      />
+    );
   },
 });

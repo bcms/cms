@@ -12,12 +12,15 @@
     "@banez/browser-storage": "^1.0.0",
     "@banez/object-utility": "^1.0.1",
     "@banez/string-utility": "^1.0.1",
+    "codemirror": "^6.0.1",
+    "html-escaper": "^3.0.3",
     "remarkable": "^2.0.1",
     "uuid": "^9.0.1",
     "vue": "^3.3.4",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "@types/html-escaper": "^3.0.2",
     "@types/node": "^20.8.10",
     "@types/remarkable": "^2.0.7",
     "@types/uuid": "^9.0.6",

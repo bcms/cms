@@ -1,8 +1,10 @@
 import { PropType, defineComponent } from 'vue';
 import { DocGroup as DocGroupType } from '../../services/doc';
+import { DefaultComponentProps } from '@ui/components/_default';
 
 export const DocGroup = defineComponent({
   props: {
+    ...DefaultComponentProps,
     group: { type: Object as PropType<DocGroupType>, required: true },
   },
   emits: {
@@ -12,9 +14,9 @@ export const DocGroup = defineComponent({
   },
   setup(props, ctx) {
     return () => (
-      <div>
+      <div id={props.id} class={props.class} style={props.style}>
         <button
-          class="text-2xl"
+          class="text-2xl mb-4"
           onClick={() => {
             ctx.emit('click');
           }}

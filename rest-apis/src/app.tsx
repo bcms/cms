@@ -1,6 +1,20 @@
 import { defineComponent, onMounted, ref } from 'vue';
-import { Doc, DocGroup as DocGroupType, ModalService } from './services';
-import { DocGroup, DocSection, Markdown, Nav, NavItem } from './components';
+import {
+  Doc,
+  DocComponent as DocComponentType,
+  DocGroup as DocGroupType,
+  ModalService,
+  Sub,
+  send,
+} from './services';
+import {
+  DocComponent,
+  DocGroup,
+  DocSection,
+  Markdown,
+  Nav,
+  NavItem,
+} from './components';
 import { BCMSSelect } from '@ui/components';
 import { AddServerModal } from './components/modals';
 import { storage } from './storage';
@@ -11,7 +25,31 @@ export const App = defineComponent({
     const doc = ref(Doc.doc);
     const navItems = ref<NavItem[]>(Doc.createNav(Doc.doc));
     const groups = ref<DocGroupType[]>(Doc.createGroups(Doc.doc));
+    const comps = ref<{ items: DocComponentType[]; extended: boolean }>(
+      Doc.createComponents(Doc.doc)
+    );
     const selectedServer = ref(Doc.doc.servers ? Doc.doc.servers[0].url : '');
+
+    function setActiveNav(href: string, items: NavItem[]): boolean {
+      for (let i = 0; i < items.length; i++) {
+        const item = items[i];
+        if (item.children) {
+          const res = setActiveNav(href, item.children);
+          if (res) {
+            item.showChildren = true;
+            return true;
+          }
+        } else if (item.href === href) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    Sub.register('nav', (href: string) => {
+      setActiveNav(href, navItems.value);
+    });
+
 
     onMounted(async () => {
       {
@@ -33,6 +71,11 @@ export const App = defineComponent({
           doc.value.info.description = await res.text();
           navItems.value = Doc.createNav(doc.value);
           groups.value = Doc.createGroups(doc.value);
+          comps.value = Doc.createComponents(doc.value);
+          const hash = window.location.href.split('#')[1];
+          if (hash) {
+            Sub.trigger('nav', hash);
+          }
         }
       }
     });
@@ -117,25 +160,33 @@ export const App = defineComponent({
                 }}
               />
             </div>
-            <div class="mt-16">
-              {groups.value.map((group) => {
+            <div>
+              {groups.value.map((group, groupIdx) => {
                 return (
                   <DocGroup
+                    class="mt-8"
                     group={group}
                     onClick={() => {
                       group.extend = !group.extend;
                     }}
                   >
-                    {group.sections.map((section) => {
+                    {group.sections.map((section, sectionIdx) => {
                       return (
                         <DocSection
+                          class="mb-4"
                           section={section}
                           onExtend={() => {
                             section.extend = !section.extend;
                           }}
-                          // on:send={async () => {
-                          //   await send(section, sectionIndex, groupIndex);
-                          // }}
+                          onSend={async () => {
+                            await send(
+                              selectedServer.value,
+                              groups.value,
+                              section,
+                              sectionIdx,
+                              groupIdx
+                            );
+                          }}
                         />
                       );
                     })}
@@ -143,6 +194,23 @@ export const App = defineComponent({
                 );
               })}
             </div>
+            {comps.value.items.length > 0 && (
+              <div class="mt-16">
+                <DocGroup
+                  group={{
+                    extend: comps.value.extended,
+                    name: 'Components',
+                    sections: [],
+                  }}
+                >
+                  <div class="flex flex-col gap-4">
+                    {comps.value.items.map((comp) => {
+                      return <DocComponent comp={comp} />;
+                    })}
+                  </div>
+                </DocGroup>
+              </div>
+            )}
           </div>
         </div>
         <div class="absolute top-0 left-0 w-72 border-r-grey border-r-[1px] p-4 overflow-auto h-screen">

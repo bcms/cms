@@ -1,11 +1,16 @@
 import { PropType, defineComponent } from 'vue';
 import { DocSection as DocSectionType } from '../../services';
 import { securityStore } from '../../store';
-import { Markdown, SegmentLoader } from '..';
+import { Link, Markdown, SegmentLoader } from '..';
 import { LockIcon, UnlockIcon } from '../icons';
+import { DocParams } from './params';
+import { DocRequest } from './request';
+import { DocResponse } from './response';
+import { DefaultComponentProps } from '@ui/components/_default';
 
 export const DocSection = defineComponent({
   props: {
+    ...DefaultComponentProps,
     section: {
       type: Object as PropType<DocSectionType>,
       required: true,
@@ -15,24 +20,38 @@ export const DocSection = defineComponent({
     extend: () => {
       return true;
     },
+    send: () => {
+      return true;
+    },
   },
   setup(props, ctx) {
     return () => (
-      <div id={props.section.id}>
+      <div
+        id={props.section.id}
+        class={`border ${props.class || ''}`}
+        style={props.style}
+      >
         <SegmentLoader show={props.section.loading} />
-        <button
-          class="flex items-center gap-2 px-2 py-4 border w-full"
+        <Link
+          href={props.section.id}
+          class={`flex items-center gap-2 px-2 py-4 ${
+            props.section.extend ? 'border-b' : ''
+          } w-full`}
           onClick={() => {
             ctx.emit('extend');
           }}
         >
-          <div class="uppercase px-2 border rounded">{props.section.method}</div>
+          <div class="uppercase px-2 border rounded">
+            {props.section.method}
+          </div>
           <div class="text-grey italic">{props.section.path}</div>
           <Markdown text={props.section.summary || ''} />
           {props.section.security && props.section.security.length > 0 ? (
             <button
+              class="flex ml-auto"
               aria-label="Setup security"
               onClick={(event) => {
+                event.preventDefault();
                 event.stopPropagation();
                 // Service.modal.security.show({
                 //   onlyShow: data.security.map((e) => e.name),
@@ -47,39 +66,55 @@ export const DocSection = defineComponent({
                 // });
               }}
             >
-              {props.section.security.find(
-                (e) =>
-                  securityStore.value[e.name] &&
-                  securityStore.value[e.name].value
-              ) ? (
-                <LockIcon />
-              ) : (
-                <UnlockIcon />
-              )}
+              <div>
+                {props.section.security.find(
+                  (e) =>
+                    securityStore.value[e.name] &&
+                    securityStore.value[e.name].value
+                ) ? (
+                  <LockIcon class="text-green w-4 h-4" />
+                ) : (
+                  <UnlockIcon class="text-pink w-4 h-4" />
+                )}
+              </div>
             </button>
           ) : (
             ''
           )}
-        </button>
+        </Link>
         {props.section.extend && (
-          <div>
+          <div class="p-4">
             <div>
               {props.section.description && (
-                <Markdown text={props.section.description} />
+                <Markdown class="mb-4" text={props.section.description} />
               )}
               {props.section.params.query.length > 0 ||
               props.section.params.header.length > 0 ||
               props.section.params.path.length > 0 ? (
                 <div>
-                  {/* <Params title="Headers" data={data.params.header} />
-                <Params title="Path parameters" data={data.params.path} />
-                <Params title="Queries" data={data.params.query} /> */}
+                  <DocParams
+                    title="Headers"
+                    params={props.section.params.header}
+                  />
+                  <DocParams
+                    title="Path parameters"
+                    params={props.section.params.path}
+                  />
+                  <DocParams
+                    title="Queries"
+                    params={props.section.params.query}
+                  />
                 </div>
               ) : (
                 ''
               )}
-              {/* <Request data={data.requestBodies[0]} on:send />
-            <Response data={data.responses[0]} /> */}
+              <DocRequest
+                req={props.section.requestBodies[0]}
+                onSend={() => {
+                  ctx.emit('send');
+                }}
+              />
+              <DocResponse res={props.section.responses[0]} />
             </div>
           </div>
         )}

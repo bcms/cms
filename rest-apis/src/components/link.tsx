@@ -17,13 +17,28 @@ export const Link = defineComponent({
       <a
         href={window.location.pathname + '#' + props.href}
         onClick={(event) => {
-          event.preventDefault();
-          event.stopPropagation();
-          window.history.pushState(
-            null,
-            '',
-            window.location.pathname + `#${props.href}`
-          );
+          (window as any).bcmsRestApisLinkClick(event, `#${props.href}`);
+          // event.preventDefault();
+          // event.stopPropagation();
+          // window.history.replaceState(
+          //   null,
+          //   '',
+          //   window.location.pathname + `#${props.href}`
+          // );
+          // const el = document.getElementById(props.href);
+          // if (el) {
+          //   const bb = el.getBoundingClientRect();
+          //   if (
+          //     bb.top > window.scrollX + window.innerHeight ||
+          //     bb.bottom < window.scrollX
+          //   ) {
+          //     el.scrollIntoView();
+          //     el.classList.add('bg-green');
+          //     setTimeout(() => {
+          //       el.classList.remove('bg-green');
+          //     }, 1000);
+          //   }
+          // }
           ctx.emit('click', event);
         }}
       >

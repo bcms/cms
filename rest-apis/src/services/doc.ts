@@ -73,6 +73,13 @@ export interface DocGroup {
   sections: DocSection[];
 }
 
+export interface DocComponent {
+  id: string;
+  name: string;
+  extended: boolean;
+  visualSchema: string;
+}
+
 function extractParams(
   type: DocSectionParamType,
   params?: OpenApiPathParam[]
@@ -412,5 +419,34 @@ export class Doc {
       });
     }
     return output;
+  }
+
+  static createComponents(docs: OpenApi): {
+    items: DocComponent[];
+    extended: boolean;
+  } {
+    const output: DocComponent[] = [];
+    if (docs.components && docs.components.schemas) {
+      for (const compName in docs.components.schemas) {
+        const comp = docs.components.schemas[compName];
+        const parsed = OpenApiUtil.parseSchema(
+          comp,
+          docs.components.schemas,
+          undefined,
+          0,
+          [`#/components/schemas/${compName}`]
+        );
+        output.push({
+          id: `model-${compName}`,
+          name: compName,
+          extended: false,
+          visualSchema: parsed.visualSchema,
+        });
+      }
+    }
+    return {
+      items: output.sort((a, b) => (a.name < b.name ? -1 : 1)),
+      extended: true,
+    };
   }
 }
