@@ -40,12 +40,12 @@ const component = defineComponent({
                 el.innerHTML = styleInjection(
                   cache[path],
                   props.class,
-                  props.style
+                  props.style,
                 );
               }
             } else {
               const response = await fetch(
-                `${window.bcms.origin}/assets/icons${path}.svg`
+                `${window.bcms.origin}/assets/icons${path}.svg`,
               );
               const value = await response.text();
               const src = styleInjection(value, props.class, props.style);

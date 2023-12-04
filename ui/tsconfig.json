@@ -11,6 +11,7 @@
     },
     "noUnusedLocals": true,
     "noUnusedParameters": true,
+    "allowImportingTsExtensions": true,
     "importsNotUsedAsValues": "error"
   },
   "references": [
@@ -18,5 +19,5 @@
       "path": "./tsconfig.node.json"
     }
   ],
-  "exclude": ["./tailwind.config.cjs"]
+  "exclude": ["./tailwind.config.cjs", "./src/stories/**/*"]
 }
