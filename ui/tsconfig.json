@@ -19,5 +19,5 @@
       "path": "./tsconfig.node.json"
     }
   ],
-  "exclude": ["./tailwind.config.cjs", "./src/stories/**/*"]
+  "exclude": ["./tailwind.config.cjs", "**/*stories/**/*.tsx"]
 }

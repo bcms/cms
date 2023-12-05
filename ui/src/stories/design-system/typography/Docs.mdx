@@ -1,0 +1,34 @@
+import { Meta, Typeset } from '@storybook/blocks';
+
+<Meta title="Design System/Typography" />
+
+export const typography = {
+  type: {
+    primary: '"Hergon Grotesk", sans-serif',
+  },
+  weight: '500',
+  size: {
+    s1: 12,
+    s2: 14,
+    s3: 16,
+    m1: 20,
+    m2: 24,
+    m3: 28,
+    l1: 32,
+    l2: 40,
+    l3: 48,
+  },
+};
+
+export const SampleText = 'Lorem ipsum dolor sit amet. 12345 s!@#$%^&*()_+';
+
+# Typography
+
+**Font:** Hergon Grotesk, sans-serif
+
+<Typeset
+  fontSizes={Object.values(typography.size)}
+  fontWeight={typography.weight}
+  sampleText={SampleText}
+  fontFamily={typography.type.primary}
+/>

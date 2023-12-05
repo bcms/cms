@@ -1,0 +1,95 @@
+import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
+
+<Meta title="Design System/Color Palette" />
+
+export const colorItems = [
+  {
+    title: 'text-green',
+    subtitle: 'Accent color on the light theme',
+    colors: {
+      Green: 'rgb(36, 150, 129)',
+    },
+  },
+  {
+    title: 'text-yellow',
+    subtitle: 'Accent color on the dark theme',
+    colors: {
+      Yellow: 'rgb(255, 205, 25)',
+    },
+  },
+  {
+    title: 'text-dark',
+    subtitle: 'Text color on the light theme',
+    colors: {
+      Dark: 'rgb(19, 20, 26)',
+    },
+  },
+  {
+    title: 'text-white',
+    subtitle: 'Text color on the dark theme',
+    colors: {
+      White: 'rgb(252, 252, 252)',
+    },
+  },
+  {
+    title: 'text-light',
+    subtitle: 'Text color on the dark theme',
+    colors: {
+      Light: 'rgb(248, 248, 252)',
+    },
+  },
+  {
+    title: 'text-pink',
+    colors: {
+      Pink: 'rgb(236, 173, 169)',
+    },
+  },
+  {
+    title: 'text-red',
+    subtitle: 'Error color',
+    colors: {
+      Red: 'rgb(245, 107, 88)',
+    },
+  },
+  {
+    title: 'text-grey',
+    colors: {
+      Grey: 'rgb(151, 152, 171)',
+    },
+  },
+  {
+    title: 'text-darkGrey',
+    colors: {
+      'Dark Grey': 'rgb(80, 79, 84)',
+    },
+  },
+  {
+    title: 'text-success',
+    colors: {
+      Success: ' rgb(234, 245, 243)',
+    },
+  },
+  {
+    title: 'text-warning',
+    colors: {
+      Warning: 'rgb(255, 250, 232)',
+    },
+  },
+  {
+    title: 'text-error',
+    colors: {
+      Error: 'rgb(245, 234, 234)',
+    },
+  },
+];
+
+<ColorPalette>
+  {colorItems.map((item, index) => (
+    <ColorItem
+      key={index}
+      title={item.title}
+      subtitle={item.subtitle}
+      colors={item.colors}
+    />
+  ))}
+</ColorPalette>

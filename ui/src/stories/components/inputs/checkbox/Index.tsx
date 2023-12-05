@@ -1,5 +1,5 @@
 import { defineComponent } from 'vue';
-import { BCMSCheckboxInput } from '../../components';
+import { BCMSCheckboxInput } from '../../../../components';
 import { action } from '@storybook/addon-actions';
 import React from 'react';
 

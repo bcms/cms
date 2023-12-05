@@ -1,5 +1,4 @@
-// TODO: Icons don't load otherwise
-window.bcms = {
-  ...window.bcms,
-  origin: '',
-};
+import { bcms } from '../main';
+
+// TODO: window.bcms is undefined otherwise
+window.bcms = bcms;

@@ -115,3 +115,5 @@ app.directive('tooltip', tooltip);
 app.use(bcmsStore).use(router).mount('#bcms-container');
 
 initializeUserLocationsWatcher();
+
+export const bcms = window.bcms;

@@ -1,5 +1,5 @@
 import { defineComponent, type PropType } from 'vue';
-import { BCMSButton } from '../../components';
+import { BCMSButton, BCMSIcon } from '../../../components';
 import { action } from '@storybook/addon-actions';
 import React from 'react';
 
@@ -43,6 +43,12 @@ const component = defineComponent({
           <BCMSButton size="s"> Small </BCMSButton>
           <BCMSButton href="https://thebcms.com/" newTab class="text-center">
             Link
+          </BCMSButton>
+          <BCMSButton href="https://thebcms.com/" newTab class="text-center">
+            <span className="flex items-center gap-2">
+              <BCMSIcon src="/file" class="w-4 h-4 fill-current" />
+              <span>With Icon</span>
+            </span>
           </BCMSButton>
         </div>
       );

@@ -2,9 +2,10 @@ import type { Meta, StoryObj } from '@storybook/vue3';
 
 import BCMSButtonPreview from './Preview.tsx';
 import BCMSButton from './Index.tsx';
+import BCMSIcon from '../../../components/icon.tsx';
 
 const meta: Meta<typeof BCMSButtonPreview> = {
-  title: 'Button',
+  title: 'Components/Button',
   component: BCMSButtonPreview,
   // tags: ['autodocs'],
   render: (args) => ({
@@ -119,9 +120,7 @@ export const Primary: Story = {
     },
     template: `
     <BCMSButton kind="primary" :class="args.class" :style="args.style" :disabled="args.disabled" :size="args.size" :href="args.href" :new-tab="args.newTab">
-      <template #default>
-        {{ args.slot }}
-      </template>
+      {{ args.slot }}
     </BCMSButton>
     `,
   }),
@@ -148,9 +147,7 @@ export const Secondary: Story = {
     },
     template: `
     <BCMSButton kind="secondary" :class="args.class" :style="args.style" :disabled="args.disabled" :size="args.size" :href="args.href" :new-tab="args.newTab">
-      <template #default>
-        {{ args.slot }}
-      </template>
+      {{ args.slot }}
     </BCMSButton>
     `,
   }),
@@ -177,9 +174,7 @@ export const Alternate: Story = {
     },
     template: `
     <BCMSButton kind="alternate" :class="args.class" :style="args.style" :disabled="args.disabled" :size="args.size" :href="args.href" :new-tab="args.newTab">
-      <template #default>
-        {{ args.slot }}
-      </template>
+      {{ args.slot }}
     </BCMSButton>
     `,
   }),
@@ -206,9 +201,7 @@ export const Ghost: Story = {
     },
     template: `
     <BCMSButton kind="ghost" :class="args.class" :style="args.style" :disabled="args.disabled" :size="args.size" :href="args.href" :new-tab="args.newTab">
-      <template #default>
-        {{ args.slot }}
-      </template>
+      {{ args.slot }}
     </BCMSButton>
     `,
   }),
@@ -235,9 +228,7 @@ export const Danger: Story = {
     },
     template: `
     <BCMSButton kind="danger" :class="args.class" :style="args.style" :disabled="args.disabled" :size="args.size" :href="args.href" :new-tab="args.newTab">
-      <template #default>
-        {{ args.slot }}
-      </template>
+      {{ args.slot }}
     </BCMSButton>
     `,
   }),
@@ -263,11 +254,11 @@ export const Disabled: Story = {
       };
     },
     template: `
-    <BCMSButton :kind="args.kind" :class="args.class" :style="args.style" disabled :size="args.size" :href="args.href" :new-tab="args.newTab">
-      <template #default>
+    <div class="flex items-center gap-2">
+      <BCMSButton :kind="args.kind" :class="args.class" :style="args.style" disabled :size="args.size" :href="args.href" :new-tab="args.newTab">
         {{ args.slot }}
-      </template>
-    </BCMSButton>
+      </BCMSButton>
+    </div>
     `,
   }),
 };
@@ -293,10 +284,55 @@ export const Link: Story = {
     },
     template: `
     <BCMSButton :kind="args.kind" :class="args.class" :style="args.style" :disabled="args.disabled" :size="args.size" href="https://thebcms.com/" :new-tab="args.newTab">
-      <template #default>
-        {{ args.slot }}
-      </template>
+      {{ args.slot }}
     </BCMSButton>
+    `,
+  }),
+};
+
+export const WithIcon: Story = {
+  args: {
+    kind: 'primary',
+    slot: 'With Icon',
+  },
+  render: (args) => ({
+    components: {
+      BCMSButton,
+      BCMSIcon,
+    },
+    setup() {
+      return {
+        args,
+      };
+    },
+    template: `
+    <div class="flex items-center gap-2">
+      <BCMSButton :kind="args.kind" :class="args.class" :style="args.style" :disabled="args.disabled" :size="args.size" :href="args.href" :new-tab="args.newTab">
+        <span class="flex items-center gap-2">
+          <BCMSIcon src="/file" class="w-4 h-4 fill-current" />
+          <span>
+            {{ args.slot }}
+          </span>
+        </span>
+      </BCMSButton>
+      <BCMSButton :kind="args.kind" :class="args.class" :style="args.style" :disabled="args.disabled" :size="args.size" :href="args.href" :new-tab="args.newTab">
+        <span class="flex items-center gap-2">
+          <BCMSIcon src="/file" class="w-4 h-4 fill-current" />
+          <span>
+          {{ args.slot }}
+          </span>
+          <BCMSIcon src="/file" class="w-4 h-4 fill-current" />
+        </span>
+      </BCMSButton>
+      <BCMSButton :kind="args.kind" :class="args.class" :style="args.style" :disabled="args.disabled" :size="args.size" :href="args.href" :new-tab="args.newTab">
+        <span class="flex items-center gap-2">
+          <span>
+          {{ args.slot }}
+          </span>
+          <BCMSIcon src="/file" class="w-4 h-4 fill-current" />
+        </span>
+      </BCMSButton>
+    </div>
     `,
   }),
 };

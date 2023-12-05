@@ -4,7 +4,7 @@ import BCMSCheckboxPreview from './Preview.tsx';
 import BCMSCheckbox from './Index.tsx';
 
 const meta: Meta<typeof BCMSCheckbox> = {
-  title: 'Checkbox',
+  title: 'Components/Inputs/Checkbox',
   component: BCMSCheckbox,
   // tags: ['autodocs'],
   render: (args) => ({
@@ -25,7 +25,7 @@ const meta: Meta<typeof BCMSCheckbox> = {
         :disabled="args.disabled"
         :helper-text="args.helperText"
         :description="args.description"
-        @input="() => args.value = !args.value"
+        @input="args.value = !args.value"
       />
     `,
   }),
@@ -77,14 +77,14 @@ export const Playground: Story = {
 \`.vue\`
 <template>
   <BCMSCheckbox
-  :class="props.class"
-  :value="props.value"
-  :label="props.label"
-  :invalid-text="props.invalidText"
-  :disabled="props.disabled"
-  :helper-text="props.helperText"
-  :description="props.description"
-  @input="props.value = !props.value"
+    :class="props.class"
+    :value="props.value"
+    :label="props.label"
+    :invalid-text="props.invalidText"
+    :disabled="props.disabled"
+    :helper-text="props.helperText"
+    :description="props.description"
+    @input="props.value = !props.value"
   />
 </template>
         `,
@@ -184,6 +184,39 @@ export const Disabled: Story = {
       disabled
       :helper-text="args.helperText"
       :description="args.description"
+    />
+    `,
+  }),
+};
+
+export const Error: Story = {
+  args: {
+    invalidText: 'Error text',
+  },
+  argTypes: {
+    invalidText: {
+      control: false,
+    },
+  },
+  render: (args) => ({
+    components: {
+      BCMSCheckbox,
+    },
+    setup() {
+      return {
+        args,
+      };
+    },
+    template: `
+    <BCMSCheckbox
+      :class="args.class"
+      :value="args.value"
+      :label="args.label"
+      :invalid-text="args.invalidText"
+      :disabled="args.disabled"
+      :helper-text="args.helperText"
+      :description="args.description"
+      @input="args.value = !args.value"
     />
     `,
   }),

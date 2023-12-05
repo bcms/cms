@@ -1,5 +1,5 @@
 import { defineComponent, type PropType } from 'vue';
-import { BCMSButton } from '../../components';
+import { BCMSButton } from '../../../components';
 import { action } from '@storybook/addon-actions';
 import React from 'react';
 
