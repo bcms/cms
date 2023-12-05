@@ -9,7 +9,7 @@ const meta: Meta<typeof BCMSCheckbox> = {
   // tags: ['autodocs'],
   render: (args) => ({
     components: {
-      BCMSCheckbox: BCMSCheckboxPreview,
+      BCMSCheckboxPreview,
     },
     setup() {
       return {
@@ -17,7 +17,7 @@ const meta: Meta<typeof BCMSCheckbox> = {
       };
     },
     template: `
-      <BCMSCheckbox
+      <BCMSCheckboxPreview
         :class="args.class"
         :value="args.value"
         :label="args.label"

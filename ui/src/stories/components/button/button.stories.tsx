@@ -10,7 +10,7 @@ const meta: Meta<typeof BCMSButtonPreview> = {
   // tags: ['autodocs'],
   render: (args) => ({
     components: {
-      BCMSButton: BCMSButtonPreview,
+      BCMSButtonPreview,
     },
     setup() {
       return {
@@ -18,9 +18,9 @@ const meta: Meta<typeof BCMSButtonPreview> = {
       };
     },
     template: `
-      <BCMSButton :kind="args.kind" :class="args.class" :style="args.style" :disabled="args.disabled" :size="args.size" :href="args.href" :new-tab="args.newTab">
+      <BCMSButtonPreview :kind="args.kind" :class="args.class" :style="args.style" :disabled="args.disabled" :size="args.size" :href="args.href" :new-tab="args.newTab">
         {{ args.slot }}
-      </BCMSButton>
+      </BCMSButtonPreview>
     `,
   }),
   argTypes: {
