@@ -976,7 +976,12 @@ export class BCMSPropHandler {
     return props;
   }
 
+  static fixInvalidRustPropNames(name: string): string {
+    return ['type', 'ref'].includes(name) ? `_${name}` : name;
+  }
+
   static async parse({
+    programLng,
     meta,
     values,
     level,
@@ -984,6 +989,7 @@ export class BCMSPropHandler {
     maxDepth,
     onlyLng,
   }: {
+    programLng: 'rust' | 'js';
     meta: BCMSProp[];
     values: BCMSPropValue[];
     level?: string;
@@ -1001,6 +1007,10 @@ export class BCMSPropHandler {
     for (let i = 0; i < meta.length; i++) {
       const prop = meta[i];
       const value = values.find((e) => e.id === prop.id);
+      const propName =
+        programLng === 'rust'
+          ? this.fixInvalidRustPropNames(prop.name)
+          : prop.name;
       if (value) {
         if (
           prop.type === BCMSPropType.STRING ||
@@ -1010,14 +1020,14 @@ export class BCMSPropHandler {
           prop.type === BCMSPropType.TAG
         ) {
           if (prop.array) {
-            parsed[prop.name] = value.data as string[];
+            parsed[propName] = value.data as string[];
           } else {
-            parsed[prop.name] = (value.data as string[])[0];
+            parsed[propName] = (value.data as string[])[0];
           }
         } else if (prop.type === BCMSPropType.MEDIA) {
           const valueData = value.data as BCMSPropValueMediaData[];
           if (prop.array) {
-            (parsed[prop.name] as BCMSPropMediaDataParsed[]) = [];
+            (parsed[propName] as BCMSPropMediaDataParsed[]) = [];
             for (let j = 0; j < valueData.length; j++) {
               const singleValueData = valueData[j];
               if (typeof singleValueData === 'object') {
@@ -1037,7 +1047,7 @@ export class BCMSPropHandler {
                       stringUtil.textBetween(svg, '<svg', '</svg>') +
                       '</svg>';
                   }
-                  (parsed[prop.name] as BCMSPropMediaDataParsed[]).push({
+                  const mediaData: BCMSPropMediaDataParsed = {
                     src: await BCMSMediaService.getPath(media),
                     _id: singleValueData._id,
                     alt_text: singleValueData.alt_text || media.altText,
@@ -1047,7 +1057,12 @@ export class BCMSPropHandler {
                     name: media.name,
                     type: media.type,
                     svg,
-                  });
+                  };
+                  (mediaData as any).type = undefined;
+                  (mediaData as any)._type = undefined;
+                  (parsed[propName] as BCMSPropMediaDataParsed[]).push(
+                    mediaData,
+                  );
                 }
               }
             }
@@ -1065,7 +1080,7 @@ export class BCMSPropHandler {
                     stringUtil.textBetween(svg, '<svg', '</svg>') +
                     '</svg>';
                 }
-                (parsed[prop.name] as BCMSPropMediaDataParsed) = {
+                const mediaData: BCMSPropMediaDataParsed = {
                   src: await BCMSMediaService.getPath(media),
                   _id: valueData[0]._id,
                   alt_text: valueData[0].alt_text || media.altText,
@@ -1076,28 +1091,31 @@ export class BCMSPropHandler {
                   type: media.type,
                   svg,
                 };
+                (mediaData as any).type = undefined;
+                (mediaData as any)._type = undefined;
+                (parsed[propName] as BCMSPropMediaDataParsed) = mediaData;
               }
             }
           }
         } else if (prop.type === BCMSPropType.ENUMERATION) {
-          (parsed[prop.name] as BCMSPropEnumData) = {
+          (parsed[propName] as BCMSPropEnumData) = {
             items: (prop.defaultData as BCMSPropEnumData).items,
             selected: (value.data as string[])[0],
           };
         } else if (prop.type === BCMSPropType.COLOR_PICKER) {
           const valueData = value.data as BCMSPropValueColorPickerData;
           if (prop.array) {
-            parsed[prop.name] = [];
+            parsed[propName] = [];
             for (let j = 0; j < valueData.length; j++) {
               const color = await BCMSRepo.color.findById(valueData[j]);
               if (color) {
-                (parsed[prop.name] as BCMSPropDataParsed[]).push(color.value);
+                (parsed[propName] as BCMSPropDataParsed[]).push(color.value);
               }
             }
           } else {
             const color = await BCMSRepo.color.findById(valueData[0]);
             if (color) {
-              (parsed[prop.name] as BCMSPropDataParsed) = color.value;
+              (parsed[propName] as BCMSPropDataParsed) = color.value;
             }
           }
         } else if (prop.type === BCMSPropType.WIDGET) {
@@ -1106,11 +1124,12 @@ export class BCMSPropHandler {
           const widget = await BCMSRepo.widget.findById(data._id);
           if (widget) {
             if (prop.array) {
-              parsed[prop.name] = [];
+              parsed[propName] = [];
               for (let j = 0; j < valueData.props.length; j++) {
                 const valueDataItem = valueData.props[j];
-                (parsed[prop.name] as BCMSPropDataParsed[]).push(
+                (parsed[propName] as BCMSPropDataParsed[]).push(
                   await BCMSPropHandler.parse({
+                    programLng,
                     maxDepth,
                     meta: widget.props,
                     values: [valueDataItem],
@@ -1121,7 +1140,8 @@ export class BCMSPropHandler {
                 );
               }
             } else {
-              parsed[prop.name] = await BCMSPropHandler.parse({
+              parsed[propName] = await BCMSPropHandler.parse({
+                programLng,
                 maxDepth,
                 meta: widget.props,
                 values: [valueData.props[0]],
@@ -1137,11 +1157,12 @@ export class BCMSPropHandler {
           const group = await BCMSRepo.group.findById(data._id);
           if (group) {
             if (prop.array) {
-              parsed[prop.name] = [];
+              parsed[propName] = [];
               for (let j = 0; j < valueData.items.length; j++) {
                 const valueDataItem = valueData.items[j];
-                (parsed[prop.name] as BCMSPropDataParsed[]).push(
+                (parsed[propName] as BCMSPropDataParsed[]).push(
                   await BCMSPropHandler.parse({
+                    programLng,
                     maxDepth,
                     meta: group.props,
                     values: valueDataItem.props,
@@ -1153,7 +1174,8 @@ export class BCMSPropHandler {
               }
             } else {
               if (valueData.items[0] && valueData.items[0].props) {
-                parsed[prop.name] = await BCMSPropHandler.parse({
+                parsed[propName] = await BCMSPropHandler.parse({
+                  programLng,
                   maxDepth,
                   meta: group.props,
                   values: valueData.items[0].props,
@@ -1177,7 +1199,7 @@ export class BCMSPropHandler {
               }
               templateMap[valueInfo.tid].push(valueInfo.eid);
             }
-            (parsed[prop.name] as BCMSPropEntryPointerData[]) = Object.keys(
+            (parsed[propName] as BCMSPropEntryPointerData[]) = Object.keys(
               templateMap,
             ).map((tid) => {
               return {
@@ -1187,12 +1209,12 @@ export class BCMSPropHandler {
               };
             });
             if (!prop.array) {
-              (parsed[prop.name] as BCMSPropEntryPointerData) = (
-                parsed[prop.name] as BCMSPropEntryPointerData[]
+              (parsed[propName] as BCMSPropEntryPointerData) = (
+                parsed[propName] as BCMSPropEntryPointerData[]
               )[0];
             }
           } else {
-            (parsed[prop.name] as BCMSPropEntryPointerDataParsed[]) = [];
+            (parsed[propName] as BCMSPropEntryPointerDataParsed[]) = [];
             for (let j = 0; j < valueData.length; j++) {
               const valueInfo = valueData[j];
               const template = await BCMSRepo.template.findById(valueInfo.tid);
@@ -1220,6 +1242,7 @@ export class BCMSPropHandler {
                       if (lng && (!onlyLng || onlyLng === lng.code)) {
                         parsedProp.meta[lng.code] = await BCMSPropHandler.parse(
                           {
+                            programLng,
                             maxDepth,
                             meta: template.props,
                             values: entryMeta.props,
@@ -1254,6 +1277,7 @@ export class BCMSPropHandler {
                         if (entryContent) {
                           parsedProp.content[lng.code] =
                             await entryParser.parseContent({
+                              programLng,
                               nodes: entryContent.nodes,
                               maxDepth,
                               depth: depth + 1,
@@ -1263,9 +1287,9 @@ export class BCMSPropHandler {
                         }
                       }
                     }
-                    (
-                      parsed[prop.name] as BCMSPropEntryPointerDataParsed[]
-                    ).push(parsedProp);
+                    (parsed[propName] as BCMSPropEntryPointerDataParsed[]).push(
+                      parsedProp,
+                    );
                   }
                 } else {
                   const entry = await BCMSRepo.entry.findById(valueInfo.eid);
@@ -1289,6 +1313,7 @@ export class BCMSPropHandler {
                       if (lng && (!onlyLng || lng.code === onlyLng)) {
                         parsedProp.meta[lng.code] = await BCMSPropHandler.parse(
                           {
+                            programLng,
                             maxDepth,
                             meta: template.props,
                             values: entryMeta.props,
@@ -1322,13 +1347,14 @@ export class BCMSPropHandler {
                         if (entryContent) {
                           parsedProp.content[lng.code] =
                             await entryParser.parseContent({
+                              programLng,
                               nodes: entryContent.nodes,
                               maxDepth,
                               depth,
                               justLng: lng.code,
                               level: `${level}.content`,
                             });
-                          parsed[prop.name] = parsedProp;
+                          parsed[propName] = parsedProp;
                         }
                       }
                     }
@@ -1348,7 +1374,7 @@ export class BCMSPropHandler {
             items = data;
           }
           if (prop.array) {
-            parsed[prop.name] = items.map((item) => {
+            parsed[propName] = items.map((item) => {
               return item.nodes.map((node) => {
                 return {
                   type: node.type,
@@ -1364,7 +1390,7 @@ export class BCMSPropHandler {
               }) as BCMSEntryContentParsedItem[];
             });
           } else {
-            parsed[prop.name] = items[0].nodes.map((node) => {
+            parsed[propName] = items[0].nodes.map((node) => {
               return {
                 type: node.type,
                 attrs:
