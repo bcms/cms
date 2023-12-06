@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3';
 import 'vue3-colorpicker/style.css';
 
 import BCMSColorPickerInputPreview from './Preview.tsx';
-import BCMSColorPickerInput from './Index.jsx';
+import BCMSColorPickerInput from './Index.tsx';
 
 const meta: Meta<typeof BCMSColorPickerInput> = {
   title: 'Components/Inputs/Color Picker',

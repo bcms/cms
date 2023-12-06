@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
 
-import BCMSMarkdownInputPreview from './Preview.tsx';
-import BCMSMarkdownInput from './Index.tsx';
+import BCMSNumberInputPreview from './Preview.tsx';
+import BCMSNumberInput from './Index.tsx';
 
-const meta: Meta<typeof BCMSMarkdownInput> = {
-  title: 'Components/Inputs/Markdown',
-  component: BCMSMarkdownInput,
+const meta: Meta<typeof BCMSNumberInput> = {
+  title: 'Components/Inputs/Number',
+  component: BCMSNumberInput,
   // tags: ['autodocs'],
   render: (args) => ({
     components: {
-      BCMSMarkdownInputPreview,
+      BCMSNumberInputPreview,
     },
     setup() {
       return {
@@ -17,23 +17,21 @@ const meta: Meta<typeof BCMSMarkdownInput> = {
       };
     },
     template: `
-      <BCMSMarkdownInputPreview
+      <BCMSNumberInputPreview
         :class="args.class"
         :value="args.value"
         :placeholder="args.placeholder"
         :label="args.label"
         :invalid-text="args.invalidText"
-        :helper-text="args.helperText"
         :disabled="args.disabled"
-        :min-height="args.minHeight"
-        :additional-helper-slot="args.additionalHelperSlot"
+        :helper-text="args.helperText"
         @input="($event) => args.value = $event.value"
       />
     `,
   }),
   argTypes: {
     value: {
-      control: 'text',
+      control: 'number',
     },
     class: {
       control: 'text',
@@ -47,23 +45,17 @@ const meta: Meta<typeof BCMSMarkdownInput> = {
     invalidText: {
       control: 'text',
     },
-    helperText: {
-      control: 'text',
-    },
     disabled: {
       control: 'boolean',
     },
-    minHeight: {
-      control: 'number',
-    },
-    additionalHelperSlot: {
+    helperText: {
       control: 'text',
     },
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof BCMSMarkdownInput>;
+type Story = StoryObj<typeof BCMSNumberInput>;
 
 export const Playground: Story = {
   parameters: {
@@ -71,31 +63,27 @@ export const Playground: Story = {
       source: {
         code: `
 \`.jsx|.tsx\`
-<BCMSMarkdownInput
+<BCMSNumberInput
   class={props.class}
   value={props.value}
   placeholder={props.placeholder}
   label={props.label}
   invalid-text={props.invalidText}
-  helper-text={props.helperText}
   disabled={props.disabled}
-  min-height={props.minHeight}
-  additional-helper-slot={props.additionalHelperSlot}
-  onInput={(val) => props.value = val}
+  helper-text={props.helperText}
+  onInput="(val) => props.value = val"
 />
 
 \`.vue\`
 <template>
-  <BCMSMarkdownInput
+  <BCMSNumberInput
     :class="props.class"
     :value="props.value"
     :placeholder="props.placeholder"
     :label="props.label"
     :invalid-text="props.invalidText"
-    :helper-text="props.helperText"
     :disabled="props.disabled"
-    :min-height="props.minHeight"
-    :additional-helper-slot="props.additionalHelperSlot"
+    :helper-text="props.helperText"
     @input="props.value = $event"
   />
 </template>
@@ -117,7 +105,7 @@ export const Disabled: Story = {
   },
   render: (args) => ({
     components: {
-      BCMSMarkdownInput,
+      BCMSNumberInput,
     },
     setup() {
       return {
@@ -125,17 +113,15 @@ export const Disabled: Story = {
       };
     },
     template: `
-    <BCMSMarkdownInput
+    <BCMSNumberInput
       :class="args.class"
       :value="args.value"
       :placeholder="args.placeholder"
       :label="args.label"
       :invalid-text="args.invalidText"
-      :helper-text="args.helperText"
       :disabled="args.disabled"
-      :min-height="args.minHeight"
-      :additional-helper-slot="args.additionalHelperSlot"
-      @input="($event) => args.value = $event.value"
+      :helper-text="args.helperText"
+      @input="args.value = $event"
     />
     `,
   }),
@@ -152,7 +138,7 @@ export const Error: Story = {
   },
   render: (args) => ({
     components: {
-      BCMSMarkdownInput,
+      BCMSNumberInput,
     },
     setup() {
       return {
@@ -160,17 +146,15 @@ export const Error: Story = {
       };
     },
     template: `
-    <BCMSMarkdownInput
+    <BCMSNumberInput
       :class="args.class"
       :value="args.value"
       :placeholder="args.placeholder"
       :label="args.label"
       :invalid-text="args.invalidText"
-      :helper-text="args.helperText"
       :disabled="args.disabled"
-      :min-height="args.minHeight"
-      :additional-helper-slot="args.additionalHelperSlot"
-      @input="($event) => args.value = $event.value"
+      :helper-text="args.helperText"
+      @input="args.value = $event"
     />
     `,
   }),
