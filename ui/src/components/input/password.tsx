@@ -44,19 +44,13 @@ const component = defineComponent({
           invalidText={props.invalidText}
           helperText={props.helperText}
         >
-          <div
-            class={`flex ${
-              props.invalidText
-                ? 'border border-red hover:border-red focus-within:border-red'
-                : ''
-            }`}
-          >
+          <div class="flex">
             <input
               id={props.label}
-              class={`relative block w-full bg-white border rounded-3.5 transition-all duration-300 shadow-none font-normal not-italic text-base leading-tight -tracking-0.01 text-dark h-11 py-0 px-4.5 outline-none placeholder-grey placeholder-opacity-100 pt-3 pb-[9px] pl-4.5 resize-none top-0 left-0 overflow-hidden hover:shadow-input focus-within:shadow-input ${
+              class={`relative block w-full bg-white border rounded-3.5 pr-[35px] transition-all duration-300 shadow-none font-normal not-italic text-base leading-tight -tracking-0.01 text-dark h-11 py-0 px-4.5 outline-none placeholder-grey placeholder-opacity-100 pt-3 pb-[9px] pl-4.5 resize-none top-0 left-0 overflow-hidden hover:shadow-input focus-within:shadow-input ${
                 props.invalidText
-                  ? 'border-red hover:border-red focus-within:border-red pr-17.5'
-                  : 'pr-[35px]'
+                  ? 'border-red hover:border-red focus-within:border-red'
+                  : ''
               } ${
                 props.invalidText
                   ? ''
@@ -80,9 +74,7 @@ const component = defineComponent({
               readonly={props.readonly}
             />
             <button
-              class={`absolute top-3 ${
-                props.invalidText ? 'right-10.5' : 'right-3'
-              }`}
+              class="absolute top-3 right-3"
               type="button"
               disabled={props.disabled}
               onClick={() => {
