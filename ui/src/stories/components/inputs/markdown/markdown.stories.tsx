@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
 
-import BCMSDateInputPreview from './Preview.tsx';
-import BCMSDateInput from './Index.tsx';
+import BCMSMarkdownInputPreview from './Preview.jsx';
+import BCMSMarkdownInput from './Index.jsx';
 
-const meta: Meta<typeof BCMSDateInput> = {
-  title: 'Components/Inputs/Date',
-  component: BCMSDateInput,
+const meta: Meta<typeof BCMSMarkdownInput> = {
+  title: 'Components/Inputs/Markdown',
+  component: BCMSMarkdownInput,
   // tags: ['autodocs'],
   render: (args) => ({
     components: {
-      BCMSDateInputPreview,
+      BCMSMarkdownInputPreview,
     },
     setup() {
       return {
@@ -17,26 +17,28 @@ const meta: Meta<typeof BCMSDateInput> = {
       };
     },
     template: `
-      <BCMSDateInputPreview
+      <BCMSMarkdownInputPreview
         :class="args.class"
         :value="args.value"
+        :placeholder="args.placeholder"
         :label="args.label"
         :invalid-text="args.invalidText"
-        :disabled="args.disabled"
-        :include-time="args.includeTime"
         :helper-text="args.helperText"
-        @input="args.value = $event"
+        :disabled="args.disabled"
+        :min-height="args.minHeight"
+        :additional-helper-slot="args.additionalHelperSlot"
+        @input="($event) => args.value = $event.value"
       />
     `,
   }),
-  args: {
-    value: new Date().getTime(),
-  },
   argTypes: {
     value: {
-      control: 'number',
+      control: 'text',
     },
     class: {
+      control: 'text',
+    },
+    placeholder: {
       control: 'text',
     },
     label: {
@@ -45,20 +47,23 @@ const meta: Meta<typeof BCMSDateInput> = {
     invalidText: {
       control: 'text',
     },
+    helperText: {
+      control: 'text',
+    },
     disabled: {
       control: 'boolean',
     },
-    includeTime: {
-      control: false,
+    minHeight: {
+      control: 'number',
     },
-    helperText: {
+    additionalHelperSlot: {
       control: 'text',
     },
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof BCMSDateInput>;
+type Story = StoryObj<typeof BCMSMarkdownInput>;
 
 export const Playground: Story = {
   parameters: {
@@ -66,27 +71,31 @@ export const Playground: Story = {
       source: {
         code: `
 \`.jsx|.tsx\`
-<BCMSDateInput
+<BCMSMarkdownInput
   class={props.class}
   value={props.value}
+  placeholder={props.placeholder}
   label={props.label}
   invalid-text={props.invalidText}
-  disabled={props.disabled}
-  include-time={props.includeTime}
   helper-text={props.helperText}
+  disabled={props.disabled}
+  min-height={props.minHeight}
+  additional-helper-slot={props.additionalHelperSlot}
   onInput={(val) => props.value = val}
 />
 
 \`.vue\`
 <template>
-  <BCMSDateInput
+  <BCMSMarkdownInput
     :class="props.class"
     :value="props.value"
+    :placeholder="props.placeholder"
     :label="props.label"
     :invalid-text="props.invalidText"
-    :disabled="props.disabled"
-    :include-time="props.includeTime"
     :helper-text="props.helperText"
+    :disabled="props.disabled"
+    :min-height="props.minHeight"
+    :additional-helper-slot="props.additionalHelperSlot"
     @input="props.value = $event"
   />
 </template>
@@ -108,7 +117,7 @@ export const Disabled: Story = {
   },
   render: (args) => ({
     components: {
-      BCMSDateInput,
+      BCMSMarkdownInput,
     },
     setup() {
       return {
@@ -116,15 +125,17 @@ export const Disabled: Story = {
       };
     },
     template: `
-    <BCMSDateInput
+    <BCMSMarkdownInput
       :class="args.class"
       :value="args.value"
+      :placeholder="args.placeholder"
       :label="args.label"
       :invalid-text="args.invalidText"
-      :disabled="args.disabled"
-      :include-time="args.includeTime"
       :helper-text="args.helperText"
-      @input="args.value = $event"
+      :disabled="args.disabled"
+      :min-height="args.minHeight"
+      :additional-helper-slot="args.additionalHelperSlot"
+      @input="($event) => args.value = $event.value"
     />
     `,
   }),
@@ -141,7 +152,7 @@ export const Error: Story = {
   },
   render: (args) => ({
     components: {
-      BCMSDateInput,
+      BCMSMarkdownInput,
     },
     setup() {
       return {
@@ -149,15 +160,17 @@ export const Error: Story = {
       };
     },
     template: `
-    <BCMSDateInput
+    <BCMSMarkdownInput
       :class="args.class"
       :value="args.value"
+      :placeholder="args.placeholder"
       :label="args.label"
       :invalid-text="args.invalidText"
-      :disabled="args.disabled"
-      :include-time="args.includeTime"
       :helper-text="args.helperText"
-      @input="args.value = $event"
+      :disabled="args.disabled"
+      :min-height="args.minHeight"
+      :additional-helper-slot="args.additionalHelperSlot"
+      @input="($event) => args.value = $event.value"
     />
     `,
   }),

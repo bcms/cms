@@ -108,3 +108,37 @@ export const Playground: Story = {
     },
   },
 };
+
+export const Error: Story = {
+  args: {
+    invalidText: 'Error text',
+  },
+  argTypes: {
+    invalidText: {
+      control: false,
+    },
+  },
+  render: (args) => ({
+    components: {
+      BCMSColorPickerInput,
+    },
+    setup() {
+      return {
+        args,
+      };
+    },
+    template: `
+    <BCMSColorPickerInput
+      :class="args.class"
+      :value="args.value"
+      :label="args.label"
+      :invalid-text="args.invalidText"
+      :helper-text="args.helperText"
+      :allow-custom="args.allowCustom"
+      :allow-global="args.allowGlobal"
+      :allow-create-color="args.allowCreateColor"
+      @change="args.value = $event"
+    />
+    `,
+  }),
+};
