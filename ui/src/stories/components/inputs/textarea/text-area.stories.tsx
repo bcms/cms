@@ -1,15 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/vue3';
 
-import BCMSTextInputPreview from './Preview.tsx';
-import BCMSTextInput from './Index.tsx';
+import BCMSTextAreaInputPreview from './Preview.tsx';
+import BCMSTextAreaInput from './Index.tsx';
 
-const meta: Meta<typeof BCMSTextInput> = {
-  title: 'Components/Inputs/Text',
-  component: BCMSTextInput,
+const meta: Meta<typeof BCMSTextAreaInput> = {
+  title: 'Components/Inputs/Text Area',
+  component: BCMSTextAreaInput,
   // tags: ['autodocs'],
   render: (args) => ({
     components: {
-      BCMSTextInputPreview,
+      BCMSTextAreaInputPreview,
     },
     setup() {
       return {
@@ -17,12 +17,11 @@ const meta: Meta<typeof BCMSTextInput> = {
       };
     },
     template: `
-      <BCMSTextInputPreview
+      <BCMSTextAreaInputPreview
         :class="args.class"
         :value="args.value"
         :placeholder="args.placeholder"
         :label="args.label"
-        :type="args.type"
         :invalid-text="args.invalidText"
         :disabled="args.disabled"
         :helper-text="args.helperText"
@@ -43,10 +42,6 @@ const meta: Meta<typeof BCMSTextInput> = {
     label: {
       control: 'text',
     },
-    type: {
-      control: 'select',
-      options: ['text', 'email'],
-    },
     invalidText: {
       control: 'text',
     },
@@ -56,11 +51,14 @@ const meta: Meta<typeof BCMSTextInput> = {
     helperText: {
       control: 'text',
     },
+    format: {
+      control: 'object',
+    },
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof BCMSTextInput>;
+type Story = StoryObj<typeof BCMSTextAreaInput>;
 
 export const Playground: Story = {
   parameters: {
@@ -68,12 +66,11 @@ export const Playground: Story = {
       source: {
         code: `
 \`.jsx|.tsx\`
-<BCMSTextInput
+<BCMSTextAreaInput
   class={props.class}
   value={props.value}
   placeholder={props.placeholder}
   label={props.label}
-  type={props.type}
   invalid-text={props.invalidText}
   disabled={props.disabled}
   helper-text={props.helperText}
@@ -82,12 +79,11 @@ export const Playground: Story = {
 
 \`.vue\`
 <template>
-  <BCMSTextInput
+  <BCMSTextAreaInput
     :class="props.class"
     :value="props.value"
     :placeholder="props.placeholder"
     :label="props.label"
-    :type="props.type"
     :invalid-text="props.invalidText"
     :disabled="props.disabled"
     :helper-text="props.helperText"
@@ -112,7 +108,7 @@ export const Disabled: Story = {
   },
   render: (args) => ({
     components: {
-      BCMSTextInput,
+      BCMSTextAreaInput,
     },
     setup() {
       return {
@@ -120,12 +116,11 @@ export const Disabled: Story = {
       };
     },
     template: `
-    <BCMSTextInput
+    <BCMSTextAreaInput
       :class="args.class"
       :value="args.value"
       :placeholder="args.placeholder"
       :label="args.label"
-      :type="args.type"
       :invalid-text="args.invalidText"
       :disabled="args.disabled"
       :helper-text="args.helperText"
@@ -146,7 +141,7 @@ export const Error: Story = {
   },
   render: (args) => ({
     components: {
-      BCMSTextInput,
+      BCMSTextAreaInput,
     },
     setup() {
       return {
@@ -154,12 +149,11 @@ export const Error: Story = {
       };
     },
     template: `
-    <BCMSTextInput
+    <BCMSTextAreaInput
       :class="args.class"
       :value="args.value"
       :placeholder="args.placeholder"
       :label="args.label"
-      :type="args.type"
       :invalid-text="args.invalidText"
       :disabled="args.disabled"
       :helper-text="args.helperText"
