@@ -1058,8 +1058,10 @@ export class BCMSPropHandler {
                     type: media.type,
                     svg,
                   };
-                  (mediaData as any).type = undefined;
-                  (mediaData as any)._type = undefined;
+                  if (programLng === 'rust') {
+                    (mediaData as any)._type = media.type;
+                    (mediaData as any).type = undefined;
+                  }
                   (parsed[propName] as BCMSPropMediaDataParsed[]).push(
                     mediaData,
                   );
@@ -1091,8 +1093,10 @@ export class BCMSPropHandler {
                   type: media.type,
                   svg,
                 };
-                (mediaData as any).type = undefined;
-                (mediaData as any)._type = undefined;
+                if (programLng === 'rust') {
+                  (mediaData as any)._type = media.type;
+                  (mediaData as any).type = undefined;
+                }
                 (parsed[propName] as BCMSPropMediaDataParsed) = mediaData;
               }
             }
