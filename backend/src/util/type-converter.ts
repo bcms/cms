@@ -79,12 +79,20 @@ class BCMSImports {
     }
     return output;
   }
+  flattenRust(): string[] {
+    const output: string[] = [];
+    for (const path in this.state) {
+      const names = Object.keys(this.state[path]);
+      output.push(names.map((name) => `use crate::bcms::${name}`).join('\n'));
+    }
+    return output;
+  }
 }
 
 export class BCMSTypeConverter {
   static async bcmsPropTypeToConvertType(
     prop: BCMSProp,
-    conversionType?: 'js' | 'gql',
+    conversionType?: 'js' | 'gql' | 'rust',
   ): Promise<{ type: string; imports: BCMSImports; additional: string[] }> {
     const cType = conversionType ? conversionType : 'js';
     let output = '';
@@ -95,20 +103,35 @@ export class BCMSTypeConverter {
       prop.type === BCMSPropType.STRING ||
       prop.type === BCMSPropType.NUMBER
     ) {
-      output =
-        cType === 'js'
-          ? prop.type.toLowerCase()
-          : toCamelCase(prop.type.toLowerCase());
+      if (cType === 'rust') {
+        if (prop.type === BCMSPropType.BOOLEAN) {
+          output = 'bool';
+        } else if (prop.type === BCMSPropType.STRING) {
+          output = 'String';
+        } else if (prop.type === BCMSPropType.NUMBER) {
+          output = 'f64';
+        }
+      } else {
+        output =
+          cType === 'js'
+            ? prop.type.toLowerCase()
+            : toCamelCase(prop.type.toLowerCase());
+      }
     } else if (prop.type === BCMSPropType.COLOR_PICKER) {
-      output = cType === 'gql' ? 'String' : 'string';
+      output =
+        cType === 'rust' ? 'String' : cType === 'gql' ? 'String' : 'string';
     } else if (prop.type === BCMSPropType.DATE) {
-      output = cType === 'gql' ? 'Float' : 'number';
+      output = cType === 'rust' ? 'f64' : cType === 'gql' ? 'Float' : 'number';
     } else if (prop.type === BCMSPropType.ENUMERATION) {
       const data = prop.defaultData as BCMSPropEnumData;
+      const key =
+        cType === 'rust'
+          ? `r#enum::${prop.name}::${toCamelCase(prop.name) + 'EnumType'};`
+          : toCamelCase(prop.name) + 'EnumType';
       output = toCamelCase(prop.name) + 'EnumType';
       const path = `../enum/${prop.name}`;
-      imports.set(output, path);
-      imports.addMetadata(output, path, {
+      imports.set(key, path);
+      imports.addMetadata(key, path, {
         name: prop.name,
         type: 'enum',
         enumItems: data.items,
@@ -119,8 +142,10 @@ export class BCMSTypeConverter {
       if (group) {
         output = toCamelCase(group.name) + 'Group';
         const path = `../group/${group.name}`;
-        imports.set(output, path);
-        imports.addMetadata(output, path, {
+        const key =
+          cType === 'rust' ? `group::${group.name}::${output};` : output;
+        imports.set(key, path);
+        imports.addMetadata(key, path, {
           name: group.name,
           type: 'group',
           props: group.props,
@@ -128,13 +153,22 @@ export class BCMSTypeConverter {
       }
     } else if (prop.type === BCMSPropType.MEDIA) {
       output = 'BCMSMediaParsed';
-      imports.set(output, '@becomes/cms-client/types');
+      if (cType === 'rust') {
+        imports.set(`media::${output};`, '@becomes/cms-client/types');
+      } else {
+        imports.set(output, '@becomes/cms-client/types');
+      }
     } else if (prop.type === BCMSPropType.RICH_TEXT) {
       output =
         cType === 'gql'
           ? '[BCMSEntryContentParsedItem!]'
+          : cType === 'rust'
+          ? 'Vec<BCMSEntryContentParsedItem>'
           : 'BCMSPropRichTextDataParsed';
-      imports.set(output, '@becomes/cms-client/types');
+      imports.set(
+        cType === 'rust' ? 'content::BCMSEntryContentParsedItem;' : output,
+        '@becomes/cms-client/types',
+      );
     } else if (prop.type === BCMSPropType.TAG) {
       output = cType === 'gql' ? 'String' : 'string';
     } else if (prop.type === BCMSPropType.ENTRY_POINTER) {
@@ -146,8 +180,14 @@ export class BCMSTypeConverter {
         if (template) {
           outputTypes.push(toCamelCase(template.name) + 'Entry');
           const path = `../entry/${template.name}`;
-          imports.set(toCamelCase(template.name) + 'Entry', path);
-          imports.addMetadata(toCamelCase(template.name) + 'Entry', path, {
+          const key =
+            cType === 'rust'
+              ? `entry::${template.name}::${
+                  outputTypes[outputTypes.length - 1]
+                };`
+              : outputTypes[outputTypes.length - 1];
+          imports.set(key, path);
+          imports.addMetadata(key, path, {
             name: template.name,
             type: 'entry',
             props: template.props,
@@ -178,6 +218,24 @@ export class BCMSTypeConverter {
           // } else {
           //   output = outputTypes[0];
           // }
+        } else if (cType === 'rust') {
+          if (outputTypes.length > 1) {
+            additional.push(
+              [
+                '',
+                '#[derive(Serialize, Deserialize, Debug)]',
+                '#[allow(non_camel_case_types)]',
+                `enum ${toCamelCase(prop.name)}Type {`,
+                ...outputTypes.map((type) => {
+                  return `    ${type}(${type}),`;
+                }),
+                '}',
+              ].join('\n'),
+            );
+            output = `${toCamelCase(prop.name)}Type`;
+          } else {
+            output = outputTypes[0];
+          }
         } else {
           output = outputTypes.join(' | ');
         }
@@ -187,6 +245,8 @@ export class BCMSTypeConverter {
       type: prop.array
         ? cType === 'gql'
           ? `[${output}]`
+          : cType === 'rust'
+          ? `Vec<${output}>`
           : `Array<${output}>`
         : output,
       additional,
@@ -199,7 +259,7 @@ export class BCMSTypeConverter {
     converterType,
   }: {
     props: BCMSProp[];
-    converterType?: 'js' | 'gql';
+    converterType?: 'js' | 'gql' | 'rust';
   }): Promise<BCMSTypeConverterPropsResult> {
     const output: BCMSTypeConverterPropsResult = {
       imports: new BCMSImports(),
@@ -604,6 +664,191 @@ export class BCMSTypeConverter {
       ),
       '}',
     ].join('\n');
+    return Object.keys(output).map((outputFile) => {
+      return {
+        outputFile,
+        content: output[outputFile],
+      };
+    });
+  }
+
+  static async rust(
+    data: BCMSTypeConverterTarget[],
+  ): Promise<BCMSTypeConverterResultItem[]> {
+    const output: {
+      [outputFile: string]: string;
+    } = {};
+    let loop = true;
+    const parsedItems: {
+      [name: string]: boolean;
+    } = {};
+    const mods: {
+      enum?: string[];
+    } = {};
+    function fixInvalidPropNames(name: string): string {
+      if (['type', 'ref'].includes(name)) {
+        return `_${name}`;
+      }
+      return name;
+    }
+    while (loop) {
+      const target = data.pop();
+      if (!target) {
+        loop = false;
+      } else {
+        if (!output[`${target.type}/${target.name}.rs`]) {
+          if (target.type === 'enum' && target.enumItems) {
+            const baseName = `${toCamelCase(target.name)}Enum`;
+            if (!mods.enum) {
+              mods.enum = [];
+            }
+            mods.enum.push(`pub mod ${target.name};`);
+            output[`enum/${target.name}.rs`] = [
+              'use serde::{Deserialize, Serialize};',
+              '',
+              '#[derive(Serialize, Deserialize, Debug)]',
+              '#[allow(non_camel_case_types)]',
+              `pub enum ${baseName} {`,
+              ...target.enumItems.map((e) => `    ${e}(String),`),
+              '}',
+            ].join('\n');
+            output[`enum/${target.name}.rs`] += [
+              '\n',
+              '#[derive(Serialize, Deserialize, Debug)]',
+              '#[allow(non_camel_case_types)]',
+              `pub struct ${baseName}Type {`,
+              `    pub items: Vec<${baseName}>,`,
+              `    pub selected: ${baseName},`,
+              `}`,
+            ].join('\n');
+          } else if (target.props) {
+            const props = target.props;
+            const result = await this.toConvertProps({
+              props,
+              converterType: 'rust',
+            });
+            const interfaceName = toCamelCase(target.name + '_' + target.type);
+            let rustProps: string[] = [];
+            let additional: string[] = [''];
+            if (target.type === 'entry') {
+              const languages = await BCMSRepo.language.findAll();
+              rustProps = [
+                '    pub _id: String,',
+                '    pub createdAt: i64,',
+                '    pub updatedAt: i64,',
+                '    pub templateId: String,',
+                '    pub templateName: String,',
+                '    pub userId: String,',
+                '    pub status: String,',
+                `    pub meta: ${interfaceName}Meta,`,
+              ];
+              additional = [
+                '',
+                '#[derive(Serialize, Deserialize, Debug)]',
+                '#[allow(non_snake_case)]',
+                `pub struct ${interfaceName}MetaItem {`,
+                ...result.props.map(
+                  (prop) =>
+                    `    pub ${fixInvalidPropNames(prop.name)}: ${prop.type},`,
+                ),
+                '}',
+                '',
+                '#[derive(Serialize, Deserialize, Debug)]',
+                '#[allow(non_snake_case)]',
+                `pub struct ${interfaceName}Meta {`,
+                ...languages.map(
+                  (lng) =>
+                    `    pub ${lng.code}: Option<${interfaceName}MetaItem>,`,
+                ),
+                '}',
+              ];
+            } else {
+              rustProps = result.props.map(
+                (prop) =>
+                  `    pub ${fixInvalidPropNames(prop.name)}: ${
+                    prop.required ? prop.type : `Option<${prop.type}>`
+                  },`,
+              );
+            }
+            output[`${target.type}/${target.name}.rs`] = [
+              'use serde::{Deserialize, Serialize};',
+              '',
+              ...result.imports.flattenRust(),
+              ...result.additional,
+              ...additional,
+              '',
+              '#[derive(Serialize, Deserialize, Debug)]',
+              '#[allow(non_snake_case)]',
+              `pub ${target.type === 'enum' ? 'enum' : 'struct'} ${toCamelCase(
+                target.name + '_' + target.type,
+              )} {`,
+              ...rustProps,
+              '}',
+            ].join('\n');
+
+            const importsState = result.imports.state;
+            for (const path in importsState) {
+              if (!path.startsWith('@becomes')) {
+                for (const name in importsState[path]) {
+                  const metadata = importsState[path][name].metadata;
+                  if (metadata && !parsedItems[name]) {
+                    data.push(metadata);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    output['media.rs'] = [
+      'use serde::{Deserialize, Serialize};',
+      '',
+      '#[derive(Serialize, Deserialize, Debug)]',
+      '#[allow(non_snake_case)]',
+      'pub struct BCMSMediaParsed {',
+      '    pub src: String,',
+      '    pub _id: String,',
+      '    pub alt_text: String,',
+      '    pub caption: String,',
+      '    pub height: i32,',
+      '    pub width: i32,',
+      '    pub name: String,',
+      '    pub _type: String,',
+      '}',
+    ].join('\n');
+    output['content.rs'] = [
+      'use serde::{Deserialize, Serialize};',
+      '',
+      '#[derive(Serialize, Deserialize, Debug)]',
+      '#[allow(non_snake_case)]',
+      'pub struct BCMSEntryContentParsedItemAttrs {',
+      '    level: Option<i32>,',
+      '}',
+      '',
+      '#[derive(Serialize, Deserialize, Debug)]',
+      '#[allow(non_snake_case)]',
+      'pub struct BCMSEntryContentParsedItem {',
+      '    _type: String,',
+      '    attrs: Option<BCMSEntryContentParsedItemAttrs>,',
+      '    name: Option<String>,',
+      '    value: String,',
+      '}',
+    ].join('\n');
+    output['mod.rs'] = 'pub mod content;\npub mod media;\n\n';
+    for (const outputFile in output) {
+      const parts = outputFile.split('/');
+      if (parts[1]) {
+        const key = `${parts[0]}/mod.rs`;
+        if (!output[key]) {
+          output['mod.rs'] += `pub mod ${
+            parts[0] === 'enum' ? 'r#enum' : parts[0]
+          };\n`;
+          output[key] = '';
+        }
+        output[key] += `pub mod ${parts[1].replace('.rs', '')};\n`;
+      }
+    }
     return Object.keys(output).map((outputFile) => {
       return {
         outputFile,
