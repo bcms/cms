@@ -83,22 +83,24 @@ export const Playground: Story = {
 \`.jsx|.tsx\`
 <BCMSRadioInput
   class={props.class}
-  value={props.value}
+  modelValue={props.modelValue}
+  options={props.options}
   label={props.label}
   disabled={props.disabled}
   helper-text={props.helperText}
-  onInput={() => props.value = !props.value}
+  onInput={(val) => props.modelValue = val}
 />
 
 \`.vue\`
 <template>
   <BCMSRadioInput
     :class="props.class"
-    :value="props.value"
+    :modelValue="props.modelValue"
+    :options="props.options"
     :label="props.label"
     :disabled="props.disabled"
     :helper-text="props.helperText"
-    @input="props.value = !props.value"
+    @input="props.modelValue = $event"
   />
 </template>
         `,
