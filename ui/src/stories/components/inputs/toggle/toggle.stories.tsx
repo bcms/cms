@@ -24,10 +24,9 @@ const meta: Meta<typeof BCMSToggleInput> = {
         :disabled="args.disabled"
         :states="args.states"
         :helper-text="args.helperText"
-        @input="alert('test')"
+        @input="args.value = !args.value"
         />
         `,
-    // @input="args.value = !args.value"
   }),
   args: {
     states: ['On', 'Off'],
