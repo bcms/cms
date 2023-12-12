@@ -75,6 +75,7 @@
     "@storybook/addon-actions": "^7.6.3",
     "@storybook/addon-essentials": "^7.6.1",
     "@storybook/addon-links": "^7.6.1",
+    "@storybook/addon-storysource": "^7.6.4",
     "@storybook/blocks": "^7.6.1",
     "@storybook/testing-library": "^0.2.2",
     "@storybook/vue3": "^7.6.1",
