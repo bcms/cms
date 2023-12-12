@@ -302,6 +302,17 @@ To get started with BCMS Cloud, please refer to the [BCMS Cloud](https://cloud.t
   </tbody>
 </table>
 <br><br>
+
+<h2 align="center">Contributing</h2>
+<p align="center">
+  We ❤️ contributions big and small.
+</p>
+<p align="center">
+  Open a PR (see our instructions on <a href="https://docs.thebcms.com/install/locally">developing BCMS locally</a>)<br>
+  Submit a <a href="https://github.com/bcms/cms/issues/new?assignees=&labels=enhancement%2C+feature&template=feature_request.md">feature request</a> or <a href="https://github.com/bcms/cms/issues/new?assignees=&labels=bug&template=bug_report.md">bug report</a><br>
+</p>
+<br><br>
+
 <h2 align="center">Support ❤️</h2>
 <p align="center">
   If you like the project, hit the ⭐ button
