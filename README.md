@@ -1,10 +1,12 @@
-https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
+<div align="center">
+  <img src="assets/readme/bcms-preview.webp" alt="Interface Animation"  width="800px" height="506px" />  
+</div>
 
 <h2 align="center">
   BCMS - Open-source Headless CMS
 </h1>
 <p align="center">
-  BCMS is an open-source Contentful alternative. Built with Node.js, MongoDB, Vue 3, and Tailwind. <br>
+  BCMS is an open-source, self-hostable Headless CMS. Built with Node.js, MongoDB, Vue 3, and Tailwind. <br>
   Design your content structure without leaving the browser. <br> Consume content via APIs. Works nicely with Next.js, Nuxt.js & Gatsby.js.<br>
 </p>
 <p align="center">🌐 <a href="https://thebcms.com">Website</a> · 📚 <a href="https://docs.thebcms.com">Documentation</a> · 💻 <a href="https://cloud.thebcms.com/">Demo</a> · 💬 <a href="https://discord.gg/Rr4kTKpU">Discord</a> · 🤓 <a href="https://github.com/bcms/starters">Code starters</a> · 🤓 <p>
@@ -19,8 +21,22 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
 [![X](https://img.shields.io/twitter/follow/thebcms?style=social&logo=x)](https://twitter.com/thebcms)
 [![Website](https://img.shields.io/badge/Website-Visit-blue)](https://www.thebcms.com) -->
 <br>
+
+## ⚙️ Quickstart
+To install BCMS on your computer run:
+```
+npm install @becomes/cms-cli -g
+```
+and then
+```
+bcms --cms create
+```
+
+To self-host BCMS on DigitalOcean, please refer to the [Self-hosting](https://docs.thebcms.com/install/digitalocean).<br />
+To get started with BCMS Cloud, please refer to the [BCMS Cloud](https://cloud.thebcms.com/).
+<br><br><br><br>
 <h2 align="center">
-  Things only BCMS can do  🦄
+  Features only BCMS have  🦄
 </h2>
 <p align="center">
   Advanced stuff, nicely put together for smooth use.
@@ -175,7 +191,7 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
     </tr>
     <tr>
       <td>
-        <strong>👩‍💻 Next.js integration</strong> <br />
+        <strong>👩‍💻 Next.js CMS integration</strong> <br />
         Out-of-the-box integration with Next.js<br />
         <a href="https://docs.thebcms.com/integrations/next-js" rel="nofollow"
           >Next.js docs</a
@@ -184,7 +200,7 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
     </tr>
     <tr>
       <td>
-        <strong>👨‍💻 Gatsby.js integration</strong> <br />
+        <strong>👨‍💻 Gatsby.js CMS integration</strong> <br />
         Out-of-the-box integration with Gatsby.js<br />
         <a href="https://docs.thebcms.com/integrations/gatsby-js" rel="nofollow"
           >Gatsby.js docs</a
@@ -193,7 +209,7 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
     </tr>
     <tr>
       <td>
-        <strong>🧑‍💻 Nuxt.js integration</strong> <br />
+        <strong>🧑‍💻 Nuxt.js CMS integration</strong> <br />
         Out-of-the-box integration with Nuxt.js<br />
         <a href="https://docs.thebcms.com/integrations/nuxt-js" rel="nofollow"
           >Nuxt.js docs</a
@@ -288,13 +304,14 @@ https://github.com/bcms/cms/assets/15079459/420395e5-5866-4aef-bb6b-f8ed4a2f1675
 <br><br>
 <h2 align="center">Support ❤️</h2>
 <p align="center">
-  If you like the project, hit that ⭐ button !!1
+  If you like the project, hit the ⭐ button
 </p>
 <br>
 <h2 align="center">Stay in touch 🌐</h2>
 <p align="center">
   <a href="https://twitter.com/thebcms">Follow on X (twitter)</a><br>
   <a href="https://www.linkedin.com/company/thebcms/">Follow on LinkedIn</a><br>
+  <a href="https://discord.gg/Rr4kTKpU">Join us on Discord</a><br>
 </p>
 <br>
 <h2 align="center">License 📄</h2>
