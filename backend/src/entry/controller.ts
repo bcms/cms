@@ -119,6 +119,7 @@ export const BCMSEntryController = createController<Setup>({
           for (let i = 0; i < entries.length; i++) {
             const entry = entries[i];
             const entryParsed = await entryParser.parse({
+              programLng: request.query.pLang === 'rust' ? 'rust' : 'js',
               entry,
               maxDepth,
               depth: 0,
@@ -300,6 +301,7 @@ export const BCMSEntryController = createController<Setup>({
           }
           return {
             item: await entryParser.parse({
+              programLng: request.query.pLang === 'rust' ? 'rust' : 'js',
               entry,
               maxDepth,
               depth: 0,

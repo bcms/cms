@@ -24,7 +24,7 @@ export function createBcmsEntryParser(): Module {
     name: 'Entry parser',
     initialize(moduleConfig) {
       parser = {
-        async parse({ entry, maxDepth, depth, level, justLng }) {
+        async parse({ entry, maxDepth, depth, level, justLng, programLng }) {
           if (!level) {
             level = 'entry';
           }
@@ -58,6 +58,7 @@ export function createBcmsEntryParser(): Module {
               const meta = entry.meta.find((e) => e.lng === lang.code);
               if (meta) {
                 entryParsed.meta[lang.code] = await BCMSPropHandler.parse({
+                  programLng,
                   meta: temp.props,
                   values: meta.props,
                   maxDepth,
@@ -67,6 +68,7 @@ export function createBcmsEntryParser(): Module {
                 });
               } else {
                 entryParsed.meta[lang.code] = await BCMSPropHandler.parse({
+                  programLng,
                   meta: temp.props,
                   values: [],
                   maxDepth,
@@ -79,6 +81,7 @@ export function createBcmsEntryParser(): Module {
               const content = entry.content.find((e) => e.lng === lang.code);
               if (content) {
                 entryParsed.content[lang.code] = await parser.parseContent({
+                  programLng,
                   nodes: content.nodes,
                   maxDepth,
                   depth,
@@ -92,7 +95,7 @@ export function createBcmsEntryParser(): Module {
           }
           return entryParsed;
         },
-        async parseContent({ nodes, maxDepth, justLng, depth, level }) {
+        async parseContent({ nodes, maxDepth, justLng, depth, level, programLng }) {
           const output: BCMSEntryContentParsedItem[] = [];
           for (let i = 0; i < nodes.length; i++) {
             const node = nodes[i];
@@ -104,6 +107,7 @@ export function createBcmsEntryParser(): Module {
                   type: node.type,
                   name: widget.name,
                   value: await BCMSPropHandler.parse({
+                    programLng,
                     meta: widget.props,
                     values: attrs.props,
                     maxDepth,
