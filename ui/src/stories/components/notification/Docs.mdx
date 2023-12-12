@@ -3,5 +3,13 @@ import * as NotificationStories from './notification.stories';
 
 <Meta of={NotificationStories} />
 <Title of={NotificationStories} />
-<Canvas of={NotificationStories.Playground} />
-<Controls of={NotificationStories.Playground} />
+
+Notification is used to notify the user of change / error / etc. from within
+the app.
+
+Notifications are triggered using the <code class="text-green">window.bcms.notification</code> service.
+
+Example: <code class="text-green">window.bcms.notification.success('Notification message\')</code>
+
+<Canvas of={NotificationStories.Preview} />
+<Controls of={NotificationStories.Preview} />

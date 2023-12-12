@@ -5,7 +5,6 @@ import BCMSNotification from './Index.tsx';
 const meta: Meta<typeof BCMSNotification> = {
   title: 'Components/Notification',
   component: BCMSNotification,
-  // tags: ['autodocs'],
   render: (args) => ({
     components: {
       BCMSNotification,
@@ -30,9 +29,11 @@ const meta: Meta<typeof BCMSNotification> = {
     type: {
       control: 'select',
       options: ['success', 'error', 'warning'],
+      description: 'Notification type',
     },
     content: {
       control: 'text',
+      description: 'Text',
     },
   },
 };
@@ -41,12 +42,16 @@ export default meta;
 
 type Story = StoryObj<typeof BCMSNotification>;
 
-export const Playground: Story = {
+export const Preview: Story = {
   parameters: {
     docs: {
       source: {
         code: `
-          <BCMSNotification />
+\`script\`
+window.bcms.notification.success('Notification message');
+
+\`template\`
+<BCMSNotification />
         `,
       },
     },
