@@ -43,7 +43,7 @@ const meta: Meta<typeof BCMSSelect> = {
         :options="args.options"
         @change="args.selected = $event.value"
       />
-        `,
+    `,
   }),
   decorators: [
     () => ({
