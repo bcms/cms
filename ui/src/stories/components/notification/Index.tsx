@@ -66,15 +66,18 @@ const component = defineComponent({
       return (
         <div className="flex items-center flex-wrap gap-4 mb-5">
           <div
-            class={`w-full flex items-center py-1 pl-6 pr-3 rounded-lg min-h-[48px] mb-2.5 ${messageTypeClass(
+            className={`w-full flex items-center py-1 pl-6 pr-3 rounded-lg min-h-[48px] mb-2.5 ${messageTypeClass(
               props.type,
             )}`}
           >
             {getTypeIcon(props.type)}
-            <p class="text-base leading-tight ml-4.5 relative top-0.5 text-dark">
+            <p className="text-base leading-tight ml-4.5 relative top-0.5 text-dark">
               {props.content}
             </p>
-            <button class="group p-3 ml-auto flex" onClick={action('close')}>
+            <button
+              className="group p-3 ml-auto flex"
+              onClick={action('close')}
+            >
               <BCMSIcon
                 src="/close"
                 class="w-6 h-6 flex-shrink-0 text-dark fill-current stroke-current m-auto transition-colors duration-300 group-scope-hover:text-red group-scope-focus-visible:text-red"
