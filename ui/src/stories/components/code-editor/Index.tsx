@@ -6,14 +6,8 @@ import React from 'react';
 const component = defineComponent({
   props: {
     class: String,
-    code: {
-      type: String,
-      default: '',
-    },
-    readOnly: {
-      type: Boolean,
-      default: false,
-    },
+    code: String,
+    readOnly: Boolean,
   },
   setup(props) {
     return () => {
