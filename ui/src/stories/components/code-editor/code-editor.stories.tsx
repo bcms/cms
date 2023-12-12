@@ -5,42 +5,44 @@ import BCMSCodeEditor from './Index.tsx';
 const meta: Meta<typeof BCMSCodeEditor> = {
   title: 'Components/Code Editor',
   component: BCMSCodeEditor,
-  // tags: ['autodocs'],
   render: (args) => ({
     components: {
       BCMSCodeEditor,
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
       <BCMSCodeEditor
-        :class="args.class"
-        :code="args.code"
-        :read-only="args.readOnly"
+        :class="props.class"
+        :code="props.code"
+        :read-only="props.readOnly"
       />
     `,
   }),
   args: {
     code: `
-<BCMSCodeEditor
-  :class="props.class"
-  :code="props.code"
-  :read-only="props.readOnly"
-/>
+for (let index = 0; index < array.length; index++) {
+  const element = array[index];
+  
+  console.log(element);
+}
     `,
   },
   argTypes: {
     class: {
       control: 'text',
+      description: 'TailwindCSS or custom CSS classes',
     },
     code: {
       control: 'text',
+      description: 'Code snippet',
     },
     readOnly: {
       control: 'boolean',
+      description: 'Disable code change',
     },
   },
 };
@@ -49,7 +51,7 @@ export default meta;
 
 type Story = StoryObj<typeof BCMSCodeEditor>;
 
-export const Playground: Story = {
+export const Preview: Story = {
   parameters: {
     docs: {
       source: {
