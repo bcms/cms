@@ -21,27 +21,26 @@ const options = [
 const meta: Meta<typeof BCMSSelect> = {
   title: 'Components/Inputs/Select',
   component: BCMSSelect,
-  // tags: ['autodocs'],
   render: (args) => ({
     components: {
       BCMSSelectPreview,
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
       <BCMSSelectPreview
-        :class="args.class"
-        :label="args.label"
-        :placeholder="args.placeholder"
-        :invalid-text="args.invalidText"
-        :helper-text="args.helperText"
-        :disabled="args.disabled"
-        :selected="args.selected"
-        :options="args.options"
-        @change="args.selected = $event.value"
+        :class="props.class"
+        :label="props.label"
+        :placeholder="props.placeholder"
+        :invalid-text="props.invalidText"
+        :helper-text="props.helperText"
+        :disabled="props.disabled"
+        :selected="props.selected"
+        :options="props.options"
+        @change="props.selected = $event.value"
       />
     `,
   }),
@@ -60,30 +59,44 @@ const meta: Meta<typeof BCMSSelect> = {
   argTypes: {
     class: {
       control: 'text',
+      description: 'TailwindCSS or custom CSS classes',
     },
     label: {
       control: 'text',
+      description: 'Select label',
     },
     placeholder: {
       control: 'text',
+      description: 'Placeholder text',
     },
     invalidText: {
       control: 'text',
+      description: 'Error text',
     },
     helperText: {
       control: 'text',
+      description: 'Helper text',
     },
     disabled: {
       control: 'boolean',
+      description: 'Disable select interaction',
     },
     selected: {
       control: 'text',
+      description: 'Selected option value',
     },
     options: {
       control: 'object',
+      description: 'Select options',
+      table: {
+        defaultValue: {
+          summary: '[]',
+        },
+      },
     },
     showSearch: {
       control: 'boolean',
+      description: 'Show search input',
     },
   },
 };
@@ -91,7 +104,7 @@ const meta: Meta<typeof BCMSSelect> = {
 export default meta;
 type Story = StoryObj<typeof BCMSSelect>;
 
-export const Playground: Story = {
+export const Preview: Story = {
   parameters: {
     docs: {
       source: {
@@ -148,19 +161,19 @@ export const Selected: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSSelect
-      :class="args.class"
-      :label="args.label"
-      :placeholder="args.placeholder"
-      :invalid-text="args.invalidText"
-      :helper-text="args.helperText"
-      :disabled="args.disabled"
+      :class="props.class"
+      :label="props.label"
+      :placeholder="props.placeholder"
+      :invalid-text="props.invalidText"
+      :helper-text="props.helperText"
+      :disabled="props.disabled"
       selected="option1"
-      :options="args.options"
+      :options="props.options"
     />
     `,
   }),
@@ -182,18 +195,18 @@ export const Unselected: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSSelect
-      :class="args.class"
-      :label="args.label"
-      :placeholder="args.placeholder"
-      :invalid-text="args.invalidText"
-      :helper-text="args.helperText"
-      :disabled="args.disabled"
-      :options="args.options"
+      :class="props.class"
+      :label="props.label"
+      :placeholder="props.placeholder"
+      :invalid-text="props.invalidText"
+      :helper-text="props.helperText"
+      :disabled="props.disabled"
+      :options="props.options"
     />
     `,
   }),
@@ -215,19 +228,19 @@ export const Disabled: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSSelect
-      :class="args.class"
-      :label="args.label"
-      :placeholder="args.placeholder"
-      :invalid-text="args.invalidText"
-      :helper-text="args.helperText"
+      :class="props.class"
+      :label="props.label"
+      :placeholder="props.placeholder"
+      :invalid-text="props.invalidText"
+      :helper-text="props.helperText"
       disabled
-      :selected="args.selected"
-      :options="args.options"
+      :selected="props.selected"
+      :options="props.options"
     />
     `,
   }),
@@ -248,19 +261,19 @@ export const Error: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSSelect
-      :class="args.class"
-      :label="args.label"
-      :placeholder="args.placeholder"
+      :class="props.class"
+      :label="props.label"
+      :placeholder="props.placeholder"
       invalid-text="Error text"
-      :helper-text="args.helperText"
-      :disabled="args.disabled"
-      :selected="args.selected"
-      :options="args.options"
+      :helper-text="props.helperText"
+      :disabled="props.disabled"
+      :selected="props.selected"
+      :options="props.options"
     />
     `,
   }),
