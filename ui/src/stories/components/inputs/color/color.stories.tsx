@@ -7,27 +7,26 @@ import BCMSColorPickerInput from './Index.tsx';
 const meta: Meta<typeof BCMSColorPickerInput> = {
   title: 'Components/Inputs/Color Picker',
   component: BCMSColorPickerInput,
-  // tags: ['autodocs'],
   render: (args) => ({
     components: {
       BCMSColorPickerInputPreview,
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
       <BCMSColorPickerInputPreview
-        :class="args.class"
-        :value="args.value"
-        :label="args.label"
-        :invalid-text="args.invalidText"
-        :helper-text="args.helperText"
-        :allow-custom="args.allowCustom"
-        :allow-global="args.allowGlobal"
-        :allow-create-color="args.allowCreateColor"
-        @change="args.value = $event"
+        :class="props.class"
+        :value="props.value"
+        :label="props.label"
+        :invalid-text="props.invalidText"
+        :helper-text="props.helperText"
+        :allow-custom="props.allowCustom"
+        :allow-global="props.allowGlobal"
+        :allow-create-color="props.allowCreateColor"
+        @change="props.value = $event"
       />
     `,
   }),
@@ -44,21 +43,27 @@ const meta: Meta<typeof BCMSColorPickerInput> = {
   argTypes: {
     value: {
       control: 'text',
+      description: 'Hex color',
     },
     class: {
       control: 'text',
+      description: 'TailwindCSS or custom CSS classes',
     },
     label: {
       control: 'text',
+      description: 'Color label',
     },
     invalidText: {
       control: 'text',
+      description: 'Error text',
     },
     helperText: {
       control: 'text',
+      description: 'Helper text',
     },
     allowCustom: {
       control: 'boolean',
+      description: 'Select a custom color',
     },
     allowGlobal: {
       control: 'boolean',
@@ -73,7 +78,7 @@ const meta: Meta<typeof BCMSColorPickerInput> = {
 export default meta;
 type Story = StoryObj<typeof BCMSColorPickerInput>;
 
-export const Playground: Story = {
+export const Preview: Story = {
   parameters: {
     docs: {
       source: {
@@ -124,20 +129,20 @@ export const Error: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSColorPickerInput
-      :class="args.class"
-      :value="args.value"
-      :label="args.label"
-      :invalid-text="args.invalidText"
-      :helper-text="args.helperText"
-      :allow-custom="args.allowCustom"
-      :allow-global="args.allowGlobal"
-      :allow-create-color="args.allowCreateColor"
-      @change="args.value = $event"
+      :class="props.class"
+      :value="props.value"
+      :label="props.label"
+      :invalid-text="props.invalidText"
+      :helper-text="props.helperText"
+      :allow-custom="props.allowCustom"
+      :allow-global="props.allowGlobal"
+      :allow-create-color="props.allowCreateColor"
+      @change="props.value = $event"
     />
     `,
   }),
