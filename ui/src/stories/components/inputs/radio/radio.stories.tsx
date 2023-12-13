@@ -3,71 +3,79 @@ import type { Meta, StoryObj } from '@storybook/vue3';
 import BCMSRadioInputPreview from './Preview.tsx';
 import BCMSRadioInput from './Index.tsx';
 
+const options = [
+  {
+    label: 'Option 1',
+    value: 'option1',
+  },
+  {
+    label: 'Option 2',
+    value: 'option2',
+  },
+  {
+    label: 'Option 3',
+    value: 'option3',
+  },
+];
+
 const meta: Meta<typeof BCMSRadioInput> = {
   title: 'Components/Inputs/Radio',
   component: BCMSRadioInput,
-  // tags: ['autodocs'],
   render: (args) => ({
     components: {
       BCMSRadioInputPreview,
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSRadioInputPreview
-      :class="args.class"
-      :modelValue="args.modelValue"
-      :options="args.options"
-      :label="args.label"
-      :name="args.name"
-      :disabled="args.disabled"
-      :helper-text="args.helperText"
-      @input="args.modelValue = $event.target.value"
+      :class="props.class"
+      :modelValue="props.modelValue"
+      :options="props.options"
+      :label="props.label"
+      :name="props.name"
+      :disabled="props.disabled"
+      :helper-text="props.helperText"
+      @input="props.modelValue = $event.target.value"
     />
     `,
   }),
   args: {
     modelValue: 'option1',
-    options: [
-      {
-        label: 'Option 1',
-        value: 'option1',
-      },
-      {
-        label: 'Option 2',
-        value: 'option2',
-      },
-      {
-        label: 'Option 3',
-        value: 'option3',
-      },
-    ],
+    options,
     name: 'options',
   },
   argTypes: {
     modelValue: {
       control: 'text',
+      description: 'Text value of an option',
     },
     class: {
       control: 'text',
+      description: 'TailwindCSS or custom CSS classes',
     },
     label: {
       control: 'text',
+      description: 'Radio label',
     },
     name: {
       control: 'text',
+      description: 'Name of the radio group',
     },
     disabled: {
       control: 'boolean',
+      description: 'Disable radio interaction',
     },
     helperText: {
       control: 'text',
+      description: 'Helper text',
     },
     options: {
       control: 'object',
+      description: 'Array of options',
     },
   },
 };
@@ -75,7 +83,7 @@ const meta: Meta<typeof BCMSRadioInput> = {
 export default meta;
 type Story = StoryObj<typeof BCMSRadioInput>;
 
-export const Playground: Story = {
+export const Preview: Story = {
   parameters: {
     docs: {
       source: {
@@ -112,6 +120,7 @@ export const Playground: Story = {
 export const Selected: Story = {
   args: {
     label: 'Selected',
+    options,
   },
   argTypes: {
     modelValue: {
@@ -127,30 +136,17 @@ export const Selected: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSRadioInput
-      :class="args.class"
+      :class="props.class"
       modelValue="option1"
-      :options="[
-        {
-          label: 'Option 1',
-          value: 'option1',
-        },
-        {
-          label: 'Option 2',
-          value: 'option2',
-        },
-        {
-          label: 'Option 3',
-          value: 'option3',
-        },
-      ]"
-      :label="args.label"
-      :disabled="args.disabled"
-      :helper-text="args.helperText"
+      :options="props.options"
+      :label="props.label"
+      :disabled="props.disabled"
+      :helper-text="props.helperText"
     />
     `,
   }),
@@ -159,6 +155,7 @@ export const Selected: Story = {
 export const Unselected: Story = {
   args: {
     label: 'Unselected',
+    options,
   },
   argTypes: {
     modelValue: {
@@ -174,30 +171,17 @@ export const Unselected: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSRadioInput
-      :class="args.class"
+      :class="props.class"
       modelValue=""
-      :options="[
-        {
-          label: 'Option 1',
-          value: 'option1',
-        },
-        {
-          label: 'Option 2',
-          value: 'option2',
-        },
-        {
-          label: 'Option 3',
-          value: 'option3',
-        },
-      ]"
-      :label="args.label"
-      :disabled="args.disabled"
-      :helper-text="args.helperText"
+      :options="props.options"
+      :label="props.label"
+      :disabled="props.disabled"
+      :helper-text="props.helperText"
     />
     `,
   }),
@@ -206,20 +190,7 @@ export const Unselected: Story = {
 export const Disabled: Story = {
   args: {
     label: 'Disabled',
-    options: [
-      {
-        label: 'Option 1',
-        value: 'option1',
-      },
-      {
-        label: 'Option 2',
-        value: 'option2',
-      },
-      {
-        label: 'Option 3',
-        value: 'option3',
-      },
-    ],
+    options,
   },
   argTypes: {
     disabled: {
@@ -232,18 +203,18 @@ export const Disabled: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSRadioInput
-      :class="args.class"
+      :class="props.class"
       disabled
-      :modelValue="args.modelValue"
-      :options="args.options"
-      :label="args.label"
+      :modelValue="props.modelValue"
+      :options="props.options"
+      :label="props.label"
       disabled
-      :helper-text="args.helperText"
+      :helper-text="props.helperText"
     />
     `,
   }),
