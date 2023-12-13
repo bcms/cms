@@ -6,27 +6,26 @@ import BCMSToggleInput from './Index.tsx';
 const meta: Meta<typeof BCMSToggleInput> = {
   title: 'Components/Inputs/Toggle',
   component: BCMSToggleInput,
-  // tags: ['autodocs'],
   render: (args) => ({
     components: {
       BCMSToggleInputPreview,
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
       <BCMSToggleInputPreview
-        :class="args.class"
-        :value="args.value"
-        :label="args.label"
-        :disabled="args.disabled"
-        :states="args.states"
-        :helper-text="args.helperText"
-        @input="args.value = !args.value"
-        />
-        `,
+        :class="props.class"
+        :value="props.value"
+        :label="props.label"
+        :disabled="props.disabled"
+        :states="props.states"
+        :helper-text="props.helperText"
+        @input="props.value = !props.value"
+      />
+    `,
   }),
   args: {
     states: ['On', 'Off'],
@@ -34,21 +33,27 @@ const meta: Meta<typeof BCMSToggleInput> = {
   argTypes: {
     value: {
       control: 'boolean',
+      description: 'true/false',
     },
     class: {
       control: 'text',
+      description: 'TailwindCSS or custom CSS classes',
     },
     label: {
       control: 'text',
+      description: 'Toggle label',
     },
     disabled: {
       control: 'boolean',
+      description: 'Disable toggle interaction',
     },
     states: {
       control: 'object',
+      description: 'Toggle state labels',
     },
     helperText: {
       control: 'text',
+      description: 'Helper text',
     },
   },
 };
@@ -56,7 +61,7 @@ const meta: Meta<typeof BCMSToggleInput> = {
 export default meta;
 type Story = StoryObj<typeof BCMSToggleInput>;
 
-export const Playground: Story = {
+export const Preview: Story = {
   parameters: {
     docs: {
       source: {
@@ -105,17 +110,17 @@ export const Checked: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSToggleInput
-      :class="args.class"
+      :class="props.class"
       value
-      :label="args.label"
-      :disabled="args.disabled"
-      :states="args.states"
-      :helper-text="args.helperText"
+      :label="props.label"
+      :disabled="props.disabled"
+      :states="props.states"
+      :helper-text="props.helperText"
     />
     `,
   }),
@@ -136,17 +141,17 @@ export const Unchecked: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSToggleInput
-      :class="args.class"
+      :class="props.class"
       :value="false"
-      :label="args.label"
-      :disabled="args.disabled"
-      :states="args.states"
-      :helper-text="args.helperText"
+      :label="props.label"
+      :disabled="props.disabled"
+      :states="props.states"
+      :helper-text="props.helperText"
     />
     `,
   }),
@@ -167,17 +172,17 @@ export const Disabled: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSToggleInput
-      :class="args.class"
-      :value="args.value"
-      :label="args.label"
+      :class="props.class"
+      :value="props.value"
+      :label="props.label"
       disabled
-      :states="args.states"
-      :helper-text="args.helperText"
+      :states="props.states"
+      :helper-text="props.helperText"
     />
     `,
   }),
