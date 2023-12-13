@@ -6,50 +6,56 @@ import BCMSNumberInput from './Index.tsx';
 const meta: Meta<typeof BCMSNumberInput> = {
   title: 'Components/Inputs/Number',
   component: BCMSNumberInput,
-  // tags: ['autodocs'],
   render: (args) => ({
     components: {
       BCMSNumberInputPreview,
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
       <BCMSNumberInputPreview
-        :class="args.class"
-        :value="args.value"
-        :placeholder="args.placeholder"
-        :label="args.label"
-        :invalid-text="args.invalidText"
-        :disabled="args.disabled"
-        :helper-text="args.helperText"
-        @input="($event) => args.value = $event.value"
+        :class="props.class"
+        :value="props.value"
+        :placeholder="props.placeholder"
+        :label="props.label"
+        :invalid-text="props.invalidText"
+        :disabled="props.disabled"
+        :helper-text="props.helperText"
+        @input="($event) => props.value = $event.value"
       />
     `,
   }),
   argTypes: {
     value: {
       control: 'number',
+      description: 'Number',
     },
     class: {
       control: 'text',
+      description: 'TailwindCSS or custom CSS classes',
     },
     placeholder: {
       control: 'text',
+      description: 'Placeholder text',
     },
     label: {
       control: 'text',
+      description: 'Number label',
     },
     invalidText: {
       control: 'text',
+      description: 'Error text',
     },
     disabled: {
       control: 'boolean',
+      description: 'Disable checkbox interaction',
     },
     helperText: {
       control: 'text',
+      description: 'Helper text',
     },
   },
 };
@@ -57,7 +63,7 @@ const meta: Meta<typeof BCMSNumberInput> = {
 export default meta;
 type Story = StoryObj<typeof BCMSNumberInput>;
 
-export const Playground: Story = {
+export const Preview: Story = {
   parameters: {
     docs: {
       source: {
@@ -96,7 +102,6 @@ export const Playground: Story = {
 export const Disabled: Story = {
   args: {
     label: 'Disabled',
-    disabled: true,
   },
   argTypes: {
     disabled: {
@@ -109,19 +114,19 @@ export const Disabled: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSNumberInput
-      :class="args.class"
-      :value="args.value"
-      :placeholder="args.placeholder"
-      :label="args.label"
-      :invalid-text="args.invalidText"
-      :disabled="args.disabled"
-      :helper-text="args.helperText"
-      @input="args.value = $event"
+      :class="props.class"
+      :value="props.value"
+      :placeholder="props.placeholder"
+      :label="props.label"
+      :invalid-text="props.invalidText"
+      disabled
+      :helper-text="props.helperText"
+      @input="props.value = $event"
     />
     `,
   }),
@@ -142,19 +147,19 @@ export const Error: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSNumberInput
-      :class="args.class"
-      :value="args.value"
-      :placeholder="args.placeholder"
-      :label="args.label"
-      :invalid-text="args.invalidText"
-      :disabled="args.disabled"
-      :helper-text="args.helperText"
-      @input="args.value = $event"
+      :class="props.class"
+      :value="props.value"
+      :placeholder="props.placeholder"
+      :label="props.label"
+      :invalid-text="props.invalidText"
+      :disabled="props.disabled"
+      :helper-text="props.helperText"
+      @input="props.value = $event"
     />
     `,
   }),
