@@ -6,7 +6,6 @@ import BCMSDateInput from './Index.tsx';
 const meta: Meta<typeof BCMSDateInput> = {
   title: 'Components/Inputs/Date',
   component: BCMSDateInput,
-  // tags: ['autodocs'],
   render: (args) => ({
     components: {
       BCMSDateInputPreview,
@@ -35,24 +34,31 @@ const meta: Meta<typeof BCMSDateInput> = {
   argTypes: {
     value: {
       control: 'number',
+      description: 'Timestamp',
     },
     class: {
       control: 'text',
+      description: 'TailwindCSS or custom CSS classes',
     },
     label: {
       control: 'text',
+      description: 'Date label',
     },
     invalidText: {
       control: 'text',
+      description: 'Error text',
     },
     disabled: {
       control: 'boolean',
+      description: 'Disable date interaction',
     },
     includeTime: {
       control: false,
+      description: 'Include time input',
     },
     helperText: {
       control: 'text',
+      description: 'Helper text',
     },
   },
 };
@@ -60,7 +66,7 @@ const meta: Meta<typeof BCMSDateInput> = {
 export default meta;
 type Story = StoryObj<typeof BCMSDateInput>;
 
-export const Playground: Story = {
+export const Preview: Story = {
   parameters: {
     docs: {
       source: {
@@ -99,7 +105,6 @@ export const Playground: Story = {
 export const Disabled: Story = {
   args: {
     label: 'Disabled',
-    disabled: true,
   },
   argTypes: {
     disabled: {
@@ -121,7 +126,7 @@ export const Disabled: Story = {
       :value="args.value"
       :label="args.label"
       :invalid-text="args.invalidText"
-      :disabled="args.disabled"
+      disabled
       :include-time="args.includeTime"
       :helper-text="args.helperText"
       @input="args.value = $event"
