@@ -12,7 +12,7 @@ const component = defineComponent({
     states: Object as PropType<[string, string]>,
     helperText: String,
   },
-  setup(props) {
+  setup(props, ctx) {
     return () => {
       return (
         <div className="flex items-end flex-wrap justify-between gap-10 p-4">
@@ -23,7 +23,10 @@ const component = defineComponent({
             disabled={props.disabled}
             states={props.states}
             helper-text={props.helperText}
-            onInput={action('input')}
+            onInput={() => {
+              ctx.emit('input');
+              action('input');
+            }}
           />
           <BCMSToggleInput value />
           <BCMSToggleInput value label="Label" />
