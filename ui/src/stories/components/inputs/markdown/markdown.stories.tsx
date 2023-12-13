@@ -41,7 +41,7 @@ const meta: Meta<typeof BCMSMarkdownInput> = {
     },
     placeholder: {
       control: 'text',
-      description: 'Markdown placeholder',
+      description: 'Placeholder text',
     },
     label: {
       control: 'text',

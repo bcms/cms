@@ -8,27 +8,26 @@ const value = ['Option 1', 'Option 2'];
 const meta: Meta<typeof BCMSMultiAddInput> = {
   title: 'Components/Inputs/Multi Add',
   component: BCMSMultiAddInput,
-  // tags: ['autodocs'],
   render: (args) => ({
     components: {
       BCMSMultiAddInputPreview,
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
       <BCMSMultiAddInputPreview
-        :class="args.class"
-        :label="args.label"
-        :value="args.value"
-        :placeholder="args.placeholder"
-        :invalid-text="args.invalidText"
-        :helper-text="args.helperText"
-        :disabled="args.disabled"
-        :format="args.format"
-        :validate="args.validate"
+        :class="props.class"
+        :label="props.label"
+        :value="props.value"
+        :placeholder="props.placeholder"
+        :invalid-text="props.invalidText"
+        :helper-text="props.helperText"
+        :disabled="props.disabled"
+        :format="props.format"
+        :validate="props.validate"
       />
     `,
   }),
@@ -38,30 +37,41 @@ const meta: Meta<typeof BCMSMultiAddInput> = {
   argTypes: {
     class: {
       control: 'text',
+      description: 'TailwindCSS or custom CSS classes',
     },
     label: {
       control: 'text',
+      description: 'Multi Add label',
     },
     value: {
       control: 'object',
+      description: 'Array of strings',
     },
     placeholder: {
       control: 'text',
+      description: 'Placeholder text',
     },
     invalidText: {
       control: 'text',
+      description: 'Error text',
     },
     helperText: {
       control: 'text',
+      description: 'Helper text',
     },
     disabled: {
       control: 'boolean',
+      description: 'Disable multi add interaction',
     },
     format: {
       control: false,
+      description:
+        'Function to modify the value before it is added to the list',
     },
     validate: {
       control: false,
+      description:
+        'Function to validate all values before adding a new one to the list',
     },
   },
 };
@@ -69,7 +79,7 @@ const meta: Meta<typeof BCMSMultiAddInput> = {
 export default meta;
 type Story = StoryObj<typeof BCMSMultiAddInput>;
 
-export const Playground: Story = {
+export const Preview: Story = {
   parameters: {
     docs: {
       source: {
@@ -125,20 +135,20 @@ export const Disabled: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSMultiAddInput
-      :class="args.class"
-      :label="args.label"
-      :value="args.value"
-      :placeholder="args.placeholder"
-      :invalid-text="args.invalidText"
-      :helper-text="args.helperText"
+      :class="props.class"
+      :label="props.label"
+      :value="props.value"
+      :placeholder="props.placeholder"
+      :invalid-text="props.invalidText"
+      :helper-text="props.helperText"
       disabled
-      :format="args.format"
-      :validate="args.validate"
+      :format="props.format"
+      :validate="props.validate"
     />
     `,
   }),
@@ -160,20 +170,20 @@ export const Error: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSMultiAddInput
-      :class="args.class"
-      :label="args.label"
-      :value="args.value"
-      :placeholder="args.placeholder"
+      :class="props.class"
+      :label="props.label"
+      :value="props.value"
+      :placeholder="props.placeholder"
       invalid-text="Error text"
-      :helper-text="args.helperText"
-      :disabled="args.disabled"
-      :format="args.format"
-      :validate="args.validate"
+      :helper-text="props.helperText"
+      :disabled="props.disabled"
+      :format="props.format"
+      :validate="props.validate"
     />
     `,
   }),
