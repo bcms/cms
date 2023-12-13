@@ -3,5 +3,31 @@ import * as OverflowMenuStories from './overflow-menu.stories';
 
 <Meta of={OverflowMenuStories} />
 <Title of={OverflowMenuStories} />
-<Canvas of={OverflowMenuStories.Playground} />
-<Controls of={OverflowMenuStories.Playground} />
+
+Overflow menu is used to provide an overflowing menu with a list of actions.
+
+Use as many <code class="text-green">BCMSOverflowMenuItem</code> as a default slot's value to define a menu item
+that is passed as a default slot.
+
+Example:
+
+```tsx
+<BCMSOverflowMenu>
+  <BCMSOverflowMenuItem
+    text="Edit"
+    icon="edit"
+    description="Edit description"
+    onClick={() => {}}
+  />
+  <BCMSOverflowMenuItem text="Notifications" icon="bell" onClick={() => {}} />
+  <BCMSOverflowMenuItem
+    text="Remove"
+    icon="trash"
+    theme="danger"
+    onClick={() => {}}
+  />
+</BCMSOverflowMenu>
+```
+
+<Canvas of={OverflowMenuStories.Preview} />
+<Controls of={OverflowMenuStories.Preview} />

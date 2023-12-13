@@ -1,0 +1,30 @@
+import { Meta, Title, Controls, Canvas } from '@storybook/blocks';
+import * as OverflowMenuItemStories from './overflow-menu-item.stories';
+
+<Meta of={OverflowMenuItemStories} />
+<Title of={OverflowMenuItemStories} />
+
+Overflow menu item is used as the main slot's value for the <code class="text-green">BCMSOverflowMenu</code>.
+
+Example:
+
+```tsx
+<BCMSOverflowMenu>
+  <BCMSOverflowMenuItem
+    text="Edit"
+    icon="edit"
+    description="Edit description"
+    onClick={() => {}}
+  />
+  <BCMSOverflowMenuItem text="Notifications" icon="bell" onClick={() => {}} />
+  <BCMSOverflowMenuItem
+    text="Remove"
+    icon="trash"
+    theme="danger"
+    onClick={() => {}}
+  />
+</BCMSOverflowMenu>
+```
+
+<Canvas of={OverflowMenuItemStories.Preview} />
+<Controls of={OverflowMenuItemStories.Preview} />

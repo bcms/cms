@@ -32,6 +32,18 @@ const component = defineComponent({
             <BCMSOverflowMenuItem
               text="Edit"
               icon="edit"
+              description="Edit description"
+              onClick={action('click')}
+            />
+            <BCMSOverflowMenuItem
+              text="Notifications"
+              icon="bell"
+              onClick={action('click')}
+            />
+            <BCMSOverflowMenuItem
+              text="Remove"
+              icon="trash"
+              theme="danger"
               onClick={action('click')}
             />
             {ctx.slots.default ? ctx.slots.default() : ''}
