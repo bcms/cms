@@ -6,50 +6,56 @@ import BCMSCheckboxInput from './Index.tsx';
 const meta: Meta<typeof BCMSCheckboxInput> = {
   title: 'Components/Inputs/Checkbox',
   component: BCMSCheckboxInput,
-  // tags: ['autodocs'],
   render: (args) => ({
     components: {
       BCMSCheckboxInputPreview,
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
       <BCMSCheckboxInputPreview
-        :class="args.class"
-        :value="args.value"
-        :label="args.label"
-        :invalid-text="args.invalidText"
-        :disabled="args.disabled"
-        :helper-text="args.helperText"
-        :description="args.description"
-        @input="args.value = !args.value"
+        :class="props.class"
+        :value="props.value"
+        :label="props.label"
+        :invalid-text="props.invalidText"
+        :disabled="props.disabled"
+        :helper-text="props.helperText"
+        :description="props.description"
+        @input="props.value = !props.value"
       />
     `,
   }),
   argTypes: {
     value: {
       control: 'boolean',
+      description: 'true/false',
     },
     class: {
       control: 'text',
+      description: 'TailwindCSS or custom CSS classes',
     },
     label: {
       control: 'text',
+      description: 'Checkbox label',
     },
     invalidText: {
       control: 'text',
+      description: 'Error text',
     },
     disabled: {
       control: 'boolean',
+      description: 'Disable checkbox interaction',
     },
     helperText: {
       control: 'text',
+      description: 'Helper text',
     },
     description: {
       control: 'text',
+      description: 'Description text',
     },
   },
 };
@@ -57,7 +63,7 @@ const meta: Meta<typeof BCMSCheckboxInput> = {
 export default meta;
 type Story = StoryObj<typeof BCMSCheckboxInput>;
 
-export const Playground: Story = {
+export const Preview: Story = {
   parameters: {
     docs: {
       source: {
@@ -108,18 +114,18 @@ export const Checked: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSCheckboxInput
-      :class="args.class"
+      :class="props.class"
       value
-      :label="args.label"
-      :invalid-text="args.invalidText"
-      :disabled="args.disabled"
-      :helper-text="args.helperText"
-      :description="args.description"
+      :label="props.label"
+      :invalid-text="props.invalidText"
+      :disabled="props.disabled"
+      :helper-text="props.helperText"
+      :description="props.description"
     />
     `,
   }),
@@ -140,18 +146,18 @@ export const Unchecked: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSCheckboxInput
-      :class="args.class"
+      :class="props.class"
       :value="false"
-      :label="args.label"
-      :invalid-text="args.invalidText"
-      :disabled="args.disabled"
-      :helper-text="args.helperText"
-      :description="args.description"
+      :label="props.label"
+      :invalid-text="props.invalidText"
+      :disabled="props.disabled"
+      :helper-text="props.helperText"
+      :description="props.description"
     />
     `,
   }),
@@ -172,18 +178,18 @@ export const Disabled: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSCheckboxInput
-      :class="args.class"
-      :value="args.value"
-      :label="args.label"
-      :invalid-text="args.invalidText"
+      :class="props.class"
+      :value="props.value"
+      :label="props.label"
+      :invalid-text="props.invalidText"
       disabled
-      :helper-text="args.helperText"
-      :description="args.description"
+      :helper-text="props.helperText"
+      :description="props.description"
     />
     `,
   }),
@@ -204,19 +210,19 @@ export const Error: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSCheckboxInput
-      :class="args.class"
-      :value="args.value"
-      :label="args.label"
-      :invalid-text="args.invalidText"
-      :disabled="args.disabled"
-      :helper-text="args.helperText"
-      :description="args.description"
-      @input="args.value = !args.value"
+      :class="props.class"
+      :value="props.value"
+      :label="props.label"
+      :invalid-text="props.invalidText"
+      :disabled="props.disabled"
+      :helper-text="props.helperText"
+      :description="props.description"
+      @input="props.value = !props.value"
     />
     `,
   }),

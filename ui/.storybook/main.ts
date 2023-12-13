@@ -12,9 +12,6 @@ const config: StorybookConfig = {
     name: '@storybook/vue3-vite',
     options: {},
   },
-  // docs: {
-  //   autodocs: 'tag',
-  // },
 };
 
 export default config;

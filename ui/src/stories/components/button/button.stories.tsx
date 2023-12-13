@@ -51,7 +51,7 @@ const meta: Meta<typeof BCMSButtonPreview> = {
     },
     disabled: {
       control: 'boolean',
-      description: 'Disable button',
+      description: 'Disable button interaction',
     },
     size: {
       control: 'select',
