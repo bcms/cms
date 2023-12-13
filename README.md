@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="assets/readme/bcms-preview.webp" alt="Interface Animation"  width="800px" height="506px" />  
+  <img src="assets/readme/bcms-preview.webp" alt="Interface Animation"  width="800px" />  
 </div>
 
 <h2 align="center">
