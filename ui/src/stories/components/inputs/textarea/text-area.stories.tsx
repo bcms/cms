@@ -6,53 +6,60 @@ import BCMSTextAreaInput from './Index.tsx';
 const meta: Meta<typeof BCMSTextAreaInput> = {
   title: 'Components/Inputs/Text Area',
   component: BCMSTextAreaInput,
-  // tags: ['autodocs'],
   render: (args) => ({
     components: {
       BCMSTextAreaInputPreview,
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
       <BCMSTextAreaInputPreview
-        :class="args.class"
-        :value="args.value"
-        :placeholder="args.placeholder"
-        :label="args.label"
-        :invalid-text="args.invalidText"
-        :disabled="args.disabled"
-        :helper-text="args.helperText"
-        @input="($event) => args.value = $event.value"
+        :class="props.class"
+        :value="props.value"
+        :placeholder="props.placeholder"
+        :label="props.label"
+        :invalid-text="props.invalidText"
+        :disabled="props.disabled"
+        :helper-text="props.helperText"
+        @input="($event) => props.value = $event.value"
       />
     `,
   }),
   argTypes: {
     value: {
       control: 'text',
+      description: 'Text',
     },
     class: {
       control: 'text',
+      description: 'TailwindCSS or custom CSS classes',
     },
     placeholder: {
       control: 'text',
+      description: 'Placeholder text',
     },
     label: {
       control: 'text',
+      description: 'Textarea label',
     },
     invalidText: {
       control: 'text',
+      description: 'Error text',
     },
     disabled: {
       control: 'boolean',
+      description: 'Disable textarea interaction',
     },
     helperText: {
       control: 'text',
+      description: 'Helper text',
     },
     format: {
       control: 'object',
+      description: 'Function to modify the value before it is emitted.',
     },
   },
 };
@@ -60,7 +67,7 @@ const meta: Meta<typeof BCMSTextAreaInput> = {
 export default meta;
 type Story = StoryObj<typeof BCMSTextAreaInput>;
 
-export const Playground: Story = {
+export const Preview: Story = {
   parameters: {
     docs: {
       source: {
@@ -99,7 +106,6 @@ export const Playground: Story = {
 export const Disabled: Story = {
   args: {
     label: 'Disabled',
-    disabled: true,
   },
   argTypes: {
     disabled: {
@@ -112,19 +118,19 @@ export const Disabled: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSTextAreaInput
-      :class="args.class"
-      :value="args.value"
-      :placeholder="args.placeholder"
-      :label="args.label"
-      :invalid-text="args.invalidText"
-      :disabled="args.disabled"
-      :helper-text="args.helperText"
-      @input="args.value = $event"
+      :class="props.class"
+      :value="props.value"
+      :placeholder="props.placeholder"
+      :label="props.label"
+      :invalid-text="props.invalidText"
+      disabled
+      :helper-text="props.helperText"
+      @input="props.value = $event"
     />
     `,
   }),
@@ -145,19 +151,19 @@ export const Error: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSTextAreaInput
-      :class="args.class"
-      :value="args.value"
-      :placeholder="args.placeholder"
-      :label="args.label"
-      :invalid-text="args.invalidText"
-      :disabled="args.disabled"
-      :helper-text="args.helperText"
-      @input="args.value = $event"
+      :class="props.class"
+      :value="props.value"
+      :placeholder="props.placeholder"
+      :label="props.label"
+      :invalid-text="props.invalidText"
+      :disabled="props.disabled"
+      :helper-text="props.helperText"
+      @input="props.value = $event"
     />
     `,
   }),
