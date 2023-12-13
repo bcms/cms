@@ -6,58 +6,66 @@ import BCMSMarkdownInput from './Index.tsx';
 const meta: Meta<typeof BCMSMarkdownInput> = {
   title: 'Components/Inputs/Markdown',
   component: BCMSMarkdownInput,
-  // tags: ['autodocs'],
   render: (args) => ({
     components: {
       BCMSMarkdownInputPreview,
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
       <BCMSMarkdownInputPreview
-        :class="args.class"
-        :value="args.value"
-        :placeholder="args.placeholder"
-        :label="args.label"
-        :invalid-text="args.invalidText"
-        :helper-text="args.helperText"
-        :disabled="args.disabled"
-        :min-height="args.minHeight"
-        :additional-helper-slot="args.additionalHelperSlot"
-        @input="($event) => args.value = $event.value"
+        :class="props.class"
+        :value="props.value"
+        :placeholder="props.placeholder"
+        :label="props.label"
+        :invalid-text="props.invalidText"
+        :helper-text="props.helperText"
+        :disabled="props.disabled"
+        :min-height="props.minHeight"
+        :additional-helper-slot="props.additionalHelperSlot"
+        @input="($event) => props.value = $event.value"
       />
     `,
   }),
   argTypes: {
     value: {
       control: 'text',
+      description: 'Markdown text',
     },
     class: {
       control: 'text',
+      description: 'TailwindCSS or custom CSS classes',
     },
     placeholder: {
       control: 'text',
+      description: 'Markdown placeholder',
     },
     label: {
       control: 'text',
+      description: 'Markdown label',
     },
     invalidText: {
       control: 'text',
+      description: 'Error text',
     },
     helperText: {
       control: 'text',
+      description: 'Helper text',
     },
     disabled: {
       control: 'boolean',
+      description: 'Disable markdown interaction',
     },
     minHeight: {
       control: 'number',
+      description: 'Minimum height',
     },
     additionalHelperSlot: {
       control: 'text',
+      description: 'Additional helper text',
     },
   },
 };
@@ -65,7 +73,7 @@ const meta: Meta<typeof BCMSMarkdownInput> = {
 export default meta;
 type Story = StoryObj<typeof BCMSMarkdownInput>;
 
-export const Playground: Story = {
+export const Preview: Story = {
   parameters: {
     docs: {
       source: {
@@ -108,7 +116,6 @@ export const Playground: Story = {
 export const Disabled: Story = {
   args: {
     label: 'Disabled',
-    disabled: true,
   },
   argTypes: {
     disabled: {
@@ -121,21 +128,21 @@ export const Disabled: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSMarkdownInput
-      :class="args.class"
-      :value="args.value"
-      :placeholder="args.placeholder"
-      :label="args.label"
-      :invalid-text="args.invalidText"
-      :helper-text="args.helperText"
-      :disabled="args.disabled"
-      :min-height="args.minHeight"
-      :additional-helper-slot="args.additionalHelperSlot"
-      @input="($event) => args.value = $event.value"
+      :class="props.class"
+      :value="props.value"
+      :placeholder="props.placeholder"
+      :label="props.label"
+      :invalid-text="props.invalidText"
+      :helper-text="props.helperText"
+      disabled
+      :min-height="props.minHeight"
+      :additional-helper-slot="props.additionalHelperSlot"
+      @input="($event) => props.value = $event.value"
     />
     `,
   }),
@@ -156,21 +163,21 @@ export const Error: Story = {
     },
     setup() {
       return {
-        args,
+        props: args,
       };
     },
     template: `
     <BCMSMarkdownInput
-      :class="args.class"
-      :value="args.value"
-      :placeholder="args.placeholder"
-      :label="args.label"
-      :invalid-text="args.invalidText"
-      :helper-text="args.helperText"
-      :disabled="args.disabled"
-      :min-height="args.minHeight"
-      :additional-helper-slot="args.additionalHelperSlot"
-      @input="($event) => args.value = $event.value"
+      :class="props.class"
+      :value="props.value"
+      :placeholder="props.placeholder"
+      :label="props.label"
+      :invalid-text="props.invalidText"
+      :helper-text="props.helperText"
+      :disabled="props.disabled"
+      :min-height="props.minHeight"
+      :additional-helper-slot="props.additionalHelperSlot"
+      @input="($event) => props.value = $event.value"
     />
     `,
   }),
