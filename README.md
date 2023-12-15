@@ -312,15 +312,35 @@ To get started with BCMS Cloud, please refer to the [BCMS Cloud](https://cloud.t
   Submit a <a href="https://github.com/bcms/cms/issues/new?assignees=&labels=enhancement%2C+feature&template=feature_request.md">feature request</a> or <a href="https://github.com/bcms/cms/issues/new?assignees=&labels=bug&template=bug_report.md">bug report</a><br>
 </p>
 <br><br>
-
 <h2 align="center">Support ❤️</h2>
 <p align="center">
   If you like the project, hit the ⭐ button
 </p>
-<br>
+<br><br>
+<h2 align="center">Code starters 📦</h2>
+<p align="center">
+  Free, beautiful, customizable, responsive, high-performance starters integrated with BCMS. <br />
+  Built with Tailwind CSS and your favorite framework. Ready-to-use. <br /><br />
+  <a href="https://github.com/bcms/starters?tab=readme-ov-file#gatsby-starters"><img src="https://img.shields.io/badge/Gatsby-%23663399.svg?style=for-the-badge&logo=gatsby&logoColor=white" alt="BCMS Gatsby CMS" /></a>
+  <a href="https://github.com/bcms/starters?tab=readme-ov-file#nuxt-starters"><img src="https://img.shields.io/badge/Nuxt-002E3B?style=for-the-badge&logo=nuxtdotjs&logoColor=#00DC82" alt="BCMS Nuxt CMS" /></a>
+  <a href="https://github.com/bcms/starters?tab=readme-ov-file#nextjs-starters"><img src="https://img.shields.io/badge/Next-white?style=for-the-badge&logo=next.js&logoColor=black" alt="BCMS Next CMS" /></a>
+  <a href="https://github.com/bcms/starters?tab=readme-ov-file#sveltekit-starters"><img src="https://img.shields.io/badge/sveltekit-f1413d.svg?style=for-the-badge&logo=svelte&logoColor=white" alt="BCMS SvelteKit CMS" /></a>
+  <a href="https://github.com/bcms/starters?tab=readme-ov-file#astrojs-starters"><img src="https://img.shields.io/badge/astro-212227.svg?style=for-the-badge&logo=astro&logoColor=white" alt="BCMS Astro.js CMS" /></a>
+</p>
+<div align="center">
+  <a href="https://github.com/bcms/starters">
+    See all BCMS starters
+  </a>
+</div>
+<div align="center">
+  <a href="https://github.com/bcms/starters">
+    <img alt="BCMS code starters" width="480" align="center" src="https://github.com/bcms/cms/assets/15079459/0e110c1f-c2f1-4806-9218-6641d2ef76bb" />
+  </a>
+</div>
+<br><br>
 <h2 align="center">Stay in touch 🌐</h2>
 <p align="center">
-  <a href="https://twitter.com/thebcms">Follow on X (twitter)</a><br>
+  <a href="https://twitter.com/thebcms">Follow on X (Twitter)</a><br>
   <a href="https://www.linkedin.com/company/thebcms/">Follow on LinkedIn</a><br>
   <a href="https://discord.gg/Rr4kTKpU">Join us on Discord</a><br>
 </p>
