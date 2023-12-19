@@ -70,7 +70,7 @@ To get started with BCMS Cloud, please refer to the [BCMS Cloud](https://cloud.t
       <td>
         <strong>🧱 NGINX Configuration</strong><br />
         You don't need to be a DevOps genius; BCMS has got your back.<br />
-        <a href="https://docs.thebcms.com/customization/nginx" rel="nofollow"
+        <a href="https://docs.thebcms.com/cloud/nginx" rel="nofollow"
           >NGINX docs</a
         >
       </td>
