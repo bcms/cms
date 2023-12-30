@@ -9,7 +9,7 @@
   BCMS is an open-source, self-hostable Headless CMS. Built with Node.js, MongoDB, Vue 3, and Tailwind. <br>
   Design your content structure without leaving the browser. <br> Consume content via APIs. Works nicely with Next.js, Nuxt.js & Gatsby.js.<br>
 </p>
-<p align="center">🌐 <a href="https://thebcms.com">Website</a> · 📚 <a href="https://docs.thebcms.com">Documentation</a> · 💻 <a href="https://cloud.thebcms.com/">Demo</a> · 💬 <a href="https://discord.gg/Rr4kTKpU">Discord</a> · 🤓 <a href="https://github.com/bcms/starters">Code starters</a><p>
+<p align="center">🌐 <a href="https://thebcms.com">Website</a> · 📚 <a href="https://docs.thebcms.com">Documentation</a> · 💻 <a href="https://cloud.thebcms.com/">Demo</a> · 💬 <a href="https://discord.gg/SYBY89ccaR">Discord</a> · 🤓 <a href="https://github.com/bcms/starters">Code starters</a><p>
 <br />
 <!--
 [![NPM Version][npm-image-ui]][npm-url-ui]
