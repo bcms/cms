@@ -223,7 +223,7 @@ export class BCMSTypeConverter {
             additional.push(
               [
                 '',
-                '#[derive(Serialize, Deserialize, Debug)]',
+                '#[derive(Serialize, Deserialize, Debug, Clone)]',
                 '#[allow(non_camel_case_types)]',
                 `enum ${toCamelCase(prop.name)}Type {`,
                 ...outputTypes.map((type) => {
@@ -706,7 +706,7 @@ export class BCMSTypeConverter {
             output[`enum/${target.name}.rs`] = [
               'use serde::{Deserialize, Serialize};',
               '',
-              '#[derive(Serialize, Deserialize, Debug)]',
+              '#[derive(Serialize, Deserialize, Debug, Clone)]',
               '#[allow(non_camel_case_types)]',
               `pub enum ${baseName} {`,
               ...target.enumItems.map((e) => `    ${e}(String),`),
@@ -714,7 +714,7 @@ export class BCMSTypeConverter {
             ].join('\n');
             output[`enum/${target.name}.rs`] += [
               '\n',
-              '#[derive(Serialize, Deserialize, Debug)]',
+              '#[derive(Serialize, Deserialize, Debug, Clone)]',
               '#[allow(non_camel_case_types)]',
               `pub struct ${baseName}Type {`,
               `    pub items: Vec<${baseName}>,`,
@@ -744,7 +744,7 @@ export class BCMSTypeConverter {
               ];
               additional = [
                 '',
-                '#[derive(Serialize, Deserialize, Debug)]',
+                '#[derive(Serialize, Deserialize, Debug, Clone)]',
                 '#[allow(non_snake_case)]',
                 `pub struct ${interfaceName}MetaItem {`,
                 ...result.props.map(
@@ -753,7 +753,7 @@ export class BCMSTypeConverter {
                 ),
                 '}',
                 '',
-                '#[derive(Serialize, Deserialize, Debug)]',
+                '#[derive(Serialize, Deserialize, Debug, Clone)]',
                 '#[allow(non_snake_case)]',
                 `pub struct ${interfaceName}Meta {`,
                 ...languages.map(
@@ -777,7 +777,7 @@ export class BCMSTypeConverter {
               ...result.additional,
               ...additional,
               '',
-              '#[derive(Serialize, Deserialize, Debug)]',
+              '#[derive(Serialize, Deserialize, Debug, Clone)]',
               '#[allow(non_snake_case)]',
               `pub ${target.type === 'enum' ? 'enum' : 'struct'} ${toCamelCase(
                 target.name + '_' + target.type,
@@ -804,7 +804,7 @@ export class BCMSTypeConverter {
     output['media.rs'] = [
       'use serde::{Deserialize, Serialize};',
       '',
-      '#[derive(Serialize, Deserialize, Debug)]',
+      '#[derive(Serialize, Deserialize, Debug, Clone)]',
       '#[allow(non_snake_case)]',
       'pub struct BCMSMediaParsed {',
       '    pub src: String,',
@@ -820,13 +820,13 @@ export class BCMSTypeConverter {
     output['content.rs'] = [
       'use serde::{Deserialize, Serialize};',
       '',
-      '#[derive(Serialize, Deserialize, Debug)]',
+      '#[derive(Serialize, Deserialize, Debug, Clone)]',
       '#[allow(non_snake_case)]',
       'pub struct BCMSEntryContentParsedItemAttrs {',
       '    level: Option<i32>,',
       '}',
       '',
-      '#[derive(Serialize, Deserialize, Debug)]',
+      '#[derive(Serialize, Deserialize, Debug, Clone)]',
       '#[allow(non_snake_case)]',
       'pub struct BCMSEntryContentParsedItem {',
       '    _type: String,',
