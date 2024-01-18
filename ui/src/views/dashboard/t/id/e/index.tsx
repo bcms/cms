@@ -75,7 +75,7 @@ const component = defineComponent({
         const fltr = filters.value as BCMSEntryFilters;
         if (fltr.search.name.length) {
           const searchResult = search({
-            searchTerm: fltr.search.name,
+            searchTerm: fltr.search.name.toLowerCase(),
             set: entriesLite.value.map((entry) => {
               return {
                 id: entry._id,
