@@ -71,6 +71,14 @@ function advancedExec(cmd, options) {
   return output;
 }
 
+async function delay(time) {
+  return await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, time);
+  });
+}
+
 async function main() {
   const cmsCreatePath = path.join(__dirname, "cms-create");
   await advancedExec(`npm i`, {
@@ -87,6 +95,7 @@ async function main() {
     },
     stdio: "inherit",
   }).awaiter;
+  await delay(1000);
   await advancedExec(`npm run post:cms-create:cleanup`, {
     cwd: cmsCreatePath,
     onChunk: (type, chunk) => {
