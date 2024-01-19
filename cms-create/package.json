@@ -5,13 +5,13 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
-    "setup": "npm-tool --setup",
+    "setup": "node node_modules/@banez/npm-tool/bin/npm-tool.js --setup",
     "bundle": "bcms --cms bundle",
     "deploy": "bcms --cms deploy",
     "pull": "bcms --cms pull",
     "db:dump": "bcms --cms dump",
-    "post:cms-create": "npm-tool --post-cms-create",
-    "post:cms-create:cleanup": "npm-tool --post-cms-create-cleanup"
+    "post:cms-create": "node node_modules/@banez/npm-tool/bin/npm-tool.js --post-cms-create",
+    "post:cms-create:cleanup": "node node_modules/@banez/npm-tool/bin/npm-tool.js --post-cms-create-cleanup"
   },
   "author": "Becomes",
   "devDependencies": {
