@@ -5,7 +5,7 @@ const path = require('path');
 const { StringUtility } = require('@becomes/purple-cheetah');
 
 const fs = createFS({
-  base: process.cwd(),
+  base: __dirname,
 });
 
 module.exports = createConfig({
