@@ -36,7 +36,7 @@ To self-host BCMS on DigitalOcean, please refer to the [Self-hosting](https://do
 To get started with BCMS Cloud, please refer to the [BCMS Cloud](https://cloud.thebcms.com/).
 <br><br><br><br>
 <h2 align="center">
-  Features only BCMS have  🦄
+  Features only BCMS has  🦄
 </h2>
 <p align="center">
   Advanced stuff, nicely put together for smooth use.
