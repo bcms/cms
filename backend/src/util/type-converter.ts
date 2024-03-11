@@ -92,7 +92,7 @@ class BCMSImports {
 export class BCMSTypeConverter {
   static async bcmsPropTypeToConvertType(
     prop: BCMSProp,
-    conversionType?: 'js' | 'gql' | 'rust',
+    conversionType?: 'js' | 'gql' | 'rust' | 'golang',
   ): Promise<{ type: string; imports: BCMSImports; additional: string[] }> {
     const cType = conversionType ? conversionType : 'js';
     let output = '';
@@ -111,6 +111,14 @@ export class BCMSTypeConverter {
         } else if (prop.type === BCMSPropType.NUMBER) {
           output = 'f64';
         }
+      } else if (cType === 'golang') {
+        if (prop.type === BCMSPropType.BOOLEAN) {
+          output = 'bool';
+        } else if (prop.type === BCMSPropType.STRING) {
+          output = 'string';
+        } else if (prop.type === BCMSPropType.NUMBER) {
+          output = 'float64';
+        }
       } else {
         output =
           cType === 'js'
@@ -119,58 +127,98 @@ export class BCMSTypeConverter {
       }
     } else if (prop.type === BCMSPropType.COLOR_PICKER) {
       output =
-        cType === 'rust' ? 'String' : cType === 'gql' ? 'String' : 'string';
+        cType === 'rust'
+          ? 'String'
+          : cType === 'golang'
+          ? 'string'
+          : cType === 'gql'
+          ? 'String'
+          : 'string';
     } else if (prop.type === BCMSPropType.DATE) {
-      output = cType === 'rust' ? 'f64' : cType === 'gql' ? 'Float' : 'number';
+      output =
+        cType === 'rust'
+          ? 'f64'
+          : cType === 'golang'
+          ? 'float64'
+          : cType === 'gql'
+          ? 'Float'
+          : 'number';
     } else if (prop.type === BCMSPropType.ENUMERATION) {
       const data = prop.defaultData as BCMSPropEnumData;
-      const key =
-        cType === 'rust'
-          ? `r#enum::${prop.name}::${toCamelCase(prop.name) + 'EnumType'};`
-          : toCamelCase(prop.name) + 'EnumType';
-      output = toCamelCase(prop.name) + 'EnumType';
-      const path = `../enum/${prop.name}`;
-      imports.set(key, path);
-      imports.addMetadata(key, path, {
-        name: prop.name,
-        type: 'enum',
-        enumItems: data.items,
-      });
+      if (cType === 'golang') {
+        output = toCamelCase(prop.name) + 'Enum';
+        const path = `../enum/${prop.name}`;
+        imports.set(output, path);
+        imports.addMetadata(output, path, {
+          name: prop.name,
+          type: 'enum',
+          enumItems: data.items,
+        });
+      } else {
+        const key =
+          cType === 'rust'
+            ? `r#enum::${prop.name}::${toCamelCase(prop.name) + 'EnumType'};`
+            : toCamelCase(prop.name) + 'EnumType';
+        output = toCamelCase(prop.name) + 'EnumType';
+        const path = `../enum/${prop.name}`;
+        imports.set(key, path);
+        imports.addMetadata(key, path, {
+          name: prop.name,
+          type: 'enum',
+          enumItems: data.items,
+        });
+      }
     } else if (prop.type === BCMSPropType.GROUP_POINTER) {
       const data = prop.defaultData as BCMSPropGroupPointerData;
       const group = await BCMSRepo.group.findById(data._id);
       if (group) {
-        output = toCamelCase(group.name) + 'Group';
-        const path = `../group/${group.name}`;
-        const key =
-          cType === 'rust' ? `group::${group.name}::${output};` : output;
-        imports.set(key, path);
-        imports.addMetadata(key, path, {
-          name: group.name,
-          type: 'group',
-          props: group.props,
-        });
+        if (cType === 'golang') {
+          output = toCamelCase(group.name) + 'Group';
+        } else {
+          output = toCamelCase(group.name) + 'Group';
+          const path = `../group/${group.name}`;
+          const key =
+            cType === 'rust' ? `group::${group.name}::${output};` : output;
+          imports.set(key, path);
+          imports.addMetadata(key, path, {
+            name: group.name,
+            type: 'group',
+            props: group.props,
+          });
+        }
       }
     } else if (prop.type === BCMSPropType.MEDIA) {
-      output = 'BCMSMediaParsed';
-      if (cType === 'rust') {
-        imports.set(`media::${output};`, '@becomes/cms-client/types');
+      if (cType === 'golang') {
+        output = 'MediaParsed';
       } else {
-        imports.set(output, '@becomes/cms-client/types');
+        output = 'BCMSMediaParsed';
+        if (cType === 'rust') {
+          imports.set(`media::${output};`, '@becomes/cms-client/types');
+        } else {
+          imports.set(output, '@becomes/cms-client/types');
+        }
       }
     } else if (prop.type === BCMSPropType.RICH_TEXT) {
-      output =
-        cType === 'gql'
-          ? '[BCMSEntryContentParsedItem!]'
-          : cType === 'rust'
-          ? 'Vec<BCMSEntryContentParsedItem>'
-          : 'BCMSPropRichTextDataParsed';
-      imports.set(
-        cType === 'rust' ? 'content::BCMSEntryContentParsedItem;' : output,
-        '@becomes/cms-client/types',
-      );
+      if (cType === 'golang') {
+        output = '[]EntryContentParsedItem';
+      } else {
+        output =
+          cType === 'gql'
+            ? '[BCMSEntryContentParsedItem!]'
+            : cType === 'rust'
+            ? 'Vec<BCMSEntryContentParsedItem>'
+            : 'BCMSPropRichTextDataParsed';
+        imports.set(
+          cType === 'rust' ? 'content::BCMSEntryContentParsedItem;' : output,
+          '@becomes/cms-client/types',
+        );
+      }
     } else if (prop.type === BCMSPropType.TAG) {
-      output = cType === 'gql' ? 'String' : 'string';
+      if (cType === 'golang') {
+        output = 'string';
+      } else {
+        output = cType === 'gql' ? 'String' : 'string';
+      }
     } else if (prop.type === BCMSPropType.ENTRY_POINTER) {
       const data = prop.defaultData as BCMSPropEntryPointerData[];
       const outputTypes: string[] = [];
@@ -178,20 +226,24 @@ export class BCMSTypeConverter {
         const info = data[j];
         const template = await BCMSRepo.template.findById(info.templateId);
         if (template) {
-          outputTypes.push(toCamelCase(template.name) + 'Entry');
-          const path = `../entry/${template.name}`;
-          const key =
-            cType === 'rust'
-              ? `entry::${template.name}::${
-                  outputTypes[outputTypes.length - 1]
-                };`
-              : outputTypes[outputTypes.length - 1];
-          imports.set(key, path);
-          imports.addMetadata(key, path, {
-            name: template.name,
-            type: 'entry',
-            props: template.props,
-          });
+          if (cType === 'golang') {
+            outputTypes.push(toCamelCase(template.name) + 'Entry');
+          } else {
+            outputTypes.push(toCamelCase(template.name) + 'Entry');
+            const path = `../entry/${template.name}`;
+            const key =
+              cType === 'rust'
+                ? `entry::${template.name}::${
+                    outputTypes[outputTypes.length - 1]
+                  };`
+                : outputTypes[outputTypes.length - 1];
+            imports.set(key, path);
+            imports.addMetadata(key, path, {
+              name: template.name,
+              type: 'entry',
+              props: template.props,
+            });
+          }
         }
       }
       if (outputTypes.length > 0) {
@@ -247,6 +299,8 @@ export class BCMSTypeConverter {
           ? `[${output}]`
           : cType === 'rust'
           ? `Vec<${output}>`
+          : cType === 'golang'
+          ? `[]${output}`
           : `Array<${output}>`
         : output,
       additional,
@@ -259,7 +313,7 @@ export class BCMSTypeConverter {
     converterType,
   }: {
     props: BCMSProp[];
-    converterType?: 'js' | 'gql' | 'rust';
+    converterType?: 'js' | 'gql' | 'rust' | 'golang';
   }): Promise<BCMSTypeConverterPropsResult> {
     const output: BCMSTypeConverterPropsResult = {
       imports: new BCMSImports(),
@@ -374,7 +428,6 @@ export class BCMSTypeConverter {
               ...typescriptProps,
               '}',
             ].join('\n');
-
             const importsState = result.imports.state;
             for (const path in importsState) {
               if (!path.startsWith('@becomes')) {
@@ -408,7 +461,6 @@ export class BCMSTypeConverter {
     const parsedItems: {
       [name: string]: boolean;
     } = {};
-
     while (loop) {
       const target = data.pop();
       if (!target) {
@@ -452,7 +504,6 @@ export class BCMSTypeConverter {
                 ),
                 ' *            }} content',
               ];
-
               result.imports.set(
                 'BCMSEntryContentParsed',
                 '@becomes/cms-client/types',
@@ -540,7 +591,6 @@ export class BCMSTypeConverter {
             let mainObjectProps: string[] = [];
             let metaObject = '';
             let metaItem = '';
-
             if (target.type === 'entry') {
               const languages = await BCMSRepo.language.findAll();
               metaItem = [
@@ -588,7 +638,6 @@ export class BCMSTypeConverter {
               ...mainObjectProps,
               '}',
             ].join('\n');
-
             const importsState = result.imports.state;
             for (const path in importsState) {
               if (!path.startsWith('@becomes')) {
@@ -785,7 +834,6 @@ export class BCMSTypeConverter {
               ...rustProps,
               '}',
             ].join('\n');
-
             const importsState = result.imports.state;
             for (const path in importsState) {
               if (!path.startsWith('@becomes')) {
@@ -849,6 +897,194 @@ export class BCMSTypeConverter {
         output[key] += `pub mod ${parts[1].replace('.rs', '')};\n`;
       }
     }
+    return Object.keys(output).map((outputFile) => {
+      return {
+        outputFile,
+        content: output[outputFile],
+      };
+    });
+  }
+
+  static async golang(
+    data: BCMSTypeConverterTarget[],
+  ): Promise<BCMSTypeConverterResultItem[]> {
+    const output: {
+      [outputFile: string]: string;
+    } = {};
+    let loop = true;
+    const parsedItems: {
+      [name: string]: boolean;
+    } = {};
+    const languages = await BCMSRepo.language.findAll();
+    while (loop) {
+      const target = data.pop();
+      if (!target) {
+        loop = false;
+      } else {
+        if (!output[`${target.type}/${target.name}.go`]) {
+          if (target.type === 'enum' && target.enumItems) {
+            const baseName = `${toCamelCase(target.name)}Enum`;
+            output[`enum/${target.name}.go`] = [
+              `package bcms`,
+              '',
+              `type ${baseName} = string`,
+              '',
+              `const (`,
+              ...target.enumItems.map((e) => `    ${e} ${baseName} = "${e}"`),
+              ')',
+              '',
+              `type ${baseName}Type struct {`,
+              `    Items    []${baseName} \`json:"items"\``,
+              `    Selected ${baseName}   \`json:"selected"\``,
+              '}',
+            ].join('\n');
+          } else if (target.props) {
+            const props = target.props;
+            const result = await this.toConvertProps({
+              props,
+              converterType: 'golang',
+            });
+            const interfaceName = toCamelCase(target.name + '_' + target.type);
+            let golangProps: string[] = [];
+            let additional: string[] = [''];
+            if (target.type === 'entry') {
+              golangProps = [
+                `    Id           string                  \`json:"id"\``,
+                `    CreatedAt    int64                   \`json:"createdAt"\``,
+                `    UpdatedAt    int64                   \`json:"updatedAt"\``,
+                `    TemplateId   string                  \`json:"templateId"\``,
+                `    TemplateName string                  \`json:"templateName"\``,
+                `    UserId       string                  \`json:"userId"\``,
+                `    Status       string                  \`json:"status"\``,
+                `    Meta         ${interfaceName}Meta    \`json:"meta"\``,
+                // `    Content      ${interfaceName}Content \`json:"content"\``,
+
+                // ...languages.map(
+                //   (lng) => `    ${lng.code}?: ${interfaceName}Meta;`,
+                // ),
+                // '  }',
+                // '  content: {',
+                // ...languages.map(
+                //   (lng) => `    ${lng.code}?: BCMSEntryContentParsedItem[];`,
+                // ),
+                // '  }',
+              ];
+              additional = [
+                '',
+                `type ${interfaceName}MetaItem struct {`,
+                ...result.props.map(
+                  (prop) =>
+                    `    ${prop.name
+                      .split('_')
+                      .map((e) => e.slice(0, 1).toUpperCase() + e.slice(1))
+                      .join('')} ${prop.type} \`json:"${prop.name}"\``,
+                ),
+                '}',
+                '',
+                `type ${interfaceName}Meta struct {`,
+                ...languages.map(
+                  (lng) =>
+                    `    ${
+                      lng.code.slice(0, 1).toUpperCase() + lng.code.slice(1)
+                    } ${interfaceName}MetaItem \`json:"${lng.code}"\``,
+                ),
+                '}',
+              ];
+            } else {
+              golangProps = result.props.map(
+                (prop) =>
+                  `    ${toCamelCase(prop.name)} ${prop.type} \`json:"${
+                    prop.name
+                  }"\``,
+              );
+            }
+            output[`${target.type}/${target.name}.go`] = [
+              'package bcms',
+              '',
+              ...result.additional,
+              ...additional,
+              '',
+              `type ${(target.name + '_' + target.type)
+                .split('_')
+                .map((e) => e.slice(0, 1).toUpperCase() + e.slice(1))
+                .join('')} struct {`,
+              ...golangProps,
+              '}',
+            ].join('\n');
+            const importsState = result.imports.state;
+            for (const path in importsState) {
+              if (!path.startsWith('@becomes')) {
+                for (const name in importsState[path]) {
+                  const metadata = importsState[path][name].metadata;
+                  if (metadata && !parsedItems[name]) {
+                    data.push(metadata);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    output['media.go'] = [
+      'package bcms',
+      '',
+      'type MediaParsed struct {',
+      `    Id       string \`json:"_id"\``,
+      `    Src      string \`json:"src"\``,
+      `    Svg      string \`json:"svg"\``,
+      `    AltText  string \`json:"alt_text"\``,
+      `    Caption  string \`json:"caption"\``,
+      `    Height   int32  \`json:"height"\``,
+      `    Width    int32  \`json:"wight"\``,
+      `    Name     string \`json:"name"\``,
+      `    Type     string \`json:"type"\``,
+      '}',
+    ].join('\n');
+    output['content.go'] = [
+      'package bcms',
+      '',
+      'type EntryContentNodeType = string',
+      'const (',
+      `    Paragraph   EntryContentNodeType = "paragraph"`,
+      `    Heading     EntryContentNodeType = "heading"`,
+      `    Widget      EntryContentNodeType = "widget"`,
+      `    BulletList  EntryContentNodeType = "bulletList"`,
+      `    ListItem    EntryContentNodeType = "listItem"`,
+      `    OrderedList EntryContentNodeType = "orderedList"`,
+      `    Text        EntryContentNodeType = "text"`,
+      `    CodeBlock   EntryContentNodeType = "codeBlock"`,
+      `    HardBreak   EntryContentNodeType = "hardBreak"`,
+      ')',
+      '',
+      'type EntryContentNodeMarkerType = string',
+      'const (',
+      `    Bold       EntryContentNodeMarkerType = "bold"`,
+      `    Italic     EntryContentNodeMarkerType = "italic"`,
+      `    Underline  EntryContentNodeMarkerType = "underline"`,
+      `    Strike     EntryContentNodeMarkerType = "strike"`,
+      `    Link       EntryContentNodeMarkerType = "link"`,
+      `    InlineCode EntryContentNodeMarkerType = "inlineCode"`,
+      ')',
+      '',
+      'type EntryContentParsedItemAttrs struct {',
+      '    Level int32 `json:"level"`',
+      '}',
+      '',
+      'type EntryContentParsedItem struct {',
+      `    Type  EntryContentNodeType        \`json:"type"\``,
+      `    Attrs EntryContentParsedItemAttrs \`json:"attrs"\``,
+      `    Value string                      \`json:"value"\``,
+      '}',
+      '',
+      'type EntryContentParsed struct {',
+      ...languages.map((lng) => {
+        return `    ${
+          lng.code.slice(0, 1) + lng.code.slice(1)
+        } []EntryContentParsedItem \`json:"${lng.code}"\``;
+      }),
+      '}',
+    ].join('\n');
     return Object.keys(output).map((outputFile) => {
       return {
         outputFile,

@@ -989,7 +989,7 @@ export class BCMSPropHandler {
     maxDepth,
     onlyLng,
   }: {
-    programLng: 'rust' | 'js';
+    programLng: 'rust' | 'js' | 'golang';
     meta: BCMSProp[];
     values: BCMSPropValue[];
     level?: string;

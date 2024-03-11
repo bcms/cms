@@ -42,20 +42,23 @@ export const BCMSTypeConverterController = createController({
             request.params.languageType !== 'typescript' &&
             request.params.languageType !== 'jsDoc' &&
             request.params.languageType !== 'gql' &&
-            request.params.languageType !== 'rust'
+            request.params.languageType !== 'rust' &&
+            request.params.languageType !== 'golang'
           ) {
             throw errorHandler.occurred(
               HTTPStatus.BAD_REQUEST,
               bcmsResCode('tc003', { type: request.params.type }),
             );
           }
-          const converter: 'typescript' | 'jsDoc' | 'gql' | 'rust' =
+          const converter: 'typescript' | 'jsDoc' | 'gql' | 'rust' | 'golang' =
             request.params.languageType === 'typescript'
               ? 'typescript'
               : request.params.languageType === 'gql'
               ? 'gql'
               : request.params.languageType === 'rust'
               ? 'rust'
+              : request.params.languageType === 'golang'
+              ? 'golang'
               : 'jsDoc';
 
           return {

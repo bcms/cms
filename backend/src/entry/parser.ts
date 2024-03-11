@@ -103,18 +103,19 @@ export function createBcmsEntryParser(): Module {
               const attrs = node.attrs as BCMSPropValueWidgetData;
               const widget = await BCMSRepo.widget.findById(attrs._id);
               if (widget) {
+                const widgetValue = await BCMSPropHandler.parse({
+                  programLng,
+                  meta: widget.props,
+                  values: attrs.props,
+                  maxDepth,
+                  depth: depth ? depth + 1 : undefined,
+                  level,
+                  onlyLng: justLng,
+                });
                 output.push({
                   type: node.type,
                   name: widget.name,
-                  value: await BCMSPropHandler.parse({
-                    programLng,
-                    meta: widget.props,
-                    values: attrs.props,
-                    maxDepth,
-                    depth: depth ? depth + 1 : undefined,
-                    level,
-                    onlyLng: justLng,
-                  }),
+                  value: programLng === 'golang' ? JSON.stringify(widgetValue) : widgetValue,
                 });
               }
             } else {
