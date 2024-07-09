@@ -32,7 +32,7 @@
 .logo-leave-active {
   path {
     transform: translateZ(0.1px);
-    @apply translate-x-0 translate-y-0 transition-transform fill-current text-white;
+    @apply translate-x-0 translate-y-0 transition-transform;
     transition-timing-function: ease;
     @for $i from 1 through 4 {
       &:nth-child(#{$i}) {

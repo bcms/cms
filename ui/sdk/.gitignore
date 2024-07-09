@@ -1,7 +1,0 @@
-node_modules
-/dist
-/doc
-/tmp
-/.idea
-/tsconfig.tsbuildinfo
-/src/backend-types

@@ -13,9 +13,9 @@
   & > * {
     &:not(div) {
       &::before {
-        content: '';
-        @apply absolute top-0 left-0 w-8 h-8 block bg-no-repeat bg-center -translate-x-1.5 -translate-y-full md:-translate-x-full md:translate-y-[-20%];
-        background-size: 65%;
+        //content: '';
+        //@apply absolute top-0 left-0 w-8 h-8 block bg-no-repeat bg-center -translate-x-1.5 -translate-y-full md:-translate-x-full md:translate-y-[-20%];
+        //background-size: 65%;
       }
     }
   }
@@ -160,4 +160,10 @@
   //     @apply bg-dark text-white rounded-3xl py-[5px] px-[15px] desktop:text-xs opacity-50;
   //   }
   // }
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  @apply flex text-gray pointer-events-none h-0;
+  content: attr(data-placeholder);
+  pointer-events: none;
 }

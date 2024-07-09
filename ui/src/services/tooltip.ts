@@ -1,18 +1,22 @@
-import type { BCMSTooltipService } from '../types';
-
-let service: BCMSTooltipService;
-
-export function createBcmsTooltipService(): void {
-  service = {
-    show() {
-      throw new Error('Assertion error');
-    },
-    hide() {
-      throw new Error('Assertion error');
-    },
-  };
+export interface TooltipService {
+    show(target: HTMLElement, message: string, type: 'default' | 'info'): void;
+    hide(): void;
 }
 
-export function useBcmsTooltipService(): BCMSTooltipService {
-  return service;
+let service: TooltipService;
+
+export function createTooltipService() {
+    service = {
+        show() {
+            throw new Error('Assertion error');
+        },
+        hide() {
+            throw new Error('Assertion error');
+        },
+    };
+    return service;
+}
+
+export function useTooltipService(): TooltipService {
+    return service;
 }

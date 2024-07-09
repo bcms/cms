@@ -1,18 +1,15 @@
-import { Types } from 'mongoose';
-import type { BCMSTemplateOrganizerFactory } from '../types';
+import { ObjectId } from 'mongodb';
+import type { TemplateOrganizer } from '@thebcms/selfhosted-backend/template-organizer/models/main';
 
-export function createBcmsTemplateOrganizerFactory(): BCMSTemplateOrganizerFactory {
-  return {
-    create(data) {
-      return {
-        _id: `${new Types.ObjectId()}`,
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-        label: data.label ? data.label : '',
-        name: data.name ? data.name : '',
-        templateIds: data.templateIds ? data.templateIds : [],
-        parentId: data.parentId,
-      };
-    },
-  };
+export class TemplateOrganizerFactory {
+    static create(
+        data: Omit<TemplateOrganizer, '_id' | 'createdAt' | 'updatedAt'>,
+    ): TemplateOrganizer {
+        return {
+            _id: `${new ObjectId()}`,
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+            ...data,
+        };
+    }
 }

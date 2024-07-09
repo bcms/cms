@@ -1,82 +1,91 @@
-version: '3.9'
-networks:
-  default:
-    external: true
-    name: bcms
 services:
-  shim:
-    hostname: 'bcms-shim'
-    image: 'becomes/cms-shim-local:1.0.5'
-    logging:
-      driver: none
-  backend:
-    hostname: 'bcms-backend'
-    depends_on:
-      - shim
-    build:
-      context: './backend'
-      dockerfile: Dockerfile.dev
-    env_file:
-      - ./backend/.env
-    volumes:
-      - type: bind
-        source: ./backend/bcms.config.js
-        target: /app/bcms.config.js
-      - type: bind
-        source: ./backend/src
-        target: /app/src
-      - type: bind
-        source: ./backend/db
-        target: /app/db
-      - type: bind
-        source: ./backend/uploads
-        target: /app/uploads
-  db:
-    hostname: bcms-db
-    image: mongo:6
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=test
-      - MONGO_INITDB_ROOT_PASSWORD=test1234
-    volumes:
-      - type: bind
-        source: ./backend/db/mongo
-        target: /data/db
-    logging:
-      driver: none
-  ui:
-    hostname: 'bcms-ui'
-    build:
-      context: './ui'
-      dockerfile: Dockerfile.dev
-    volumes:
-      - type: bind
-        source: ./ui/public
-        target: /app/public
-      - type: bind
-        source: ./ui/src
-        target: /app/src
-      - type: bind
-        source: ./ui/tailwind.config.cjs
-        target: /app/tailwind.config.cjs
-      - type: bind
-        source: ./ui/postcss.config.cjs
-        target: /app/postcss.config.cjs
-      - type: bind
-        source: ./ui/vite.config.ts
-        target: /app/vite.config.ts
-      - type: bind
-        source: ./ui/sdk/src
-        target: /app/sdk/src
-  proxy:
-    hostname: 'bcms-proxy'
-    depends_on:
-      - shim
-      - backend
-      - db
-    build:
-      context: ./proxy
-      dockerfile: Dockerfile
-    ports:
-      - '8080:8080'
-    # logging:
-    #   driver: none
+    db:
+        hostname: db
+        image: mongo:7
+        environment:
+            - MONGO_INITDB_ROOT_USERNAME=test
+            - MONGO_INITDB_ROOT_PASSWORD=test1234
+        volumes:
+            - type: bind
+              source: ./db
+              target: /data/db
+        logging:
+            driver: none
+    backend:
+        depends_on:
+            - db
+        hostname: backend
+        build:
+            context: ./
+            dockerfile: Dockerfile.backend.dev
+        env_file:
+            - ./backend/.env
+        volumes:
+            - type: bind
+              source: ./backend/src
+              target: /app/backend/src
+            - type: bind
+              source: ./backend/tsconfig.json
+              target: /app/backend/tsconfig.json
+            - type: bind
+              source: ./backend/logs
+              target: /app/backend/logs
+            - type: bind
+              source: ./backups
+              target: /app/backend/backups
+            - type: bind
+              source: ./uploads
+              target: /app/backend/uploads
+            - type: bind
+              source: ./backend/docs
+              target: /app/backend/docs
+            - type: bind
+              source: ./README.md
+              target: /app/README.md
+    ui:
+        depends_on:
+            - backend
+        hostname: ui
+        build:
+            context: ./
+            dockerfile: Dockerfile.ui.dev
+        env_file:
+            - ./ui/.env
+        volumes:
+            - type: bind
+              source: ./backend/src
+              target: /app/backend/src
+            - type: bind
+              source: ./backend/types
+              target: /app/backend/types
+            - type: bind
+              source: ./ui/src
+              target: /app/ui/src
+            - type: bind
+              source: ./ui/public
+              target: /app/ui/public
+            - type: bind
+              source: ./ui/vite.config.ts
+              target: /app/ui/vite.config.ts
+            - type: bind
+              source: ./ui/index.html
+              target: /app/ui/index.html
+            - type: bind
+              source: ./ui/tsconfig.json
+              target: /app/ui/tsconfig.json
+            - type: bind
+              source: ./ui/tailwind.config.cjs
+              target: /app/ui/tailwind.config.cjs
+            - type: bind
+              source: ./ui/postcss.config.cjs
+              target: /app/ui/postcss.config.cjs
+    proxy:
+        depends_on:
+            - backend
+            - ui
+        hostname: proxy
+        build:
+            context: ./proxy
+            dockerfile: Dockerfile
+        ports:
+            - '8080:8080'

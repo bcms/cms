@@ -1,0 +1,31 @@
+{
+    "extends": "@vue/tsconfig/tsconfig.dom.json",
+    "include": [
+        "env.d.ts",
+        "src/**/*",
+        "src/**/*.vue",
+        "../backend/src",
+        "../backend/src/_utils/**/*.ts"
+    ],
+    "exclude": ["src/**/__tests__/*"],
+    "compilerOptions": {
+        "composite": true,
+        "baseUrl": ".",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "moduleResolution": "Node",
+        "rootDir": "../",
+        "types": ["vite-plugin-glsl/ext", "node"],
+        "paths": {
+            "@thebcms/selfhosted-backend/*": ["../backend/src/*"],
+            "@thebcms/selfhosted-backend/server": ["../backend/src/_server"],
+            "@thebcms/selfhosted-backend/server/*": [
+                "../backend/src/_server/*"
+            ],
+            "@thebcms/selfhosted-utils/*": ["../backend/src/_utils/*"],
+            "@thebcms/selfhosted-sdk": ["./src/sdk"],
+            "@thebcms/selfhosted-sdk/*": ["./src/sdk/*"],
+            "@thebcms/selfhosted-ui/*": ["./src/*"]
+        }
+    }
+}

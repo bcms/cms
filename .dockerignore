@@ -1,5 +1,12 @@
 /node_modules
+/.github
+/.husky
+/_scripts
+/db
+/uploads
+
 /backend/node_modules
-/ui/node_modules
-/ui/sdk/node_modules
 /backend/dist
+
+/ui/node_modules
+/ui/dist

@@ -1,358 +1,307 @@
+import path from 'path';
 import {
-  createBodyParserMiddleware,
-  createCorsMiddleware,
-  createPurpleCheetah,
-  createRequestLoggerMiddleware,
-} from '@becomes/purple-cheetah';
-import type {
-  Controller,
-  Middleware,
-  Module,
-} from '@becomes/purple-cheetah/types';
+    createController,
+    createControllerMethod,
+    createServer,
+} from '@thebcms/selfhosted-backend/server';
+import FastifyMultipart from '@fastify/multipart';
+import FastifyStatic from '@fastify/static';
+import FastifyCors from '@fastify/cors';
 import {
-  JWTAlgorithm,
-  JWTError,
-  JWTPayload,
-  JWTPermissionName,
-  JWTRoleName,
-} from '@becomes/purple-cheetah-mod-jwt/types';
-import { createJwt, useJwt } from '@becomes/purple-cheetah-mod-jwt';
-import { createFSDB } from '@becomes/purple-cheetah-mod-fsdb';
-import { createMongoDB } from '@becomes/purple-cheetah-mod-mongodb';
+    createJwt,
+    JWTError,
+    JWTManager,
+} from '@thebcms/selfhosted-backend/server/modules/jwt';
+import { Config } from '@thebcms/selfhosted-backend/config';
+import { createSocket } from '@thebcms/selfhosted-backend/server/modules/socket';
+import { Repo } from '@thebcms/selfhosted-backend/repo';
+import { createMongoDB } from '@thebcms/selfhosted-backend/server/modules/mongodb';
+import {
+    createMigrations,
+    MigrationRepo,
+} from '@thebcms/selfhosted-backend/migrations';
+import { FS } from '@thebcms/selfhosted-backend/_utils/fs';
+import { IPMiddleware } from '@thebcms/selfhosted-backend/ip-middleware';
+import {
+    AuthController,
+    setAuthCreateAdminServerToken,
+} from '@thebcms/selfhosted-backend/auth/controller';
+import { UserController } from '@thebcms/selfhosted-backend/user/controller';
+import { StorageController } from '@thebcms/selfhosted-backend/storage/controller';
+import type { UserCustomPool } from '@thebcms/selfhosted-backend/user/models/custom-pool';
+import { socketEventHandlersEntrySync } from '@thebcms/selfhosted-backend/socket/handlers/entry-sync';
+import {
+    createEntrySyncChannelHandler,
+    useEntrySyncChannelHandler,
+} from '@thebcms/selfhosted-backend/entry-sync/channel-handler';
+import { MediaController } from '@thebcms/selfhosted-backend/media/controller';
+import { ApiKeyController } from '@thebcms/selfhosted-backend/api-key/controller';
+import { EntryController } from '@thebcms/selfhosted-backend/entry/controller';
+import { EntryStatusController } from '@thebcms/selfhosted-backend/entry-status/controller';
+import { GroupController } from '@thebcms/selfhosted-backend/group/controller';
+import { LanguageController } from '@thebcms/selfhosted-backend/language/controller';
+import { TemplateController } from '@thebcms/selfhosted-backend/template/controller';
+import { WidgetController } from '@thebcms/selfhosted-backend/widget/controller';
+import { TemplateOrganizerController } from '@thebcms/selfhosted-backend/template-organizer/controller';
+import { BackupController } from '@thebcms/selfhosted-backend/backup/controller';
 
-import type { BCMSBackend, BCMSUserCustomPool } from './types';
-import { BCMSConfig, loadBcmsConfig } from './config';
-import { BCMSCypressController } from './cypress';
-import {
-  BCMSShimCallsController,
-  BCMSShimUserController,
-  createBcmsShimService,
-  ShimConfig,
-  BCMSShimConnectionAccess,
-  BCMSShimSecurityMiddleware,
-} from './shim';
-import { BCMSUserController, createBcmsUserRepository } from './user';
-import { BCMSApiKeySecurity, createBcmsApiKeySecurity } from './security';
-import { BCMSApiKeyController, createBcmsApiKeyRepository } from './api';
-import { BCMSFunctionController, createBcmsFunctionModule } from './function';
-import { BCMSPluginController, createBcmsPluginModule } from './plugin';
-import { createBcmsEventModule } from './event';
-import { createBcmsJobModule } from './job';
-import {
-  BCMSLanguageController,
-  createBcmsLanguageRepository,
-} from './language';
-import {
-  BCMSMediaController,
-  BCMSMediaMiddleware,
-  createBcmsMediaRepository,
-  createBcmsMediaService,
-} from './media';
-import { BCMSStatusController, createBcmsStatusRepository } from './status';
-import {
-  BCMSTemplateController,
-  createBcmsTemplateRepository,
-} from './template';
-import { BCMSWidgetController, createBcmsWidgetRepository } from './widget';
-import { createSocket } from '@becomes/purple-cheetah-mod-socket';
-import { BCMSGroupController, createBcmsGroupRepository } from './group';
-import { createBcmsPropHandler } from './prop';
-import {
-  createBcmsEntryParser,
-  BCMSEntryController,
-  createBcmsEntryRepository,
-} from './entry';
-import { createBcmsFfmpeg } from './util';
-import {
-  BCMSTemplateOrganizerController,
-  createBcmsTemplateOrganizerRepository,
-} from './template-organizer';
-import {
-  bcmsCreateSocketEventHandlers,
-  BCMSSocketController,
-  BCMSSocketEntrySyncManager,
-  createBcmsSocketManager,
-} from './socket';
-import { BCMSUiAssetMiddleware } from './ui-middleware';
-import { createBcmsIdCounterRepository } from './id-counter';
-import { createBcmsFactories } from './factory';
-import { BCMSAuthController } from './auth';
-import { bcmsPostSetup, bcmsSetup } from './setup';
-import { BCMSColorController, createBcmsColorRepository } from './color';
-import { BCMSTagController, createBcmsTagRepository } from './tag';
-import { BCMSTypeConverterController } from './type-converter';
-import { BCMSSearchController } from './search';
-import { BCMSChangeController, createBcmsChangeRepository } from './change';
-import { loadBcmsResponseCodes } from './response-code';
-import { BCMSBackupController, BCMSBackupMediaFileMiddleware } from './backup';
-import { RouteTrackerController } from './route-tracker';
-import type { SocketConnection } from '@becomes/purple-cheetah-mod-socket/types';
-import { BCMSRouteTracker } from './route-tracker/service';
-
-const backend: BCMSBackend = {
-  app: undefined as never,
-};
-
-async function initialize() {
-  await loadBcmsConfig();
-  await loadBcmsResponseCodes();
-  await createBcmsShimService();
-
-  const modules: Module[] = [
-    bcmsSetup(),
-    createBcmsFactories(),
-    createJwt({
-      scopes: [
-        {
-          secret: BCMSConfig.jwt.secret,
-          issuer: BCMSConfig.jwt.scope,
-          alg: JWTAlgorithm.HMACSHA256,
-          expIn: BCMSConfig.jwt.expireIn,
+async function main() {
+    await createServer({
+        server: {
+            host: '0.0.0.0',
+            port: 8080,
         },
-      ],
-    }),
-    createSocket({
-      path: '/api/socket/server',
-      onConnection(socket) {
-        let id: string;
-        if (socket.handshake.query.at) {
-          try {
-            const token: JWTPayload<BCMSUserCustomPool> = JSON.parse(
-              Buffer.from(
-                (socket.handshake.query.at as string).split('.')[1],
-                'base64',
-              ).toString(),
-            );
-            id = token.userId;
-          } catch (err) {
-            id = 'none';
-          }
-        } else {
-          id = socket.handshake.query.key as string;
-        }
-        const conn: SocketConnection<unknown> = {
-          id: `${id}_${Buffer.from(socket.id).toString('hex')}`,
-          createdAt: Date.now(),
-          scope: socket.handshake.query.at ? 'global' : 'client',
-          socket,
-        };
-        socket.on('disconnect', () => {
-          BCMSSocketEntrySyncManager.unsync(conn);
-          delete BCMSRouteTracker.connections[conn.id];
-        });
-        return conn;
-      },
-      async verifyConnection(socket) {
-        const query = socket.handshake.query as {
-          at: string;
-          signature: string;
-          key: string;
-          nonce: string;
-          timestamp: string;
-        };
-        if (query.signature) {
-          try {
-            const key = await BCMSApiKeySecurity.verify(
-              {
-                path: '',
-                requestMethod: 'POST',
-                data: {
-                  k: query.key,
-                  n: query.nonce,
-                  t: query.timestamp,
-                  s: query.signature,
-                },
-                payload: {},
-              },
-              true,
-            );
-            if (!key) {
-              return false;
+
+        logs: {
+            saveToFile: {
+                output: path.join(process.cwd(), 'logs'),
+                interval: 5000,
+            },
+        },
+
+        onReady() {
+            async function init() {
+                const users = await Repo.user.findAll();
+                if (
+                    users.length === 0 ||
+                    !users.find((user) =>
+                        user.roles.find((role) => role.name === 'ADMIN'),
+                    )
+                ) {
+                    const message =
+                        'Server token: ' + setAuthCreateAdminServerToken();
+                    console.log(Array(message.length).fill('-').join(''));
+                    console.log(message);
+                    console.log(Array(message.length).fill('-').join(''));
+                }
             }
-          } catch (error) {
-            // eslint-disable-next-line no-console
-            console.error(error);
-            return false;
-          }
-        } else {
-          const jwt = useJwt();
-          const token = jwt.get({
-            jwtString: query.at,
-            roleNames: [JWTRoleName.ADMIN, JWTRoleName.USER],
-            permissionName: JWTPermissionName.READ,
-          });
-          if (token instanceof JWTError) {
-            return false;
-          }
-        }
-        return true;
-      },
-      eventHandlers: bcmsCreateSocketEventHandlers(),
-      // eventHandlers: [createEntryChangeSocketHandler()],
-    }),
-    createBcmsSocketManager(),
-    createBcmsMediaService(),
-    createBcmsFfmpeg(),
-    // Repos
-    createBcmsApiKeyRepository(),
-    createBcmsEntryRepository(),
-    createBcmsGroupRepository(),
-    createBcmsIdCounterRepository(),
-    createBcmsLanguageRepository(),
-    createBcmsMediaRepository(),
-    createBcmsStatusRepository(),
-    createBcmsTemplateRepository(),
-    createBcmsTemplateOrganizerRepository(),
-    createBcmsUserRepository(),
-    createBcmsWidgetRepository(),
-    createBcmsColorRepository(),
-    createBcmsTagRepository(),
-    createBcmsChangeRepository(),
-  ];
-  const middleware: Middleware[] = [
-    createCorsMiddleware(),
-    createBodyParserMiddleware({
-      limit: BCMSConfig.bodySizeLimit ? BCMSConfig.bodySizeLimit : 1024000000,
-    }),
-    BCMSShimSecurityMiddleware,
-    BCMSShimConnectionAccess,
-    BCMSMediaMiddleware,
-    BCMSUiAssetMiddleware,
-    BCMSBackupMediaFileMiddleware,
-  ];
-  const controllers: Controller[] = [
-    BCMSAuthController,
-    BCMSUserController,
-    BCMSShimCallsController,
-    BCMSShimUserController,
-    BCMSApiKeyController,
-    BCMSPluginController,
-    BCMSLanguageController,
-    BCMSGroupController,
-    BCMSMediaController,
-    BCMSStatusController,
-    BCMSFunctionController,
-    BCMSTemplateController,
-    BCMSWidgetController,
-    BCMSEntryController,
-    BCMSTemplateOrganizerController,
-    BCMSColorController,
-    BCMSTagController,
-    BCMSTypeConverterController,
-    BCMSChangeController,
-    BCMSSearchController,
-    BCMSBackupController,
-    RouteTrackerController,
-    BCMSSocketController,
-  ];
-  if (BCMSConfig.database.mongodb) {
-    if (BCMSConfig.database.mongodb.selfHosted) {
-      modules.push(
-        createMongoDB({
-          selfHosted: {
-            db: {
-              port: BCMSConfig.database.mongodb.selfHosted.port,
-              host: BCMSConfig.database.mongodb.selfHosted.host,
-              name: BCMSConfig.database.mongodb.selfHosted.name,
-            },
-            user: {
-              name: BCMSConfig.database.mongodb.selfHosted.user,
-              password: BCMSConfig.database.mongodb.selfHosted.password,
-            },
-          },
-        }),
-      );
-    } else if (BCMSConfig.database.mongodb.atlas) {
-      modules.push(
-        createMongoDB({
-          atlas: {
-            db: {
-              name: BCMSConfig.database.mongodb.atlas.name,
-              readWrite: true,
-              cluster: BCMSConfig.database.mongodb.atlas.cluster,
-            },
-            user: {
-              name: BCMSConfig.database.mongodb.atlas.user,
-              password: BCMSConfig.database.mongodb.atlas.password,
-            },
-          },
-        }),
-      );
-    } else {
-      throw Error('No MongoDB database configuration detected.');
-    }
-  } else if (BCMSConfig.database.fs) {
-    modules.push(
-      createFSDB({
-        output: `db${BCMSConfig.database.prefix.startsWith('/') ? '' : '/'}${
-          BCMSConfig.database.prefix
-        }`,
-        prettyOutput: true,
-        saveInterval: 2000,
-      }),
-    );
-  } else {
-    throw Error('No database configuration detected.');
-  }
-  if (ShimConfig.local) {
-    middleware.push(createRequestLoggerMiddleware());
-    controllers.push(BCMSCypressController);
-  }
-  modules.push(createBcmsApiKeySecurity());
-  modules.push(createBcmsPropHandler());
-  modules.push(createBcmsEntryParser());
-  modules.push(createBcmsPluginModule(BCMSConfig));
-  modules.push(createBcmsFunctionModule());
-  modules.push(createBcmsEventModule());
-  modules.push(createBcmsJobModule());
+            init().catch((err) => console.error(err));
+        },
 
-  // modules.push(
-  //   createGraphql({
-  //     uri: '/api/gql',
-  //     // TODO: Disable in production
-  //     graphiql: true,
-  //     rootName: 'BCMS',
-  //     collections: [
-  //       BCMSApiKeyCollection,
-  //       BCMSPropCollection,
-  //       BCMSGroupCollection,
-  //       BCMSLanguageCollection,
-  //       BCMSMediaCollection,
-  //       BCMSColorCollection,
-  //       BCMSStatusCollection,
-  //       BCMSTagCollection,
-  //       BCMSTemplateCollection,
-  //       BCMSTemplateOrganizerCollection,
-  //       BCMSWidgetCollection,
-  //     ],
-  //   }),
-  // );
+        controllers: [
+            createController({
+                path: '/api/v4',
+                name: 'HealthCheck',
+                methods() {
+                    return {
+                        check: createControllerMethod({
+                            path: '/health-check',
+                            type: 'head',
+                            async handler() {
+                                return { ok: true };
+                            },
+                        }),
+                    };
+                },
+            }),
+            createController({
+                path: '/api/v4/docs',
+                name: 'Docs',
+                methods() {
+                    const fs = new FS(process.cwd());
+                    return {
+                        swagger: createControllerMethod({
+                            path: '/swagger.json',
+                            type: 'get',
+                            async handler({ replay }) {
+                                const data = await fs.readString([
+                                    'docs',
+                                    'swagger.json',
+                                ]);
+                                replay.header(
+                                    'Content-Type',
+                                    'application/json',
+                                );
+                                return data;
+                            },
+                        }),
+                    };
+                },
+            }),
+            ApiKeyController,
+            AuthController,
+            EntryController,
+            EntryStatusController,
+            GroupController,
+            LanguageController,
+            MediaController,
+            StorageController,
+            TemplateController,
+            TemplateOrganizerController,
+            UserController,
+            WidgetController,
+            BackupController,
+        ],
 
-  modules.push(bcmsPostSetup());
+        middleware: [IPMiddleware],
 
-  backend.app = createPurpleCheetah({
-    port: BCMSConfig.port,
-    middleware,
-    controllers,
-    modules,
-    logger: {
-      saveToFile: {
-        interval: 2000,
-        output: 'logs',
-      },
-    },
-    onReady(pc) {
-      const ex = pc.getExpress();
-      ex.disable('x-powered-by');
-    },
-  });
+        modules: [
+            {
+                name: 'Fastify modules',
+                initialize({ next, fastify }) {
+                    async function init() {
+                        await fastify.register(FastifyMultipart);
+                        await fastify.register(FastifyStatic, {
+                            root: path.join(process.cwd(), 'public'),
+                        });
+                        await fastify.register(FastifyCors, {});
+                    }
+                    init()
+                        .then(() => next())
+                        .catch((err) => next(err));
+                },
+            },
+            createJwt({
+                scopes: [
+                    {
+                        alg: 'HS256',
+                        expIn: Config.jwtExpIn,
+                        issuer: Config.jwtIssuer,
+                        secret: Config.jwtSecret,
+                    },
+                ],
+            }),
+            createSocket({
+                path: '/api/v4/socket',
+                async validateConnection({ req }, next) {
+                    const queryString = req.url ? req.url.split('?')[1] : '';
+                    if (!queryString) {
+                        next(false);
+                        return;
+                    }
+                    const query: { [key: string]: string } = {};
+                    const queryParts = queryString.split('&');
+                    for (let i = 0; i < queryParts.length; i++) {
+                        const [key, value] = queryParts[i].split('=');
+                        query[key] = value;
+                    }
+                    if (!query.token) {
+                        next(false);
+                        return;
+                    }
+                    if (query.token.startsWith('apikey_')) {
+                        const [id, secret] = query.token
+                            .replace('apikey_', '')
+                            .split('.');
+                        const apiKey = await Repo.apiKey.findById(id);
+                        if (
+                            !apiKey ||
+                            apiKey.secret !== secret ||
+                            apiKey.blocked
+                        ) {
+                            next(false);
+                            return;
+                        }
+                        next(true);
+                    } else {
+                        const jwt = JWTManager.get({
+                            roles: ['ADMIN', 'USER'],
+                            token: query.token,
+                        });
+                        if (jwt instanceof JWTError) {
+                            next(false);
+                            return;
+                        }
+                        next(true);
+                    }
+                },
+                async onConnection(connection, req) {
+                    const queryString = req.url ? req.url.split('?')[1] : '';
+                    if (!queryString) {
+                        return;
+                    }
+                    const query: { [key: string]: string } = {};
+                    const queryParts = queryString.split('&');
+                    for (let i = 0; i < queryParts.length; i++) {
+                        const [key, value] = queryParts[i].split('=');
+                        query[key] = value;
+                    }
+                    if (!query.token) {
+                        return;
+                    }
+                    if (query.token.startsWith('apikey_')) {
+                        const [id, secret] = query.token
+                            .replace('apikey_', '')
+                            .split('.');
+                        const apiKey = await Repo.apiKey.findById(id);
+                        if (!apiKey || apiKey.secret !== secret) {
+                            return;
+                        }
+                        connection.channels.push(
+                            apiKey.userId,
+                            'apiKey',
+                            'global',
+                        );
+                        connection.emit('socket_connection', {
+                            id: connection.id,
+                        });
+                    } else {
+                        const jwt = JWTManager.get<UserCustomPool>({
+                            roles: ['ADMIN', 'USER'],
+                            token: query.token,
+                        });
+                        if (jwt instanceof JWTError) {
+                            return;
+                        }
+                        connection.channels.push(
+                            jwt.payload.userId,
+                            ...jwt.payload.rls,
+                            'user',
+                            'global',
+                        );
+                        connection.emit('socket_connection', {
+                            id: connection.id,
+                        });
+                    }
+                },
+                eventHandlers: {
+                    ...socketEventHandlersEntrySync,
+                },
+                async onDisconnect(conn) {
+                    const chan = useEntrySyncChannelHandler();
+                    const chanKeysInfo = chan.getAllKeysInfo();
+                    for (let i = 0; i < chanKeysInfo.length; i++) {
+                        if (conn.id === chanKeysInfo[i].connId) {
+                            chan.removeConnection(
+                                chanKeysInfo[i].entryId,
+                                conn.id,
+                                conn.channels[0],
+                            );
+                            break;
+                        }
+                    }
+                },
+            }),
+            createMongoDB({
+                forceClose: true,
+                url: Config.dbUrl,
+            }),
+            /**
+             * ----------
+             * Init repos
+             * ----------
+             */
+            Repo.user.init(),
+            Repo.apiKey.init(),
+            Repo.media.init(),
+            Repo.group.init(),
+            Repo.widget.init(),
+            Repo.template.init(),
+            Repo.templateOrganizer.init(),
+            Repo.entry.init(),
+            Repo.language.init(),
+            Repo.entryStatus.init(),
+            Repo.backup.init(),
+            // @inject-repo
+
+            MigrationRepo.init(),
+
+            createEntrySyncChannelHandler(),
+            createMigrations(),
+        ],
+    });
 }
-initialize().catch((error) => {
-  // eslint-disable-next-line no-console
-  console.error(error);
-  process.exit(1);
+main().catch((err) => {
+    console.error(err);
+    process.exit(1);
 });
-
-export function useBCMSBackend(): BCMSBackend {
-  return backend;
-}

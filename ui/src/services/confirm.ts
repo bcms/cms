@@ -1,25 +1,28 @@
-import type { BCMSConfirmService } from '../types';
+import type { JSX } from 'vue/jsx-runtime';
 
-let service: BCMSConfirmService;
-
-export function useBcmsConfirmService(): BCMSConfirmService {
-  return service;
+export interface ConfirmService {
+    (
+        title: string,
+        content: string | JSX.Element,
+        prompt?: string,
+    ): Promise<boolean>;
 }
 
-export function createBcmsConfirmService(): void {
-  service = async (title, text, prompt) => {
-    return new Promise<boolean>((resolve) => {
-      window.bcms.modal.confirm.show({
-        title,
-        body: text,
-        prompt,
-        onDone() {
-          resolve(true);
-        },
-        onCancel() {
-          resolve(false);
-        },
-      });
+export const confirm: ConfirmService = async (title, content, prompt) => {
+    return await new Promise<boolean>((resolve) => {
+        window.bcms.modalService.handlers.confirm.open({
+            title,
+            data: {
+                title,
+                content,
+                prompt,
+            },
+            onDone() {
+                resolve(true);
+            },
+            onCancel() {
+                resolve(false);
+            },
+        });
     });
-  };
-}
+};

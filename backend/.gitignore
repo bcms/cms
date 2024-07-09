@@ -1,26 +1,19 @@
 # compiled output
-/node_modules
 /dist
-/lib
 /doc
-/db
+/node_modules
+/types
 /uploads
-/functions
-/events
-/jobs
-/ts-plugins
-/plugins
-/dockerfile-local/dist
-/local-dev-dist
-/dev-dist
-/public
-/_test
-/_jsDoc
-/____backup
+/docs/swagger.json
+/docs/*.swagger.json
+/cy-pipe.json
+
+# Environment
+
+.env
 
 # Logs
-/log
-/logs
+logs
 *.log
 npm-debug.log*
 yarn-debug.log*
@@ -35,8 +28,6 @@ lerna-debug.log*
 /.nyc_output
 
 # IDEs and editors
-.env
-bcms.db.json
 /.idea
 .idea
 .project
@@ -52,4 +43,6 @@ bcms.db.json
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
-yarn.lock
+
+# Test temp
+/test/assets/db/_*

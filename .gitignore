@@ -2,3 +2,5 @@
 /uploads
 /db
 /logs
+/backups
+.idea

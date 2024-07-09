@@ -8,6 +8,10 @@
       <excludeFolder url="file://$MODULE_DIR$/backend/uploads" />
       <excludeFolder url="file://$MODULE_DIR$/temp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/db" />
+      <excludeFolder url="file://$MODULE_DIR$/uploads" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/backups" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

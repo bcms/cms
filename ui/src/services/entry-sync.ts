@@ -1,694 +1,933 @@
-import { v4 as uuidv4 } from 'uuid';
-import type { Ref } from 'vue';
-import {
-  type BCMSLanguage,
-  BCMSSocketEventName,
-  type BCMSSocketSyncChangeDataFocus,
-  type BCMSSocketSyncChangeDataMouse,
-  type BCMSSocketSyncChangeEvent,
-  BCMSSocketSyncChangeType,
-  type BCMSSocketSyncEvent,
-  type BCMSSocketUnsyncEvent,
-  type BCMSTemplate,
-} from '@becomes/cms-sdk/types';
+import { ref } from 'vue';
 import type {
-  BCMSArrayPropMoveEventData,
-  BCMSEntryExtended,
-  BCMSEntryExtendedMeta,
-  BCMSEntrySync,
-  BCMSEntrySyncChannelData,
-  BCMSEntrySyncFocusContainer,
-  BCMSEntrySyncUser,
-} from '../types';
+    SocketEventDataEntrySyncBooleanUpdate,
+    SocketEventDataEntrySyncDateUpdate,
+    SocketEventDataEntrySyncDefaults,
+    SocketEventDataEntrySyncEntryPointerUpdate,
+    SocketEventDataEntrySyncEnumUpdate,
+    SocketEventDataEntrySyncFocus,
+    SocketEventDataEntrySyncGroupPointerUpdate,
+    SocketEventDataEntrySyncMediaUpdate,
+    SocketEventDataEntrySyncMouseMove,
+    SocketEventDataEntrySyncNumberUpdate,
+    SocketEventDataEntrySyncProseContentUpdate,
+    SocketEventDataEntrySyncProseCursorUpdate,
+    SocketEventDataEntrySyncRichTextUpdate,
+    SocketEventDataEntrySyncStringUpdate,
+    SocketEventDataEntrySyncStringUpdateChange,
+    SocketEventDataEntrySyncUpdateDefaults,
+    SocketEventDataEntrySyncUserSelectRange,
+    SocketEventDataEntrySyncYSyncReq,
+    SocketEventDataEntrySyncYSyncRes,
+} from '@thebcms/selfhosted-backend/socket/events/entry-sync';
+import type { Sdk } from '@thebcms/selfhosted-sdk';
+import type { Entry } from '@thebcms/selfhosted-backend/entry/models/main';
+import type { Throwable } from '@thebcms/selfhosted-ui/util/throwable';
+import type { SocketEventHandler } from '@thebcms/selfhosted-sdk/handlers/socket';
+import type { PropValueDateData } from '@thebcms/selfhosted-backend/prop/models/date';
+import type { PropValueMediaData } from '@thebcms/selfhosted-backend/prop/models/media';
+import type { PropValueEntryPointer } from '@thebcms/selfhosted-backend/prop/models/entry-pointer';
+import type { UserProtected } from '@thebcms/selfhosted-backend/user/models/main';
+import { callAndClearUnsubscribeFns } from '@thebcms/selfhosted-ui/util/sub';
 
-type LanguageType = Ref<{
-  items: BCMSLanguage[];
-  target: BCMSLanguage;
-  targetIndex: number;
-}>;
-
-export class BCMSEntrySyncService {
-  static instance: BCMSEntrySync | undefined;
-  static entry: Ref<BCMSEntryExtended | undefined> | undefined;
-  static template: Ref<BCMSTemplate | undefined> | undefined;
-  static language: LanguageType | undefined;
-
-  static set(data: {
-    instance: BCMSEntrySync | undefined;
-    entry: Ref<BCMSEntryExtended | undefined>;
-    template: Ref<BCMSTemplate | undefined>;
-    language: LanguageType;
-  }): void {
-    BCMSEntrySyncService.instance = data.instance;
-    BCMSEntrySyncService.entry = data.entry;
-    BCMSEntrySyncService.template = data.template;
-    BCMSEntrySyncService.language = data.language;
-  }
-
-  static clear(): void {
-    BCMSEntrySyncService.instance = undefined;
-    BCMSEntrySyncService.entry = undefined;
-    BCMSEntrySyncService.template = undefined;
-    BCMSEntrySyncService.language = undefined;
-  }
+export interface EntrySyncUserDataColor {
+    main: string;
 }
 
-export function createBcmsEntrySync({
-  uri,
-  getEntry,
-  setEntryMeta,
-}: {
-  uri: string;
-  getEntry(): BCMSEntryExtended | null;
-  setEntryMeta(meta: BCMSEntryExtendedMeta[]): void;
-}): BCMSEntrySync {
-  const store = window.bcms.vue.store;
-  function onMouseMove(event: MouseEvent) {
-    self.mouse.pos.curr[0] = event.clientX;
-    self.mouse.pos.curr[1] = event.clientY + document.body.scrollTop;
-  }
-
-  function onScroll() {
-    self.scroll.y.curr = document.body.scrollTop;
-    const scrollDelta = self.scroll.y.curr - self.scroll.y.last;
-    self.scroll.y.last = document.body.scrollTop;
-    self.mouse.pos.curr[1] = self.mouse.pos.curr[1] + scrollDelta;
-    for (const connId in self.users) {
-      const user = self.users[connId];
-      user.mouse[1] -= scrollDelta / 20;
-      user._handlers.forEach((f) => f(user));
-    }
-  }
-
-  function findPropPath(el: HTMLElement): string {
-    const propPath = el.getAttribute('data-bcms-prop-path');
-    if (propPath) {
-      return propPath;
-    }
-    if (el.parentElement) {
-      return findPropPath(el.parentElement as HTMLElement);
-    }
-    return '';
-  }
-
-  function onMouseClick(event: MouseEvent) {
-    if (event.buttons === 1) {
-      const el = event.target as HTMLElement;
-      const propPath = findPropPath(el);
-      self.emit.focus({
-        propPath: propPath || 'n',
-      });
-      self.mouse.click.left = true;
-    } else if (event.buttons === 0) {
-      self.mouse.click.left = false;
-    }
-  }
-
-  function createAvatarElement(user: BCMSEntrySyncUser): HTMLElement {
-    const root = document.createElement('div');
-    root.setAttribute('class', 'select-none inline-block cursor-pointer');
-    root.addEventListener('click', () => {
-      const cursor = document.getElementById(user.uid);
-      if (cursor) {
-        const bb = cursor.getBoundingClientRect();
-        document.body.scrollTop = bb.top - window.innerHeight / 2;
-        onScroll();
-      }
-    });
-    root.innerHTML = `
-    ${
-      user.avatar
-        ? `
-        <div class="w-10 h-10 rounded-full ring-2 ring-white ${user.colors.avatarRing} overflow-hidden">
-          <img
-            src="${user.avatar}"
-            alt="${user.name}"
-            class="w-full h-full"
-          />
-        </div>
-    `
-        : `
-      <div class="w-10 h-10 rounded-full ${
-        user.colors.avatarRing
-      } flex justify-center items-center">
-        <span class="text-white font-semibold relative top-0.5 text-l">
-          ${user.name
-            .split(' ')
-            .map((word) => word[0])
-            .slice(0, 2)
-            .join('')}
-        </span>
-      </div>
-    `
-    }
-    `;
-    return root;
-  }
-
-  function addUserToFocusContainer(
-    user: BCMSEntrySyncUser,
-    focusElement: HTMLElement,
-  ): BCMSEntrySyncFocusContainer {
-    if (user.focusElement) {
-      removeUserFromFocusContainer(user);
-    }
-    user.focusElement = focusElement;
-    let target: BCMSEntrySyncFocusContainer | undefined = undefined;
-    for (const id in focusContainers) {
-      const focusContainer = focusContainers[id];
-      if (focusContainer.focus === focusElement) {
-        target = focusContainer;
-        break;
-      }
-    }
-    user.avatarMoveEl.style.opacity = '1';
-    if (!target) {
-      const root = document.createElement('div');
-      root.setAttribute(
-        'class',
-        'absolute flex flex-col -space-y-2 flex-shrink-0 transition-all',
-      );
-      const bb = focusElement.getBoundingClientRect();
-      root.setAttribute(
-        'style',
-        `top: ${bb.top + document.body.scrollTop}px; left: ${bb.right + 10}px;`,
-      );
-      root.appendChild(user.avatarMoveEl);
-      document.body.appendChild(root);
-      const id = uuidv4();
-      target = {
-        id,
-        root,
-        focus: focusElement,
-        bb,
-        conns: {},
-        destroy() {
-          document.body.removeChild(root);
-          delete focusContainers[id];
-        },
-      };
-      focusContainers[id] = target;
-    } else {
-      target.root.style.top =
-        target.bb.top +
-        target.bb.height / 2 -
-        target.root.offsetHeight +
-        document.body.scrollTop +
-        'px';
-      target.conns[user.connId] = true;
-      target.root.appendChild(user.avatarMoveEl);
-    }
-    return target;
-  }
-
-  function removeUserFromFocusContainer(user: BCMSEntrySyncUser): void {
-    if (user.focusElement) {
-      for (const id in focusContainers) {
-        const focusContainer = focusContainers[id];
-        if (focusContainer.focus === user.focusElement) {
-          focusContainer.root.removeChild(user.avatarMoveEl);
-          user.focusElement = undefined;
-          delete focusContainer.conns[user.connId];
-          const connCount = focusContainer.root.childNodes.length;
-          if (connCount === 0) {
-            document.body.removeChild(focusContainer.root);
-            delete focusContainers[focusContainer.id];
-          } else if (connCount === 1) {
-            focusContainer.root.style.top =
-              focusContainer.bb.top + document.body.scrollTop + 'px';
-          } else {
-            focusContainer.root.style.top =
-              focusContainer.bb.top +
-              focusContainer.bb.height / 2 -
-              focusContainer.root.offsetHeight +
-              document.body.scrollTop +
-              'px';
-          }
-          break;
-        }
-      }
-    }
-  }
-
-  function handlerFocusEvent(event: BCMSSocketSyncChangeEvent) {
-    const data = event.data as BCMSSocketSyncChangeDataFocus;
-    const el = document.querySelector(
-      `[data-bcms-prop-path="${data.p}"]`,
-    ) as HTMLElement;
-    const syncUser = self.users[event.connId as string];
-    if (el) {
-      addUserToFocusContainer(syncUser, el);
-      syncUser.avatarMoveEl.style.display = 'block';
-    } else {
-      syncUser.avatarMoveEl.style.display = 'none';
-      removeUserFromFocusContainer(syncUser);
-    }
-  }
-
-  const ticker = setInterval(() => {
-    if (store.getters.feature_available('content_sync')) {
-      if (
-        self.mouse.pos.curr[0] !== self.mouse.pos.last[0] ||
-        self.mouse.pos.curr[1] !== self.mouse.pos.last[1]
-      ) {
-        self.mouse.pos.last[0] = self.mouse.pos.curr[0];
-        self.mouse.pos.last[1] = self.mouse.pos.curr[1];
-        window.bcms.sdk.socket.emit(BCMSSocketEventName.SYNC_CHANGE_TSERV, {
-          p: uri,
-          sct: BCMSSocketSyncChangeType.MOUSE,
-          data: {
-            x: self.mouse.pos.curr[0],
-            y: self.mouse.pos.curr[1],
-          },
-        });
-      }
-    }
-  }, 100);
-  // let colorIndex = 0;
-  const focusContainers: {
-    [id: string]: BCMSEntrySyncFocusContainer;
-  } = {};
-  const socketSubs: Array<() => void> = [];
-  const onChange: { [id: string]: (data: BCMSSocketSyncChangeEvent) => void } =
-    {};
-
-  const self: BCMSEntrySync = {
-    scroll: {
-      y: {
-        curr: 0,
-        last: 0,
-      },
-    },
+export interface EntrySyncUserData {
+    connId: string;
+    userId: string;
+    color: EntrySyncUserDataColor;
+    /**
+     * Value of -1 should be ignored. That means that data
+     * is not yet available.
+     */
     mouse: {
-      pos: {
-        curr: [0, 0],
-        last: [0, 0],
-      },
-      click: {
-        left: false,
-      },
+        x: number;
+        y: number;
+    };
+    /**
+     * Value of -1 should be ignored. That means that data
+     * is not yet available.
+     */
+    scroll: {
+        y: number;
+    };
+    /**
+     * Will contain a prop path. This can be used to target
+     * node in the DOM.
+     */
+    focusOn?: string;
+}
+
+const userColors: EntrySyncUserDataColor[] = [
+    {
+        main: '#ff0000',
     },
-    users: {},
+    {
+        main: '#ffff00',
+    },
+    {
+        main: '#ff00ff',
+    },
+    {
+        main: '#00ff00',
+    },
+    {
+        main: '#00ffff',
+    },
+    {
+        main: '#0000ff',
+    },
+];
+
+type UpdateDefaults = Omit<
+    SocketEventDataEntrySyncUpdateDefaults,
+    'instanceId' | 'entryId' | 'lngIdx' | 'lngCode' | 'sourceConnId'
+>;
+
+function fnWrapper(handler: any): (args: any) => void {
+    return (args) => {
+        handler(args);
+    };
+}
+
+export class EntrySync {
+    private sdk: Sdk;
+    private throwable: Throwable;
+    private unsubs: Array<() => void> = [];
+    private tickerInterval = setInterval(() => {
+        let emitMouseMove = false;
+        if (
+            this.mouse.position.curr.x !== this.mouse.position.last.x ||
+            this.mouse.position.curr.y !== this.mouse.position.last.y
+        ) {
+            this.mouse.position.last.x = this.mouse.position.curr.x;
+            this.mouse.position.last.y = this.mouse.position.curr.y;
+            emitMouseMove = true;
+        }
+        if (this.scroll.y.curr !== this.scroll.y.last) {
+            this.scroll.y.last = this.scroll.y.curr;
+            emitMouseMove = true;
+        }
+        if (emitMouseMove) {
+            this.emitMouseMove(
+                this.mouse.position.curr.x,
+                this.mouse.position.curr.y,
+                this.scroll.y.curr,
+            );
+        }
+    }, 20);
+    private refreshConnectionInterval = setInterval(() => {
+        const data: SocketEventDataEntrySyncDefaults = {
+            entryId: this.getEntryId(),
+            instanceId: this.getInstanceId(),
+            lngIdx: this.getLngIdx(),
+            lngCode: this.getLngCode(),
+            sourceConnId: '',
+        };
+        this.sdk.socket.emit('entry_sync_open', data);
+    }, 60000);
+
+    users = ref<EntrySyncUserData[]>([]);
+    scroll: {
+        y: {
+            curr: number;
+            last: number;
+        };
+    } = {
+        y: {
+            curr: 0,
+            last: 0,
+        },
+    };
+    mouse: {
+        position: {
+            curr: {
+                x: number;
+                y: number;
+            };
+            last: {
+                x: number;
+                y: number;
+            };
+        };
+        click: {
+            left: boolean;
+        };
+    } = {
+        position: {
+            curr: {
+                x: 0,
+                y: 0,
+            },
+            last: {
+                x: 0,
+                y: 0,
+            },
+        },
+        click: {
+            left: false,
+        },
+    };
+
+    constructor(
+        public getEntryId: () => string,
+        public getEntry: () => Entry | undefined,
+        public setEntry: (entry: Entry) => void,
+        public getLngCode: () => string,
+        public getLngIdx: () => number,
+        public getInstanceId: () => string,
+    ) {
+        this.sdk = window.bcms.sdk;
+        this.throwable = window.bcms.throwable;
+        this.unsubs.push(
+            this.sdk.socket.internalEventRegister('open', async () => {
+                const data: SocketEventDataEntrySyncDefaults = {
+                    entryId: this.getEntryId(),
+                    instanceId: this.getInstanceId(),
+                    lngIdx: this.getLngIdx(),
+                    lngCode: this.getLngCode(),
+                    sourceConnId: '',
+                };
+                this.sdk.socket.emit('entry_sync_open', data);
+            }),
+            this.sdk.socket.register('entry_sync_user_leave', async (data) => {
+                if (data.entryId === this.getEntryId()) {
+                    for (let i = 0; i < this.users.value.length; i++) {
+                        const user = this.users.value[i];
+                        if (user.connId === data.sourceConnId) {
+                            this.users.value.splice(i, 1);
+                            break;
+                        }
+                    }
+                }
+            }),
+            this.sdk.socket.register('entry_sync_user_join', async (data) => {
+                if (data.entryId === this.getEntryId()) {
+                    if (
+                        !this.users.value.find(
+                            (e) => e.connId === data.sourceConnId,
+                        )
+                    ) {
+                        const colorIdx =
+                            this.users.value.length % userColors.length;
+                        this.users.value.push({
+                            connId: data.sourceConnId,
+                            userId: data.userId,
+                            color: userColors[colorIdx],
+                            mouse: {
+                                x: -1,
+                                y: -1,
+                            },
+                            scroll: {
+                                y: -1,
+                            },
+                        });
+                    }
+                }
+            }),
+            this.sdk.socket.register('entry_sync_users', async (data) => {
+                if (data.entryId === this.getEntryId()) {
+                    /**
+                     * Prefetch all users of the instance. They will
+                     * be pulled from cache if available.
+                     */
+                    await this.throwable(async () => {
+                        await this.sdk.user.getAll();
+                    });
+                    const items = data.items.filter(
+                        (e) => e.connId !== this.sdk.socket.id,
+                    );
+                    for (let i = 0; i < items.length; i++) {
+                        const item = items[i];
+                        const existingUser = this.users.value.find(
+                            (e) => e.connId === item.connId,
+                        );
+                        if (!existingUser) {
+                            await this.throwable(async () => {
+                                const user = await this.sdk.user.get(
+                                    item.userId,
+                                );
+                                const colorIdx =
+                                    this.users.value.length % userColors.length;
+                                this.users.value.push({
+                                    connId: item.connId,
+                                    userId: user._id,
+                                    color: userColors[colorIdx],
+                                    scroll: {
+                                        y: -1,
+                                    },
+                                    mouse: {
+                                        x: -1,
+                                        y: -1,
+                                    },
+                                });
+                            });
+                        }
+                    }
+                }
+            }),
+            this.sdk.socket.register('entry_sync_mouse_move', async (data) => {
+                if (data.entryId === this.getEntryId()) {
+                    const user = this.users.value.find(
+                        (e) => e.connId === data.sourceConnId,
+                    );
+                    if (user) {
+                        user.mouse.x = data.x;
+                        user.mouse.y = data.y;
+                        user.scroll.y = data.scrollY;
+                    }
+                }
+            }),
+            this.sdk.socket.register('entry_sync_focus', async (data) => {
+                if (data.entryId === this.getEntryId()) {
+                    const user = this.users.value.find(
+                        (e) => e.connId === data.sourceConnId,
+                    );
+                    if (user) {
+                        user.focusOn =
+                            data.propPath === '__none'
+                                ? undefined
+                                : data.propPath;
+                    }
+                }
+            }),
+            this.sdk.socket.register('entry_sync_content_req', async (data) => {
+                if (data.entryId === this.getEntryId()) {
+                    this.sdk.socket.emit('entry_sync_content_res', {
+                        instanceId: this.getInstanceId(),
+                        entryId: this.getEntryId(),
+                        lngCode: this.getLngCode(),
+                        lngIdx: this.getLngIdx(),
+                        sourceConnId: data.sourceConnId,
+                        shouldSync: true,
+                        data: this.getEntry(),
+                    });
+                }
+            }),
+        );
+    }
+
+    private onMouseMove(event: MouseEvent) {
+        this.mouse.position.curr.x = event.clientX;
+        this.mouse.position.curr.y = event.clientY;
+    }
+
+    private onScroll() {
+        this.scroll.y.curr = document.body.scrollTop;
+        const scrollDelta = this.scroll.y.curr - this.scroll.y.last;
+        this.scroll.y.last = document.body.scrollTop;
+        this.mouse.position.curr.y = this.mouse.position.curr.y + scrollDelta;
+    }
+
+    private findPropPath(element: HTMLElement): string | null {
+        if (element.id && element.id.startsWith('entry.')) {
+            return element.id;
+        } else if (element.parentElement) {
+            return this.findPropPath(element.parentElement);
+        }
+        return null;
+    }
+
+    private onMouseClick(event: MouseEvent) {
+        if (event.buttons === 1) {
+            const propPath = this.findPropPath(event.target as HTMLElement);
+            this.emitFocus(propPath || '__none');
+            this.mouse.click.left = true;
+        } else if (event.buttons === 0) {
+            this.mouse.click.left = false;
+        }
+    }
 
     async sync() {
-      if (store.getters.feature_available('content_sync')) {
-        await window.bcms.util.throwable(async () => {
-          window.bcms.sdk.socket.emit(BCMSSocketEventName.SYNC_TSERV, {
-            p: uri,
-          });
-          window.addEventListener('mousemove', onMouseMove);
-          document.body.addEventListener('scroll', onScroll);
-          window.addEventListener('mousedown', onMouseClick);
-          window.addEventListener('mouseup', onMouseClick);
-
-          const soc = window.bcms.sdk.socket;
-          socketSubs.push(
-            soc.subscribe(BCMSSocketEventName.SYNC_FSERV, async (ev) => {
-              const event = ev as BCMSSocketSyncEvent;
-              if (event.p === uri) {
-                const me = await window.bcms.sdk.user.get();
-                if (event.connId !== `${me._id}_${window.bcms.sdk.socket.id}`) {
-                  const connId = event.connId + '';
-                  if (self.users[connId]) {
-                    self.users[connId].destroy();
-                  }
-                  self.createUser(connId);
-                }
-              }
-            }),
-            soc.subscribe(BCMSSocketEventName.UNSYNC_FSERV, async (ev) => {
-              const event = ev as BCMSSocketUnsyncEvent;
-              if (event.p === uri) {
-                const connId = event.connId as string;
-                if (self.users[connId]) {
-                  self.users[connId].destroy();
-                }
-              }
-            }),
-            soc.subscribe(BCMSSocketEventName.SYNC_CHANGE_FSERV, async (ev) => {
-              const event = ev as BCMSSocketSyncChangeEvent;
-              if (event.p === uri) {
-                if (event.sct === BCMSSocketSyncChangeType.MOUSE) {
-                  const data = event.data as BCMSSocketSyncChangeDataMouse;
-                  const connId = event.connId as string;
-                  if (self.users[connId]) {
-                    self.users[connId].mouse = [data.x, data.y];
-                    self.users[connId]._handlers.forEach((e) =>
-                      e(self.users[connId]),
-                    );
-                  }
-                } else if (event.sct === BCMSSocketSyncChangeType.FOCUS) {
-                  handlerFocusEvent(event);
-                } else {
-                  for (const id in onChange) {
-                    onChange[id](event);
-                  }
-                }
-              }
-            }),
-            soc.subscribe('SC', async (ev) => {
-              const event = ev as unknown as BCMSEntrySyncChannelData;
-              if (event.type === 'entry-sync') {
-                soc.emit('SC', {
-                  channel: event.channel,
-                  payload: {
-                    entry: getEntry(),
-                  },
-                });
-              }
-            }),
-            soc.subscribe('SMQ', async (ev) => {
-              const event = ev as any;
-              const entry = getEntry();
-              if (entry) {
-                window.bcms.sdk.socket.emit('SMS', {
-                  p: event.p,
-                  connId: event.connId,
-                  data: entry.meta,
-                });
-              }
-            }),
-          );
-          const connIds = await window.bcms.sdk.socket.sync.connections();
-          if (connIds.length > 1) {
-            window.bcms.sdk.socket.emit('SMQ', {
-              p: window.location.pathname,
-            });
-            await new Promise<void>((resolve) => {
-              const unsub = window.bcms.sdk.socket.subscribe(
-                'SMS',
-                async (ev) => {
-                  const event = ev as any;
-                  unsub();
-                  clearTimeout(timeout);
-                  setEntryMeta(event.data);
-                  resolve();
-                },
-              );
-              const timeout = setTimeout(() => {
-                unsub();
-                resolve();
-              }, 2000);
-            });
-          }
+        this.sdk.socket.emit('entry_sync_user_join', {
+            entryId: this.getEntryId(),
+            lngCode: this.getLngCode(),
+            lngIdx: this.getLngIdx(),
+            instanceId: this.getInstanceId(),
+            userId: this.sdk.accessToken?.payload.userId || '__none',
+            sourceConnId: '',
         });
-      }
-    },
-
-    async unsync() {
-      if (store.getters.feature_available('content_sync')) {
-        clearInterval(ticker);
-        socketSubs.forEach((e) => e());
-        await window.bcms.util.throwable(async () => {
-          window.bcms.sdk.socket.emit(BCMSSocketEventName.UNSYNC_TSERV, {
-            p: uri,
-          });
-          window.removeEventListener('mousemove', onMouseMove);
-          window.removeEventListener('mousedown', onMouseClick);
-          window.removeEventListener('mouseup', onMouseClick);
-          document.body.removeEventListener('scroll', onScroll);
-          for (const connId in self.users) {
-            self.users[connId].destroy();
-          }
-          for (const id in focusContainers) {
-            document.body.removeChild(focusContainers[id].root);
-          }
+        await this.throwable(async () => {
+            const mouseMove = fnWrapper((event: MouseEvent) => {
+                this.onMouseMove(event);
+            });
+            const scroll = fnWrapper(() => {
+                this.onScroll();
+            });
+            const mouseClick = fnWrapper((event: MouseEvent) => {
+                this.onMouseClick(event);
+            });
+            window.addEventListener('mousemove', mouseMove);
+            document.body.addEventListener('scroll', scroll);
+            window.addEventListener('mousedown', mouseClick);
+            window.addEventListener('mouseup', mouseClick);
+            this.unsubs.push(() => {
+                window.removeEventListener('mousemove', mouseMove);
+                document.body.removeEventListener('scroll', scroll);
+                window.removeEventListener('mousedown', mouseClick);
+                window.removeEventListener('mouseup', mouseClick);
+            });
+            await new Promise<void>((resolve, reject) => {
+                const resUnsub = this.sdk.socket.register(
+                    'entry_sync_content_res',
+                    async (data) => {
+                        if (data.entryId === this.getEntryId()) {
+                            if (data.data && data.shouldSync) {
+                                this.setEntry(data.data);
+                            }
+                            clearTimeout(timeout);
+                            resUnsub();
+                            resolve();
+                        }
+                    },
+                );
+                const timeout = setTimeout(() => {
+                    resUnsub();
+                    reject('Timeout while waiting for entry sync data');
+                }, 3000);
+                this.sdk.socket.emit('entry_sync_content_req', {
+                    entryId: this.getEntryId(),
+                    instanceId: this.getInstanceId(),
+                    lngIdx: this.getLngIdx(),
+                    lngCode: this.getLngCode(),
+                    sourceConnId: '',
+                });
+            });
         });
-      }
-    },
+    }
 
-    async createUser(connId) {
-      const uid = connId.split('_')[0];
-      const user = await window.bcms.sdk.user.get(uid);
-      const color =
-        window.bcms.util.color.colors[
-          parseInt(uid, 16) % window.bcms.util.color.colors.length
-        ];
-      // colorIndex++;
-      self.users[connId] = {
-        connId,
-        colors: {
-          cursor: color.class.text,
-          avatarRing: color.class.bg,
-        },
-        uid,
-        mouse: [0, 0],
-        name: user.username,
-        avatar: user.customPool.personal.avatarUri,
-        avatarEl: undefined as never,
-        avatarMoveEl: undefined as never,
-        _handlers: [],
-        pointerElements: undefined as never,
-        onUpdate: () => {
-          // Do nothing
-        },
-        destroy() {
-          removeUserFromFocusContainer(self.users[connId]);
-          const avatarContainer = document.getElementById(
-            'bcms-avatar-container',
-          );
-          if (avatarContainer) {
-            avatarContainer.removeChild(self.users[connId].avatarEl);
-          }
-          if (self.users[connId].pointerElements) {
-            document.body.removeChild(self.users[connId].pointerElements.root);
-          }
-          delete self.users[connId];
-        },
-      };
-      self.users[connId].onUpdate = (handler) => {
-        self.users[connId]._handlers.push(handler);
-      };
-      self.users[connId].avatarEl = createAvatarElement(self.users[connId]);
-      const avatarMoveEl = createAvatarElement(self.users[connId]);
-      avatarMoveEl.style.opacity = '0';
-      self.users[connId].avatarMoveEl = avatarMoveEl;
-      // self.users[connId].avatarMoveEl.style.display = 'none';
-      document.body.appendChild(self.users[connId].avatarMoveEl);
-      const avatarContainer = document.getElementById('bcms-avatar-container');
-      if (avatarContainer) {
-        avatarContainer.appendChild(self.users[connId].avatarEl);
-      }
-      self.users[connId].pointerElements = self.createUserPointer(
-        self.users[connId],
-      );
-      return self.users[connId];
-    },
+    emitFocus(propPath: string) {
+        const data: SocketEventDataEntrySyncFocus = {
+            instanceId: this.getInstanceId(),
+            entryId: this.getEntryId(),
+            lngCode: this.getLngCode(),
+            lngIdx: this.getLngIdx(),
+            sourceConnId: '',
+            propPath,
+        };
+        this.sdk.socket.emit('entry_sync_focus', data);
+    }
 
-    async createUsers() {
-      const me = await window.bcms.sdk.user.get();
-      const connIds = await window.bcms.sdk.socket.sync.connections();
-      const output: BCMSEntrySyncUser[] = [];
-      for (let i = 0; i < connIds.length; i++) {
-        const connId = connIds[i];
-        if (connId !== `${me._id}_${window.bcms.sdk.socket.id()}`) {
-          if (!self.users[connId]) {
-            await self.createUser(connId);
-            output.push(self.users[connId]);
-          }
-        }
-      }
-      return output;
-    },
+    emitMouseMove(x: number, y: number, scrollY: number) {
+        const data: SocketEventDataEntrySyncMouseMove = {
+            instanceId: this.getInstanceId(),
+            entryId: this.getEntryId(),
+            lngCode: this.getLngCode(),
+            lngIdx: this.getLngIdx(),
+            sourceConnId: '',
+            x,
+            y,
+            scrollY,
+        };
+        this.sdk.socket.emit('entry_sync_mouse_move', data);
+    }
 
-    createUserPointer(user) {
-      const root = document.createElement('div');
-      root.setAttribute('id', user.uid);
-      root.setAttribute('class', 'fixed z-[1000000]');
-      root.style.left = '0px';
-      root.style.top = '0px';
-      root.style.transition = 'all 0.1s';
-      root.addEventListener('mouseenter', () => {
-        username.style.display = 'block';
-      });
-      root.addEventListener('mouseleave', () => {
-        username.style.display = 'none';
-      });
+    emitProseContentUpdate(propPath: string, updates: number[]) {
+        const data: SocketEventDataEntrySyncProseContentUpdate = {
+            instanceId: this.getInstanceId(),
+            entryId: this.getEntryId(),
+            lngCode: this.getLngCode(),
+            lngIdx: this.getLngIdx(),
+            sourceConnId: '',
+            propPath,
+            updates,
+        };
+        this.sdk.socket.emit('entry_sync_prose_content_update', data);
+    }
 
-      const cursor = document.createElement('div');
-      cursor.innerHTML = `
-      <svg class="w-4 h-4 ${user.colors.cursor}" viewBox="0 0 36 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path class="fill-current" d="M14.2737 32L0 0L36 9.58755L19.2 16.0623L14.2737 32Z" />
-      </svg>`;
-      root.appendChild(cursor);
-
-      const username = document.createElement('div');
-      username.setAttribute(
-        'class',
-        `${user.colors.cursor} font-semibold relative left-3 bottom-2 text-sm`,
-      );
-      username.innerText = user.name;
-      root.appendChild(username);
-      document.body.appendChild(root);
-
-      user.onUpdate((u) => {
-        root.style.left = u.mouse[0] + 'px';
-        root.style.top = u.mouse[1] - document.body.scrollTop + 'px';
-      });
-
-      return {
-        cursor,
-        root,
-        name: username,
-      };
-    },
-
-    onChange(handler) {
-      const id = uuidv4();
-      onChange[id] = handler;
-      return () => {
-        delete onChange[id];
-      };
-    },
-
-    async updateEntry(ent, data) {
-      /**
-       * Prop in meta
-       */
-      if (data.p.startsWith('m')) {
-        const path: Array<string | number> = window.bcms.prop.pathStrToArr(
-          data.p,
+    onProseContentUpdate(
+        propPath: string,
+        handler: SocketEventHandler<'entry_sync_prose_content_update'>,
+    ): () => void {
+        return this.sdk.socket.register(
+            'entry_sync_prose_content_update',
+            async (data) => {
+                if (
+                    data.entryId === this.getEntryId() &&
+                    data.propPath === propPath
+                ) {
+                    await handler(data, undefined);
+                }
+            },
         );
-        for (let i = 0; i < path.length; i++) {
-          const p = path[i];
-          const num = parseInt(p as string);
-          if (!isNaN(num)) {
-            path[i] = num;
-          }
-        }
-        if (data.sd) {
-          window.bcms.prop.mutateValue.string(
-            ent.meta[data.li].props,
-            path,
-            data.sd,
-          );
-        } else if (typeof data.rep !== 'undefined') {
-          window.bcms.prop.mutateValue.any(
-            ent.meta[data.li].props,
-            path,
-            data.rep,
-          );
-        } else if (data.movI) {
-          window.bcms.prop.mutateValue.reorderArrayItems(
-            ent.meta[data.li].props,
-            path,
-            data.movI as BCMSArrayPropMoveEventData,
-          );
-        } else if (data.remI) {
-          window.bcms.prop.mutateValue.removeArrayItem(
-            ent.meta[data.li].props,
-            path,
-          );
-        } else if (data.addI) {
-          const template = await window.bcms.sdk.template.get(ent.templateId);
-          if (template) {
-            await window.bcms.prop.mutateValue.addArrayItem(
-              ent.meta[data.li].props,
-              template.props,
-              window.bcms.prop.pathStrToArr(data.p),
-              data.l,
-            );
-          }
-          // window.bcms.prop.mutateValue.any(
-          //   entry.meta[data.li].props,
-          //   path,
-          //   value,
-          // );
-        }
-      }
-    },
+    }
 
-    emit: {
-      propValueChange(data) {
-        window.bcms.sdk.socket.emit(BCMSSocketEventName.SYNC_CHANGE_TSERV, {
-          p: window.location.pathname,
-          sct: BCMSSocketSyncChangeType.PROP,
-          data: {
-            p: data.propPath,
-            l: data.languageCode,
-            li: data.languageIndex,
-            sd: data.sd,
-            rep: data.replaceValue,
-          },
+    emitProseCursorUpdate(propPath: string, updates: number[]) {
+        const data: SocketEventDataEntrySyncProseCursorUpdate = {
+            instanceId: this.getInstanceId(),
+            entryId: this.getEntryId(),
+            lngCode: this.getLngCode(),
+            lngIdx: this.getLngIdx(),
+            sourceConnId: '',
+            propPath,
+            updates,
+        };
+        this.sdk.socket.emit('entry_sync_prose_cursor_update', data);
+    }
+
+    onProseCursorUpdate(
+        propPath: string,
+        handler: SocketEventHandler<'entry_sync_prose_cursor_update'>,
+    ): () => void {
+        return this.sdk.socket.register(
+            'entry_sync_prose_cursor_update',
+            async (data) => {
+                if (
+                    data.entryId === this.getEntryId() &&
+                    data.propPath === propPath
+                ) {
+                    await handler(data, undefined);
+                }
+            },
+        );
+    }
+
+    emitYSyncRequest(propPath: string) {
+        const data: SocketEventDataEntrySyncYSyncReq = {
+            instanceId: this.getInstanceId(),
+            entryId: this.getEntryId(),
+            lngCode: this.getLngCode(),
+            lngIdx: this.getLngIdx(),
+            sourceConnId: '',
+            propPath,
+        };
+        this.sdk.socket.emit('entry_sync_y_sync_req', data);
+    }
+
+    onYSyncRequest(
+        propPath: string,
+        handler: SocketEventHandler<'entry_sync_y_sync_req'>,
+    ) {
+        return this.sdk.socket.register(
+            'entry_sync_y_sync_req',
+            async (data) => {
+                if (
+                    data.entryId === this.getEntryId() &&
+                    data.propPath === propPath
+                ) {
+                    await handler(data, undefined);
+                }
+            },
+        );
+    }
+
+    emitYSyncResponse(
+        propPath: string,
+        connId: string,
+        shouldSync: boolean,
+        updates: number[],
+    ) {
+        const data: SocketEventDataEntrySyncYSyncRes = {
+            instanceId: this.getInstanceId(),
+            entryId: this.getEntryId(),
+            lngCode: this.getLngCode(),
+            lngIdx: this.getLngIdx(),
+            sourceConnId: connId,
+            shouldSync,
+            updates,
+            propPath,
+        };
+        this.sdk.socket.emit('entry_sync_y_sync_res', data);
+    }
+
+    onYSyncResponse(
+        propPath: string,
+        handler: SocketEventHandler<'entry_sync_y_sync_res'>,
+    ) {
+        return this.sdk.socket.register(
+            'entry_sync_y_sync_res',
+            async (data) => {
+                if (
+                    data.entryId === this.getEntryId() &&
+                    data.propPath === propPath
+                ) {
+                    await handler(data, undefined);
+                }
+            },
+        );
+    }
+
+    emitStringUpdate(
+        event: UpdateDefaults & {
+            changes?: SocketEventDataEntrySyncStringUpdateChange[];
+        },
+    ) {
+        const data: SocketEventDataEntrySyncStringUpdate = {
+            instanceId: this.getInstanceId(),
+            entryId: this.getEntryId(),
+            lngCode: this.getLngCode(),
+            lngIdx: this.getLngIdx(),
+            sourceConnId: '',
+            propPath: event.propPath,
+            add: event.add,
+            remove: event.remove,
+            move: event.move,
+            changes: event.changes,
+        };
+        this.sdk.socket.emit('entry_sync_string_update', data);
+    }
+
+    onStringUpdate(
+        propPath: string,
+        handler: SocketEventHandler<'entry_sync_string_update'>,
+    ) {
+        return this.sdk.socket.register(
+            'entry_sync_string_update',
+            async (data) => {
+                if (
+                    data.entryId === this.getEntryId() &&
+                    data.propPath === propPath
+                ) {
+                    await handler(data, undefined);
+                }
+            },
+        );
+    }
+
+    emitNumberUpdate(
+        event: UpdateDefaults & {
+            value?: number;
+        },
+    ) {
+        const data: SocketEventDataEntrySyncNumberUpdate = {
+            instanceId: this.getInstanceId(),
+            entryId: this.getEntryId(),
+            lngCode: this.getLngCode(),
+            lngIdx: this.getLngIdx(),
+            sourceConnId: '',
+            propPath: event.propPath,
+            add: event.add,
+            remove: event.remove,
+            move: event.move,
+            value: event.value,
+        };
+        this.sdk.socket.emit('entry_sync_number_update', data);
+    }
+
+    onNumberUpdate(
+        propPath: string,
+        handler: SocketEventHandler<'entry_sync_number_update'>,
+    ) {
+        return this.sdk.socket.register(
+            'entry_sync_number_update',
+            async (data) => {
+                if (
+                    data.entryId === this.getEntryId() &&
+                    data.propPath === propPath
+                ) {
+                    await handler(data, undefined);
+                }
+            },
+        );
+    }
+
+    emitBoolUpdate(
+        event: UpdateDefaults & {
+            value?: boolean;
+        },
+    ) {
+        const data: SocketEventDataEntrySyncBooleanUpdate = {
+            instanceId: this.getInstanceId(),
+            entryId: this.getEntryId(),
+            lngCode: this.getLngCode(),
+            lngIdx: this.getLngIdx(),
+            sourceConnId: '',
+            propPath: event.propPath,
+            add: event.add,
+            remove: event.remove,
+            move: event.move,
+            value: event.value,
+        };
+        this.sdk.socket.emit('entry_sync_bool_update', data);
+    }
+    onBoolUpdate(
+        propPath: string,
+        handler: SocketEventHandler<'entry_sync_bool_update'>,
+    ) {
+        return this.sdk.socket.register(
+            'entry_sync_bool_update',
+            async (data) => {
+                if (
+                    data.entryId === this.getEntryId() &&
+                    data.propPath === propPath
+                ) {
+                    await handler(data, undefined);
+                }
+            },
+        );
+    }
+
+    emitDateUpdate(
+        event: UpdateDefaults & {
+            value?: PropValueDateData;
+        },
+    ) {
+        const data: SocketEventDataEntrySyncDateUpdate = {
+            instanceId: this.getInstanceId(),
+            entryId: this.getEntryId(),
+            lngCode: this.getLngCode(),
+            lngIdx: this.getLngIdx(),
+            sourceConnId: '',
+            propPath: event.propPath,
+            add: event.add,
+            remove: event.remove,
+            move: event.move,
+            value: event.value,
+        };
+        this.sdk.socket.emit('entry_sync_date_update', data);
+    }
+    onDateUpdate(
+        propPath: string,
+        handler: SocketEventHandler<'entry_sync_date_update'>,
+    ) {
+        return this.sdk.socket.register(
+            'entry_sync_date_update',
+            async (data) => {
+                if (
+                    data.entryId === this.getEntryId() &&
+                    data.propPath === propPath
+                ) {
+                    await handler(data, undefined);
+                }
+            },
+        );
+    }
+
+    emitEnumUpdate(
+        event: UpdateDefaults & {
+            value?: string;
+        },
+    ) {
+        const data: SocketEventDataEntrySyncEnumUpdate = {
+            instanceId: this.getInstanceId(),
+            entryId: this.getEntryId(),
+            lngCode: this.getLngCode(),
+            lngIdx: this.getLngIdx(),
+            sourceConnId: '',
+            propPath: event.propPath,
+            add: event.add,
+            remove: event.remove,
+            move: event.move,
+            value: event.value,
+        };
+        this.sdk.socket.emit('entry_sync_enum_update', data);
+    }
+
+    onEnumUpdate(
+        propPath: string,
+        handler: SocketEventHandler<'entry_sync_enum_update'>,
+    ) {
+        return this.sdk.socket.register(
+            'entry_sync_enum_update',
+            async (data) => {
+                if (
+                    data.entryId === this.getEntryId() &&
+                    data.propPath === propPath
+                ) {
+                    await handler(data, undefined);
+                }
+            },
+        );
+    }
+
+    emitMediaUpdate(
+        event: UpdateDefaults & {
+            value?: PropValueMediaData;
+        },
+    ) {
+        const data: SocketEventDataEntrySyncMediaUpdate = {
+            instanceId: this.getInstanceId(),
+            entryId: this.getEntryId(),
+            lngCode: this.getLngCode(),
+            lngIdx: this.getLngIdx(),
+            sourceConnId: '',
+            propPath: event.propPath,
+            add: event.add,
+            remove: event.remove,
+            move: event.move,
+            value: event.value,
+        };
+        this.sdk.socket.emit('entry_sync_media_update', data);
+    }
+
+    onMediaUpdate(
+        propPath: string,
+        handler: SocketEventHandler<'entry_sync_media_update'>,
+    ) {
+        return this.sdk.socket.register(
+            'entry_sync_media_update',
+            async (data) => {
+                if (
+                    data.entryId === this.getEntryId() &&
+                    data.propPath === propPath
+                ) {
+                    await handler(data, undefined);
+                }
+            },
+        );
+    }
+
+    emitEntryPointerUpdate(
+        event: UpdateDefaults & {
+            value?: PropValueEntryPointer;
+        },
+    ) {
+        const data: SocketEventDataEntrySyncEntryPointerUpdate = {
+            instanceId: this.getInstanceId(),
+            entryId: this.getEntryId(),
+            lngCode: this.getLngCode(),
+            lngIdx: this.getLngIdx(),
+            sourceConnId: '',
+            propPath: event.propPath,
+            add: event.add,
+            remove: event.remove,
+            move: event.move,
+            value: event.value,
+        };
+        this.sdk.socket.emit('entry_sync_entry_pointer_update', data);
+    }
+
+    onEntryPointerUpdate(
+        propPath: string,
+        handler: SocketEventHandler<'entry_sync_entry_pointer_update'>,
+    ) {
+        return this.sdk.socket.register(
+            'entry_sync_entry_pointer_update',
+            async (data) => {
+                if (
+                    data.entryId === this.getEntryId() &&
+                    data.propPath === propPath
+                ) {
+                    await handler(data, undefined);
+                }
+            },
+        );
+    }
+
+    emitGroupPointerUpdate(event: UpdateDefaults) {
+        const data: SocketEventDataEntrySyncGroupPointerUpdate = {
+            instanceId: this.getInstanceId(),
+            entryId: this.getEntryId(),
+            lngCode: this.getLngCode(),
+            lngIdx: this.getLngIdx(),
+            sourceConnId: '',
+            propPath: event.propPath,
+            add: event.add,
+            remove: event.remove,
+            move: event.move,
+        };
+        this.sdk.socket.emit('entry_sync_group_pointer_update', data);
+    }
+
+    onGroupPointerUpdate(
+        propPath: string,
+        handler: SocketEventHandler<'entry_sync_group_pointer_update'>,
+    ) {
+        return this.sdk.socket.register(
+            'entry_sync_group_pointer_update',
+            async (data) => {
+                if (
+                    data.entryId === this.getEntryId() &&
+                    data.propPath === propPath
+                ) {
+                    await handler(data, undefined);
+                }
+            },
+        );
+    }
+
+    emitRichTextUpdate(event: UpdateDefaults) {
+        const data: SocketEventDataEntrySyncRichTextUpdate = {
+            instanceId: this.getInstanceId(),
+            entryId: this.getEntryId(),
+            lngCode: this.getLngCode(),
+            lngIdx: this.getLngIdx(),
+            sourceConnId: '',
+            propPath: event.propPath,
+            add: event.add,
+            remove: event.remove,
+            move: event.move,
+        };
+        this.sdk.socket.emit('entry_sync_rich_text_update', data);
+    }
+
+    onRichTextUpdate(
+        propPath: string,
+        handler: SocketEventHandler<'entry_sync_rich_text_update'>,
+    ) {
+        return this.sdk.socket.register(
+            'entry_sync_rich_text_update',
+            async (data) => {
+                if (
+                    data.entryId === this.getEntryId() &&
+                    data.propPath === propPath
+                ) {
+                    await handler(data, undefined);
+                }
+            },
+        );
+    }
+
+    emitUserSelectRange(propPath: string, range: [number, number]) {
+        const data: SocketEventDataEntrySyncUserSelectRange = {
+            instanceId: this.getInstanceId(),
+            entryId: this.getEntryId(),
+            lngCode: this.getLngCode(),
+            lngIdx: this.getLngIdx(),
+            sourceConnId: '',
+            propPath,
+            range,
+            userId: (this.sdk.store.user.methods.me() as UserProtected)._id,
+        };
+        this.sdk.socket.emit('entry_sync_user_select_range', data);
+    }
+
+    onUserSelectRange(
+        propPath: string,
+        handler: SocketEventHandler<
+            'entry_sync_user_select_range',
+            { entrySyncUser: EntrySyncUserData; user: UserProtected }
+        >,
+    ) {
+        return this.sdk.socket.register(
+            'entry_sync_user_select_range',
+            async (data) => {
+                if (
+                    data.entryId === this.getEntryId() &&
+                    data.propPath === propPath
+                ) {
+                    await this.throwable(async () => {
+                        const entrySyncUser = this.users.value.find(
+                            (e) => e.connId === data.sourceConnId,
+                        );
+                        const user = (await this.sdk.user.get(
+                            'me',
+                        )) as UserProtected;
+                        if (entrySyncUser && user) {
+                            await handler(data, {
+                                entrySyncUser,
+                                user,
+                            });
+                        }
+                    });
+                }
+            },
+        );
+    }
+
+    destroy() {
+        callAndClearUnsubscribeFns(this.unsubs);
+        clearInterval(this.tickerInterval);
+        clearInterval(this.refreshConnectionInterval);
+        this.sdk.socket.emit('entry_sync_user_leave', {
+            entryId: this.getEntryId(),
+            lngCode: this.getLngCode(),
+            lngIdx: this.getLngIdx(),
+            instanceId: this.getInstanceId(),
+            userId: this.sdk.accessToken?.payload.userId || '__none',
+            sourceConnId: '',
         });
-      },
-
-      propAddArrayItem(data) {
-        window.bcms.sdk.socket.emit(BCMSSocketEventName.SYNC_CHANGE_TSERV, {
-          p: window.location.pathname,
-          sct: BCMSSocketSyncChangeType.PROP,
-          data: {
-            p: data.propPath,
-            l: data.languageCode,
-            li: data.languageIndex,
-            addI: true,
-          },
-        });
-      },
-
-      propRemoveArrayItem(data) {
-        window.bcms.sdk.socket.emit(BCMSSocketEventName.SYNC_CHANGE_TSERV, {
-          p: window.location.pathname,
-          sct: BCMSSocketSyncChangeType.PROP,
-          data: {
-            p: data.propPath,
-            l: data.languageCode,
-            li: data.languageIndex,
-            remI: true,
-          },
-        });
-      },
-
-      propMoveArrayItem(data) {
-        window.bcms.sdk.socket.emit(BCMSSocketEventName.SYNC_CHANGE_TSERV, {
-          p: window.location.pathname,
-          sct: BCMSSocketSyncChangeType.PROP,
-          data: {
-            p: data.propPath,
-            l: data.languageCode,
-            li: data.languageIndex,
-            movI: data.data,
-          },
-        });
-      },
-
-      contentUpdate(data) {
-        window.bcms.sdk.socket.emit(BCMSSocketEventName.SYNC_CHANGE_TSERV, {
-          p: window.location.pathname,
-          sct: BCMSSocketSyncChangeType.PROP,
-          data: {
-            p: data.propPath,
-            l: data.languageCode,
-            li: data.languageIndex,
-            cu: data.data,
-          },
-        });
-      },
-
-      cursorUpdate(data) {
-        window.bcms.sdk.socket.emit(BCMSSocketEventName.SYNC_CHANGE_TSERV, {
-          p: window.location.pathname,
-          sct: 'C',
-          data: {
-            p: data.propPath,
-            l: data.languageCode,
-            li: data.languageIndex,
-            cursor: data.data,
-          },
-        });
-      },
-
-      focus(data) {
-        window.bcms.sdk.socket.emit(BCMSSocketEventName.SYNC_CHANGE_TSERV, {
-          p: window.location.pathname,
-          sct: BCMSSocketSyncChangeType.FOCUS,
-          data: {
-            p: data.propPath,
-          },
-        });
-      },
-    },
-  };
-
-  return self;
+    }
 }

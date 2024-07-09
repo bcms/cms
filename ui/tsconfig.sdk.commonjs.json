@@ -1,0 +1,32 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "declaration": false,
+        "declarationMap": false,
+        "sourceMap": false,
+        "removeComments": false,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "strict": true,
+        "target": "ES2020",
+        "outDir": "./dist-sdk/cjs",
+        "baseUrl": "./src/sdk",
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "moduleResolution": "Node",
+        "paths": {
+            "@thebcms/selfhosted-backend/*": ["../backend/src/*"],
+            "@thebcms/selfhosted-backend/server": ["../backend/src/_server"],
+            "@thebcms/selfhosted-backend/server/*": [
+                "../backend/src/_server/*"
+            ],
+            "@thebcms/selfhosted-utils/*": ["../backend/src/_server/util/*"],
+            "@thebcms/selfhosted-sdk": ["./src/sdk"],
+            "@thebcms/selfhosted-sdk/*": ["./src/sdk/*"],
+            "@thebcms/selfhosted-ui/*": ["./src/*"]
+        }
+    },
+    "include": ["src/sdk", "../backend/src"]
+}

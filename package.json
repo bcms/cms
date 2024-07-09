@@ -1,43 +1,43 @@
 {
-  "name": "@thebcms/cms",
-  "version": "1.0.0",
-  "private": true,
-  "description": "",
-  "scripts": {
-    "postinstall": "npm-tool --postinstall",
-    "setup": "npm-tool --setup",
-    "build:types": "npm-tool --build-types",
-    "bundle:ui": "npm-tool --bundle-ui",
-    "bundle:sdk": "npm-tool --bundle-sdk",
-    "bundle:backend": "npm-tool --bundle-backend",
-    "bundle:backend:dev": "npm-tool --bundle-backend-dev",
-    "bundle:client": "npm-tool --bundle-client",
-    "create:docker:backend:image": "npm-tool --create-docker-backend-image",
-    "create:docker:backend:image:dev": "npm-tool --create-docker-backend-image-dev",
-    "bundle": "npm-tool --bundle",
-    "publish:ui": "npm-tool --publish-ui",
-    "publish:sdk": "npm-tool --publish-sdk",
-    "publish:backend": "npm-tool --publish-backend",
-    "publish:client": "npm-tool --publish-client",
-    "prepare": "husky install",
-    "pre:commit": "npm-tool --pre-commit"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/bcms/cms.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/bcms/cms/issues"
-  },
-  "homepage": "https://github.com/bcms/cms#readme",
-  "devDependencies": {
-    "@banez/child_process": "^1.0.3",
-    "@banez/fs": "^1.0.3",
-    "@banez/npm-tool": "^1.1.1",
-    "@banez/string-utility": "^1.0.1",
-    "husky": "^8.0.3"
-  }
+    "name": "@thebcms/selfhosted-cms",
+    "version": "1.0.0",
+    "private": true,
+    "description": "",
+    "scripts": {
+        "postinstall": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --postinstall",
+        "setup": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --setup",
+        "bundle:types": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --bundle-types",
+        "bundle:ui": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --bundle-ui",
+        "bundle:sdk": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --bundle-sdk",
+        "bundle:backend": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --bundle-backend",
+        "bundle:client": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --bundle-client",
+        "bundle:cli": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --bundle-cli",
+        "bundle": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --bundle",
+        "publish:ui": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --publish-ui",
+        "publish:sdk": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --publish-sdk",
+        "publish:backend": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --publish-backend",
+        "publish:client": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --publish-client",
+        "publish:cli": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --publish-cli",
+        "pre:commit": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --pre-commit",
+        "prepare": "husky install"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/bcms/cms.git"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/bcms/cms/issues"
+    },
+    "homepage": "https://github.com/bcms/cms#readme",
+    "devDependencies": {
+        "@types/node": "^20.14.2",
+        "fs-extra": "^11.2.0",
+        "husky": "^8.0.3",
+        "prettier": "^3.3.2",
+        "ts-node": "^10.9.2",
+        "tsconfig-paths": "^4.2.0"
+    }
 }

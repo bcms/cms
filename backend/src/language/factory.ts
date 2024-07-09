@@ -1,19 +1,15 @@
-import { Types } from 'mongoose';
-import type { BCMSLanguageFactory } from '../types';
+import { ObjectId } from 'mongodb';
+import type { Language } from '@thebcms/selfhosted-backend/language/models/main';
 
-export function createBcmsLanguageFactory(): BCMSLanguageFactory {
-  return {
-    create(data) {
-      return {
-        _id: `${new Types.ObjectId()}`,
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-        code: data.code ? data.code : '',
-        def: data.def ? data.def : false,
-        name: data.name ? data.name : '',
-        nativeName: data.nativeName ? data.nativeName : '',
-        userId: data.userId ? data.userId : '',
-      };
-    },
-  };
+export class LanguageFactory {
+    static create(
+        data: Omit<Language, '_id' | 'createdAt' | 'updatedAt'>,
+    ): Language {
+        return {
+            _id: `${new ObjectId()}`,
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+            ...data,
+        };
+    }
 }

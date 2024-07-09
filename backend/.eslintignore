@@ -1,8 +1,5 @@
-node_modules
-dist
-/uploads
-tools.js
-/npm-tool.js
-dev.js
-bcms.config.js
-/db
+/node_modules
+/dist
+/types
+/logs
+/docs
