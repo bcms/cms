@@ -129,7 +129,7 @@ export const DashboardLayout = defineComponent({
                 },
                 {
                     title: 'Entries',
-                    activeOnViews: [],
+                    activeOnViews: ['EntriesView', 'EntryView'],
                     visible: true,
                     children: templates.value
                         .map((template) => {
@@ -139,16 +139,15 @@ export const DashboardLayout = defineComponent({
                             return {
                                 title: template.label,
                                 activeOnViews: [
-                                    ('BCMSEntriesView' + template.name) as any,
-                                    ('BCMSEntryView' + template.name) as any,
+                                    ('EntriesView' + template._id) as any,
+                                    ('EntryView' + template._id) as any,
                                 ],
                                 visible:
                                     isAdmin ||
                                     (!!template && templatePolicy?.get),
-                                href: `/d/template/${template.name}/entry`,
+                                href: `/d/template/${template._id}/entry`,
                                 titleSlot: () => (
                                     <div class={'flex gap-2'}>
-                                        <Icon src={'/cube'} />
                                         <div>{template.label}</div>
                                     </div>
                                 ),

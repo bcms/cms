@@ -83,7 +83,7 @@ const userColors: EntrySyncUserDataColor[] = [
 
 type UpdateDefaults = Omit<
     SocketEventDataEntrySyncUpdateDefaults,
-    'instanceId' | 'entryId' | 'lngIdx' | 'lngCode' | 'sourceConnId'
+    'entryId' | 'lngIdx' | 'lngCode' | 'sourceConnId'
 >;
 
 function fnWrapper(handler: any): (args: any) => void {
@@ -121,7 +121,6 @@ export class EntrySync {
     private refreshConnectionInterval = setInterval(() => {
         const data: SocketEventDataEntrySyncDefaults = {
             entryId: this.getEntryId(),
-            instanceId: this.getInstanceId(),
             lngIdx: this.getLngIdx(),
             lngCode: this.getLngCode(),
             sourceConnId: '',
@@ -177,7 +176,6 @@ export class EntrySync {
         public setEntry: (entry: Entry) => void,
         public getLngCode: () => string,
         public getLngIdx: () => number,
-        public getInstanceId: () => string,
     ) {
         this.sdk = window.bcms.sdk;
         this.throwable = window.bcms.throwable;
@@ -185,7 +183,6 @@ export class EntrySync {
             this.sdk.socket.internalEventRegister('open', async () => {
                 const data: SocketEventDataEntrySyncDefaults = {
                     entryId: this.getEntryId(),
-                    instanceId: this.getInstanceId(),
                     lngIdx: this.getLngIdx(),
                     lngCode: this.getLngCode(),
                     sourceConnId: '',
@@ -296,7 +293,6 @@ export class EntrySync {
             this.sdk.socket.register('entry_sync_content_req', async (data) => {
                 if (data.entryId === this.getEntryId()) {
                     this.sdk.socket.emit('entry_sync_content_res', {
-                        instanceId: this.getInstanceId(),
                         entryId: this.getEntryId(),
                         lngCode: this.getLngCode(),
                         lngIdx: this.getLngIdx(),
@@ -345,7 +341,6 @@ export class EntrySync {
             entryId: this.getEntryId(),
             lngCode: this.getLngCode(),
             lngIdx: this.getLngIdx(),
-            instanceId: this.getInstanceId(),
             userId: this.sdk.accessToken?.payload.userId || '__none',
             sourceConnId: '',
         });
@@ -389,7 +384,6 @@ export class EntrySync {
                 }, 3000);
                 this.sdk.socket.emit('entry_sync_content_req', {
                     entryId: this.getEntryId(),
-                    instanceId: this.getInstanceId(),
                     lngIdx: this.getLngIdx(),
                     lngCode: this.getLngCode(),
                     sourceConnId: '',
@@ -400,7 +394,6 @@ export class EntrySync {
 
     emitFocus(propPath: string) {
         const data: SocketEventDataEntrySyncFocus = {
-            instanceId: this.getInstanceId(),
             entryId: this.getEntryId(),
             lngCode: this.getLngCode(),
             lngIdx: this.getLngIdx(),
@@ -412,7 +405,6 @@ export class EntrySync {
 
     emitMouseMove(x: number, y: number, scrollY: number) {
         const data: SocketEventDataEntrySyncMouseMove = {
-            instanceId: this.getInstanceId(),
             entryId: this.getEntryId(),
             lngCode: this.getLngCode(),
             lngIdx: this.getLngIdx(),
@@ -426,7 +418,6 @@ export class EntrySync {
 
     emitProseContentUpdate(propPath: string, updates: number[]) {
         const data: SocketEventDataEntrySyncProseContentUpdate = {
-            instanceId: this.getInstanceId(),
             entryId: this.getEntryId(),
             lngCode: this.getLngCode(),
             lngIdx: this.getLngIdx(),
@@ -456,7 +447,6 @@ export class EntrySync {
 
     emitProseCursorUpdate(propPath: string, updates: number[]) {
         const data: SocketEventDataEntrySyncProseCursorUpdate = {
-            instanceId: this.getInstanceId(),
             entryId: this.getEntryId(),
             lngCode: this.getLngCode(),
             lngIdx: this.getLngIdx(),
@@ -486,7 +476,6 @@ export class EntrySync {
 
     emitYSyncRequest(propPath: string) {
         const data: SocketEventDataEntrySyncYSyncReq = {
-            instanceId: this.getInstanceId(),
             entryId: this.getEntryId(),
             lngCode: this.getLngCode(),
             lngIdx: this.getLngIdx(),
@@ -520,7 +509,6 @@ export class EntrySync {
         updates: number[],
     ) {
         const data: SocketEventDataEntrySyncYSyncRes = {
-            instanceId: this.getInstanceId(),
             entryId: this.getEntryId(),
             lngCode: this.getLngCode(),
             lngIdx: this.getLngIdx(),
@@ -555,7 +543,6 @@ export class EntrySync {
         },
     ) {
         const data: SocketEventDataEntrySyncStringUpdate = {
-            instanceId: this.getInstanceId(),
             entryId: this.getEntryId(),
             lngCode: this.getLngCode(),
             lngIdx: this.getLngIdx(),
@@ -592,7 +579,6 @@ export class EntrySync {
         },
     ) {
         const data: SocketEventDataEntrySyncNumberUpdate = {
-            instanceId: this.getInstanceId(),
             entryId: this.getEntryId(),
             lngCode: this.getLngCode(),
             lngIdx: this.getLngIdx(),
@@ -629,7 +615,6 @@ export class EntrySync {
         },
     ) {
         const data: SocketEventDataEntrySyncBooleanUpdate = {
-            instanceId: this.getInstanceId(),
             entryId: this.getEntryId(),
             lngCode: this.getLngCode(),
             lngIdx: this.getLngIdx(),
@@ -665,7 +650,6 @@ export class EntrySync {
         },
     ) {
         const data: SocketEventDataEntrySyncDateUpdate = {
-            instanceId: this.getInstanceId(),
             entryId: this.getEntryId(),
             lngCode: this.getLngCode(),
             lngIdx: this.getLngIdx(),
@@ -701,7 +685,6 @@ export class EntrySync {
         },
     ) {
         const data: SocketEventDataEntrySyncEnumUpdate = {
-            instanceId: this.getInstanceId(),
             entryId: this.getEntryId(),
             lngCode: this.getLngCode(),
             lngIdx: this.getLngIdx(),
@@ -738,7 +721,6 @@ export class EntrySync {
         },
     ) {
         const data: SocketEventDataEntrySyncMediaUpdate = {
-            instanceId: this.getInstanceId(),
             entryId: this.getEntryId(),
             lngCode: this.getLngCode(),
             lngIdx: this.getLngIdx(),
@@ -775,7 +757,6 @@ export class EntrySync {
         },
     ) {
         const data: SocketEventDataEntrySyncEntryPointerUpdate = {
-            instanceId: this.getInstanceId(),
             entryId: this.getEntryId(),
             lngCode: this.getLngCode(),
             lngIdx: this.getLngIdx(),
@@ -808,7 +789,6 @@ export class EntrySync {
 
     emitGroupPointerUpdate(event: UpdateDefaults) {
         const data: SocketEventDataEntrySyncGroupPointerUpdate = {
-            instanceId: this.getInstanceId(),
             entryId: this.getEntryId(),
             lngCode: this.getLngCode(),
             lngIdx: this.getLngIdx(),
@@ -840,7 +820,6 @@ export class EntrySync {
 
     emitRichTextUpdate(event: UpdateDefaults) {
         const data: SocketEventDataEntrySyncRichTextUpdate = {
-            instanceId: this.getInstanceId(),
             entryId: this.getEntryId(),
             lngCode: this.getLngCode(),
             lngIdx: this.getLngIdx(),
@@ -872,7 +851,6 @@ export class EntrySync {
 
     emitUserSelectRange(propPath: string, range: [number, number]) {
         const data: SocketEventDataEntrySyncUserSelectRange = {
-            instanceId: this.getInstanceId(),
             entryId: this.getEntryId(),
             lngCode: this.getLngCode(),
             lngIdx: this.getLngIdx(),
@@ -925,7 +903,6 @@ export class EntrySync {
             entryId: this.getEntryId(),
             lngCode: this.getLngCode(),
             lngIdx: this.getLngIdx(),
-            instanceId: this.getInstanceId(),
             userId: this.sdk.accessToken?.payload.userId || '__none',
             sourceConnId: '',
         });

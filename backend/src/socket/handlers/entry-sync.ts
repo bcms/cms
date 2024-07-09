@@ -133,7 +133,6 @@ export const socketEventHandlersEntrySync = {
                         entryId: data.entryId,
                         lngCode: data.lngCode,
                         lngIdx: data.lngIdx,
-                        instanceId: data.instanceId,
                         sourceConnId: conn.id,
                         items: userIds
                             .filter((_, i) => !!SocketManager.conns[connIds[i]])
@@ -233,7 +232,6 @@ export const socketEventHandlersEntrySync = {
                         'entry_sync_y_sync_res',
                         {
                             entryId: data.entryId,
-                            instanceId: data.instanceId,
                             sourceConnId: conn.id,
                             lngIdx: data.lngIdx,
                             lngCode: data.lngCode,
@@ -282,7 +280,6 @@ export const socketEventHandlersEntrySync = {
                         'entry_sync_content_res',
                         {
                             entryId: data.entryId,
-                            instanceId: data.instanceId,
                             sourceConnId: conn.id,
                             lngIdx: data.lngIdx,
                             lngCode: data.lngCode,

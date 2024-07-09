@@ -103,23 +103,19 @@ export const PropInputWrapper = defineComponent({
                     );
                     if (label && lock && horizontalLine && borderLeft) {
                         if (node) {
-                            label.classList.add('text-brand-700');
+                            label.classList.add('text-green');
                             label.classList.remove('text-black');
-                            lock.classList.add('stroke-brand-700');
-                            lock.classList.remove('stroke-black');
-                            horizontalLine.classList.add('bg-brand-700');
-                            horizontalLine.classList.remove('bg-gray-300');
-                            borderLeft.classList.add('border-l-brand-700');
-                            borderLeft.classList.remove('border-l-gray-300');
+                            horizontalLine.classList.add('bg-green');
+                            horizontalLine.classList.remove('bg-gray');
+                            borderLeft.classList.add('border-l-green');
+                            borderLeft.classList.remove('border-l-gray');
                         } else {
-                            label.classList.remove('text-brand-700');
+                            label.classList.remove('text-green');
                             label.classList.add('text-black');
-                            lock.classList.remove('stroke-brand-700');
-                            lock.classList.add('stroke-black');
-                            horizontalLine.classList.remove('bg-brand-700');
-                            horizontalLine.classList.add('bg-gray-300');
-                            borderLeft.classList.remove('border-l-brand-700');
-                            borderLeft.classList.add('border-l-gray-300');
+                            horizontalLine.classList.remove('bg-green');
+                            horizontalLine.classList.add('bg-gray');
+                            borderLeft.classList.remove('border-l-green');
+                            borderLeft.classList.add('border-l-gray');
                         }
                     }
                     ctx.emit('focus', node);
@@ -143,14 +139,14 @@ export const PropInputWrapper = defineComponent({
                 class={`flex flex-col pt-2 ${props.class || ''}`}
             >
                 <div
-                    class={`sticky flex items-center gap-2 w-full bg-gray-50 dark:bg-gray-950 z-10`}
+                    class={`flex items-center gap-2 w-full z-10`}
                     style={`top: ${75 + 20 * props.propDepth}px;`}
                 >
                     <div
                         id={`${id}_label`}
                         class={`${
                             inFocus.value
-                                ? 'text-brand-700'
+                                ? 'text-green'
                                 : `text-black dark:text-white`
                         } whitespace-nowrap`}
                     >
@@ -160,14 +156,20 @@ export const PropInputWrapper = defineComponent({
                         id={`${id}_lock`}
                         class={`${
                             inFocus.value
-                                ? 'stroke-brand-700'
-                                : `stroke-black dark:stroke-white`
+                                ? 'text-green'
+                                : `text-dark dark:text-white`
                         }`}
                     >
                         {props.required ? (
-                            <Icon class={`w-4 h-4`} src={`/lock-03`} />
+                            <Icon
+                                class={`w-4 h-4 fill-current`}
+                                src={`/lock`}
+                            />
                         ) : (
-                            <Icon class={`w-4 h-4`} src={`/lock-unlocked-03`} />
+                            <Icon
+                                class={`w-4 h-4 fill-current`}
+                                src={`/unlock`}
+                            />
                         )}
                     </div>
                     <div
@@ -178,8 +180,8 @@ export const PropInputWrapper = defineComponent({
                         id={`${id}_horizontal_line`}
                         class={`${
                             inFocus.value
-                                ? 'bg-brand-700'
-                                : 'bg-gray-300 dark:bg-gray-700'
+                                ? 'bg-green'
+                                : 'bg-gray dark:bg-darkGray'
                         } h-[1px] w-full`}
                     />
                     {props.deletable || props.collapsable || props.array ? (
@@ -192,7 +194,7 @@ export const PropInputWrapper = defineComponent({
                             {props.deletable && (
                                 <button>
                                     <Icon
-                                        class={`stroke-error`}
+                                        class={`w-4 h-4 fill-current`}
                                         src={`/trash`}
                                     />
                                 </button>
@@ -200,22 +202,22 @@ export const PropInputWrapper = defineComponent({
                             {props.collapsable && (
                                 <button>
                                     <Icon
-                                        class={`stroke-black`}
-                                        src={`/minimize-01`}
+                                        class={`w-4 h-4 text-dark dark:text-white fill-current`}
+                                        src={`/chevron/down`}
                                     />
                                 </button>
                             )}
-                            {props.array && (
-                                <Button
-                                    class={`whitespace-nowrap`}
-                                    kind={`ghost`}
-                                    onClick={(event) => {
-                                        ctx.emit('addArrayItem', event);
-                                    }}
-                                >
-                                    Add new item to {getLabel()}
-                                </Button>
-                            )}
+                            {/*{props.array && (*/}
+                            {/*    <Button*/}
+                            {/*        class={`whitespace-nowrap`}*/}
+                            {/*        kind={`ghost`}*/}
+                            {/*        onClick={(event) => {*/}
+                            {/*            ctx.emit('addArrayItem', event);*/}
+                            {/*        }}*/}
+                            {/*    >*/}
+                            {/*        Add new item to {getLabel()}*/}
+                            {/*    </Button>*/}
+                            {/*)}*/}
                         </div>
                     ) : (
                         ''
@@ -225,8 +227,8 @@ export const PropInputWrapper = defineComponent({
                     id={`${id}_border_left`}
                     class={`ml-2.5 mt-2 border-l ${
                         inFocus.value
-                            ? 'border-l-brand-700'
-                            : 'border-l-gray-300 dark:border-gray-700'
+                            ? 'border-l-green dark:border-l-yellow'
+                            : 'border-l-gray dark:border-l-darkGray'
                     } pl-2`}
                 >
                     <div class={`flex flex-col gap-4`}>
@@ -303,12 +305,12 @@ export const PropInputWrapperArrayItem = defineComponent({
                 class={`pl-3 ${props.class || ''}`}
                 data-bcms-prop-input-wrapper-array={'true'}
             >
-                <div class={`sticky flex gap-2 items-center`}>
+                <div class={`flex gap-2 items-center`}>
                     <button
                         class={`${
                             inFocus.value
-                                ? 'stroke-brand-700'
-                                : `stroke-black dark:stroke-white`
+                                ? 'text-green'
+                                : `text-dark dark:text-white`
                         } ${
                             itemExtended.value ? 'rotate-90' : 'rotate-[-90deg]'
                         }`}
@@ -317,12 +319,15 @@ export const PropInputWrapperArrayItem = defineComponent({
                             ctx.emit('extend', itemExtended.value);
                         }}
                     >
-                        <Icon src={'/chevron-left'} />
+                        <Icon
+                            class={`w-3 h-3 fill-current`}
+                            src={'/chevron/right'}
+                        />
                     </button>
                     <div
                         class={`whitespace-nowrap ${
                             inFocus.value
-                                ? 'text-brand-700'
+                                ? 'text-green'
                                 : 'text-black dark:text-white'
                         }`}
                     >
@@ -335,36 +340,45 @@ export const PropInputWrapperArrayItem = defineComponent({
                     <div
                         class={`h-[1px] ${
                             inFocus.value
-                                ? 'bg-brand-700'
-                                : 'bg-gray-300 dark:bg-gray-700'
+                                ? 'bg-green'
+                                : 'bg-gray dark:bg-darkGray'
                         } w-full`}
                     />
                     <div class={`flex items-center gap-2`}>
                         <button
-                            class={`stroke-error`}
+                            class={`text-red`}
                             onClick={() => {
                                 ctx.emit('delete');
                             }}
                         >
-                            <Icon src={`/trash-01`} />
+                            <Icon
+                                class={`w-4 h-4 fill-current`}
+                                src={`/trash`}
+                            />
                         </button>
                         <button
-                            class={`stroke-black disabled:stroke-gray-400`}
+                            class={`text-dark disabled:text-gray dark:text-white dark:disabled:text-darkGray`}
                             disabled={props.disableMoveUp}
                             onClick={() => {
                                 ctx.emit('move', -1);
                             }}
                         >
-                            <Icon src={`/arrow-up`} />
+                            <Icon
+                                class={`w-4 h-4 fill-current`}
+                                src={`/arrow/up`}
+                            />
                         </button>
                         <button
-                            class={`stroke-black disabled:stroke-gray-400`}
+                            class={`text-dark disabled:text-gray dark:text-white dark:disabled:text-darkGray`}
                             disabled={props.disableMoveDown}
                             onClick={() => {
                                 ctx.emit('move', 1);
                             }}
                         >
-                            <Icon src={`/arrow-down`} />
+                            <Icon
+                                class={`w-4 h-4 fill-current`}
+                                src={`/arrow/down`}
+                            />
                         </button>
                     </div>
                 </div>
@@ -372,8 +386,8 @@ export const PropInputWrapperArrayItem = defineComponent({
                     <div
                         class={`border-l mt-2 ${
                             inFocus.value
-                                ? 'border-l-brand-900'
-                                : `border-l-gray-300 dark:border-l-gray-700`
+                                ? 'border-l-green'
+                                : `border-l-gray dark:border-l-darkGray`
                         }`}
                     >
                         <div class={`ml-3`}>

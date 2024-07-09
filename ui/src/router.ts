@@ -181,6 +181,26 @@ const routes: Array<RouteRecordRawExtended> = [
             ),
     },
     {
+        path: '/d/template/:templateId/entry',
+        name: 'EntriesView',
+        meta: {
+            title: 'Entries',
+            layout: 'DashboardLayout',
+        },
+        component: () =>
+            import(/* webpackChunkName: "entry" */ './views/dashboard/entries'),
+    },
+    {
+        path: '/d/template/:templateId/entry/:entryId',
+        name: 'EntryView',
+        meta: {
+            title: 'Entry',
+            layout: 'DashboardLayout',
+        },
+        component: () =>
+            import(/* webpackChunkName: "entry" */ './views/dashboard/entry'),
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'P404View',
         meta: {

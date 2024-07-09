@@ -48,6 +48,11 @@ import {
     ModalApiKeyCreateEdit,
     type ModalApiKeyCreateEditInput,
 } from '@thebcms/selfhosted-ui/components/modals/api-key/create-edit';
+import {
+    ModalMediaSelect,
+    type ModalMediaSelectInput,
+    type ModalMediaSelectOutput,
+} from '@thebcms/selfhosted-ui/components/modals/media/select';
 
 export interface ModalHandlerOptions<Output = unknown> {
     title?: string;
@@ -109,6 +114,10 @@ export class ModalService {
 
         mediaCreateDir: new ModalHandler<void, void>(ModalMediaCreateDir),
         mediaCreateFile: new ModalHandler<void, void>(ModalMediaCreateFile),
+        mediaSelect: new ModalHandler<
+            ModalMediaSelectInput,
+            ModalMediaSelectOutput
+        >(ModalMediaSelect),
 
         entryContentLinkEdit: new ModalHandler<
             ModalEntryContentLindEditInput,

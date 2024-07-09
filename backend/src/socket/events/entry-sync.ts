@@ -17,7 +17,6 @@ import {
 } from '@thebcms/selfhosted-backend/prop/models/entry-pointer';
 
 export interface SocketEventDataEntrySyncDefaults {
-    instanceId: string;
     entryId: string;
     lngIdx: number;
     lngCode: string;
@@ -30,10 +29,6 @@ export interface SocketEventDataEntrySyncDefaults {
 }
 
 export const SocketEventDataEntrySyncDefaultsSchema: ObjectSchema = {
-    instanceId: {
-        __type: 'string',
-        __required: true,
-    },
     entryId: {
         __type: 'string',
         __required: true,

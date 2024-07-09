@@ -41,6 +41,8 @@ export const MediaSelect = defineComponent({
     setup(props, ctx) {
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
+        const modal = window.bcms.modalService;
+
         const media = computed(() => sdk.store.media.findById(props.mediaId));
         const unsubs: UnsubscribeFns = [];
 
@@ -89,28 +91,29 @@ export const MediaSelect = defineComponent({
                 label={props.label}
             >
                 <div
-                    class={`border bg-gray-25 dark:bg-gray-800 ${
+                    class={`border bg-light dark:bg-darkGray ${
                         props.error
-                            ? 'border-error'
-                            : `border-gray-100 dark:border-gray-700`
+                            ? 'border-red'
+                            : `border-gray/50 dark:border-gray`
                     } rounded-2.5`}
                 >
                     <button
                         class={`w-full flex gap-2`}
                         onClick={() => {
-                            // TODO
-                            // ModalService.mediaSelect.show({
-                            //     mediaId: media.value?._id || '',
-                            //     altText: media.value?.altText || '',
-                            //     caption: media.value?.caption || '',
-                            //     onDone(data) {
-                            //         ctx.emit('change', {
-                            //             media: data.media,
-                            //             altText: data.altText,
-                            //             caption: data.caption,
-                            //         });
-                            //     },
-                            // });
+                            modal.handlers.mediaSelect.open({
+                                data: {
+                                    mediaId: media.value?._id || '',
+                                    altText: media.value?.altText || '',
+                                    caption: media.value?.caption || '',
+                                },
+                                onDone(data) {
+                                    ctx.emit('change', {
+                                        media: data.media,
+                                        altText: data.altText,
+                                        caption: data.caption,
+                                    });
+                                },
+                            });
                         }}
                     >
                         {media.value ? (

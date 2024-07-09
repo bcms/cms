@@ -35,9 +35,7 @@ export const DashboardLayoutNavItem = defineComponent({
                 {props.item.visible && (
                     <div
                         id={props.id}
-                        data-tag={
-                            (route.name as any) + route.params.templateSlug
-                        }
+                        data-tag={(route.name as any) + route.params.templateId}
                         style={props.style}
                         class={`flex flex-col gap-2 items-center w-full ${
                             !props.item.children &&
@@ -46,7 +44,7 @@ export const DashboardLayoutNavItem = defineComponent({
                             ) ||
                                 props.item.activeOnViews.includes(
                                     (route.name as any) +
-                                        route.params.templateSlug,
+                                        route.params.templateId,
                                 ))
                                 ? 'text-green dark:text-yellow'
                                 : 'text-black dark:text-white'
