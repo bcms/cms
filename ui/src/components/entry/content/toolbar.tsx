@@ -335,7 +335,10 @@ export const EntryContentEditorToolbar = defineComponent({
                             }
                         }}
                     >
-                        <Icon class={`w-4 h-4 fill-current`} src={navItem.icon} />
+                        <Icon
+                            class={`w-4 h-4 fill-current`}
+                            src={navItem.icon}
+                        />
                     </button>
                     {navItem.children && navItem.children.show ? (
                         <div
@@ -410,6 +413,13 @@ export const EntryContentEditorToolbar = defineComponent({
                             toolbarPosition.value.left -=
                                 containerBBox.width / 2;
                         }
+                        if (
+                            toolbarPosition.value &&
+                            toolbarPosition.value.left < 0
+                        ) {
+                            toolbarPosition.value.left = 0;
+                        }
+                        console.log(toolbarPosition.value?.left);
                     } else {
                         toolbarPosition.value = undefined;
                     }
@@ -425,6 +435,7 @@ export const EntryContentEditorToolbar = defineComponent({
             <Teleport to={`body`}>
                 <div
                     ref={container}
+                    class={`max-w-full`}
                     style={
                         toolbarPosition.value
                             ? {

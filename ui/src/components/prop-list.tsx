@@ -28,6 +28,7 @@ export const PropList = defineComponent({
     setup(props, ctx) {
         const sdk = window.bcms.sdk;
         const confirm = window.bcms.confirm;
+        const notification = window.bcms.notification;
 
         const showOptions = ref<{
             [id: string]: boolean;
@@ -75,7 +76,7 @@ export const PropList = defineComponent({
                         <div
                             id={prop.id}
                             data-bcms-metadata={'prop_item'}
-                            class={`relative flex gap-4 py-4 px-6 bg-white dark:bg-darkGray rounded-2.5 border border-gray dark:border-gray`}
+                            class={`relative flex flex-col sm:flex-row gap-4 py-4 px-6 bg-white dark:bg-darkGray rounded-2.5 border border-gray dark:border-gray`}
                             draggable={!props.uneditable}
                             onMouseenter={() => {
                                 if (!props.uneditable) {
@@ -157,11 +158,25 @@ export const PropList = defineComponent({
                                     <div>/</div>
                                     <div>{prop.name}</div>
                                 </div>
-                                <div
-                                    class={`text-darkGray dark:text-gray text-xs`}
+                                <button
+                                    class={`flex gap-2 items-center text-darkGray dark:text-gray text-xs`}
+                                    onClick={async () => {
+                                        await navigator.clipboard.writeText(
+                                            prop.id,
+                                        );
+                                        notification.success(
+                                            'Property ID successfully copied to the clipboard',
+                                        );
+                                    }}
                                 >
-                                    {prop.id}
-                                </div>
+                                    <div>
+                                        <Icon
+                                            class={`w-3 h-3 fill-current text-gray`}
+                                            src={'/link'}
+                                        />
+                                    </div>
+                                    <div class={`text-left`}>{prop.id}</div>
+                                </button>
                             </div>
                             <Tag class={'mt-auto mb-auto'}>
                                 {prop.type

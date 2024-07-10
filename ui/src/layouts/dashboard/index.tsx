@@ -1,178 +1,21 @@
-import { computed, defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, onMounted, ref, Teleport } from 'vue';
 import { delay } from '@thebcms/selfhosted-ui/util/delay';
-import { useTheme } from '@thebcms/selfhosted-ui/hooks/theme';
-import {
-    DashboardLayoutNavItem,
-    type DashboardLayoutNavItemProps,
-} from '@thebcms/selfhosted-ui/layouts/dashboard/nav-item';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
-import { isUserAdmin } from '@thebcms/selfhosted-utils/user-role';
 import { BgDashboard } from '@thebcms/selfhosted-ui/components/bg-dashboard';
-import { Tag } from '@thebcms/selfhosted-ui/components/tag';
-import { UserAvatar } from '@thebcms/selfhosted-ui/components/user-avatar';
-import { Dropdown } from '@thebcms/selfhosted-ui/components/dropdown';
+import { DashboardLayoutAsideContent } from '@thebcms/selfhosted-ui/layouts/dashboard/aside-content';
 import { BCMSLogo } from '@thebcms/selfhosted-ui/components/logo';
+import { Icon } from '@thebcms/selfhosted-ui/components/icon';
 
 export const DashboardLayout = defineComponent({
     setup(_, ctx) {
         const sdk = window.bcms.sdk;
-        const pageTransition = window.bcms.pageTransition();
-        const modal = window.bcms.modalService;
         const throwable = window.bcms.throwable;
-        const theme = useTheme();
+        const pageTransition = window.bcms.pageTransition();
+        const [screen] = window.bcms.useScreenSize();
 
-        const baseUri = ref('/d');
+        const mobileBrakePoint = 900;
+        const mobileShowNav = ref(false);
         const [t1State] = pageTransition.register(() => delay(300));
         const [t2State] = pageTransition.register(() => delay(300));
-        const me = computed(() => sdk.store.user.methods.me());
-        const templates = computed(() => sdk.store.template.items());
-
-        function navItemSlot(name: string, src: string) {
-            return (
-                <div class={'flex gap-4 w-full '}>
-                    <div
-                        class={`group-hover:text-green dark:group-hover:text-yellow duration-300 transition-all`}
-                    >
-                        {name}
-                    </div>
-                    <div class={`ml-auto`}>
-                        <Icon
-                            class={`fill-current transition-all duration-300 w-5 h-5 group-hover:text-green group-focus-visible:text-green desktop:w-6 desktop:h-6 dark:group-hover:text-yellow dark:group-focus-visible:text-yellow`}
-                            src={src}
-                        />
-                    </div>
-                </div>
-            );
-        }
-
-        const navItems = computed(() => {
-            const myPolicy = me.value?.customPool.policy;
-            if (!myPolicy) {
-                return [];
-            }
-            const isAdmin = isUserAdmin(me.value);
-            const items: DashboardLayoutNavItemProps[] = [];
-            items.push(
-                {
-                    title: 'Administration',
-                    activeOnViews: [
-                        'HomeView',
-                        'TemplatesView',
-                        'TemplateView',
-                        'GroupsView',
-                        'GroupView',
-                        'WidgetsView',
-                        'MediaView',
-                        'SettingsView',
-                        'ApiKeysView',
-                        'ApiKeyView',
-                    ],
-                    visible: true,
-                    children: [
-                        {
-                            title: 'Templates',
-                            href: `/d/template`,
-                            activeOnViews: ['TemplatesView', 'TemplateView'],
-                            visible: isAdmin,
-                            titleSlot: () =>
-                                navItemSlot(
-                                    'Templates',
-                                    '/administration/template',
-                                ),
-                        },
-                        {
-                            title: 'Groups',
-                            href: `/d/group`,
-                            activeOnViews: ['GroupsView', 'GroupsView'],
-                            visible: isAdmin,
-                            titleSlot: () =>
-                                navItemSlot('Groups', '/administration/group'),
-                        },
-                        {
-                            title: 'Widgets',
-                            href: `${baseUri.value}/widget`,
-                            activeOnViews: ['WidgetsView'],
-                            visible: isAdmin,
-                            titleSlot: () =>
-                                navItemSlot(
-                                    'Widgets',
-                                    '/administration/widget',
-                                ),
-                        },
-                        {
-                            title: 'Media',
-                            href: `${baseUri.value}/media`,
-                            activeOnViews: ['MediaView'],
-                            visible: isAdmin || myPolicy.media.get,
-                            titleSlot: () =>
-                                navItemSlot('Media', '/administration/media'),
-                        },
-                        {
-                            title: 'Settings',
-                            href: `${baseUri.value}/settings`,
-                            activeOnViews: ['SettingsView'],
-                            visible: isAdmin,
-                            titleSlot: () => navItemSlot('Settings', '/cog'),
-                        },
-                        {
-                            title: 'API Keys',
-                            href: `${baseUri.value}/api-key`,
-                            activeOnViews: ['ApiKeysView', 'ApiKeyView'],
-                            visible: isAdmin,
-                            titleSlot: () =>
-                                navItemSlot(
-                                    'Key manager',
-                                    '/administration/key',
-                                ),
-                        },
-                    ],
-                },
-                {
-                    title: 'Entries',
-                    activeOnViews: ['EntriesView', 'EntryView'],
-                    visible: true,
-                    children: templates.value
-                        .map((template) => {
-                            const templatePolicy = myPolicy.templates.find(
-                                (e) => e._id === template._id,
-                            );
-                            return {
-                                title: template.label,
-                                activeOnViews: [
-                                    ('EntriesView' + template._id) as any,
-                                    ('EntryView' + template._id) as any,
-                                ],
-                                visible:
-                                    isAdmin ||
-                                    (!!template && templatePolicy?.get),
-                                href: `/d/template/${template._id}/entry`,
-                                titleSlot: () => (
-                                    <div class={'flex gap-2'}>
-                                        <div>{template.label}</div>
-                                    </div>
-                                ),
-                            };
-                        })
-                        .sort((a, b) =>
-                            a.title.toLowerCase() > b.title.toLowerCase()
-                                ? 1
-                                : -1,
-                        ),
-                },
-            );
-            return items;
-        });
-
-        async function logout() {
-            await throwable(
-                async () => {
-                    await sdk.auth.logout();
-                },
-                async () => {
-                    window.location.pathname = '/';
-                },
-            );
-        }
 
         onMounted(async () => {
             await throwable(async () => {
@@ -197,141 +40,58 @@ export const DashboardLayout = defineComponent({
                             t2State.value === 'in-done'
                                 ? 'top-0 opacity-100'
                                 : 'top-48 opacity-0'
-                        } transition-all duration-300 pl-[338px] py-[51px] pr-6 w-full min-h-screen text-black dark:text-white`}
+                        } transition-all duration-300 max-desktop:pl-6 pl-[338px] max-desktop:pt-[80px] py-[51px] pr-6 w-full min-h-screen text-black dark:text-white`}
                     >
                         {ctx.slots.default ? ctx.slots.default() : ''}
                     </main>
-                    <aside
-                        class={`${
-                            t1State.value === 'in' ||
-                            t1State.value === 'in-done'
-                                ? 'left-0'
-                                : 'left-[-312px]'
-                        } transition-all duration-300 fixed top-0 flex flex-col gap-6 px-6 py-8 h-screen overflow-y-auto overflow-x-hidden border-r border-r-gray/50 dark:border-r-darkGray/50 w-[312px]`}
-                    >
-                        <div class={`flex gap-4 items-center`}>
-                            <BCMSLogo />
-                        </div>
-                        <button
-                            class={`mt-6 border border-gray dark:border-darkGray bg-white/50 dark:bg-dark/50 text-black dark:text-white rounded-2.5 flex gap-2 items-center px-[16px] py-[10px]`}
+                    {screen.value.width > mobileBrakePoint ? (
+                        <aside
+                            class={`${
+                                t1State.value === 'in' ||
+                                t1State.value === 'in-done'
+                                    ? 'left-0'
+                                    : 'left-[-312px]'
+                            } transition-all duration-300 fixed top-0 flex flex-col gap-6 px-6 py-8 h-screen overflow-y-auto overflow-x-hidden border-r border-r-gray/50 dark:border-r-darkGray/50 w-[312px]`}
                         >
-                            <Icon
-                                class={`w-3 h-3 text-dark dark:text-white fill-current`}
-                                src={'/search'}
-                            />
-                            <div>Search</div>
-                            <Tag
-                                class={`flex-shrink-0 ml-auto mt-auto mb-auto text-black`}
-                            >
-                                Ctrl+K
-                            </Tag>
-                        </button>
+                            <DashboardLayoutAsideContent />
+                        </aside>
+                    ) : (
                         <div
-                            class={`flex flex-col gap-6 h-full overflow-y-auto overflow-x-hidden mt-6 w-full`}
+                            class={`fixed left-0 ${
+                                t1State.value === 'in' ||
+                                t1State.value === 'in-done'
+                                    ? 'top-0'
+                                    : 'top-[-312px]'
+                            } transition-all duration-300 w-screen border-b border-b-gray/50 dark:border-b-gray`}
                         >
-                            {navItems.value.map((item) => {
-                                return (
-                                    <DashboardLayoutNavItem
-                                        class={`w-full`}
-                                        item={item}
+                            <div class={`flex gap-2 px-6 py-4 backdrop-blur-lg bg-white/20 dark:bg-dark/20`}>
+                                <BCMSLogo />
+                                <button
+                                    class={`ml-auto`}
+                                    onClick={() => {
+                                        mobileShowNav.value =
+                                            !mobileShowNav.value;
+                                    }}
+                                >
+                                    <Icon
+                                        class={`w-6 text-dark dark:text-white fill-current`}
+                                        src={'/nav'}
                                     />
-                                );
-                            })}
-                        </div>
-                        <div
-                            class={`flex gap-8 pt-[24px] border-t border-t-gray/50 dark:border-t-darkGray/50`}
-                        >
-                            <button
-                                class={`flex gap-2 items-center text-left`}
-                                onClick={() => {
-                                    modal.handlers.userAddEdit.open({
-                                        data: {
-                                            userId: me.value?._id,
-                                        },
-                                    });
-                                }}
-                            >
-                                <UserAvatar
-                                    fullName={me.value?.username}
-                                    image={
-                                        me.value?.customPool.personal.avatarUri
-                                    }
-                                />
-                                <div class={'flex flex-col'}>
-                                    <div
-                                        class={`text-sm text-darkGray dark:text-gray font-bold`}
+                                </button>
+                            </div>
+                            {mobileShowNav.value && (
+                                <Teleport to={`body`}>
+                                    <aside
+                                        class={`bg-white dark:bg-dark z-1000 transition-all duration-300 fixed top-0 flex flex-col gap-6 px-6 py-8 h-screen overflow-y-auto overflow-x-hidden border-r border-r-gray/50 dark:border-r-darkGray/50 w-full`}
                                     >
-                                        {me.value?.username}
-                                    </div>
-                                    <div
-                                        class={`text-xs text-darkGray dark:text-gray`}
-                                    >
-                                        {me.value?.email}
-                                    </div>
-                                </div>
-                            </button>
-                            <Dropdown
-                                class={`ml-auto`}
-                                fixed
-                                items={[
-                                    {
-                                        text: 'Settings',
-                                        icon: '/cog',
-                                        onClick: async () => {
-                                            modal.handlers.userAddEdit.open({
-                                                data: {
-                                                    userId: me.value?._id,
-                                                },
-                                            });
-                                        },
-                                    },
-                                    {
-                                        text:
-                                            theme.active.value === 'light'
-                                                ? 'Dark mode'
-                                                : 'Light mode',
-                                        border: true,
-                                        onClick: () => {
-                                            theme.set(
-                                                theme.active.value === 'light'
-                                                    ? 'dark'
-                                                    : 'light',
-                                            );
-                                        },
-                                    },
-                                    {
-                                        text: 'Twitter @thebcms',
-                                        onClick: () => {
-                                            window.location.href =
-                                                'https://x.com/@thebcms';
-                                        },
-                                    },
-                                    {
-                                        text: 'Terms & privacy',
-                                        onClick: () => {
-                                            window.location.href =
-                                                'https://thebcms.com/terms-and-conditions';
-                                        },
-                                    },
-                                    {
-                                        text: 'Support',
-                                        border: true,
-                                        onClick: () => {
-                                            window.location.href =
-                                                'https://thebcms.com/contact';
-                                        },
-                                    },
-                                    {
-                                        text: 'Log out',
-                                        icon: '/sign-out',
-                                        onClick: async () => {
-                                            await logout();
-                                        },
-                                    },
-                                ]}
-                            />
+                                        <DashboardLayoutAsideContent onCloseNav={() => {
+                                            mobileShowNav.value = false;
+                                        }} />
+                                    </aside>
+                                </Teleport>
+                            )}
                         </div>
-                    </aside>
+                    )}
                 </div>
             </div>
         );

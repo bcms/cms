@@ -66,6 +66,10 @@ class Theme {
 
 const theme = new Theme();
 
-export function useTheme() {
-    return theme;
+export interface UseTheme {
+    (): Theme;
 }
+
+export const useTheme: UseTheme = () => {
+    return theme;
+};

@@ -235,9 +235,9 @@ export const EntryView = defineComponent({
                     >
                         <EntrySyncElements entrySync={entrySync} />
                         <div
-                            class={`flex gap-2 items-center sticky top-0 z-20 pb-8`}
+                            class={`flex gap-2 items-center desktop:sticky top-0 max-desktop:top-14 z-20 pb-8`}
                         >
-                            <div class={`ml-auto flex gap-4 items-center`}>
+                            <div class={`ml-auto flex max-desktop:flex-col gap-4 items-center max-desktop:items-end`}>
                                 <div
                                     id={`entrySync-connected-users-container`}
                                     class={`flex items-center gap-1`}

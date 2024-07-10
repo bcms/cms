@@ -14,6 +14,8 @@ import { throwable } from '@thebcms/selfhosted-ui/util/throwable';
 import { modalService } from '@thebcms/selfhosted-ui/services/modal';
 import { useLanguage } from '@thebcms/selfhosted-ui/hooks/language';
 import { confirm } from '@thebcms/selfhosted-ui/services/confirm';
+import { useTheme } from '@thebcms/selfhosted-ui/hooks/theme';
+import { useScreenSize } from '@thebcms/selfhosted-ui/hooks/screen';
 
 const sdk = createSdk(useStore(), Storage, {
     debug: ['all'],
@@ -26,6 +28,8 @@ window.bcms = {
     notification: createNotificationService(),
     tooltip: createTooltipService(),
     useLanguage,
+    useTheme,
+    useScreenSize,
     pageTransition: null as never,
     modalService,
     throwable,

@@ -518,7 +518,7 @@ export const Table = defineComponent({
                     >
                         <div
                             id={props.id}
-                            class={`flex flex-col ${props.class || ''}`}
+                            class={`flex flex-col ${props.class || ''} max-w-full`}
                             style={`${
                                 props.height ? `height: ${props.height}px;` : ''
                             } ${props.style}`}

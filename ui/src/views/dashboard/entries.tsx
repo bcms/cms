@@ -1,4 +1,4 @@
-import { computed, defineComponent, onMounted, ref } from 'vue';
+import { computed, defineComponent, onBeforeUpdate, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { Loader } from '@thebcms/selfhosted-ui/components/loader';
 import { LanguageSwitch } from '@thebcms/selfhosted-ui/components/language-switch';
@@ -38,16 +38,24 @@ export const EntriesView = defineComponent({
                     templateId: string;
                 },
         );
+        let templateIdBuffer = '';
 
         const template = computed(() =>
             sdk.store.template.findById(params.value.templateId),
         );
-        const entriesLite = computed(() => sdk.store.entryLite.items());
+        const entriesLite = computed(() =>
+            sdk.store.entryLite.findMany(
+                (e) => e.templateId === template.value?._id,
+            ),
+        );
         const media = computed(() => sdk.store.media.items());
 
         const loading = ref(true);
         const tableContainer = ref<HTMLDivElement>();
         const tableData = computed(() => {
+            const dynamicRowWidth = tableContainer.value
+                ? tableContainer.value.offsetWidth - 96 - 150 - 150 - 250 - 150
+                : 300;
             const output: {
                 header: TableHeaderItem[];
                 rows: TableRowProps[];
@@ -75,14 +83,7 @@ export const EntriesView = defineComponent({
                     {
                         text: 'Description',
                         sortable: tableDefaultSort(),
-                        width: tableContainer.value
-                            ? tableContainer.value.offsetWidth -
-                              96 -
-                              150 -
-                              150 -
-                              250 -
-                              150
-                            : 300,
+                        width: dynamicRowWidth < 300 ? 300 : dynamicRowWidth,
                     },
                     {
                         text: 'Actions',
@@ -154,15 +155,30 @@ export const EntriesView = defineComponent({
             return output;
         }
 
-        onMounted(async () => {
-            loading.value = true;
+        async function init() {
+            const loadingTimeout = setTimeout(() => {
+                loading.value = true;
+            }, 100);
             await throwable(async () => {
                 await sdk.template.getAll();
                 await sdk.entry.getAllLiteByTemplateId({
                     templateId: params.value.templateId,
                 });
             });
+            clearTimeout(loadingTimeout);
             loading.value = false;
+        }
+
+        onMounted(async () => {
+            templateIdBuffer = params.value.templateId;
+            await init();
+        });
+
+        onBeforeUpdate(async () => {
+            if (templateIdBuffer !== params.value.templateId) {
+                templateIdBuffer = params.value.templateId;
+                await init();
+            }
         });
 
         function tableRows() {
@@ -256,7 +272,9 @@ export const EntriesView = defineComponent({
                                 {template.value.label}
                             </h1>
                             <div class={`ml-auto flex gap-4 items-center`}>
-                                <LanguageSwitch />
+                                <div class={`max-desktop:hidden`}>
+                                    <LanguageSwitch />
+                                </div>
                                 <Button
                                     onClick={async () => {
                                         await throwable(
@@ -301,20 +319,22 @@ export const EntriesView = defineComponent({
                                     ctaText={'Create new entry'}
                                 />
                             ) : (
-                                <Table
-                                    class={`absolute`}
-                                    name={`entries_${template.value._id}`}
-                                    rowHeight={120}
-                                    height={
-                                        tableContainer.value
-                                            ? tableContainer.value
-                                                  .offsetHeight - 100
-                                            : 500
-                                    }
-                                    searchable
-                                    header={tableData.value.header}
-                                    rows={tableData.value.rows}
-                                />
+                                <div class={`mt-10`}>
+                                    <Table
+                                        class={`absolute`}
+                                        name={`entries_${template.value._id}`}
+                                        rowHeight={120}
+                                        height={
+                                            tableContainer.value
+                                                ? tableContainer.value
+                                                      .offsetHeight - 100
+                                                : 500
+                                        }
+                                        searchable
+                                        header={tableData.value.header}
+                                        rows={tableData.value.rows}
+                                    />
+                                </div>
                             )}
                         </div>
                     </div>

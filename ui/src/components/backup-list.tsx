@@ -89,13 +89,13 @@ export const BackupListItem = defineComponent({
 
         return () => (
             <li
-                class={`flex gap-4 items-center px-5 py-3 rounded-2.5 border bg-white border-gray/50 dark:bg-darkGray`}
+                class={`flex flex-col xs:flex-row gap-4 items-center px-5 py-3 rounded-2.5 border bg-white border-gray/50 dark:bg-darkGray`}
             >
                 <div class={`text-sm font-bold`}>{props.backup.name}</div>
                 <div class={`text-xs`}>
                     {millisToDateString(props.backup.createdAt)}
                 </div>
-                <div class={`flex gap-2 items-center ml-auto`}>
+                <div class={`flex gap-2 items-center xs:ml-auto`}>
                     <Tag>
                         {props.backup.inQueue
                             ? 'Queue'

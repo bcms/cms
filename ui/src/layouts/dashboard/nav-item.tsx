@@ -11,6 +11,7 @@ export interface DashboardLayoutNavItemProps {
     titleSlot?: () => JSX.Element;
     activeOnViews: ViewNames[];
     href?: string;
+    onClick?: (event: Event) => void;
     visible?: boolean;
     children?: DashboardLayoutNavItemProps[];
 }
@@ -23,6 +24,7 @@ export const DashboardLayoutNavItem = defineComponent({
             required: true,
         },
     },
+
     setup(props) {
         const route = useRoute();
         const extended = ref(
@@ -53,13 +55,14 @@ export const DashboardLayoutNavItem = defineComponent({
                         <tag.value
                             className={`pl-1 py-3 flex gap-2 items-center w-full group hover:text-green dark:hover:text-yellow transition-all duration-300`}
                             href={props.item.href || '#'}
-                            onClick={
-                                tag.value === 'button'
-                                    ? () => {
-                                          extended.value = !extended.value;
-                                      }
-                                    : undefined
-                            }
+                            onClick={(event: Event) => {
+                                if (tag.value === 'button') {
+                                    extended.value = !extended.value;
+                                }
+                                if (props.item.onClick) {
+                                    props.item.onClick(event);
+                                }
+                            }}
                         >
                             {props.item.children ? (
                                 <div

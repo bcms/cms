@@ -160,7 +160,7 @@ export const SlackCommandList = defineComponent({
                 ref="list"
                 class={[
                     'bcmsScrollbar',
-                    'bg-white',
+                    'bg-white dark:bg-darkGray',
                     'shadow-cardLg',
                     'overflow-y-auto',
                     'max-h-80',
@@ -168,7 +168,6 @@ export const SlackCommandList = defineComponent({
                     'max-w-xs',
                     'rounded-2.5',
                     'z-50',
-                    'dark:bg-gray-900',
                 ]}
             >
                 {this.primaryItems.length > 0 ? (
@@ -200,10 +199,10 @@ export const SlackCommandList = defineComponent({
                                         'py-3',
                                         'transition-colors',
                                         'duration-300',
-                                        'hover:bg-grey-400',
-                                        'focus:bg-grey-200',
+                                        'hover:bg-grey',
+                                        'focus:bg-grey',
                                         index === this.selectedIndex
-                                            ? 'bg-grey-200'
+                                            ? 'bg-grey'
                                             : '',
                                     ]}
                                     onClick={() => this.selectItem(item.id)}
@@ -213,13 +212,13 @@ export const SlackCommandList = defineComponent({
                                             'mr-3.5',
                                             'transition-colors',
                                             'duration-300',
-                                            'group-hover:text-brand-700',
-                                            'group-focus:text-brand-700',
+                                            'group-hover:text-yellow dark:group-hover:text-yellow',
+                                            'group-focus:text-yellow dark:group-hover:text-yellow',
                                             index === this.selectedIndex
-                                                ? 'text-brand-700'
+                                                ? 'text-yellow dark:text-yellow'
                                                 : 'text-grey',
-                                            'dark:group-hover:text-brand-700',
-                                            'dark:group-focus-visible:text-brand-700',
+                                            'dark:group-hover:text-green',
+                                            'dark:group-focus-visible:text-yellow',
                                         ]}
                                     >
                                         <Icon
@@ -241,8 +240,8 @@ export const SlackCommandList = defineComponent({
                                             'transition-colors',
                                             'duration-300',
                                             'text-left',
-                                            'group-hover:text-brand-700',
-                                            'group-focus:text-brand-700',
+                                            'group-hover:text-yellow',
+                                            'group-focus:text-yellow',
                                             'dark:text-white',
                                         ]}
                                     >
@@ -285,13 +284,13 @@ export const SlackCommandList = defineComponent({
                                         'py-3',
                                         'transition-colors',
                                         'duration-300',
-                                        'hover:bg-grey-200',
-                                        'hover:text-brand-700',
-                                        'focus:bg-grey-200',
-                                        'focus:text-brand-700',
+                                        'hover:bg-grey',
+                                        'hover:text-yellow dark:hover:text-yellow',
+                                        'focus:bg-grey',
+                                        'focus:text-yellow dark:focus:text-yellow',
                                         index + this.primaryItems.length ===
                                         this.selectedIndex
-                                            ? 'bg-grey-200 text-brand-700'
+                                            ? 'bg-grey text-yellow dark:text-yellow'
                                             : '',
                                     ]}
                                     onClick={() => this.selectItem(item.id)}
@@ -309,15 +308,14 @@ export const SlackCommandList = defineComponent({
                                         class={[
                                             'pt-1',
                                             'line-clamp-2',
-                                            'text-black',
+                                            'text-black dark:text-white',
                                             '-tracking-0.01',
                                             'leading-tight',
                                             'transition-colors',
                                             'duration-300',
                                             'text-left',
-                                            'group-hover:text-brand-700',
-                                            'group-focus:text-brand-700',
-                                            'dark:text-white',
+                                            'group-hover:text-yellow dark:group-hover:text-yellow',
+                                            'group-focus:text-yellow dark:group-focus:text-yellow',
                                         ]}
                                     >
                                         {item.title}

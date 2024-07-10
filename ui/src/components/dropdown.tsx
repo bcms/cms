@@ -72,11 +72,19 @@ export const Dropdown = defineComponent({
                     mountTo.value.left = bb.left;
                 } else {
                     mountTo.value.right = window.innerWidth - bb.right;
+                    const offsetDelta =
+                        window.innerWidth - mountTo.value.right - maxWidth;
+                    if (offsetDelta < 0) {
+                        mountTo.value.right += offsetDelta;
+                    }
                 }
+                console.log(bb.bottom + maxHeight, window.innerHeight)
                 if (bb.bottom + maxHeight < window.innerHeight) {
+                    console.log(1)
                     mountTo.value.top = bb.bottom;
                     mountTo.value.top += document.body.scrollTop;
                 } else {
+                    console.log(2)
                     mountTo.value.bottom = window.innerHeight - bb.top;
                     mountTo.value.bottom -= document.body.scrollTop;
                 }
@@ -100,14 +108,14 @@ export const Dropdown = defineComponent({
                 >
                     <Icon
                         src={`/more-vertical`}
-                        class={`w-4 h-4 fill-current`}
+                        class={`w-4 h-4 text-dark dark:text-white fill-current`}
                     />
                 </Button>
                 {showDrop.value && mountTo && (
                     <Teleport to={'body'}>
                         <div
                             ref={dropEl}
-                            class={`${
+                            class={`z-1000 ${
                                 props.fixed ? 'fixed' : 'absolute'
                             } flex flex-col bg-light dark:bg-darkGray rounded-xl w-full overflow-x-hidden z-100 shadow-2xl shadow-black`}
                             style={`max-width: ${maxWidth}px; max-height: ${maxHeight}px; ${
@@ -141,9 +149,7 @@ export const Dropdown = defineComponent({
                                     >
                                         <div class={`flex gap-4 items-center`}>
                                             {item.icon && (
-                                                <div
-                                                    class={`mb-auto mt-1`}
-                                                >
+                                                <div class={`mb-auto mt-1`}>
                                                     <Icon
                                                         class={`w-4 h-4 mb-auto fill-current`}
                                                         src={item.icon}

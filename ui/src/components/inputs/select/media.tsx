@@ -98,7 +98,7 @@ export const MediaSelect = defineComponent({
                     } rounded-2.5`}
                 >
                     <button
-                        class={`w-full flex gap-2`}
+                        class={`w-full flex flex-col xs:flex-row gap-2`}
                         onClick={() => {
                             modal.handlers.mediaSelect.open({
                                 data: {
@@ -117,7 +117,7 @@ export const MediaSelect = defineComponent({
                         }}
                     >
                         {media.value ? (
-                            <div class={`relative flex gap-4 px-6 py-4 w-full`}>
+                            <div class={`relative flex flex-col xs:flex-row gap-4 px-6 py-4 w-full`}>
                                 <MediaPreview
                                     class={`flex-shrink-0 w-24 h-24 rounded-2.5 overflow-hidden`}
                                     media={media.value}

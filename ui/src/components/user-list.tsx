@@ -106,7 +106,7 @@ export const UserListItem = defineComponent({
 
         return () => (
             <li
-                class={`flex gap-4 items-center px-5 py-3 rounded-2.5 border bg-white border-gray/50 dark:bg-darkGray`}
+                class={`flex flex-col xs:flex-row gap-4 items-center px-5 py-3 rounded-2.5 border bg-white border-gray/50 dark:bg-darkGray`}
             >
                 <UserAvatar
                     fullName={props.user.username}
@@ -114,7 +114,7 @@ export const UserListItem = defineComponent({
                 />
                 <div class={`text-sm font-bold`}>{props.user.username}</div>
                 <div class={`text-xs`}>{props.user.email}</div>
-                <div class={`flex gap-2 items-center ml-auto`}>
+                <div class={`flex gap-2 items-center xs:ml-auto`}>
                     <Tag>
                         {props.user.roles[0].name
                             .split('_')

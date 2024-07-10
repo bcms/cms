@@ -10,6 +10,8 @@ import type { PropValidator } from '@thebcms/selfhosted-ui/util/prop-validation'
 import type {
     PageTransition
 } from "@thebcms/selfhosted-ui/services/page-transition";
+import type {UseTheme} from "@thebcms/selfhosted-ui/hooks/theme";
+import type {UseScreenSize} from "@thebcms/selfhosted-ui/hooks/screen";
 
 export interface GlobalScopeMain {
     // <
@@ -28,6 +30,8 @@ export interface GlobalScopeMain {
     // media: BCMSMediaService;
     // globalSearch: BCMSGlobalSearchService;
     useLanguage: UseLanguage;
+    useTheme: UseTheme;
+    useScreenSize: UseScreenSize;
     modalService: ModalService;
     throwable: Throwable;
     confirm: ConfirmService;

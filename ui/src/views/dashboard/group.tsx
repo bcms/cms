@@ -130,7 +130,7 @@ export const GroupView = defineComponent({
                     <div
                         class={`w-full flex flex-col gap-4 desktop:justify-center`}
                     >
-                        <div class={`flex gap-4`}>
+                        <div class={`flex flex-col sm:flex-row gap-4`}>
                             <Breadcrumb
                                 items={[
                                     {
@@ -147,7 +147,7 @@ export const GroupView = defineComponent({
                                     },
                                 ]}
                             />
-                            <div class={`flex gap-2 desktop:ml-auto`}>
+                            <div class={`flex gap-2 ml-auto`}>
                                 <Dropdown items={dropdownItems} />
                                 <Button onClick={createProperty}>
                                     Add property

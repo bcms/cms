@@ -64,7 +64,7 @@ export const Button = defineComponent({
                 >
                     {ctx.slots.default ? (
                         <span
-                            class={`relative z-10 ${
+                            class={`relative ${
                                 props.disabled
                                     ? props.kind === 'primary'
                                         ? 'text-white text-opacity-50'

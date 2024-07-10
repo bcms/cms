@@ -243,31 +243,37 @@ export const PropRichTextInput = defineComponent({
                                             }
                                             error={errors.value[valueItemIdx]}
                                         >
-                                            <EntryContentEditor
-                                                id={
-                                                    props.propPath +
-                                                    `.data.${valueItemIdx}`
-                                                }
-                                                propPath={
-                                                    props.propPath +
-                                                    `.data.${valueItemIdx}`
-                                                }
-                                                placeholder={props.prop.label}
-                                                nodes={valueItem.nodes}
-                                                lngIdx={props.lngIdx}
-                                                entryId={props.entryId}
-                                                entrySync={props.entrySync}
-                                                onInput={(value) => {
-                                                    ctx.emit(
-                                                        'edit',
+                                            <div
+                                                class={`bg-light dark:bg-darkGray border border-gray/50 dark:border-gray px-4 py-3 rounded-2xl`}
+                                            >
+                                                <EntryContentEditor
+                                                    id={
                                                         props.propPath +
-                                                            `.data.${valueItemIdx}`,
-                                                        {
-                                                            nodes: value,
-                                                        },
-                                                    );
-                                                }}
-                                            />
+                                                        `.data.${valueItemIdx}`
+                                                    }
+                                                    propPath={
+                                                        props.propPath +
+                                                        `.data.${valueItemIdx}`
+                                                    }
+                                                    placeholder={
+                                                        props.prop.label
+                                                    }
+                                                    nodes={valueItem.nodes}
+                                                    lngIdx={props.lngIdx}
+                                                    entryId={props.entryId}
+                                                    entrySync={props.entrySync}
+                                                    onInput={(value) => {
+                                                        ctx.emit(
+                                                            'edit',
+                                                            props.propPath +
+                                                                `.data.${valueItemIdx}`,
+                                                            {
+                                                                nodes: value,
+                                                            },
+                                                        );
+                                                    }}
+                                                />
+                                            </div>
                                         </InputWrapper>
                                     </PropInputWrapperArrayItem>
                                 );
@@ -279,24 +285,34 @@ export const PropRichTextInput = defineComponent({
                         id={props.propPath + `.data.0`}
                         error={errors.value[0]}
                     >
-                        <EntryContentEditor
-                            id={props.propPath + `.data.0`}
-                            propPath={props.propPath + `.data.0`}
-                            placeholder={props.prop.label}
-                            nodes={
-                                (props.value.data as PropValueRichTextData[])[0]
-                                    .nodes
-                            }
-                            allowedWidgets={[]}
-                            lngIdx={props.lngIdx}
-                            entryId={props.entryId}
-                            entrySync={props.entrySync}
-                            onInput={(value) => {
-                                ctx.emit('edit', props.propPath + `.data.0`, {
-                                    nodes: value,
-                                });
-                            }}
-                        />
+                        <div
+                            class={`bg-light dark:bg-darkGray border border-gray/50 dark:border-gray px-4 py-3 rounded-2xl min-h-[unset] max-h-[unset] h-auto`}
+                        >
+                            <EntryContentEditor
+                                id={props.propPath + `.data.0`}
+                                propPath={props.propPath + `.data.0`}
+                                placeholder={props.prop.label}
+                                nodes={
+                                    (
+                                        props.value
+                                            .data as PropValueRichTextData[]
+                                    )[0].nodes
+                                }
+                                allowedWidgets={[]}
+                                lngIdx={props.lngIdx}
+                                entryId={props.entryId}
+                                entrySync={props.entrySync}
+                                onInput={(value) => {
+                                    ctx.emit(
+                                        'edit',
+                                        props.propPath + `.data.0`,
+                                        {
+                                            nodes: value,
+                                        },
+                                    );
+                                }}
+                            />
+                        </div>
                     </InputWrapper>
                 )}
             </PropInputWrapper>

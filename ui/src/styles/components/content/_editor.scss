@@ -1,7 +1,7 @@
 .ProseMirror {
   @apply focus:outline-none;
   & > .paragraph {
-    @apply mb-12 md:mb-10;
+    @apply mb-12 md:mb-10 first:last:mb-0 md:first:last:mb-0;
   }
   & * {
     &:not(div) {
