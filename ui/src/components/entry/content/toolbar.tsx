@@ -419,7 +419,6 @@ export const EntryContentEditorToolbar = defineComponent({
                         ) {
                             toolbarPosition.value.left = 0;
                         }
-                        console.log(toolbarPosition.value?.left);
                     } else {
                         toolbarPosition.value = undefined;
                     }
