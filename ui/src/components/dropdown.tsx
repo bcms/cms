@@ -78,13 +78,10 @@ export const Dropdown = defineComponent({
                         mountTo.value.right += offsetDelta;
                     }
                 }
-                console.log(bb.bottom + maxHeight, window.innerHeight)
                 if (bb.bottom + maxHeight < window.innerHeight) {
-                    console.log(1)
                     mountTo.value.top = bb.bottom;
                     mountTo.value.top += document.body.scrollTop;
                 } else {
-                    console.log(2)
                     mountTo.value.bottom = window.innerHeight - bb.top;
                     mountTo.value.bottom -= document.body.scrollTop;
                 }
