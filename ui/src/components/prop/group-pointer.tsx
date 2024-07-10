@@ -210,6 +210,7 @@ export const PropGroupPointerInput = defineComponent({
                         required={props.prop.required}
                         array={props.prop.array}
                         propDepth={props.propDepth}
+                        isGroup
                         onAddArrayItem={() => {
                             ctx.emit('addValue', props.propPath, props.prop);
                             props.entrySync?.emitGroupPointerUpdate({

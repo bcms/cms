@@ -230,7 +230,7 @@ export const EntryEditor = defineComponent({
                             />
                             <TextInput
                                 id={`entry.meta.${lngIdx.value}.props.1.data.0`}
-                                class={`mt-4`}
+                                class={`mt-4 mb-4`}
                                 label="Slug"
                                 placeholder="Slug"
                                 required

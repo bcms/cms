@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import {
+    computed,
     defineComponent,
     onBeforeUnmount,
     onMounted,
@@ -47,6 +48,7 @@ export const PropInputWrapper = defineComponent({
         required: Boolean,
         deletable: Boolean,
         collapsable: Boolean,
+        isGroup: Boolean,
         propDepth: {
             type: Number,
             default: 0,
@@ -66,6 +68,8 @@ export const PropInputWrapper = defineComponent({
     setup(props, ctx) {
         const id = uuidv4();
         const inFocus = ref(false);
+        const hasFrame = computed(() => props.isGroup || props.array);
+
         function getLabel() {
             return typeof props.label === 'function'
                 ? props.label()
@@ -92,32 +96,7 @@ export const PropInputWrapper = defineComponent({
                 );
                 if (!inModalEl) {
                     const node = findNodeById(el, props.id || '');
-                    // inFocus.value = !!node;
-                    const label = document.getElementById(id + '_label');
-                    const lock = document.getElementById(id + '_lock');
-                    const horizontalLine = document.getElementById(
-                        id + '_horizontal_line',
-                    );
-                    const borderLeft = document.getElementById(
-                        id + '_border_left',
-                    );
-                    if (label && lock && horizontalLine && borderLeft) {
-                        if (node) {
-                            label.classList.add('text-green');
-                            label.classList.remove('text-black');
-                            horizontalLine.classList.add('bg-green');
-                            horizontalLine.classList.remove('bg-gray');
-                            borderLeft.classList.add('border-l-green');
-                            borderLeft.classList.remove('border-l-gray');
-                        } else {
-                            label.classList.remove('text-green');
-                            label.classList.add('text-black');
-                            horizontalLine.classList.remove('bg-green');
-                            horizontalLine.classList.add('bg-gray');
-                            borderLeft.classList.remove('border-l-green');
-                            borderLeft.classList.add('border-l-gray');
-                        }
-                    }
+                    inFocus.value = !!node;
                     ctx.emit('focus', node);
                 }
             }
@@ -136,101 +115,127 @@ export const PropInputWrapper = defineComponent({
                 id={props.id}
                 data-bcms-prop-input-wrapper={'true'}
                 style={props.style}
-                class={`flex flex-col pt-2 ${props.class || ''}`}
+                class={
+                    hasFrame.value
+                        ? `${
+                              inFocus.value
+                                  ? 'border-green dark:border-yellow'
+                                  : 'border-gray'
+                          } relative flex flex-col border border-gray border-t-0 rounded-bl-2.5 rounded-br-2.5
+                          p-4 mt-8 ${props.class || ''}`
+                        : 'relative flex flex-col mt-4 first:mt-0'
+                }
             >
                 <div
-                    class={`flex items-center gap-2 w-full z-10`}
-                    style={`top: ${75 + 20 * props.propDepth}px;`}
+                    class={
+                        hasFrame.value
+                            ? `group absolute flex items-center`
+                            : `flex items-center border-b border-b-gray mb-4 pb-2`
+                    }
+                    style={
+                        hasFrame.value
+                            ? `top: -16px; left: -1px; width: calc(100% + 2px);`
+                            : ''
+                    }
                 >
-                    <div
-                        id={`${id}_label`}
-                        class={`${
+                    {hasFrame.value && (
+                        <div
+                            class={`w-2.5 h-2.5 rounded-tl-2.5 border-l border-t border-gray 
+                        ${
                             inFocus.value
-                                ? 'text-green'
-                                : `text-black dark:text-white`
-                        } whitespace-nowrap`}
-                    >
-                        {getLabel()}
-                    </div>
-                    <div
-                        id={`${id}_lock`}
-                        class={`${
-                            inFocus.value
-                                ? 'text-green'
-                                : `text-dark dark:text-white`
+                                ? 'border-green dark:border-yellow'
+                                : ''
                         }`}
+                        ></div>
+                    )}
+                    <div
+                        class={
+                            hasFrame.value
+                                ? `relative flex items-center top-[-3px] pl-2 w-full`
+                                : 'flex items-center w-full'
+                        }
                     >
-                        {props.required ? (
-                            <Icon
-                                class={`w-4 h-4 fill-current`}
-                                src={`/lock`}
-                            />
-                        ) : (
-                            <Icon
-                                class={`w-4 h-4 fill-current`}
-                                src={`/unlock`}
+                        <div
+                            id={`${id}_label`}
+                            class={`${
+                                inFocus.value
+                                    ? 'text-green dark:text-yellow'
+                                    : ''
+                            }
+                            whitespace-nowrap
+                            `}
+                        >
+                            {getLabel()}
+                        </div>
+                        <div
+                            id={`${id}_lock`}
+                            class={`ml-2 mr-2 text-darkGray dark:text-gray`}
+                        >
+                            {props.required ? (
+                                <Icon
+                                    class={`w-4 h-4 fill-current`}
+                                    src={`/lock`}
+                                />
+                            ) : (
+                                <Icon
+                                    class={`w-4 h-4 fill-current`}
+                                    src={`/unlock`}
+                                />
+                            )}
+                        </div>
+                        <div
+                            id={`${props.id}_user_avatar_container`}
+                            class={`flex items-center gap-1`}
+                        />
+                        {hasFrame.value && (
+                            <div
+                                id={`${id}_horizontal_line`}
+                                class={`relative top-[-1.5px]
+                            bg-gray
+                            ${inFocus.value ? `bg-green dark:bg-yellow` : ''}
+                            h-[1px] w-full`}
                             />
                         )}
+                        {props.deletable || props.collapsable || props.array ? (
+                            <div class={`flex gap-2 items-center`}>
+                                {props.deletable && (
+                                    <button>
+                                        <Icon src={`/trash`} />
+                                    </button>
+                                )}
+                                {props.deletable && (
+                                    <button>
+                                        <Icon
+                                            class={`w-4 h-4 fill-current`}
+                                            src={`/trash`}
+                                        />
+                                    </button>
+                                )}
+                                {props.collapsable && (
+                                    <button>
+                                        <Icon
+                                            class={`w-4 h-4 text-dark dark:text-white fill-current`}
+                                            src={`/chevron/down`}
+                                        />
+                                    </button>
+                                )}
+                            </div>
+                        ) : (
+                            ''
+                        )}
                     </div>
-                    <div
-                        id={`${props.id}_user_avatar_container`}
-                        class={`flex items-center gap-1`}
-                    />
-                    <div
-                        id={`${id}_horizontal_line`}
-                        class={`${
+                    {hasFrame.value && (
+                        <div
+                            class={`w-2.5 h-2.5 border-t border-r border-gray rounded-tr-2.5
+                        ${
                             inFocus.value
-                                ? 'bg-green'
-                                : 'bg-gray dark:bg-darkGray'
-                        } h-[1px] w-full`}
-                    />
-                    {props.deletable || props.collapsable || props.array ? (
-                        <div class={`flex gap-2 items-center`}>
-                            {props.deletable && (
-                                <button>
-                                    <Icon src={`/trash`} />
-                                </button>
-                            )}
-                            {props.deletable && (
-                                <button>
-                                    <Icon
-                                        class={`w-4 h-4 fill-current`}
-                                        src={`/trash`}
-                                    />
-                                </button>
-                            )}
-                            {props.collapsable && (
-                                <button>
-                                    <Icon
-                                        class={`w-4 h-4 text-dark dark:text-white fill-current`}
-                                        src={`/chevron/down`}
-                                    />
-                                </button>
-                            )}
-                            {/*{props.array && (*/}
-                            {/*    <Button*/}
-                            {/*        class={`whitespace-nowrap`}*/}
-                            {/*        kind={`ghost`}*/}
-                            {/*        onClick={(event) => {*/}
-                            {/*            ctx.emit('addArrayItem', event);*/}
-                            {/*        }}*/}
-                            {/*    >*/}
-                            {/*        Add new item to {getLabel()}*/}
-                            {/*    </Button>*/}
-                            {/*)}*/}
-                        </div>
-                    ) : (
-                        ''
+                                ? 'border-green dark:border-yellow'
+                                : ''
+                        }`}
+                        ></div>
                     )}
                 </div>
-                <div
-                    id={`${id}_border_left`}
-                    class={`ml-2.5 mt-2 border-l ${
-                        inFocus.value
-                            ? 'border-l-green dark:border-l-yellow'
-                            : 'border-l-gray dark:border-l-darkGray'
-                    } pl-2`}
-                >
+                <div id={`${id}_border_left`}>
                     <div class={`flex flex-col gap-4`}>
                         {ctx.slots.default ? ctx.slots.default() : ''}
                     </div>
@@ -302,47 +307,56 @@ export const PropInputWrapperArrayItem = defineComponent({
             <div
                 id={props.id}
                 style={props.style}
-                class={`pl-3 ${props.class || ''}`}
+                class={`relative border border-t-0 pt-2 pb-4 px-4 rounded-b-2.5 mt-6 mb-4 last:mb-0 
+                ${
+                    inFocus.value
+                        ? 'border-green dark:border-yellow'
+                        : 'border-gray'
+                }
+                ${props.class || ''}`}
                 data-bcms-prop-input-wrapper-array={'true'}
             >
-                <div class={`flex gap-2 items-center`}>
+                <div
+                    class={`absolute flex gap-2 items-center top-[-24px] left-[-6px]`}
+                    style={`width: calc(100% + 14px)`}
+                >
                     <button
-                        class={`${
-                            inFocus.value
-                                ? 'text-green'
-                                : `text-dark dark:text-white`
-                        } ${
-                            itemExtended.value ? 'rotate-90' : 'rotate-[-90deg]'
-                        }`}
+                        class={`
+                        relative flex items-center gap-4
+                        ${inFocus.value ? 'text-green dark:text-yellow' : ''}
+                        `}
                         onClick={() => {
                             itemExtended.value = !itemExtended.value;
                             ctx.emit('extend', itemExtended.value);
                         }}
                     >
-                        <Icon
-                            class={`w-3 h-3 fill-current`}
-                            src={'/chevron/right'}
-                        />
+                        <div
+                            class={`
+                        ${itemExtended.value ? 'rotate-90' : 'rotate-[-90deg]'}
+                        `}
+                        >
+                            <Icon
+                                class={`w-3 h-3 fill-current`}
+                                src={'/chevron/right'}
+                            />
+                        </div>
+                        <div
+                            class={`whitespace-nowrap 
+                        ${inFocus.value ? 'text-green dark:text-yellow' : ''}
+                        `}
+                        >
+                            {props.label} {props.itemIdx}
+                        </div>
                     </button>
-                    <div
-                        class={`whitespace-nowrap ${
-                            inFocus.value
-                                ? 'text-green'
-                                : 'text-black dark:text-white'
-                        }`}
-                    >
-                        {props.label} {props.itemIdx}
-                    </div>
                     <div
                         id={`${props.id}_user_avatar_container`}
                         class={`flex items-center gap-1`}
                     />
                     <div
-                        class={`h-[1px] ${
-                            inFocus.value
-                                ? 'bg-green'
-                                : 'bg-gray dark:bg-darkGray'
-                        } w-full`}
+                        class={`h-[1px] 
+                        bg-gray
+                        ${inFocus.value ? 'bg-green dark:bg-yellow' : ''}
+                         w-full`}
                     />
                     <div class={`flex items-center gap-2`}>
                         <button
@@ -383,14 +397,8 @@ export const PropInputWrapperArrayItem = defineComponent({
                     </div>
                 </div>
                 {itemExtended.value && (
-                    <div
-                        class={`border-l mt-2 ${
-                            inFocus.value
-                                ? 'border-l-green'
-                                : `border-l-gray dark:border-l-darkGray`
-                        }`}
-                    >
-                        <div class={`ml-3`}>
+                    <div>
+                        <div>
                             {ctx.slots.default ? ctx.slots.default() : ''}
                         </div>
                     </div>
