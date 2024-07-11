@@ -72,7 +72,6 @@ export const PropDateInput = defineComponent({
                         errors.value.push('');
                         errorUnsubs.push(
                             props.propValidator.register(() => {
-                                console.log({ ts: valueData[i].timestamp });
                                 if (
                                     !valueData[i].timestamp ||
                                     valueData[i].timestamp === -1

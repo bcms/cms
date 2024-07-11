@@ -29,15 +29,15 @@ html {
   @include fluid(background-size, 375px, 900px, 450px, 622px);
 }
 
-::-moz-selection {
-  @apply bg-green bg-opacity-30 text-dark select-none dark:text-dark dark:bg-yellow;
-  text-shadow: none;
-}
-
-::selection {
-  @apply bg-green bg-opacity-30 text-dark select-none dark:text-dark dark:bg-yellow;
-  text-shadow: none;
-}
+//::-moz-selection {
+//  @apply bg-green bg-opacity-30 text-dark select-none dark:text-dark dark:bg-yellow;
+//  text-shadow: none;
+//}
+//
+//::selection {
+//  @apply bg-green bg-opacity-30 text-dark select-none dark:text-dark dark:bg-yellow;
+//  text-shadow: none;
+//}
 
 /* Give a remote user a caret */
 .collaboration-cursor__caret {

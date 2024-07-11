@@ -209,7 +209,7 @@ export const EntryEditor = defineComponent({
                 {template.value && lngCode.value && lngIdx.value !== -1 ? (
                     <div class={`flex flex-col gap-2 max-w-[600px]`}>
                         <div
-                            class={`bg-light/50 dark:bg-darkGray/50 rounded-xl border border-gray/50 dark:border-gray p-5`}
+                            class={`bg-light/50 dark:bg-darkGray/50 rounded-xl border border-gray/50 dark:border-gray p-5 mb-10`}
                         >
                             <TextAreaInput
                                 id={`entry.meta.${lngIdx.value}.props.0.data.0`}

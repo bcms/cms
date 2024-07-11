@@ -389,6 +389,10 @@ export const EntryContentEditorToolbar = defineComponent({
             props.editor.on('selectionUpdate', (event) => {
                 clearTimeout(selectDebounce);
                 selectDebounce = setTimeout(() => {
+                    if (event.editor.isActive('widget')) {
+                        toolbarPosition.value = undefined
+                        return;
+                    }
                     const from = Math.min(
                         ...event.transaction.selection.ranges.map(
                             (range) => range.$from.pos,

@@ -76,10 +76,18 @@ export const ModalWidgetCreateEdit = defineComponent({
                 }
                 const isOk = await throwable(
                     async () => {
-                        await sdk.widget.create({
-                            desc: inputs.value.description.value,
-                            label: inputs.value.label.value,
-                        });
+                        if (widgetToUpdate.value) {
+                            await sdk.widget.update({
+                                _id: widgetToUpdate.value._id,
+                                desc: inputs.value.description.value,
+                                label: inputs.value.label.value,
+                            });
+                        } else {
+                            await sdk.widget.create({
+                                desc: inputs.value.description.value,
+                                label: inputs.value.label.value,
+                            });
+                        }
                     },
                     async () => {
                         notification.success('Widget created successfully');
@@ -102,7 +110,7 @@ export const ModalWidgetCreateEdit = defineComponent({
             <ModalWrapper
                 title={`Create new widget`}
                 handler={props.handler}
-                doneText={'Create'}
+                doneText={widgetToUpdate.value ? 'Update' : 'Create'}
             >
                 <div class={`flex flex-col gap-8`}>
                     <TextInput

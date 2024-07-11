@@ -77,8 +77,6 @@ export const PropRichTextInput = defineComponent({
                 errors.value[itemIdx] =
                     'Property is required, please enter some text';
                 return false;
-            } else {
-                console.log(valueData[itemIdx].nodes);
             }
             errors.value[itemIdx] = '';
             return true;

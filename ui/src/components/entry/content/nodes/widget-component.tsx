@@ -73,8 +73,8 @@ export const EntryContentNodeWidgetComponent = defineComponent({
         });
 
         return () => (
-            <NodeViewWrapper class="group-scope relative" ref={wrapperRef}>
-                <div class="absolute z-10 top-0 left-0 w-10 -translate-x-full -translate-y-2 h-full group-scope-hover:block">
+            <NodeViewWrapper class="relative" ref={wrapperRef}>
+                <div class="absolute z-10 top-0 left-0 w-10 -translate-x-full -translate-y-2 h-full ">
                     <div data-drag-handle class="cursor-move p-2">
                         <Icon
                             src="/editor/drag"
@@ -82,19 +82,31 @@ export const EntryContentNodeWidgetComponent = defineComponent({
                         />
                     </div>
                 </div>
-                <div data-bcms-wid={JSON.stringify(attrs.value.data || {})}>
-                    <div class={`flex gap-2 items-center`}>
+                <div
+                    class={`relative border border-green dark:border-yellow border-t-0 rounded-b-2.5 px-4 pt-4 pb-8 mb-10`}
+                    data-bcms-wid={JSON.stringify(attrs.value.data || {})}
+                >
+                    <div
+                        class={`absolute flex items-center`}
+                        style={`width: calc(100% + 2px); top: -17px; left: -1px;`}
+                    >
+                        <div
+                            class={`relative top-[4px] w-2.5 h-2.5 rounded-tl-2.5 border-l border-t border-green dark:border-yellow`}
+                        ></div>
                         <Icon
-                            class="flex-shrink-0 w-3 h-3 stroke-brand-700"
+                            class="mx-2 flex-shrink-0 w-3 h-3 text-dark dark:text-white"
                             src="/feather"
                         />
-                        <div class={`whitespace-nowrap text-xs uppercase`}>
+                        <div
+                            class={`appearance-none relative mr-2 text-green dark:text-yellow whitespace-nowrap text-xs uppercase`}
+                        >
                             Widget | {widget.value?.label}
                         </div>
                         <div
-                            class={`h-[1px] bg-gray-300 dark:bg-gray-800 w-full`}
+                            class={`h-[1px] bg-green dark:bg-yellow w-full mr-2`}
                         />
                         <button
+                            class={`mr-4`}
                             onClick={() => {
                                 if (props.deleteNode) {
                                     props.deleteNode();
@@ -102,27 +114,28 @@ export const EntryContentNodeWidgetComponent = defineComponent({
                             }}
                         >
                             <Icon
-                                src="/trash-01"
-                                class="w-6 h-6 block stroke-error-700"
+                                src="/trash"
+                                class="w-4 h-4 block text-red fill-current"
                             />
                         </button>
                         <button
-                            class={`stroke-black dark:stroke-white hover:stroke-brand-700`}
+                            class={`mr-2 text-dark dark:text-white hover:text-green dark:hover:text-yellow fill-current`}
                             onClick={() => {
                                 extended.value = !extended.value;
                             }}
                         >
                             {extended.value ? (
-                                <Icon src={'/minimize-01'} />
+                                <Icon class={`w-4 h-4 `} src={'/minimize'} />
                             ) : (
-                                <Icon src={`maximize-01`} />
+                                <Icon class={`w-4 h-4 `} src={`/maximize`} />
                             )}
                         </button>
+                        <div
+                            class={`relative top-[4px] w-2.5 h-2.5 border-t border-r border-green dark:border-yellow rounded-tr-2.5`}
+                        ></div>
                     </div>
-                    <div
-                        class={`pl-2 ml-2 border-l border-l-gray-300 dark:border-l-gray-800`}
-                    >
-                        {widget.value && (
+                    <div>
+                        {widget.value && extended.value && (
                             <div>
                                 <EntryMetaEditor
                                     propPath={attrs.value.propPath + '.props'}
