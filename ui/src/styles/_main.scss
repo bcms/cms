@@ -24,8 +24,6 @@ html {
 .bcmsBody {
   @apply relative box-border text-base leading-snug overflow-x-hidden overflow-y-auto bg-white bg-no-repeat dark:bg-dark;
   -webkit-overflow-scrolling: touch;
-  background-image: url('/assets/gradients/gradient-small.png');
-  background-position: top left;
   @include fluid(background-size, 375px, 900px, 450px, 622px);
 }
 
