@@ -251,6 +251,7 @@ export const PropRichTextInput = defineComponent({
                                                         props.propPath +
                                                         `.data.${valueItemIdx}`
                                                     }
+                                                    class='bcmsRichText'
                                                     propPath={
                                                         props.propPath +
                                                         `.data.${valueItemIdx}`
@@ -289,6 +290,7 @@ export const PropRichTextInput = defineComponent({
                             class={`bg-light dark:bg-darkGray border border-gray/50 dark:border-gray px-4 py-3 rounded-2xl min-h-[unset] max-h-[unset] h-auto`}
                         >
                             <EntryContentEditor
+                                class='bcmsRichText'
                                 id={props.propPath + `.data.0`}
                                 propPath={props.propPath + `.data.0`}
                                 placeholder={props.prop.label}

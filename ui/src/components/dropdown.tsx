@@ -80,10 +80,14 @@ export const Dropdown = defineComponent({
                 }
                 if (bb.bottom + maxHeight < window.innerHeight) {
                     mountTo.value.top = bb.bottom;
-                    mountTo.value.top += document.body.scrollTop;
+                    if (!props.fixed) {
+                        mountTo.value.top += document.body.scrollTop;
+                    }
                 } else {
                     mountTo.value.bottom = window.innerHeight - bb.top;
-                    mountTo.value.bottom -= document.body.scrollTop;
+                    if (!props.fixed) {
+                        mountTo.value.bottom -= document.body.scrollTop;
+                    }
                 }
             }
         }

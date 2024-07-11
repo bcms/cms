@@ -30,6 +30,8 @@ export const MediaPreview = defineComponent({
         thumbnail: Boolean,
         doNotOpenOnClick: Boolean,
         imageClass: String,
+        altText: String,
+        caption: String,
     },
     setup(props) {
         const sdk = window.bcms.sdk;
@@ -131,12 +133,12 @@ export const MediaPreview = defineComponent({
                         ? `\nHeight: ${props.media.height}px`
                         : ''
                 }${
-                    props.media.altText
-                        ? `\nAlt text: ${props.media.altText}`
+                    props.media.altText || props.altText
+                        ? `\nAlt text: ${props.altText || props.media.altText}`
                         : ''
                 }${
-                    props.media.caption
-                        ? `\nCaption: ${props.media.caption}`
+                    props.caption || props.media.caption
+                        ? `\nCaption: ${props.caption || props.media.caption}`
                         : ''
                 }`}
             >

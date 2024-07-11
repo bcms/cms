@@ -147,10 +147,6 @@ export const TextAreaInput = defineComponent({
                 } else {
                     if (editor.value) {
                         const text = nodesToText(editor.value.getJSON());
-                        console.log({
-                            text,
-                            val: props.value,
-                        });
                         if (props.value !== text) {
                             editor.value?.commands.setContent(
                                 getDocContent(props.value),
@@ -183,7 +179,7 @@ export const TextAreaInput = defineComponent({
                 <div
                     id={props.id}
                     style={props.style}
-                    class={`relative block w-full bg-white pr-6 border rounded-3.5 transition-all duration-300 shadow-none font-normal not-italic text-base leading-tight -tracking-0.01 text-dark h-11 py-0 px-4.5 outline-none placeholder-grey placeholder-opacity-100 pt-3 pb-[9px] pl-4.5 resize-none top-0 left-0 overflow-hidden hover:shadow-input focus-within:shadow-input ${
+                    class={`bcmsTextArea relative block w-full bg-white pr-6 border rounded-3.5 transition-all duration-300 shadow-none font-normal not-italic text-base leading-tight -tracking-0.01 text-dark h-11 py-0 px-4.5 outline-none placeholder-grey placeholder-opacity-100 pt-3 pb-[9px] pl-4.5 resize-none top-0 left-0 overflow-hidden hover:shadow-input focus-within:shadow-input ${
                         props.error
                             ? 'border-red hover:border-red focus-within:border-red'
                             : 'border-grey'

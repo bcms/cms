@@ -53,6 +53,11 @@ import {
     type ModalMediaSelectInput,
     type ModalMediaSelectOutput,
 } from '@thebcms/selfhosted-ui/components/modals/media/select';
+import {
+    ModalMediaEditAltCaption,
+    type ModalMediaEditAltCaptionInput,
+    type ModalMediaEditAltCaptionOutput,
+} from '@thebcms/selfhosted-ui/components/modals/media/edit-alt-caption';
 
 export interface ModalHandlerOptions<Output = unknown> {
     title?: string;
@@ -118,6 +123,10 @@ export class ModalService {
             ModalMediaSelectInput,
             ModalMediaSelectOutput
         >(ModalMediaSelect),
+        mediaEditAltCaption: new ModalHandler<
+            ModalMediaEditAltCaptionInput,
+            ModalMediaEditAltCaptionOutput
+        >(ModalMediaEditAltCaption),
 
         entryContentLinkEdit: new ModalHandler<
             ModalEntryContentLindEditInput,

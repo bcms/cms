@@ -59,8 +59,8 @@ export const MediaSelect = defineComponent({
                                     'change',
                                     {
                                         media: mediaItem,
-                                        altText: data.value.alt_text || '',
-                                        caption: data.value.caption || '',
+                                        altText: props.altText || '',
+                                        caption: props.caption || '',
                                     },
                                     true,
                                 );
@@ -103,8 +103,8 @@ export const MediaSelect = defineComponent({
                             modal.handlers.mediaSelect.open({
                                 data: {
                                     mediaId: media.value?._id || '',
-                                    altText: media.value?.altText || '',
-                                    caption: media.value?.caption || '',
+                                    altText: props.altText || '',
+                                    caption: props.caption || '',
                                 },
                                 onDone(data) {
                                     ctx.emit('change', {
@@ -117,12 +117,16 @@ export const MediaSelect = defineComponent({
                         }}
                     >
                         {media.value ? (
-                            <div class={`relative flex flex-col xs:flex-row gap-4 px-6 py-4 w-full`}>
+                            <div
+                                class={`relative flex flex-col xs:flex-row gap-4 px-6 py-4 w-full`}
+                            >
                                 <MediaPreview
                                     class={`flex-shrink-0 w-24 h-24 rounded-2.5 overflow-hidden`}
                                     media={media.value}
                                     doNotOpenOnClick
                                     thumbnail
+                                    altText={props.altText}
+                                    caption={props.caption}
                                 />
                                 <div class={`flex flex-col gap-1 text-left`}>
                                     <div class={`font-medium text-sm`}>
@@ -132,16 +136,38 @@ export const MediaSelect = defineComponent({
                                         {prettyFileSize(media.value.size)}
                                     </div>
                                     <div
-                                        class={`flex gap-2 mt-auto text-brand-700 font-medium`}
+                                        class={`flex flex-col mt-auto text-green dark:text-yellow text-left font-medium`}
                                     >
+                                        <div>Click to select another media</div>
                                         <button
+                                            class={`text-left`}
                                             onClick={(event) => {
                                                 event.stopPropagation();
+                                                modal.handlers.mediaEditAltCaption.open(
+                                                    {
+                                                        data: {
+                                                            altText:
+                                                                props.altText,
+                                                            caption:
+                                                                props.caption,
+                                                        },
+                                                        onDone(output) {
+                                                            ctx.emit('change', {
+                                                                media: media.value as Media,
+                                                                caption:
+                                                                    output.caption ||
+                                                                    '',
+                                                                altText:
+                                                                    output.altText ||
+                                                                    '',
+                                                            });
+                                                        },
+                                                    },
+                                                );
                                             }}
                                         >
                                             Edit media
                                         </button>
-                                        <div>Click to select another media</div>
                                     </div>
                                 </div>
                                 <div

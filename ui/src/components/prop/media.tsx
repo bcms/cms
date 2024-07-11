@@ -235,6 +235,10 @@ export const PropMediaInput = defineComponent({
                                                     `.data.${valueItemIdx}`;
                                                 ctx.emit('edit', propPath, {
                                                     _id: data?.media._id || '',
+                                                    caption:
+                                                        data?.caption || '',
+                                                    alt_text:
+                                                        data?.altText || '',
                                                 });
                                                 if (!byEntrySync) {
                                                     props.entrySync?.emitMediaUpdate(
@@ -244,6 +248,12 @@ export const PropMediaInput = defineComponent({
                                                                 _id:
                                                                     data?.media
                                                                         ._id ||
+                                                                    '',
+                                                                alt_text:
+                                                                    data?.altText ||
+                                                                    '',
+                                                                caption:
+                                                                    data?.caption ||
                                                                     '',
                                                             },
                                                         },
@@ -283,12 +293,16 @@ export const PropMediaInput = defineComponent({
                             const propPath = props.propPath + `.data.0`;
                             ctx.emit('edit', propPath, {
                                 _id: data?.media._id || '',
+                                caption: data?.caption || '',
+                                alt_text: data?.altText || '',
                             });
                             if (!byEntrySync) {
                                 props.entrySync?.emitMediaUpdate({
                                     propPath,
                                     value: {
                                         _id: data?.media._id || '',
+                                        caption: data?.caption || '',
+                                        alt_text: data?.altText || '',
                                     },
                                 });
                             }

@@ -145,8 +145,11 @@ export const Select = defineComponent({
             if (inputRef.value) {
                 const inputEl = inputRef.value;
                 const bBox = inputEl.getBoundingClientRect();
-                dropdownPosition.value.top =
-                    bBox.y + document.body.scrollTop + bBox.height;
+                let topOffset = 0;
+                if (!props.fixed) {
+                    topOffset = document.body.scrollTop;
+                }
+                dropdownPosition.value.top = bBox.y + topOffset + bBox.height;
                 dropdownPosition.value.left = bBox.x;
                 setTimeout(() => {
                     const dropdownEl = document.getElementById(dropdownId);
@@ -156,9 +159,7 @@ export const Select = defineComponent({
                             window.innerHeight
                         ) {
                             dropdownPosition.value.top =
-                                bBox.y +
-                                document.body.scrollTop -
-                                dropdownEl.offsetHeight;
+                                bBox.y + topOffset - dropdownEl.offsetHeight;
                         }
                     }
                     dropdownPosition.value.visible = true;

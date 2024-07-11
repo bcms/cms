@@ -39,9 +39,7 @@ export const EntryView = defineComponent({
         window.bcms.entryPropValidator = propValidator;
 
         const template = computed(() =>
-            sdk.store.template.find(
-                (e) => e._id === route.params.templateId,
-            ),
+            sdk.store.template.find((e) => e._id === route.params.templateId),
         );
         const entry = ref<Entry>();
         const lngIdx = computed(() => {
@@ -229,15 +227,17 @@ export const EntryView = defineComponent({
             <div>
                 {template.value && entry.value && lngIdx.value !== -1 ? (
                     <div
-                        class={`relative flex flex-col ${
+                        class={`flex flex-col mt-8 pl-8 ${
                             loading.value ? 'opacity-0' : ''
                         }`}
                     >
                         <EntrySyncElements entrySync={entrySync} />
                         <div
-                            class={`flex gap-2 items-center desktop:sticky top-0 max-desktop:top-14 z-20 pb-8`}
+                            class={`desktop:fixed desktop:right-6 desktop:top-6 flex gap-2 items-center top-0 max-desktop:top-14 z-20 pb-8`}
                         >
-                            <div class={`ml-auto flex max-desktop:flex-col gap-4 items-center max-desktop:items-end`}>
+                            <div
+                                class={`ml-auto flex max-desktop:flex-col gap-4 items-center max-desktop:items-end`}
+                            >
                                 <div
                                     id={`entrySync-connected-users-container`}
                                     class={`flex items-center gap-1`}

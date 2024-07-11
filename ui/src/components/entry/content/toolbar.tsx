@@ -342,7 +342,8 @@ export const EntryContentEditorToolbar = defineComponent({
                     </button>
                     {navItem.children && navItem.children.show ? (
                         <div
-                            class={`absolute flex flex-col gap-2 top-8 left-0 bg-white dark:bg-darkGray py-2 px-4 shadow-xl rounded-bl-xl rounded-br-xl`}
+                            class={`absolute flex flex-col gap-2 bg-white dark:bg-darkGray py-2 px-4 shadow-xl rounded-bl-xl rounded-br-xl`}
+                            style={`bottom: 32px; left: 0px;`}
                         >
                             {navItem.children.items
                                 .filter((childItem) => childItem.visible())
