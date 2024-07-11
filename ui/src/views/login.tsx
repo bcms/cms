@@ -81,6 +81,7 @@ export const LoginView = defineComponent({
                 <TextInput
                     class={`mt-10`}
                     label="Email"
+                    placeholder='Email'
                     value={inputs.value.email.value}
                     error={inputs.value.email.error}
                     onInput={(value) => {
@@ -91,6 +92,7 @@ export const LoginView = defineComponent({
                 <PasswordInput
                     class={`mt-4`}
                     label="Password"
+                    placeholder='Password'
                     value={inputs.value.password.value}
                     error={inputs.value.password.error}
                     onInput={(value) => {

@@ -52,15 +52,15 @@ export const BgAuth = defineComponent({
                 if (container.value) {
                     grad.shader.setUniform(
                         'uPos1',
-                        new Vector2(container.value.offsetWidth / 2 + 200, 200),
+                        new Vector2(window.innerWidth / 2 + 200, 200),
                     );
                     grad.shader.setUniform(
                         'uPos2',
-                        new Vector2(container.value.offsetWidth / 2 - 200, 200),
+                        new Vector2(window.innerWidth / 2 - 200, 200),
                     );
                     grad.shader.setUniform(
                         'uPos3',
-                        new Vector2(container.value.offsetWidth / 2 + 100, 0),
+                        new Vector2(window.innerWidth / 2 + 100, 0),
                     );
                 }
                 grad.update();
@@ -73,7 +73,12 @@ export const BgAuth = defineComponent({
 
         onMounted(() => {
             if (container.value) {
-                grad = new Grad3C(container.value);
+                grad = new Grad3C(container.value, undefined, () => {
+                    return {
+                        width: window.innerWidth,
+                        height: window.innerHeight,
+                    };
+                });
                 updateGrad(theme.active.value);
                 window.addEventListener('resize', onResize);
             }

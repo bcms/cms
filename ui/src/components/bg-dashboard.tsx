@@ -63,7 +63,12 @@ export const BgDashboard = defineComponent({
 
         onMounted(() => {
             if (container.value) {
-                grad = new Grad3C(container.value);
+                grad = new Grad3C(container.value, undefined, () => {
+                    return {
+                        width: window.innerWidth,
+                        height: window.innerHeight,
+                    };
+                });
                 updateGrad(theme.active.value);
                 window.addEventListener('resize', onResize);
             }

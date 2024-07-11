@@ -74,7 +74,11 @@ export class Grad3C {
         vec2(v2: Vector2): Vector2;
     };
 
-    constructor(appendToElement: HTMLElement, options?: Grad3COptions) {
+    constructor(
+        appendToElement: HTMLElement,
+        options?: Grad3COptions,
+        getCanvasSize?: () => { width: number; height: number },
+    ) {
         if (!options) {
             options = {
                 useNoise: false,
@@ -127,16 +131,16 @@ export class Grad3C {
         appendToElement.appendChild(this.renderer.domElement);
 
         this.onResize = () => {
-            this.renderer.setSize(
-                appendToElement.offsetWidth,
-                appendToElement.offsetHeight,
-            );
+            const size = getCanvasSize
+                ? getCanvasSize()
+                : {
+                      width: appendToElement.offsetWidth,
+                      height: appendToElement.offsetHeight,
+                  };
+            this.renderer.setSize(size.width, size.height);
             this.shader.setUniform(
                 'resolution',
-                new Vector2(
-                    appendToElement.offsetWidth,
-                    appendToElement.offsetHeight,
-                ),
+                new Vector2(size.width, size.height),
             );
         };
 
