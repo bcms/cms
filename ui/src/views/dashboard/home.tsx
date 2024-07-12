@@ -20,6 +20,7 @@ export const HomeView = defineComponent({
         const recentMedia = computed(() =>
             sdk.store.media
                 .items()
+                .filter((e) => e.type !== 'DIR')
                 .sort((a, b) => b.createdAt - a.createdAt)
                 .slice(0, 15),
         );
