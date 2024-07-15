@@ -11,6 +11,7 @@ import { millisToDateString } from '@thebcms/selfhosted-ui/util/date';
 import { Icon } from '@thebcms/selfhosted-ui/components/icon';
 import type { UserPolicyCRUD } from '@thebcms/selfhosted-backend/user/models/policy';
 import { CheckBox } from '@thebcms/selfhosted-ui/components/inputs/check-box';
+import type { BCMSFunctionConfig } from '@thebcms/selfhosted-backend/function/models/main';
 
 export interface TemplateConfig {
     id: string;
@@ -33,11 +34,14 @@ export const ApiKeyView = defineComponent({
         const apiKey = computed(() =>
             sdk.store.apiKey.find((e) => e._id === route.params.apiKeyId),
         );
+        const fns = ref<BCMSFunctionConfig[]>([]);
 
         const data = ref<{
             templatesConfig: TemplateConfig[];
+            fns: string[];
         }>({
             templatesConfig: [],
+            fns: [],
         });
 
         meta.set({ title: `API Key` });
@@ -101,26 +105,36 @@ export const ApiKeyView = defineComponent({
                     if (apiKey.value) {
                         meta.set({ title: apiKey.value.name });
                     }
-                    return await sdk.template.getAll();
+                    return {
+                        templates: await sdk.template.getAll(),
+                        fns: await sdk.fn.available(),
+                    };
                 },
-                async (templates) => {
-                    data.value.templatesConfig = templates.map((template) => {
-                        const templateConfig =
-                            apiKey.value?.access.templates.find(
-                                (e) => e._id === template._id,
-                            );
-                        return {
-                            id: template._id,
-                            label: template.label,
-                            name: template.name,
-                            access: {
-                                get: templateConfig?.get || false,
-                                put: templateConfig?.put || false,
-                                post: templateConfig?.post || false,
-                                delete: templateConfig?.delete || false,
-                            },
-                        };
-                    });
+                async (result) => {
+                    data.value.templatesConfig = result.templates.map(
+                        (template) => {
+                            const templateConfig =
+                                apiKey.value?.access.templates.find(
+                                    (e) => e._id === template._id,
+                                );
+                            return {
+                                id: template._id,
+                                label: template.label,
+                                name: template.name,
+                                access: {
+                                    get: templateConfig?.get || false,
+                                    put: templateConfig?.put || false,
+                                    post: templateConfig?.post || false,
+                                    delete: templateConfig?.delete || false,
+                                },
+                            };
+                        },
+                    );
+                    fns.value = result.fns;
+                    data.value.fns =
+                        apiKey.value?.access.functions.map((e) => {
+                            return e.name;
+                        }) || [];
                 },
             );
             loading.value = false;
@@ -143,7 +157,11 @@ export const ApiKeyView = defineComponent({
                                 };
                             },
                         ),
-                        functions: [],
+                        functions: data.value.fns.map((fnName) => {
+                            return {
+                                name: fnName,
+                            };
+                        }),
                     },
                 });
             });
@@ -226,6 +244,41 @@ export const ApiKeyView = defineComponent({
                             await updateAccess();
                         }}
                     />
+                </div>
+            );
+        }
+
+        function fnCard(fn: BCMSFunctionConfig) {
+            return (
+                <div
+                    class={`flex flex-col rounded-2.5 overflow-hidden border border-gray dark:border-gray bg-light dark:bg-darkGray mb-auto p-2 shadow-xl`}
+                >
+                    <h3 class={`mb-2`}>Function {fn.name}</h3>
+                    {fn.public ? (
+                        <p>This function is public</p>
+                    ) : (
+                        <CheckBox
+                            text={`Can call function`}
+                            value={!!data.value.fns.find((e) => e === fn.name)}
+                            onInput={async (value) => {
+                                if (value) {
+                                    data.value.fns.push(fn.name);
+                                } else {
+                                    for (
+                                        let i = 0;
+                                        i < data.value.fns.length;
+                                        i++
+                                    ) {
+                                        if (data.value.fns[i] === fn.name) {
+                                            data.value.fns.splice(i, 1);
+                                            break;
+                                        }
+                                    }
+                                }
+                                await updateAccess();
+                            }}
+                        />
+                    )}
                 </div>
             );
         }
@@ -328,6 +381,9 @@ export const ApiKeyView = defineComponent({
                                     return templateCard(templateConfig);
                                 },
                             )}
+                            {fns.value.map((fn) => {
+                                return fnCard(fn);
+                            })}
                         </div>
                     </div>
                 )}

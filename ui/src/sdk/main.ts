@@ -17,6 +17,7 @@ import { EntryHandler } from '@thebcms/selfhosted-sdk/handlers/entry';
 import { EntryStatusHandler } from '@thebcms/selfhosted-sdk/handlers/entry-status';
 import { BackupHandler } from '@thebcms/selfhosted-sdk/handlers/backup';
 import { ApiKeyHandler } from '@thebcms/selfhosted-sdk/handlers/api-key';
+import { FunctionHandler } from '@thebcms/selfhosted-sdk/handlers/functions';
 
 export interface SdkConfig {
     apiOrigin?: string;
@@ -48,10 +49,10 @@ export class Sdk {
     media = new MediaHandler(this);
     apiKey = new ApiKeyHandler(this);
     language = new LanguageHandler(this);
-    // invitation = new InvitationHandler(this);
     entry = new EntryHandler(this);
     entryStatus = new EntryStatusHandler(this);
     // typeGenerator = new TypeGeneratorHandler(this);
+    fn = new FunctionHandler(this);
     backup = new BackupHandler(this);
 
     constructor(
@@ -118,11 +119,11 @@ export class Sdk {
         this.media.clear();
         this.apiKey.clear();
         this.language.clear();
-        // this.invitation.clear();
         this.entry.clear();
         this.entryStatus.clear();
         // this.typeGenerator.clear();
         this.backup.clear();
+        this.fn.clear();
         this.socket.clear();
     }
 
@@ -263,4 +264,3 @@ export function createSdk(
 ) {
     return new Sdk(store, storage, config);
 }
-
