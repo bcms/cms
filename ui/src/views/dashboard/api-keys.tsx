@@ -4,6 +4,7 @@ import { Button } from '@thebcms/selfhosted-ui/components/button';
 import { Icon } from '@thebcms/selfhosted-ui/components/icon';
 import { EntityList } from '@thebcms/selfhosted-ui/components/entity-list';
 import { EmptyState } from '@thebcms/selfhosted-ui/components/empty-state';
+import { Tag } from '@thebcms/selfhosted-ui/components/tag';
 
 export const ApiKeysView = defineComponent({
     setup() {
@@ -51,6 +52,16 @@ export const ApiKeysView = defineComponent({
                                     desc: apiKey.desc,
                                     updatedAt: apiKey.updatedAt,
                                     href: `${route.path}/${apiKey._id}`,
+                                    slot: () => (
+                                        <div class={`flex gap-2 items-center`}>
+                                            <div>{apiKey.name}</div>
+                                            {apiKey.blocked ? (
+                                                <Tag danger>Blocked</Tag>
+                                            ) : (
+                                                ''
+                                            )}
+                                        </div>
+                                    ),
                                 };
                             })}
                         />

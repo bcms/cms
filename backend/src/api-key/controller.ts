@@ -29,6 +29,7 @@ import {
 } from '@thebcms/selfhosted-backend/api-key/models/controller';
 import { ApiKeyFactory } from '@thebcms/selfhosted-backend/api-key/factory';
 import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
+import { FunctionManager } from '@thebcms/selfhosted-backend/function/main';
 
 export const ApiKeyController = createController({
     name: 'ApiKey',
@@ -280,6 +281,19 @@ export const ApiKeyController = createController({
                             );
                             if (template) {
                                 apiKey.access.templates.push(templateInfo);
+                            }
+                        }
+                        const fns = FunctionManager.getAll();
+                        const fnsInfo = body.access.functions;
+                        for (let i = 0; i < fnsInfo.length; i++) {
+                            const fnInfo = fnsInfo[i];
+                            const fn = fns.find(
+                                (e) => e.config.name === fnInfo.name,
+                            );
+                            if (fn) {
+                                apiKey.access.functions.push({
+                                    name: fn.config.name,
+                                });
                             }
                         }
                     }

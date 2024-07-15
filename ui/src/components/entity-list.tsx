@@ -3,6 +3,7 @@ import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default
 import { Link } from '@thebcms/selfhosted-ui/components/link';
 import { millisToDateString } from '@thebcms/selfhosted-ui/util/date';
 import { Icon } from '@thebcms/selfhosted-ui/components/icon';
+import type { JSX } from 'vue/jsx-runtime';
 
 export const EntityList = defineComponent({
     props: {
@@ -11,6 +12,7 @@ export const EntityList = defineComponent({
             type: Array as PropType<
                 {
                     name: string;
+                    slot?: () => JSX.Element;
                     desc?: string;
                     updatedAt: number;
                     href: string;
@@ -43,7 +45,7 @@ export const EntityList = defineComponent({
                                 <div
                                     class={`text-gray-700 font-medium dark:text-white`}
                                 >
-                                    {item.name}
+                                    {item.slot ? item.slot() : item.name}
                                 </div>
                                 <div>
                                     <span class={`text-gray-600`}>

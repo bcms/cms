@@ -140,8 +140,29 @@ export const ApiKeyView = defineComponent({
             loading.value = false;
         });
 
+        async function toggleKeyBlock() {
+            await throwable(
+                async () => {
+                    if (apiKey.value) {
+                        await sdk.apiKey.update({
+                            _id: apiKey.value._id,
+                            blocked: !apiKey.value.blocked,
+                        });
+                    }
+                },
+                async () => {
+                    notification.success(
+                        `API Key successfully ${
+                            apiKey.value?.blocked ? 'blocked' : 'unblocked'
+                        }`,
+                    );
+                },
+            );
+        }
+
         async function updateAccess() {
             await throwable(async () => {
+                console.log(data.value.fns);
                 await sdk.apiKey.update({
                     _id: apiKey.value?._id as string,
                     access: {
@@ -314,7 +335,7 @@ export const ApiKeyView = defineComponent({
                             />
                             <div class={`flex gap-2 ml-auto`}>
                                 <Dropdown items={dropdownItems} />
-                                <Button kind="danger" onClick={() => {}}>
+                                <Button kind="danger" onClick={toggleKeyBlock}>
                                     {apiKey.value?.blocked
                                         ? 'Unblock the key'
                                         : 'Block the key'}
