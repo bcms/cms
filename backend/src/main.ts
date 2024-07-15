@@ -44,6 +44,8 @@ import { TemplateController } from '@thebcms/selfhosted-backend/template/control
 import { WidgetController } from '@thebcms/selfhosted-backend/widget/controller';
 import { TemplateOrganizerController } from '@thebcms/selfhosted-backend/template-organizer/controller';
 import { BackupController } from '@thebcms/selfhosted-backend/backup/controller';
+import { FunctionController } from '@thebcms/selfhosted-backend/function/controllert';
+import { FunctionManager } from '@thebcms/selfhosted-backend/function/main';
 
 async function main() {
     await createServer({
@@ -131,6 +133,7 @@ async function main() {
             UserController,
             WidgetController,
             BackupController,
+            FunctionController,
         ],
 
         middleware: [IPMiddleware],
@@ -292,12 +295,20 @@ async function main() {
             Repo.language.init(),
             Repo.entryStatus.init(),
             Repo.backup.init(),
-            // @inject-repo
-
             MigrationRepo.init(),
+            // @inject-repo
 
             createEntrySyncChannelHandler(),
             createMigrations(),
+
+            {
+                name: 'FunctionManager',
+                initialize({ next }) {
+                    FunctionManager.init()
+                        .then(() => next())
+                        .catch((err) => next(err));
+                },
+            },
         ],
     });
 }

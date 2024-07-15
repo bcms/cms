@@ -66,6 +66,11 @@ async function setup() {
         ['backups'],
         ['backend', 'logs'],
         ['backend', 'docs'],
+        ['backend', 'additional'],
+        ['backend', 'events'],
+        ['backend', 'functions'],
+        ['backend', 'jobs'],
+        ['backend', 'plugins'],
     ];
     for (let i = 0; i < dirs.length; i++) {
         const dir = dirs[i];

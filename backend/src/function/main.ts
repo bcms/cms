@@ -39,8 +39,8 @@ export class FunctionManager {
             ) {
                 const fnImport: {
                     default(): Promise<BCMSFunction>;
-                } = await import(path.join(fs.baseRoot + fnName));
-                if (typeof fnImport.default === 'function') {
+                } = await import(path.join(fs.baseRoot, fnName));
+                if (typeof fnImport.default !== 'function') {
                     throw Error(`There is no default function in: ${fnName}`);
                 }
                 const fn = await fnImport.default();
@@ -59,7 +59,10 @@ export class FunctionManager {
                             ' This is not allowed.',
                     );
                 }
-                this.fns.push();
+                console.log(
+                    `Function mounted: ${fn.config.name} -> POST: /api/v4/function/${fn.config.name}`,
+                );
+                this.fns.push(fn);
             }
         }
     }

@@ -82,6 +82,7 @@ import {
     TemplateOrganizerUpdateBodySchema,
 } from '@thebcms/selfhosted-backend/template-organizer/models/controller';
 import { BackupSchema } from '@thebcms/selfhosted-backend/backup/models/main';
+import { BCMSFunctionConfigSchema } from '@thebcms/selfhosted-backend/function/models/main';
 
 export function getObjectPropertyByPath<Property = unknown>(
     object: any,
@@ -151,6 +152,8 @@ export const OpenApiModels = {
     MediaCreateDirBody: objectSchemaToOpenApi3Schema(MediaCreateDirBodySchema),
     MediaUpdateBody: objectSchemaToOpenApi3Schema(MediaUpdateBodySchema),
     MediaDeleteBody: objectSchemaToOpenApi3Schema(MediaDeleteBodySchema),
+
+    BCMSFunctionConfig: objectSchemaToOpenApi3Schema(BCMSFunctionConfigSchema),
 
     EntryContentNodeHeadingAttr: openApiCreateSchema({
         type: 'object',
@@ -887,24 +890,6 @@ export function openApiGetSchema(): Omit<OpenAPIV3.Document, 'paths'> {
                         'Can be obtained via instance dashboard.' +
                         ' Format: `Authentication: ApiKey' +
                         ' {key_id}.{key_secret}`',
-                },
-                execToken: {
-                    type: 'http',
-                    scheme: 'ExecToken',
-                    description:
-                        'Token which is issued to execution' +
-                        ' function, event or job. It is issued by the' +
-                        ' backend and is consumed by executed code to access' +
-                        ' protected resources of an instance. Format:' +
-                        ' `Authentication: ExecToken {exec_token}`',
-                },
-                serviceToken: {
-                    type: 'http',
-                    scheme: 'ServiceToken',
-                    description:
-                        'Token used for internal communication' +
-                        ' between services. Format:' +
-                        ' `Authentication: ServiceToken {service_token}`',
                 },
             },
         },

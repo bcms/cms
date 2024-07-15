@@ -4,8 +4,7 @@ import type {
     Logger,
 } from '@thebcms/selfhosted-backend/server';
 import type { ApiKey } from '@thebcms/selfhosted-backend/api-key/models/main';
-import type { JWT } from '@thebcms/selfhosted-backend/server/modules/jwt';
-import type { UserCustomPool } from '@thebcms/selfhosted-backend/user/models/custom-pool';
+import type { FastifyRequest } from 'fastify';
 
 export interface BCMSFunctionConfig {
     /**
@@ -34,10 +33,10 @@ export const BCMSFunctionConfigSchema: ObjectSchema = {
 export interface BCMSFunction<Result = unknown> {
     config: BCMSFunctionConfig;
     handler(data: {
-        request: Request;
+        request: FastifyRequest;
         errorHandler: HttpErrorHandler;
         logger: Logger;
-        auth: ApiKey | JWT<UserCustomPool>;
+        apiKey: ApiKey;
     }): Promise<Result>;
 }
 export const BCMSFunctionSchema: ObjectSchema = {

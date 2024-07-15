@@ -40,6 +40,21 @@ services:
               source: ./backend/docs
               target: /app/backend/docs
             - type: bind
+              source: ./backend/additional
+              target: /app/backend/additional
+            - type: bind
+              source: ./backend/events
+              target: /app/backend/events
+            - type: bind
+              source: ./backend/functions
+              target: /app/backend/functions
+            - type: bind
+              source: ./backend/jobs
+              target: /app/backend/jobs
+            - type: bind
+              source: ./backend/plugins
+              target: /app/backend/plugins
+            - type: bind
               source: ./README.md
               target: /app/README.md
     ui:
