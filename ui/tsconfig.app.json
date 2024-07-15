@@ -5,7 +5,7 @@
         "src/**/*",
         "src/**/*.vue",
         "../backend/types",
-        "../backend/src/_utils/**/*.ts"
+        "../backend/src/_utils"
     ],
     "exclude": ["src/**/__tests__/*"],
     "compilerOptions": {

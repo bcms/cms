@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer';
-import { createQueue, QueueResult } from '@thebcms/selfhosted-utils/queue';
+import { createQueue, type QueueResult } from '@thebcms/selfhosted-utils/queue';
 import type {
     Media,
     MediaType,

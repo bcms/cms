@@ -29,7 +29,7 @@ export default defineConfig({
     },
     build: {
         rollupOptions: {
-            external: new RegExp('../backend/*'),
+            external: new RegExp('../backend/_utils'),
         },
     },
 });
