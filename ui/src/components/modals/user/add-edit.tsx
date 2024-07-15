@@ -109,6 +109,8 @@ export const ModalUserAddEdit = defineComponent({
             handler._onOpen = (event) => {
                 if (event?.data) {
                     data.value = event.data;
+                } else {
+                    data.value = {};
                 }
                 inputs.value = getInputs();
                 throwable(

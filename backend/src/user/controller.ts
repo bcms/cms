@@ -331,6 +331,8 @@ export const UserController = createController({
                                 `Role name "${body.role}" is not allowed`,
                             );
                         }
+                        shouldUpdate = true;
+                        user.roles[0].name = body.role;
                     }
                     if (body.password && body.password.length > 8) {
                         shouldUpdate = true;
