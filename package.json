@@ -4,21 +4,10 @@
     "private": true,
     "description": "",
     "scripts": {
-        "postinstall": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --postinstall",
-        "setup": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --setup",
-        "bundle:types": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --bundle-types",
-        "bundle:ui": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --bundle-ui",
-        "bundle:sdk": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --bundle-sdk",
-        "bundle:backend": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --bundle-backend",
-        "bundle:client": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --bundle-client",
-        "bundle:cli": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --bundle-cli",
-        "bundle": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --bundle",
-        "publish:ui": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --publish-ui",
-        "publish:sdk": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --publish-sdk",
-        "publish:backend": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --publish-backend",
-        "publish:client": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --publish-client",
-        "publish:cli": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --publish-cli",
-        "pre:commit": "ts-node -r tsconfig-paths/register _scripts/build-tool.ts --pre-commit",
+        "postinstall": "ts-node -r tsconfig-paths/register _scripts/main.ts --postinstall",
+        "setup": "ts-node -r tsconfig-paths/register _scripts/main.ts --setup",
+        "build:types": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-types",
+        "pre:commit": "ts-node -r tsconfig-paths/register _scripts/main.ts --pre-commit",
         "prepare": "husky install"
     },
     "repository": {
@@ -33,6 +22,7 @@
     },
     "homepage": "https://github.com/bcms/cms#readme",
     "devDependencies": {
+        "@types/fs-extra": "^11.0.4",
         "@types/node": "^20.14.2",
         "fs-extra": "^11.2.0",
         "husky": "^8.0.3",

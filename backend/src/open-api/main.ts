@@ -83,6 +83,7 @@ import {
 } from '@thebcms/selfhosted-backend/template-organizer/models/controller';
 import { BackupSchema } from '@thebcms/selfhosted-backend/backup/models/main';
 import { BCMSFunctionConfigSchema } from '@thebcms/selfhosted-backend/function/models/main';
+import { TypeGeneratorFileSchema } from '@thebcms/selfhosted-backend/type-generator/generator/main';
 
 export function getObjectPropertyByPath<Property = unknown>(
     object: any,
@@ -844,6 +845,8 @@ export const OpenApiModels = {
     ),
 
     Backup: objectSchemaToOpenApi3Schema(BackupSchema),
+
+    TypeGeneratorFile: objectSchemaToOpenApi3Schema(TypeGeneratorFileSchema),
 };
 
 export type OpenApiModelNames = keyof typeof OpenApiModels;

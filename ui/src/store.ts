@@ -14,6 +14,7 @@ import type {
 import type { Language } from '@thebcms/selfhosted-backend/language/models/main';
 import type { EntryStatus } from '@thebcms/selfhosted-backend/entry-status/models/main';
 import type { Backup } from '@thebcms/selfhosted-backend/backup/models/main';
+import type { TemplateOrganizer } from '@thebcms/selfhosted-backend/template-organizer/models/main';
 
 const me = ref<UserProtected | null>(null);
 
@@ -38,6 +39,7 @@ export const Store: SdkStore = {
     }),
     apiKey: createArrayStore<ApiKey>('_id', []),
     template: createArrayStore<Template>('_id'),
+    templateOrganizer: createArrayStore<TemplateOrganizer>('_id', []),
     media: createArrayStore<Media>('_id'),
     widget: createArrayStore<Widget>('_id'),
     group: createArrayStore<Group>('_id'),

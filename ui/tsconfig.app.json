@@ -4,7 +4,7 @@
         "env.d.ts",
         "src/**/*",
         "src/**/*.vue",
-        "../backend/src",
+        "../backend/types",
         "../backend/src/_utils/**/*.ts"
     ],
     "exclude": ["src/**/__tests__/*"],
@@ -17,10 +17,10 @@
         "rootDir": "../",
         "types": ["vite-plugin-glsl/ext", "node"],
         "paths": {
-            "@thebcms/selfhosted-backend/*": ["../backend/src/*"],
-            "@thebcms/selfhosted-backend/server": ["../backend/src/_server"],
+            "@thebcms/selfhosted-backend/*": ["../backend/types/*"],
+            "@thebcms/selfhosted-backend/server": ["../backend/types/_server"],
             "@thebcms/selfhosted-backend/server/*": [
-                "../backend/src/_server/*"
+                "../backend/types/_server/*"
             ],
             "@thebcms/selfhosted-utils/*": ["../backend/src/_utils/*"],
             "@thebcms/selfhosted-sdk": ["./src/sdk"],

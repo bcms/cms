@@ -22,5 +22,5 @@
             "@thebcms/selfhosted-backend/server/*": ["./src/_server/*"]
         }
     },
-    "include": ["src", "functions", "events", "jobs", "plugins", "additional"]
+    "include": ["src"]
 }

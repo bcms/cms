@@ -1,3 +1,4 @@
+import 'module-alias/register';
 import path from 'path';
 import {
     createController,
@@ -46,6 +47,8 @@ import { TemplateOrganizerController } from '@thebcms/selfhosted-backend/templat
 import { BackupController } from '@thebcms/selfhosted-backend/backup/controller';
 import { FunctionController } from '@thebcms/selfhosted-backend/function/controllert';
 import { FunctionManager } from '@thebcms/selfhosted-backend/function/main';
+import { UIProxy } from '@thebcms/selfhosted-backend/ui-proxy';
+import { TypeGeneratorController } from '@thebcms/selfhosted-backend/type-generator/controller';
 
 async function main() {
     await createServer({
@@ -134,9 +137,10 @@ async function main() {
             WidgetController,
             BackupController,
             FunctionController,
+            TypeGeneratorController,
         ],
 
-        middleware: [IPMiddleware],
+        middleware: [IPMiddleware, UIProxy],
 
         modules: [
             {

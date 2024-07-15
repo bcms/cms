@@ -402,6 +402,10 @@ export const ApiKeyView = defineComponent({
                                     return templateCard(templateConfig);
                                 },
                             )}
+                        </div>
+                        <div
+                            class={`mt-8 grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-[15px] desktop:gap-x-5 desktop:gap-y-7.5`}
+                        >
                             {fns.value.map((fn) => {
                                 return fnCard(fn);
                             })}

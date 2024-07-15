@@ -1,0 +1,49 @@
+{
+    "name": "@thebcms/selfhosted-client",
+    "version": "1.0.0",
+    "description": "Make external communication with BCMS easy.",
+    "author": "BCMS",
+    "license": "MIT",
+    "main": "./index.cjs",
+    "module": "./index.mjs",
+    "types": "./index.d.ts",
+    "scripts": {
+        "build:ts:mjs": "tsc --project tsconfig.json",
+        "build:ts:cjs": "tsc --project tsconfig.commonjs.json",
+        "bundle": "npm-tool --bundle",
+        "publish": "npm-tool --publish",
+        "pack": "npm-tool --pack",
+        "test": "jest",
+        "_test": "ts-node --project ./tsconfig.commonjs.json -r tsconfig-paths/register src/_test.ts"
+    },
+    "dependencies": {
+        "@types/ws": "^8.5.10",
+        "axios": "^1.6.8",
+        "buffer": "^6.0.3",
+        "isomorphic-ws": "^5.0.0",
+        "uuid": "^9.0.1",
+        "ws": "^8.17.0"
+    },
+    "devDependencies": {
+        "@types/jest": "^29.5.12",
+        "@types/node": "^15.6.2",
+        "@types/uuid": "^8.3.0",
+        "@typescript-eslint/eslint-plugin": "^7.9.0",
+        "@typescript-eslint/parser": "^7.9.0",
+        "env-cmd": "^10.1.0",
+        "eslint": "^8.56.0",
+        "prettier": "^3.2.5",
+        "ts-jest": "^29.1.3",
+        "ts-node": "^10.9.2",
+        "tsconfig-paths": "^4.2.0",
+        "typescript": "^5.4.5"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/bcms/utils"
+    },
+    "bugs": {
+        "url": "https://github.com/bcms/utils/issues"
+    },
+    "homepage": "https://github.com/bcms/utils#readme"
+}

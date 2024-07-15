@@ -12,6 +12,7 @@ import type {
 import type { Language } from '@thebcms/selfhosted-backend/language/models/main';
 import type { EntryStatus } from '@thebcms/selfhosted-backend/entry-status/models/main';
 import type { Backup } from '@thebcms/selfhosted-backend/backup/models/main';
+import type { TemplateOrganizer } from '@thebcms/selfhosted-backend/template-organizer/models/main';
 
 export interface SdkStore {
     user: ArrayStore<
@@ -22,6 +23,7 @@ export interface SdkStore {
     >;
     apiKey: ArrayStore<ApiKey>;
     template: ArrayStore<Template>;
+    templateOrganizer: ArrayStore<TemplateOrganizer>;
     group: ArrayStore<Group>;
     widget: ArrayStore<Widget>;
     media: ArrayStore<Media>;

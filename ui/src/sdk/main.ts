@@ -18,6 +18,7 @@ import { EntryStatusHandler } from '@thebcms/selfhosted-sdk/handlers/entry-statu
 import { BackupHandler } from '@thebcms/selfhosted-sdk/handlers/backup';
 import { ApiKeyHandler } from '@thebcms/selfhosted-sdk/handlers/api-key';
 import { FunctionHandler } from '@thebcms/selfhosted-sdk/handlers/functions';
+import { TemplateOrganizerHandler } from '@thebcms/selfhosted-sdk/handlers/template-organizer';
 
 export interface SdkConfig {
     apiOrigin?: string;
@@ -45,6 +46,7 @@ export class Sdk {
     user = new UserHandler(this);
     group = new GroupHandler(this);
     template = new TemplateHandler(this);
+    templateOrganizer = new TemplateOrganizerHandler(this);
     widget = new WidgetHandler(this);
     media = new MediaHandler(this);
     apiKey = new ApiKeyHandler(this);
@@ -116,6 +118,7 @@ export class Sdk {
         this.group.clear();
         this.widget.clear();
         this.template.clear();
+        this.templateOrganizer.clear();
         this.media.clear();
         this.apiKey.clear();
         this.language.clear();

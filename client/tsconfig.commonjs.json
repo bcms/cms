@@ -11,22 +11,20 @@
         "esModuleInterop": true,
         "strict": true,
         "target": "ES2020",
-        "outDir": "./dist-sdk/cjs",
-        "baseUrl": "./src/sdk",
+        "outDir": "./dist/cjs",
+        "baseUrl": "./",
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "moduleResolution": "Node",
         "paths": {
+            "@thebcms/selfhosted-client": ["./src"],
+            "@thebcms/selfhosted-client/*": ["./src/*"],
+            "@thebcms/selfhosted-backend": ["../backend/types"],
             "@thebcms/selfhosted-backend/*": ["../backend/types/*"],
             "@thebcms/selfhosted-backend/server": ["../backend/types/_server"],
-            "@thebcms/selfhosted-backend/server/*": [
-                "../backend/types/_server/*"
-            ],
-            "@thebcms/selfhosted-utils/*": ["../backend/src/_server/util/*"],
-            "@thebcms/selfhosted-sdk": ["./src/sdk"],
-            "@thebcms/selfhosted-sdk/*": ["./src/sdk/*"],
-            "@thebcms/selfhosted-ui/*": ["./src/*"]
+            "@thebcms/selfhosted-backend/server/*": ["../backend/types/_server/*"],
+            "@thebcms/selfhosted-utils/*": ["../backend/src/_utils/*"]
         }
     },
-    "include": ["src/sdk", "../backend/types"]
+    "include": ["src", "../backend/src/_utils"]
 }
