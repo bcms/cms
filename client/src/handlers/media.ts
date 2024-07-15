@@ -23,7 +23,7 @@ export class MediaHandler {
         [name: string]: boolean;
     } = {};
 
-    baseUri = `/api/v3/org/:orgId/instance/:instanceId/media`;
+    baseUri = `/api/v4/media`;
 
     constructor(private client: Client) {
         if (this.client.enableSocket) {
@@ -118,9 +118,7 @@ export class MediaHandler {
         query.push(
             `apiKey=${this.client.apiKeyInfo.id}.${this.client.apiKeyInfo.secret}`,
         );
-        let uri = this.baseUri
-            .replace(':instanceId', this.client.instanceId)
-            .replace(':orgId', this.client.orgId);
+        let uri = this.baseUri;
         uri += `/${id}/bin/${filename}`;
         if (query.length > 0) {
             uri += '?' + query.join('&');

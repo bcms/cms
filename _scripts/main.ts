@@ -2,6 +2,7 @@ import { postinstall } from './postinstall';
 import { setup } from './setup';
 import { buildTypes } from './build-types';
 import { preCommit } from './pre-commit';
+import { buildClient, packClient } from './client';
 
 async function main() {
     const command = process.argv[2];
@@ -22,6 +23,14 @@ async function main() {
         }
         case '--build-types': {
             return await buildTypes();
+        }
+        case '--build-client': {
+            await buildClient();
+            return;
+        }
+        case '--pack-client': {
+            await packClient();
+            return;
         }
         default: {
             throw Error(`Unknown command: ${command}`);

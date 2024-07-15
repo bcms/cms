@@ -6,9 +6,11 @@
     "scripts": {
         "postinstall": "ts-node -r tsconfig-paths/register _scripts/main.ts --postinstall",
         "setup": "ts-node -r tsconfig-paths/register _scripts/main.ts --setup",
-        "build:types": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-types",
         "pre:commit": "ts-node -r tsconfig-paths/register _scripts/main.ts --pre-commit",
-        "prepare": "husky install"
+        "prepare": "husky install",
+        "build:types": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-types",
+        "build:client": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-client",
+        "pack:client": "ts-node -r tsconfig-paths/register _scripts/main.ts --pack-client"
     },
     "repository": {
         "type": "git",

@@ -64,6 +64,7 @@ export class Client {
             config.headers = {};
         }
         config.headers.Authorization = `ApiKey ${this.apiKeyInfo.id}.${this.apiKeyInfo.secret}`;
+        config.url = `${this.cmsOrigin}${config.url}`;
         const res = await axios(config);
         return res.data;
     }

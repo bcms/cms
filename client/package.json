@@ -7,12 +7,15 @@
     "main": "./index.cjs",
     "module": "./index.mjs",
     "types": "./index.d.ts",
+    "exports": {
+        ".": {
+            "require": "./index.cjs",
+            "import": "./index.mjs"
+        }
+    },
     "scripts": {
         "build:ts:mjs": "tsc --project tsconfig.json",
         "build:ts:cjs": "tsc --project tsconfig.commonjs.json",
-        "bundle": "npm-tool --bundle",
-        "publish": "npm-tool --publish",
-        "pack": "npm-tool --pack",
         "test": "jest",
         "_test": "ts-node --project ./tsconfig.commonjs.json -r tsconfig-paths/register src/_test.ts"
     },
@@ -40,10 +43,10 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/bcms/utils"
+        "url": "git+https://github.com/bcms/cms"
     },
     "bugs": {
-        "url": "https://github.com/bcms/utils/issues"
+        "url": "https://github.com/bcms/cms/issues"
     },
-    "homepage": "https://github.com/bcms/utils#readme"
+    "homepage": "https://github.com/bcms/cms#readme"
 }

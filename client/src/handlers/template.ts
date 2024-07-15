@@ -11,7 +11,7 @@ import {
 } from '@thebcms/selfhosted-backend/util/controller';
 
 export class TemplateHandler {
-    private baseUri = '/api/v3/org/:orgId/instance/:instanceId/template';
+    private baseUri = '/api/v4/template';
     private latch: {
         [name: string]: boolean;
     } = {};
