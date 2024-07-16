@@ -9,7 +9,7 @@ RUN apt update && apt install ffmpeg zip unzip -y
 # Install dependencies
 RUN npm i
 # Prepare backend code
-RUN cd backend && rm package.json && mv prod.package.json package.json
+RUN npm run build:backend
 # Build and prepare UI code
 RUN cd ui && npm run build
 

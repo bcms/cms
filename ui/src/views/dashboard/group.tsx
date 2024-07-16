@@ -1,5 +1,5 @@
 import { computed, defineComponent, onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { Loader } from '@thebcms/selfhosted-ui/components/loader';
 import { Breadcrumb } from '@thebcms/selfhosted-ui/components/breadcrumb';
 import {
@@ -20,6 +20,7 @@ export const GroupView = defineComponent({
         const confirm = window.bcms.confirm;
         const notification = window.bcms.notification;
 
+        const router = useRouter();
         const route = useRoute();
         const group = computed(() =>
             sdk.store.group.find((e) => e._id === route.params.groupId),
@@ -69,7 +70,19 @@ export const GroupView = defineComponent({
                             group.value?.name,
                         ))
                     ) {
-                        return;
+                        await throwable(
+                            async () => {
+                                await sdk.group.deleteById({
+                                    groupId: group.value?._id || '',
+                                });
+                            },
+                            async () => {
+                                notification.success(
+                                    'Group successfully deleted',
+                                );
+                                await router.replace('/d/group');
+                            },
+                        );
                     }
                 },
             },

@@ -68,6 +68,8 @@ export const ModalGroupCreateEdit = defineComponent({
                             inputs.value = getInputs(group);
                         },
                     ).catch((err) => console.error(err));
+                } else {
+                    groupToUpdate.value = undefined;
                 }
             };
             handler._onDone = async () => {
@@ -76,10 +78,18 @@ export const ModalGroupCreateEdit = defineComponent({
                 }
                 const isOk = await throwable(
                     async () => {
-                        await sdk.group.create({
-                            desc: inputs.value.description.value,
-                            label: inputs.value.label.value,
-                        });
+                        if (groupToUpdate.value) {
+                            await sdk.group.update({
+                                _id: groupToUpdate.value._id,
+                                desc: inputs.value.description.value,
+                                label: inputs.value.label.value,
+                            });
+                        } else {
+                            await sdk.group.create({
+                                desc: inputs.value.description.value,
+                                label: inputs.value.label.value,
+                            });
+                        }
                     },
                     async () => {
                         notification.success('Group created successfully');
@@ -100,9 +110,11 @@ export const ModalGroupCreateEdit = defineComponent({
 
         return () => (
             <ModalWrapper
-                title={`Create new group`}
+                title={
+                    groupToUpdate.value ? 'Update group' : `Create new group`
+                }
                 handler={props.handler}
-                doneText={'Create'}
+                doneText={groupToUpdate.value ? 'Update' : 'Create'}
             >
                 <div class={`flex flex-col gap-8`}>
                     <TextInput
