@@ -420,7 +420,7 @@ export const EntryController = createController({
                         },
                     },
                 },
-                preRequestHandler: RP.createJwtCheck(),
+                preRequestHandler: RP.createApiKeyJwtCheck(),
                 async handler({ request, errorHandler }) {
                     const params = request.params as {
                         templateId: string;
@@ -483,7 +483,7 @@ export const EntryController = createController({
                         },
                     },
                 },
-                preRequestHandler: RP.createJwtCheck(),
+                preRequestHandler: RP.createApiKeyJwtCheck(),
                 async handler({ request, errorHandler }) {
                     const params = request.params as {
                         templateId: string;
