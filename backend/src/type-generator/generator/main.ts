@@ -141,7 +141,6 @@ export class TypeGenerator {
                                 '    _id: string;',
                                 '    createdAt: number;',
                                 '    updatedAt: number;',
-                                '    instanceId: string;',
                                 '    templateId: string;',
                                 '    userId: string;',
                                 '    statuses: BCMSEntryStatuses;',
