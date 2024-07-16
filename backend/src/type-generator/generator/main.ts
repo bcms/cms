@@ -196,7 +196,7 @@ export class TypeGenerator {
 
     static snakeToCamelCase(str: string): string {
         return str
-            .split('_')
+            .split('-')
             .map((e) => e.substring(0, 1).toUpperCase() + e.substring(1))
             .join('');
     }
