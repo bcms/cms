@@ -110,11 +110,15 @@ export const EntryLiteSchema: ObjectSchema = {
     },
 };
 
+export interface EntryStatusParsed {
+    [lng: string]: string;
+}
+
 export interface EntryParsed extends MongoDBEntry {
     templateId: string;
     templateName: string;
     userId: string;
-    statuses: EntryStatusValue[];
+    statuses: EntryStatusParsed;
     meta: EntryMetaParsed;
     content: EntryContentParsed;
 }

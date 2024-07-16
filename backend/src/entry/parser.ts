@@ -57,10 +57,14 @@ export function parseEntry(
         templateId: entry.templateId,
         templateName: '',
         userId: entry.userId,
-        statuses: entry.statuses,
+        statuses: {},
         meta: {},
         content: {},
     };
+    for (let i = 0; i < entry.statuses.length; i++) {
+        const status = entry.statuses[i];
+        entryParsed.statuses[status.lng] = status.id;
+    }
     const template = templates.find((e) => e._id === entry.templateId);
     if (!template) {
         throw Error(`Template with ID "${entry.templateId}" does not exist`);
