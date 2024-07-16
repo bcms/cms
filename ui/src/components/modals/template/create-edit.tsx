@@ -119,7 +119,7 @@ export const ModalTemplateCreateEdit = defineComponent({
         return () => (
             <ModalWrapper
                 title={
-                    templateToUpdate ? 'Update template' : `Create new template`
+                    templateToUpdate.value ? 'Update template' : `Create new template`
                 }
                 handler={props.handler}
                 doneText={templateToUpdate.value ? 'Update' : 'Create'}
