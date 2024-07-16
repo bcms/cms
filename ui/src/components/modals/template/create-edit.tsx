@@ -73,6 +73,9 @@ export const ModalTemplateCreateEdit = defineComponent({
                             inputs.value = getInputs(template);
                         },
                     ).catch((err) => console.error(err));
+                } else {
+                    templateToUpdate.value = undefined;
+                    inputs.value = getInputs();
                 }
             };
             handler._onDone = async () => {
@@ -115,7 +118,9 @@ export const ModalTemplateCreateEdit = defineComponent({
 
         return () => (
             <ModalWrapper
-                title={`Create new template`}
+                title={
+                    templateToUpdate ? 'Update template' : `Create new template`
+                }
                 handler={props.handler}
                 doneText={templateToUpdate.value ? 'Update' : 'Create'}
             >

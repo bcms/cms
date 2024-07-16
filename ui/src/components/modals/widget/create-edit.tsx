@@ -68,6 +68,9 @@ export const ModalWidgetCreateEdit = defineComponent({
                             inputs.value = getInputs(widget);
                         },
                     ).catch((err) => console.error(err));
+                } else {
+                    widgetToUpdate.value = undefined;
+                    inputs.value = getInputs();
                 }
             };
             handler._onDone = async () => {
@@ -108,7 +111,9 @@ export const ModalWidgetCreateEdit = defineComponent({
 
         return () => (
             <ModalWrapper
-                title={`Create new widget`}
+                title={
+                    widgetToUpdate.value ? 'Update widget' : `Create new widget`
+                }
                 handler={props.handler}
                 doneText={widgetToUpdate.value ? 'Update' : 'Create'}
             >

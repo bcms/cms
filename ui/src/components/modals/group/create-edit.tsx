@@ -70,6 +70,7 @@ export const ModalGroupCreateEdit = defineComponent({
                     ).catch((err) => console.error(err));
                 } else {
                     groupToUpdate.value = undefined;
+                    inputs.value = getInputs();
                 }
             };
             handler._onDone = async () => {

@@ -1,5 +1,5 @@
 import { computed, defineComponent, onMounted, ref } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { Loader } from '@thebcms/selfhosted-ui/components/loader';
 import { Breadcrumb } from '@thebcms/selfhosted-ui/components/breadcrumb';
 import {
@@ -20,6 +20,7 @@ export const WidgetView = defineComponent({
         const confirm = window.bcms.confirm;
         const notification = window.bcms.notification;
 
+        const router = useRouter();
         const route = useRoute();
         const widget = computed(() =>
             sdk.store.widget.find((e) => e._id === route.params.widgetId),
@@ -67,7 +68,19 @@ export const WidgetView = defineComponent({
                             'Are you sure you' + ' want to delete this widget?',
                         ))
                     ) {
-                        return;
+                        await throwable(
+                            async () => {
+                                await sdk.widget.deleteById({
+                                    widgetId: widget.value?._id as string,
+                                });
+                            },
+                            async () => {
+                                notification.success(
+                                    'Group successfully deleted',
+                                );
+                                await router.replace('/d/group');
+                            },
+                        );
                     }
                 },
             },
