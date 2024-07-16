@@ -135,12 +135,27 @@ export async function propValuesFromSchema(
                                     items = [];
                                 }
                             }
-                            const valueData: PropValueGroupPointerData = value
-                                ? (value.data as PropValueGroupPointerData)
-                                : {
-                                      _id: data._id,
-                                      items,
-                                  };
+                            const currentValueData =
+                                value?.data as PropValueGroupPointerData;
+                            if (currentValueData) {
+                                items = [];
+                                for (
+                                    let j = 0;
+                                    j < currentValueData.items.length;
+                                    j++
+                                ) {
+                                    items.push({
+                                        props: await propValuesFromSchema(
+                                            group.props,
+                                            currentValueData.items[j].props,
+                                        ),
+                                    });
+                                }
+                            }
+                            const valueData: PropValueGroupPointerData = {
+                                _id: data._id,
+                                items,
+                            };
                             values.push({
                                 id: prop.id,
                                 data: valueData,
