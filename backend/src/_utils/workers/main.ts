@@ -1,6 +1,6 @@
-import { Worker } from '@thebcms/selfhosted-backend/_utils/workers/worker';
-import { WorkerError } from '@thebcms/selfhosted-backend/_utils/workers/error';
-import { WorkerResult } from '@thebcms/selfhosted-backend/_utils/workers/result';
+import { Worker } from '@thebcms/selfhosted-utils/workers/worker';
+import { WorkerError } from '@thebcms/selfhosted-utils/workers/error';
+import { WorkerResult } from '@thebcms/selfhosted-utils/workers/result';
 
 export interface WorkerFunction<Output> {
     (workerId: string): Promise<Output>;

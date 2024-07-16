@@ -14,7 +14,7 @@ export async function replaceStringInFile(config: {
             config.endsWith &&
             !!config.endsWith.find((e) => filePath.path.abs.endsWith(e))
         ) {
-            let replacer = config.basePath;
+            let replacer = '.' + config.basePath;
             if (filePath.dir !== '') {
                 const depth = filePath.dir.split('/').length;
                 replacer =

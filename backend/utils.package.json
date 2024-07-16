@@ -1,0 +1,13 @@
+{
+    "name": "@thebcms/selfhosted-utils",
+    "version": "1.0.0",
+    "license": "MIT",
+    "exports": {
+    },
+    "dependencies": {
+        "@types/fs-extra": "^11.0.4",
+        "fs-extra": "^11.2.0",
+        "uuid": "^9.0.0",
+        "@types/uuid": "^9.0.2"
+    }
+}

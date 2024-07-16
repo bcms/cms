@@ -10,7 +10,11 @@
         "prepare": "husky install",
         "build:types": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-types",
         "build:client": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-client",
-        "pack:client": "ts-node -r tsconfig-paths/register _scripts/main.ts --pack-client"
+        "pack:client": "ts-node -r tsconfig-paths/register _scripts/main.ts --pack-client",
+        "build:utils": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-utils",
+        "pack:utils": "ts-node -r tsconfig-paths/register _scripts/main.ts --pack-utils",
+        "build:backend": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-backend",
+        "pack:backend": "ts-node -r tsconfig-paths/register _scripts/main.ts --pack-backend"
     },
     "repository": {
         "type": "git",

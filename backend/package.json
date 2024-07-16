@@ -1,57 +1,53 @@
 {
-  "name": "@thebcms/selfhosted-backend",
-  "version": "4.0.0",
-  "main": "./index.js",
-  "types": "./index.d.ts",
-  "scripts": {
-    "start": "node dist/main.js",
-    "dev": "nodemon -r tsconfig-paths/register src/main.ts",
-    "build": "tsc -p .",
-    "build:noEmit": "tsc -p . --noEmit",
-    "lint": "eslint . --ext .ts"
-  },
-  "license": "MIT",
-  "dependencies": {
-    "@fastify/cors": "^8.4.0",
-    "@fastify/mongodb": "^8.0.0",
-    "@fastify/multipart": "^7.7.0",
-    "@fastify/static": "^6.10.2",
-    "@fastify/websocket": "^10.0.1",
-    "@types/fs-extra": "^11.0.4",
-    "adm-zip": "^0.5.10",
-    "axios": "^1.6.7",
-    "bcryptjs": "^2.4.3",
-    "fs-extra": "^11.2.0",
-    "image-size": "^1.1.1",
-    "mime-types": "^2.1.35",
-    "module-alias": "^2.2.3",
-    "mongodb": "^6.6.1",
-    "openapi-types": "^12.1.3",
-    "uuid": "^9.0.0"
-  },
-  "devDependencies": {
-    "@fastify/middie": "^8.3.0",
-    "@types/adm-zip": "^0.5.5",
-    "@types/bcryptjs": "^2.4.2",
-    "@types/mime-types": "^2.1.4",
-    "@types/module-alias": "^2.0.4",
-    "@types/node": "^20.3.1",
-    "@types/uuid": "^9.0.2",
-    "@typescript-eslint/eslint-plugin": "^5.60.1",
-    "@typescript-eslint/parser": "^5.60.1",
-    "dotenv": "^16.3.1",
-    "eslint": "^8.43.0",
-    "fastify": "^4.18.0",
-    "nodemon": "^3.0.1",
-    "prettier": "^2.7.1",
-    "ts-node": "^10.9.1",
-    "tsconfig-paths": "^4.2.0",
-    "typescript": "^5.3.3"
-  },
-  "nodemonConfig": {
-    "watch": [
-      "src"
-    ],
-    "ext": "ts"
-  }
+    "name": "@thebcms/selfhosted-backend",
+    "version": "4.0.0",
+    "scripts": {
+        "start": "node dist/main.js",
+        "dev": "nodemon -r tsconfig-paths/register src/main.ts",
+        "build": "tsc --project tsconfig.json",
+        "build:utils:cjs": "tsc --project utils.tsconfig.json",
+        "build:utils:mjs": "tsc --project utils.mjs.tsconfig.json",
+        "build:noEmit": "tsc -p . --noEmit",
+        "lint": "eslint . --ext .ts"
+    },
+    "license": "MIT",
+    "dependencies": {
+        "@fastify/cors": "^8.4.0",
+        "@fastify/middie": "^8.3.0",
+        "@fastify/mongodb": "^8.0.0",
+        "@fastify/multipart": "^7.7.0",
+        "@fastify/static": "^6.10.2",
+        "@fastify/websocket": "^10.0.1",
+        "@types/fs-extra": "^11.0.4",
+        "@types/uuid": "^9.0.2",
+        "@types/bcryptjs": "^2.4.2",
+        "@types/mime-types": "^2.1.4",
+        "fastify": "^4.18.0",
+        "axios": "^1.6.7",
+        "bcryptjs": "^2.4.3",
+        "fs-extra": "^11.2.0",
+        "image-size": "^1.1.1",
+        "mime-types": "^2.1.35",
+        "mongodb": "^6.6.1",
+        "openapi-types": "^12.1.3",
+        "uuid": "^9.0.0"
+    },
+    "devDependencies": {
+        "@types/node": "^20.3.1",
+        "@typescript-eslint/eslint-plugin": "^5.60.1",
+        "@typescript-eslint/parser": "^5.60.1",
+        "dotenv": "^16.3.1",
+        "eslint": "^8.43.0",
+        "nodemon": "^3.0.1",
+        "prettier": "^2.7.1",
+        "ts-node": "^10.9.1",
+        "tsconfig-paths": "^4.2.0",
+        "typescript": "^5.3.3"
+    },
+    "nodemonConfig": {
+        "watch": [
+            "src"
+        ],
+        "ext": "ts"
+    }
 }

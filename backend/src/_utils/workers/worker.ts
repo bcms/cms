@@ -1,5 +1,5 @@
-import type { WorkerTask } from '@thebcms/selfhosted-backend/_utils/workers/main';
-import { createQueue } from '@thebcms/selfhosted-backend/_utils/queue';
+import type { WorkerTask } from '@thebcms/selfhosted-utils/workers/main';
+import { createQueue } from '@thebcms/selfhosted-utils/queue';
 
 export class Worker {
     public busy = false;

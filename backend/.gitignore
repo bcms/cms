@@ -12,6 +12,7 @@
 /jobs
 /additional
 /plugins
+/dist-utils
 
 # Environment
 .env

@@ -3,6 +3,7 @@ import { setup } from './setup';
 import { buildTypes } from './build-types';
 import { preCommit } from './pre-commit';
 import { buildClient, packClient } from './client';
+import { buildBackend, buildUtils, packBackend, packUtils } from './backend';
 
 async function main() {
     const command = process.argv[2];
@@ -30,6 +31,22 @@ async function main() {
         }
         case '--pack-client': {
             await packClient();
+            return;
+        }
+        case '--build-utils': {
+            await buildUtils();
+            return;
+        }
+        case '--pack-utils': {
+            await packUtils();
+            return;
+        }
+        case '--build-backend': {
+            await buildBackend();
+            return;
+        }
+        case '--pack-backend': {
+            await packBackend();
             return;
         }
         default: {

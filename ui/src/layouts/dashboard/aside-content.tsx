@@ -8,7 +8,7 @@ import {
 } from '@thebcms/selfhosted-ui/layouts/dashboard/nav-item';
 import { UserAvatar } from '@thebcms/selfhosted-ui/components/user-avatar';
 import { Dropdown } from '@thebcms/selfhosted-ui/components/dropdown';
-import { isUserAdmin } from '@thebcms/selfhosted-utils/user-role';
+import { isUserAdmin } from '@thebcms/selfhosted-ui/util/user-role';
 
 export const DashboardLayoutAsideContent = defineComponent({
     emits: {

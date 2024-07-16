@@ -17,6 +17,9 @@
       <excludeFolder url="file://$MODULE_DIR$/backend/functions" />
       <excludeFolder url="file://$MODULE_DIR$/backend/jobs" />
       <excludeFolder url="file://$MODULE_DIR$/backend/plugins" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/dist-utils" />
+      <excludeFolder url="file://$MODULE_DIR$/client/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/ui/dist" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
