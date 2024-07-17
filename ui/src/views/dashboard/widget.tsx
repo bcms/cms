@@ -63,10 +63,10 @@ export const WidgetView = defineComponent({
                 danger: true,
                 async onClick() {
                     if (
-                        !(await confirm(
+                        await confirm(
                             'Delete widget',
                             'Are you sure you' + ' want to delete this widget?',
-                        ))
+                        )
                     ) {
                         await throwable(
                             async () => {

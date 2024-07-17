@@ -63,12 +63,12 @@ export const GroupView = defineComponent({
                 danger: true,
                 async onClick() {
                     if (
-                        !(await confirm(
+                        await confirm(
                             'Delete group',
                             'Are you sure you' +
                                 ' want to delete this group? All entries with',
                             group.value?.name,
-                        ))
+                        )
                     ) {
                         await throwable(
                             async () => {
