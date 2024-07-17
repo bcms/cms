@@ -243,7 +243,7 @@ export interface BCMSPropRichTextParsedItem {
     };
 }
 
-export type BCMSPropRichTextParsed = BCMSPropRichTextParsed[];
+export type BCMSPropRichTextParsed = BCMSPropRichTextParsedItem[];
 
 export interface BCMSPropDate {
     timestamp: number;
