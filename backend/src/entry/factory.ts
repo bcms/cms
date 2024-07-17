@@ -33,13 +33,14 @@ export class EntryFactory {
         groups: Group[],
         valuePath: (string | number)[],
     ): { prop: Prop; value: PropValue; valuePath: (string | number)[] } | null {
-        if (props.length !== values.length) {
-            throw Error(
-                `[${valuePath.join(
-                    '.',
-                )}] -> props and values are not the same length.`,
-            );
-        }
+        // if (props.length !== values.length) {
+        //     console.log({props, values})
+        //     throw Error(
+        //         `[${valuePath.join(
+        //             '.',
+        //         )}] -> props and values are not the same length.`,
+        //     );
+        // }
         for (let i = 0; i < props.length; i++) {
             const prop = props[i];
             const valueIdx = values.findIndex((e) => e.id === prop.id);
