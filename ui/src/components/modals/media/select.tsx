@@ -35,6 +35,7 @@ export const ModalMediaSelect = defineComponent({
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const notification = window.bcms.notification;
+        const modal = window.bcms.modalService;
 
         const data = ref<ModalMediaSelectInput>({});
         const dirId = ref('');
@@ -183,8 +184,21 @@ export const ModalMediaSelect = defineComponent({
                     <div
                         class={`flex gap-2 border-b border-b-gray-200 dark:border-b-gray-800 pb-4`}
                     >
-                        <Button>Upload file</Button>
-                        <Button kind={`secondary`}>Create a new folder</Button>
+                        <Button
+                            onClick={() => {
+                                modal.handlers.mediaCreateFile.open();
+                            }}
+                        >
+                            Upload file
+                        </Button>
+                        <Button
+                            kind={`secondary`}
+                            onClick={() => {
+                                modal.handlers.mediaCreateDir.open();
+                            }}
+                        >
+                            Create a new folder
+                        </Button>
                     </div>
                     {mediaData.value.breadcrumb.length > 0 && (
                         <Breadcrumb items={mediaData.value.breadcrumb} />
