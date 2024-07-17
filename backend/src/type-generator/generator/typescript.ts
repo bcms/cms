@@ -97,7 +97,7 @@ export function generateTypescriptProp(
             const item = data[i];
             const template = templates.find((e) => e._id === item.templateId);
             if (!template) {
-                return null;
+                continue;
             }
             const typeName =
                 TypeGenerator.snakeToCamelCase(template.name) + 'Entry';
