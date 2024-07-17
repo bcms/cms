@@ -237,13 +237,14 @@ import type { BCMSEntryContentNodeType, BCMSContentNodeAttrs } from './content';
 export interface BCMSPropRichTextParsedItem {
     type: BCMSEntryContentNodeType;
     attrs?: BCMSContentNodeAttrs;
+    widgetName?: string;
     name?: string;
     value: string | {
         [name: string]: any
     };
 }
 
-export type BCMSPropRichTextParsed = BCMSPropRichTextParsedItem[];
+export type BCMSPropRichTextParsed = {nodes: BCMSPropRichTextParsedItem[]};
 
 export interface BCMSPropDate {
     timestamp: number;
