@@ -44,7 +44,6 @@ import { keyValueStore } from '@thebcms/selfhosted-backend/key-value-store';
 import { MediaFactory } from '@thebcms/selfhosted-backend/media/factory';
 import { mimetypeToMediaType } from '@thebcms/selfhosted-backend/media/mimetype';
 import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
-import {StringUtility} from "@thebcms/selfhosted-utils/string-utility";
 
 export const MediaController = createController({
     name: 'Media',
@@ -250,13 +249,13 @@ export const MediaController = createController({
                             data.image,
                         );
                         reply.header('Content-Type', res.mimetype);
-                        reply.header('Content-Length', res.buffer.length);
-                        reply.header(
-                            'Content-Disposition',
-                            `${
-                                data.view ? 'inline' : 'attachment'
-                            }; filename="${StringUtility.toSlug(media.name)}"`,
-                        );
+                        // reply.header('Content-Length', res.buffer.length);
+                        // reply.header(
+                        //     'Content-Disposition',
+                        //     `${
+                        //         data.view ? 'inline' : 'attachment'
+                        //     }; filename="${encodeURIComponent(media.name)}"`,
+                        // );
                         return reply.send(res.buffer);
                     } else {
                         const stream = await MediaStorage.readStream(media, {
@@ -269,13 +268,13 @@ export const MediaController = createController({
                             );
                         }
                         reply.header('Content-Type', media.mimetype);
-                        reply.header('Content-Length', media.size);
-                        reply.header(
-                            'Content-Disposition',
-                            `${
-                                data.view ? 'inline' : 'attachment'
-                            }; filename="${StringUtility.toSlug(media.name)}"`,
-                        );
+                        // reply.header('Content-Length', media.size);
+                        // reply.header(
+                        //     'Content-Disposition',
+                        //     `${
+                        //         data.view ? 'inline' : 'attachment'
+                        //     }; filename="${encodeURIComponent(media.name)}"`,
+                        // );
                         // reply.header(
                         //     'Content-Disposition',
                         //     `${
