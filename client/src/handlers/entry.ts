@@ -80,24 +80,28 @@ export class EntryHandler {
     }
 
     async getAllLite(templateIdOrName: string, skipCache?: boolean) {
+        const cacheKey = `all_lite_${templateIdOrName}`;
         const template = await this.findTemplateByName(templateIdOrName);
-        if (!skipCache && this.client.useMemCache && this.latch.all_lite) {
+        if (!skipCache && this.client.useMemCache && this.latch[cacheKey]) {
             return this.cacheLite.items;
         }
         const res = await this.client.send<ControllerItemsResponse<EntryLite>>({
             url: `${this.baseUri(template._id)}/all/lite`,
         });
         if (this.client.useMemCache) {
-            this.cacheLite.items = res.items;
-            this.latch.all_lite = true;
+            this.cacheLite.set(res.items);
+            this.latch[cacheKey] = true;
         }
         return res.items;
     }
 
     async getAll(templateIdOrName: string, skipCache?: boolean) {
+        const cacheKey = `all_parsed_${templateIdOrName}`;
         const template = await this.findTemplateByName(templateIdOrName);
-        if (!skipCache && this.client.useMemCache && this.latch.all_parse) {
-            return this.cacheParse.items;
+        if (!skipCache && this.client.useMemCache && this.latch[cacheKey]) {
+            return this.cacheParse.items.filter(
+                (e) => e.templateId === template._id,
+            );
         }
         const res = await this.client.send<
             ControllerItemsResponse<EntryParsed>
@@ -108,23 +112,26 @@ export class EntryHandler {
             await this.injectMediaSvg(res.items);
         }
         if (this.client.useMemCache) {
-            this.cacheParse.items = res.items;
-            this.latch.all_parse = true;
+            this.cacheParse.set(res.items);
+            this.latch[cacheKey] = true;
         }
         return res.items;
     }
 
     async getAllRaw(templateIdOrName: string, skipCache?: boolean) {
+        const cacheKey = `all_raw_${templateIdOrName}`;
         const template = await this.findTemplateByName(templateIdOrName);
-        if (!skipCache && this.client.useMemCache && this.latch.all_raw) {
-            return this.cacheRaw.items;
+        if (!skipCache && this.client.useMemCache && this.latch[cacheKey]) {
+            return this.cacheRaw.items.filter(
+                (e) => e.templateId === template._id,
+            );
         }
         const res = await this.client.send<ControllerItemsResponse<Entry>>({
             url: `${this.baseUri(template._id)}/all`,
         });
         if (this.client.useMemCache) {
-            this.cacheRaw.items = res.items;
-            this.latch.all_raw = true;
+            this.cacheRaw.set(res.items);
+            this.latch[cacheKey] = true;
         }
         return res.items;
     }
