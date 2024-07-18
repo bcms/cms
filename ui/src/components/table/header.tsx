@@ -83,11 +83,6 @@ export const TableHeader = defineComponent({
             type: Array as PropType<TableHeaderItem[]>,
             required: true,
         },
-        theme: {
-            type: String as PropType<'default' | 'lighter'>,
-            required: false,
-            default: 'default',
-        },
     },
     emits: {
         sort: (_event: TableHeaderItemSort) => {
@@ -354,23 +349,18 @@ export const TableHeader = defineComponent({
             <div
                 id={props.id}
                 style={props.style}
-                class={`flex sticky top-0 z-20 ${
-                    props.theme === 'lighter'
-                        ? 'bg-lightgray-100 dark:bg-slate after:bg-silver dark:after:bg-lightgray-500'
-                        : 'bg-lightgray-200 dark:bg-onyx after:bg-lightgray-100 dark:after:bg-slate'
-                } after:absolute after:bottom-0 after:left-0 after:w-full after:h-px ${
-                    props.class || ''
-                }`}
+                class={`flex sticky top-0 z-20 after:absolute after:bottom-0 after:left-0 after:w-full after:h-px
+                 ${props.class || ''}`}
             >
                 {props.items.map((headerItem, colIdx) => {
                     return (
                         <TableCell
                             data-cy={headerItem.cy}
-                            class={`flex items-center text-sm leading-none font-medium gap-2.5 ${
-                                props.theme === 'lighter'
-                                    ? 'bg-lightgray-100 dark:bg-slate'
-                                    : 'bg-lightgray-200 dark:bg-onyx'
-                            } dark:text-silver ${props.class || ''}`}
+                            class={`flex items-center text-sm leading-none font-medium gap-2.5
+                            bg-light dark:bg-darkGray backdrop-blur-xl first:rounded-l-2.5 last:rounded-r-2.5
+                            ${
+                                props.class || ''
+                            }`}
                             height={props.rowHeight}
                             tag={
                                 headerItem.sortable || headerItem.filter

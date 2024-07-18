@@ -51,7 +51,7 @@ export const DashboardLayout = defineComponent({
                                 t1State.value === 'in-done'
                                     ? 'left-0'
                                     : 'left-[-312px]'
-                            } transition-all duration-300 fixed top-0 flex flex-col gap-6 px-6 py-8 h-screen overflow-y-auto overflow-x-hidden border-r border-r-gray/50 dark:border-r-darkGray/50 w-[312px]`}
+                            } transition-all duration-300 fixed top-0 flex flex-col h-screen overflow-y-auto overflow-x-hidden border-r border-r-gray/50 dark:border-r-darkGray/50 w-[312px]`}
                         >
                             <DashboardLayoutAsideContent />
                         </aside>

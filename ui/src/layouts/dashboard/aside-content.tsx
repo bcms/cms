@@ -194,7 +194,7 @@ export const DashboardLayoutAsideContent = defineComponent({
 
         return () => (
             <>
-                <div class={`flex gap-4 items-center`}>
+                <div class={`flex gap-4 items-center px-6 pt-14`}>
                     <BCMSLogo />
                     <button
                         class={`ml-auto hidden max-desktop:block`}
@@ -209,7 +209,7 @@ export const DashboardLayoutAsideContent = defineComponent({
                     </button>
                 </div>
                 <button
-                    class={`mt-6 border border-gray dark:border-darkGray bg-white/50 dark:bg-dark/50 text-black dark:text-white rounded-2.5 flex gap-2 items-center px-[16px] py-[10px]`}
+                    class={`mt-14 px-6 mx-6 border border-gray dark:border-darkGray bg-white/50 dark:bg-dark/50 text-black dark:text-white rounded-2.5 flex gap-2 items-center py-[10px]`}
                 >
                     <Icon
                         class={`w-3 h-3 text-dark dark:text-white fill-current`}
@@ -222,20 +222,22 @@ export const DashboardLayoutAsideContent = defineComponent({
                         Ctrl+K
                     </Tag>
                 </button>
-                <div
-                    class={`flex flex-col gap-6 h-full overflow-y-auto overflow-x-hidden mt-6 w-full`}
-                >
-                    {navItems.value.map((item) => {
-                        return (
-                            <DashboardLayoutNavItem
-                                class={`w-full`}
-                                item={item}
-                            />
-                        );
-                    })}
+                <div class={`relative h-full flex flex-col overflow-hidden`}>
+                    <div
+                        class={`flex flex-col gap-6 h-full overflow-y-auto overflow-x-hidden mt-10 px-6 pb-6 w-full bcmsScrollbar`}
+                    >
+                        {navItems.value.map((item) => {
+                            return (
+                                <DashboardLayoutNavItem
+                                    class={`w-full`}
+                                    item={item}
+                                />
+                            );
+                        })}
+                    </div>
                 </div>
                 <div
-                    class={`flex gap-8 pt-[24px] border-t border-t-gray/50 dark:border-t-darkGray/50`}
+                    class={`flex gap-8 pt-[24px] mx-6 mb-8 border-t border-t-gray/50 dark:border-t-darkGray/50`}
                 >
                     <button
                         class={`flex gap-2 items-center text-left`}

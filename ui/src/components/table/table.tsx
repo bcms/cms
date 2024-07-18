@@ -127,11 +127,6 @@ export const Table = defineComponent({
             type: Array as PropType<TableRowProps[]>,
             required: true,
         },
-        theme: {
-            type: String as PropType<'default' | 'lighter'>,
-            required: false,
-            default: 'default',
-        },
         emptyTitle: String,
         emptyDescription: String,
         doSearch: Function as PropType<
@@ -439,7 +434,6 @@ export const Table = defineComponent({
                                                 : 'div'
                                         }
                                         href={row.href}
-                                        theme={props.theme}
                                         onClick={row.onClick}
                                     />
                                 );
@@ -468,7 +462,6 @@ export const Table = defineComponent({
                                             : 'div'
                                     }
                                     href={row.href}
-                                    theme={props.theme}
                                     onClick={row.onClick}
                                 />
                             );
@@ -518,18 +511,16 @@ export const Table = defineComponent({
                     >
                         <div
                             id={props.id}
-                            class={`flex flex-col ${props.class || ''} max-w-full`}
+                            class={`flex flex-col ${
+                                props.class || ''
+                            } max-w-full`}
                             style={`${
                                 props.height ? `height: ${props.height}px;` : ''
                             } ${props.style}`}
                         >
                             <div
                                 ref={scrollWrapper}
-                                class={`w-full rounded-t-xl overflow-auto flex-1 ${
-                                    props.theme === 'lighter'
-                                        ? 'bg-lightgray-100 dark:bg-slate'
-                                        : 'bg-lightgray-200 dark:bg-onyx'
-                                }`}
+                                class={`w-full overflow-auto flex-1 bcmsScrollbar`}
                                 onScroll={(event) => {
                                     event.preventDefault();
                                     // Close all active header dropdowns
@@ -564,7 +555,6 @@ export const Table = defineComponent({
                                         tableName={props.name}
                                         items={props.header}
                                         rowHeight={props.rowHeight}
-                                        theme={props.theme}
                                         onSort={(event) => {
                                             sortHandler(event);
                                         }}

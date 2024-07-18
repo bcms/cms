@@ -44,7 +44,7 @@ export const TableCell = defineComponent({
                         ? `flex-grow: 1; min-width: ${props.minWidth}px;`
                         : `width: ${props.width}px;`
                 } height: ${props.height}px; ${props.style || ''}`}
-                class={`flex flex-shrink-0 px-4 text-sm leading-none font-medium truncate items-center border-b dark:border-slate border-solid ${
+                class={`flex flex-shrink-0 px-4 text-sm leading-none font-medium truncate items-center ${
                     props.class || ''
                 }`}
                 onClick={(event) => {

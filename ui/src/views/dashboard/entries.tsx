@@ -44,9 +44,9 @@ export const EntriesView = defineComponent({
             sdk.store.template.findById(params.value.templateId),
         );
         const entriesLite = computed(() =>
-            sdk.store.entryLite.findMany(
-                (e) => e.templateId === template.value?._id,
-            ),
+            sdk.store.entryLite
+                .findMany((e) => e.templateId === template.value?._id)
+                .sort((a, b) => b.createdAt - a.createdAt),
         );
         const media = computed(() => sdk.store.media.items());
 
@@ -61,6 +61,10 @@ export const EntriesView = defineComponent({
                 rows: TableRowProps[];
             } = {
                 header: [
+                    {
+                        text: 'No.',
+                        width: 60,
+                    },
                     {
                         text: 'Image',
                         width: 96,
@@ -99,21 +103,21 @@ export const EntriesView = defineComponent({
             const output: DropdownItem[] = [
                 {
                     text: 'Duplicate',
-                    icon: '/copy-06',
+                    icon: '/copy',
                     onClick(event) {
                         console.log(event);
                     },
                 },
                 {
                     text: 'View model',
-                    icon: '/code-square-01',
+                    icon: '/code',
                     onClick(event) {
                         console.log(event);
                     },
                 },
                 {
                     text: 'Where is it used',
-                    icon: '/link-04',
+                    icon: '/link',
                     border: true,
                     onClick(event) {
                         console.log(event);
@@ -121,7 +125,7 @@ export const EntriesView = defineComponent({
                 },
                 {
                     text: 'Delete',
-                    icon: '/trash-01',
+                    icon: '/trash',
                     danger: true,
                     async onClick() {
                         if (
@@ -196,6 +200,9 @@ export const EntriesView = defineComponent({
                     },
                     id: entry._id,
                     cells: [
+                        {
+                            text: (i + 1) + '.',
+                        },
                         {
                             text: mediaItem?.name + '',
                             slot() {
@@ -323,7 +330,7 @@ export const EntriesView = defineComponent({
                                     <Table
                                         class={`absolute`}
                                         name={`entries_${template.value._id}`}
-                                        rowHeight={120}
+                                        rowHeight={80}
                                         height={
                                             tableContainer.value
                                                 ? tableContainer.value
