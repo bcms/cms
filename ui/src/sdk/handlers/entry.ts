@@ -174,6 +174,11 @@ export class EntryHandler extends Handler {
             data: data.data,
         });
         this.sdk.store.entry.set(result.item);
+        await this.getLite({
+            entryId: result.item._id,
+            templateId: result.item.templateId,
+            skipCache: true,
+        });
         return result.item;
     }
 
@@ -184,6 +189,11 @@ export class EntryHandler extends Handler {
             data,
         });
         this.sdk.store.entry.set(result.item);
+        await this.getLite({
+            entryId: result.item._id,
+            templateId: result.item.templateId,
+            skipCache: true,
+        });
         return result.item;
     }
 
