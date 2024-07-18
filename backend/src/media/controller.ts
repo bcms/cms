@@ -249,6 +249,7 @@ export const MediaController = createController({
                             data.image,
                         );
                         reply.header('Content-Type', res.mimetype);
+                        reply.header('Cache-Control', 'max-age=86400');
                         // reply.header('Content-Length', res.buffer.length);
                         // reply.header(
                         //     'Content-Disposition',
@@ -268,6 +269,7 @@ export const MediaController = createController({
                             );
                         }
                         reply.header('Content-Type', media.mimetype);
+                        reply.header('Cache-Control', 'max-age=86400');
                         // reply.header('Content-Length', media.size);
                         // reply.header(
                         //     'Content-Disposition',
