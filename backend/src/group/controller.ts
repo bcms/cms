@@ -33,6 +33,7 @@ import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
 import { propsApplyChanges } from '@thebcms/selfhosted-backend/prop/changes';
 import { propsValidationTestInfiniteLoop } from '@thebcms/selfhosted-backend/prop/validate';
 import { removeGroupPointerProps } from '@thebcms/selfhosted-backend/prop/delete';
+import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
 
 export const GroupController = createController({
     name: 'Group',
@@ -264,6 +265,9 @@ export const GroupController = createController({
                         },
                         [token.payload.userId],
                     );
+                    EventManager.trigger('add', 'group', group).catch((err) =>
+                        console.error(err),
+                    );
                     return {
                         item: group,
                     };
@@ -388,6 +392,9 @@ export const GroupController = createController({
                             },
                             [token.payload.userId],
                         );
+                        EventManager.trigger('update', 'group', group).catch(
+                            (err) => console.error(err),
+                        );
                     }
                     return {
                         item: group,
@@ -459,6 +466,9 @@ export const GroupController = createController({
                         [token.payload.userId],
                     );
                     await removeGroupPointerProps(group._id);
+                    EventManager.trigger('delete', 'group', group).catch(
+                        (err) => console.error(err),
+                    );
                     return {
                         item: group,
                     };

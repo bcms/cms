@@ -26,6 +26,7 @@ import {
 } from '@thebcms/selfhosted-backend/language/models/controller';
 import { LanguageFactory } from '@thebcms/selfhosted-backend/language/factory';
 import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
+import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
 
 export const LanguageController = createController({
     name: 'Language',
@@ -194,6 +195,9 @@ export const LanguageController = createController({
                         },
                         [token.payload.userId],
                     );
+                    EventManager.trigger('add', 'language', language).catch(
+                        (err) => console.error(err),
+                    );
                     return {
                         item: language,
                     };
@@ -254,6 +258,9 @@ export const LanguageController = createController({
                         );
                     }
                     await Repo.language.deleteById(language._id);
+                    EventManager.trigger('delete', 'language', language).catch(
+                        (err) => console.error(err),
+                    );
                     return {
                         item: language,
                     };

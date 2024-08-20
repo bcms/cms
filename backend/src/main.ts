@@ -48,6 +48,7 @@ import { FunctionController } from '@thebcms/selfhosted-backend/function/control
 import { FunctionManager } from '@thebcms/selfhosted-backend/function/main';
 import { UIProxy } from '@thebcms/selfhosted-backend/ui-proxy';
 import { TypeGeneratorController } from '@thebcms/selfhosted-backend/type-generator/controller';
+import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
 
 async function main() {
     await createServer({
@@ -308,6 +309,14 @@ async function main() {
                 name: 'FunctionManager',
                 initialize({ next }) {
                     FunctionManager.init()
+                        .then(() => next())
+                        .catch((err) => next(err));
+                },
+            },
+            {
+                name: 'EventManager',
+                initialize({ next }) {
+                    EventManager.init()
                         .then(() => next())
                         .catch((err) => next(err));
                 },

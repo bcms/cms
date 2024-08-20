@@ -44,6 +44,7 @@ import { keyValueStore } from '@thebcms/selfhosted-backend/key-value-store';
 import { MediaFactory } from '@thebcms/selfhosted-backend/media/factory';
 import { mimetypeToMediaType } from '@thebcms/selfhosted-backend/media/mimetype';
 import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
+import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
 
 export const MediaController = createController({
     name: 'Media',
@@ -427,6 +428,9 @@ export const MediaController = createController({
                             userId: token.payload.userId,
                         }),
                     );
+                    EventManager.trigger('add', 'media', media).catch((err) =>
+                        console.error(err),
+                    );
                     return {
                         item: media,
                     };
@@ -574,6 +578,9 @@ export const MediaController = createController({
                         },
                         [userId],
                     );
+                    EventManager.trigger('add', 'media', media).catch((err) =>
+                        console.error(err),
+                    );
                     return {
                         item: media,
                     };
@@ -679,6 +686,9 @@ export const MediaController = createController({
                             },
                             [token.payload.userId],
                         );
+                        EventManager.trigger('update', 'media', media).catch(
+                            (err) => console.error(err),
+                        );
                     }
                     return {
                         item: media,
@@ -760,9 +770,9 @@ export const MediaController = createController({
                         }
                     }
                     const deletePaths: string[] = [];
-                    const mediaIds: string[] = [];
+                    const medias: Media[] = [];
                     for (const mediaId in mediaToDelete) {
-                        mediaIds.push(mediaId);
+                        medias.push(mediaToDelete[mediaId]);
                         if (
                             [
                                 MediaType.GIF,
@@ -786,13 +796,21 @@ export const MediaController = createController({
                             ),
                         );
                     }
-                    console.log({ deletePaths });
-                    await Repo.media.methods.deleteManyById(mediaIds);
+                    await Repo.media.methods.deleteManyById(
+                        medias.map((e) => e._id),
+                    );
                     SocketManager.channelEmit(['global'], 'media', {
                         type: 'delete',
                         mediaId: 'many',
                     });
                     await MediaStorage.removeMany(deletePaths);
+                    for (let i = 0; i < medias.length; i++) {
+                        EventManager.trigger(
+                            'delete',
+                            'media',
+                            medias[i],
+                        ).catch((err) => console.error(err));
+                    }
                     return {
                         ok: true,
                     };

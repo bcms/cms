@@ -25,6 +25,7 @@ import type {
 export const EntriesView = defineComponent({
     setup() {
         const sdk = window.bcms.sdk;
+        const modal = window.bcms.modalService;
         const throwable = window.bcms.throwable;
         const confirm = window.bcms.confirm;
         const notification = window.bcms.notification;
@@ -113,6 +114,12 @@ export const EntriesView = defineComponent({
                     icon: '/code',
                     onClick(event) {
                         console.log(event);
+                        modal.handlers.entryViewModel.open({
+                            data: {
+                                entryId: entryLite._id,
+                                templateId: entryLite.templateId,
+                            },
+                        });
                     },
                 },
                 {
@@ -201,7 +208,7 @@ export const EntriesView = defineComponent({
                     id: entry._id,
                     cells: [
                         {
-                            text: (i + 1) + '.',
+                            text: i + 1 + '.',
                         },
                         {
                             text: mediaItem?.name + '',

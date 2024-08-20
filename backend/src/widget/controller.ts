@@ -31,6 +31,7 @@ import { WidgetFactory } from '@thebcms/selfhosted-backend/widget/factory';
 import { StringUtility } from '@thebcms/selfhosted-backend/_utils/string-utility';
 import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
 import { propsApplyChanges } from '@thebcms/selfhosted-backend/prop/changes';
+import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
 
 export const WidgetController = createController({
     name: 'Widget',
@@ -255,6 +256,9 @@ export const WidgetController = createController({
                         },
                         [token.payload.userId],
                     );
+                    EventManager.trigger('add', 'widgets', widget).catch(
+                        (err) => console.error(err),
+                    );
                     return {
                         item: widget,
                     };
@@ -362,6 +366,9 @@ export const WidgetController = createController({
                             },
                             [token.payload.userId],
                         );
+                        EventManager.trigger('update', 'widgets', widget).catch(
+                            (err) => console.error(err),
+                        );
                     }
                     return {
                         item: widget,
@@ -431,6 +438,9 @@ export const WidgetController = createController({
                             widgetId: widget._id,
                         },
                         [token.payload.userId],
+                    );
+                    EventManager.trigger('delete', 'widgets', widget).catch(
+                        (err) => console.error(err),
                     );
                     return {
                         item: widget,

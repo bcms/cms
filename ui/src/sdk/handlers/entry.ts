@@ -143,7 +143,7 @@ export class EntryHandler extends Handler {
     async getParsed(data: { entryId: string; templateId: string }) {
         const result = await this.sdk.send<ControllerItemResponse<EntryParsed>>(
             {
-                url: `${this.baseUri}/${data.templateId}/entry/${data.entryId}/parsed`,
+                url: `${this.baseUri}/${data.templateId}/entry/${data.entryId}/parse`,
             },
         );
         return result.item;

@@ -255,7 +255,7 @@ export const Select = defineComponent({
                         }}
                     >
                         {props.searchable && (
-                            <div class={`stroke-gray-400 dark:stroke-gray-200`}>
+                            <div class={`fill-current stroke-gray dark:stroke-white`}>
                                 <Icon class={`w-3 h-3`} src={`/search`} />
                             </div>
                         )}

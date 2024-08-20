@@ -20,6 +20,7 @@ import type { Backup } from '@thebcms/selfhosted-backend/backup/models/main';
 import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
 import { BackupFactory } from '@thebcms/selfhosted-backend/backup/factory';
 import { BackupManager } from '@thebcms/selfhosted-backend/backup/manager';
+import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
 
 export const BackupController = createController({
     name: 'Backup',
@@ -230,6 +231,9 @@ export const BackupController = createController({
                     BackupManager.create(backup).catch((err) => {
                         console.error(err);
                     });
+                    EventManager.trigger('add', 'backup', backup).catch((err) =>
+                        console.error(err),
+                    );
                     return {
                         item: backup,
                     };
@@ -287,6 +291,9 @@ export const BackupController = createController({
                     }
                     await Repo.backup.deleteById(backup._id);
                     await BackupManager.remove(backup._id);
+                    EventManager.trigger('delete', 'backup', backup).catch(
+                        (err) => console.error(err),
+                    );
                     return { item: backup };
                 },
             }),

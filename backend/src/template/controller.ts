@@ -33,6 +33,7 @@ import { StringUtility } from '@thebcms/selfhosted-backend/_utils/string-utility
 import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
 import { propsApplyChanges } from '@thebcms/selfhosted-backend/prop/changes';
 import { removeEntryPointerProps } from '@thebcms/selfhosted-backend/prop/delete';
+import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
 
 export const TemplateController = createController({
     name: 'Template',
@@ -310,6 +311,9 @@ export const TemplateController = createController({
                         },
                         token ? [token.payload.userId] : undefined,
                     );
+                    EventManager.trigger('add', 'template', template).catch(
+                        (err) => console.error(err),
+                    );
                     return {
                         item: template,
                     };
@@ -424,6 +428,11 @@ export const TemplateController = createController({
                             },
                             token ? [token.payload.userId] : undefined,
                         );
+                        EventManager.trigger(
+                            'update',
+                            'template',
+                            template,
+                        ).catch((err) => console.error(err));
                     }
                     return {
                         item: template,
@@ -496,6 +505,9 @@ export const TemplateController = createController({
                         token ? [token.payload.userId] : undefined,
                     );
                     await removeEntryPointerProps(template._id);
+                    EventManager.trigger('delete', 'template', template).catch(
+                        (err) => console.error(err),
+                    );
                     return {
                         item: template,
                     };

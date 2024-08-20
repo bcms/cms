@@ -28,6 +28,7 @@ import {
 } from '@thebcms/selfhosted-backend/entry-status/models/controller';
 import { EntryStatusFactory } from '@thebcms/selfhosted-backend/entry-status/factory';
 import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
+import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
 
 export const EntryStatusController = createController({
     name: 'EntryStatus',
@@ -188,6 +189,11 @@ export const EntryStatusController = createController({
                         },
                         [token.payload.userId],
                     );
+                    EventManager.trigger(
+                        'add',
+                        'entryStatus',
+                        entryStatus,
+                    ).catch((err) => console.error(err));
                     return {
                         item: entryStatus,
                     };
@@ -262,6 +268,11 @@ export const EntryStatusController = createController({
                             },
                             [token.payload.userId],
                         );
+                        EventManager.trigger(
+                            'update',
+                            'entryStatus',
+                            entryStatus,
+                        ).catch((err) => console.error(err));
                     }
                     return {
                         item: entryStatus,
@@ -330,6 +341,11 @@ export const EntryStatusController = createController({
                         },
                         [token.payload.userId],
                     );
+                    EventManager.trigger(
+                        'delete',
+                        'entryStatus',
+                        entryStatus,
+                    ).catch((err) => console.error(err));
                     return {
                         item: entryStatus,
                     };

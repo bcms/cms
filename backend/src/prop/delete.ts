@@ -4,6 +4,7 @@ import {
 } from '@thebcms/selfhosted-backend/prop/models/main';
 import { Repo } from '@thebcms/selfhosted-backend/repo';
 import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
+import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
 
 function filterGroupPointer(groupId: string, props: Prop[]) {
     return props.filter(
@@ -37,6 +38,9 @@ export async function removeGroupPointerProps(groupId: string) {
             type: 'update',
             groupId: group._id,
         });
+        EventManager.trigger('update', 'group', group).catch((err) =>
+            console.error(err),
+        );
     }
     const widgetsToUpdate = await Repo.widget.methods.findAllByPropGroupPointer(
         groupId,
@@ -49,6 +53,9 @@ export async function removeGroupPointerProps(groupId: string) {
             type: 'update',
             widgetId: widget._id,
         });
+        EventManager.trigger('update', 'widgets', widget).catch((err) =>
+            console.error(err),
+        );
     }
     const templatesToUpdate =
         await Repo.template.methods.findAllByPropGroupPointer(groupId);
@@ -60,6 +67,9 @@ export async function removeGroupPointerProps(groupId: string) {
             type: 'update',
             templateId: template._id,
         });
+        EventManager.trigger('update', 'template', template).catch((err) =>
+            console.error(err),
+        );
     }
 }
 
@@ -75,6 +85,9 @@ export async function removeEntryPointerProps(templateId: string) {
             type: 'update',
             groupId: group._id,
         });
+        EventManager.trigger('update', 'group', group).catch((err) =>
+            console.error(err),
+        );
     }
     const widgetsToUpdate = await Repo.widget.methods.findAllByPropEntryPointer(
         templateId,
@@ -87,6 +100,9 @@ export async function removeEntryPointerProps(templateId: string) {
             type: 'update',
             widgetId: widget._id,
         });
+        EventManager.trigger('update', 'widgets', widget).catch((err) =>
+            console.error(err),
+        );
     }
     const templatesToUpdate =
         await Repo.template.methods.findAllByPropEntryPointer(templateId);
@@ -98,5 +114,8 @@ export async function removeEntryPointerProps(templateId: string) {
             type: 'update',
             templateId: template._id,
         });
+        EventManager.trigger('update', 'template', template).catch((err) =>
+            console.error(err),
+        );
     }
 }

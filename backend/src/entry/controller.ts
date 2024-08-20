@@ -35,6 +35,7 @@ import {
 import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
 import { propsValueCheck } from '@thebcms/selfhosted-backend/prop/values';
 import { entryContentNodeToHtml } from '@thebcms/selfhosted-backend/entry/content';
+import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
 
 export const EntryController = createController({
     name: 'Entry',
@@ -603,6 +604,9 @@ export const EntryController = createController({
                         },
                         token ? [token.payload.userId] : undefined,
                     );
+                    EventManager.trigger('add', 'entry', entry).catch((err) =>
+                        console.error(err),
+                    );
                     return { item: entry };
                 },
             }),
@@ -780,6 +784,9 @@ export const EntryController = createController({
                         },
                         token ? [token.payload.userId] : undefined,
                     );
+                    EventManager.trigger('update', 'entry', entry).catch(
+                        (err) => console.error(err),
+                    );
                     return { item: entry };
                 },
             }),
@@ -852,6 +859,9 @@ export const EntryController = createController({
                             entryId: entry._id,
                         },
                         token ? [token.payload.userId] : undefined,
+                    );
+                    EventManager.trigger('delete', 'entry', entry).catch(
+                        (err) => console.error(err),
                     );
                     return { item: entry };
                 },

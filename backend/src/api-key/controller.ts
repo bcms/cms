@@ -30,6 +30,7 @@ import {
 import { ApiKeyFactory } from '@thebcms/selfhosted-backend/api-key/factory';
 import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
 import { FunctionManager } from '@thebcms/selfhosted-backend/function/main';
+import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
 
 export const ApiKeyController = createController({
     name: 'ApiKey',
@@ -193,6 +194,9 @@ export const ApiKeyController = createController({
                             templates: [],
                         },
                     });
+                    EventManager.trigger('add', 'apiKey', apiKey).catch((err) =>
+                        console.error(err),
+                    );
                     return { item: await Repo.apiKey.add(apiKey) };
                 },
             }),
@@ -308,6 +312,9 @@ export const ApiKeyController = createController({
                             },
                             [token.payload.userId],
                         );
+                        EventManager.trigger('update', 'apiKey', apiKey).catch(
+                            (err) => console.error(err),
+                        );
                     }
                     return { item: apiKey };
                 },
@@ -373,6 +380,9 @@ export const ApiKeyController = createController({
                             apiKey: apiKey._id,
                         },
                         [token.payload.userId],
+                    );
+                    EventManager.trigger('delete', 'apiKey', apiKey).catch(
+                        (err) => console.error(err),
                     );
                     return { item: apiKey };
                 },

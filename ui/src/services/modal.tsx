@@ -58,6 +58,10 @@ import {
     type ModalMediaEditAltCaptionInput,
     type ModalMediaEditAltCaptionOutput,
 } from '@thebcms/selfhosted-ui/components/modals/media/edit-alt-caption';
+import {
+    ModalEntryViewModel,
+    type ModalEntryViewModelInput,
+} from '@thebcms/selfhosted-ui/components/modals/entry/view-model';
 
 export interface ModalHandlerOptions<Output = unknown> {
     title?: string;
@@ -132,6 +136,9 @@ export class ModalService {
             ModalEntryContentLindEditInput,
             ModalEntryContentLindEditOutput
         >(ModalEntryContentLinkEdit),
+        entryViewModel: new ModalHandler<ModalEntryViewModelInput, void>(
+            ModalEntryViewModel,
+        ),
 
         templateCreateEdit: new ModalHandler<
             ModalTemplateCreateEditInput,

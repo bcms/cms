@@ -30,6 +30,7 @@ import {
     UserUpdateBodySchema,
 } from '@thebcms/selfhosted-backend/user/models/controller';
 import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
+import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
 
 export const UserController = createController({
     name: 'User',
@@ -264,6 +265,9 @@ export const UserController = createController({
                         },
                         [token.payload.userId],
                     );
+                    EventManager.trigger('add', 'user', user).catch((err) =>
+                        console.error(err),
+                    );
                     return {
                         item: user,
                     };
@@ -398,6 +402,9 @@ export const UserController = createController({
                             },
                             [token.payload.userId],
                         );
+                        EventManager.trigger('update', 'user', user).catch(
+                            (err) => console.error(err),
+                        );
                     }
                     return { item: user };
                 },
@@ -509,6 +516,9 @@ export const UserController = createController({
                         },
                         [token.payload.userId],
                     );
+                    EventManager.trigger('update', 'user', user).catch((err) =>
+                        console.error(err),
+                    );
                     return {
                         item: UserFactory.toProtected(user),
                     };
@@ -579,6 +589,9 @@ export const UserController = createController({
                             type: 'delete',
                         },
                         [token.payload.userId],
+                    );
+                    EventManager.trigger('delete', 'user', user).catch((err) =>
+                        console.error(err),
                     );
                     return { item: user };
                 },

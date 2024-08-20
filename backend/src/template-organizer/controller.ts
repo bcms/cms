@@ -28,6 +28,7 @@ import {
 import { TemplateOrganizerFactory } from '@thebcms/selfhosted-backend/template-organizer/factory';
 import { StringUtility } from '@thebcms/selfhosted-backend/_utils/string-utility';
 import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
+import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
 
 export const TemplateOrganizerController = createController({
     name: 'TemplateOrganizer',
@@ -191,6 +192,11 @@ export const TemplateOrganizerController = createController({
                         },
                         token ? [token.payload.userId] : undefined,
                     );
+                    EventManager.trigger(
+                        'add',
+                        'templateOrganizer',
+                        templateOrganizer,
+                    ).catch((err) => console.error(err));
                     return {
                         item: templateOrganizer,
                     };
@@ -273,6 +279,11 @@ export const TemplateOrganizerController = createController({
                             },
                             [token.payload.userId],
                         );
+                        EventManager.trigger(
+                            'update',
+                            'templateOrganizer',
+                            templateOrganizer,
+                        ).catch((err) => console.error(err));
                     }
                     return {
                         item: templateOrganizer,
@@ -344,6 +355,11 @@ export const TemplateOrganizerController = createController({
                         },
                         [token.payload.userId],
                     );
+                    EventManager.trigger(
+                        'delete',
+                        'templateOrganizer',
+                        templateOrganizer,
+                    ).catch((err) => console.error(err));
                     return {
                         item: templateOrganizer,
                     };
