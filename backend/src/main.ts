@@ -49,6 +49,7 @@ import { FunctionManager } from '@thebcms/selfhosted-backend/function/main';
 import { UIProxy } from '@thebcms/selfhosted-backend/ui-proxy';
 import { TypeGeneratorController } from '@thebcms/selfhosted-backend/type-generator/controller';
 import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
+import { createBcmsJobs } from '@thebcms/selfhosted-backend/job/main';
 
 async function main() {
     await createServer({
@@ -321,6 +322,7 @@ async function main() {
                         .catch((err) => next(err));
                 },
             },
+            createBcmsJobs(),
         ],
     });
 }
