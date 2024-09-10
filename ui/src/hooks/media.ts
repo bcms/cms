@@ -27,6 +27,9 @@ export const useMedia: UseMedia = () => {
     const sdk = window.bcms.sdk;
     const throwable = window.bcms.throwable;
     throwable(async () => {
+        if (!(await sdk.isLoggedIn())) {
+            return;
+        }
         await sdk.media.getAll();
     }).catch((err) => console.error(err));
 
