@@ -26,6 +26,7 @@ import { Config } from '@thebcms/selfhosted-backend/config';
 import { RefreshTokenService } from '@thebcms/selfhosted-backend/auth/refresh-token-service';
 import { openApiGetObjectRefSchema } from '@thebcms/selfhosted-backend/open-api/schema';
 import { UserFactory } from '@thebcms/selfhosted-backend/user/factory';
+import { LanguageFactory } from '@thebcms/selfhosted-backend/language/factory';
 
 let createAdminServerToken: string | null = null;
 
@@ -151,6 +152,17 @@ export const AuthController = createController({
                             username: body.firstName + ' ' + body.lastName,
                         }),
                     );
+                    if (!(await Repo.language.methods.findByCode('en'))) {
+                        await Repo.language.add(
+                            LanguageFactory.create({
+                                name: 'English',
+                                userId: 'admin',
+                                code: 'en',
+                                default: true,
+                                nativeName: 'English',
+                            }),
+                        );
+                    }
                     createAdminServerToken = null;
                     const accessToken = JWTManager.create<UserCustomPool>({
                         issuer: Config.jwtIssuer,

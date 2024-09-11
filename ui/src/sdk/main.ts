@@ -128,6 +128,9 @@ export class Sdk {
         this.backup.clear();
         this.fn.clear();
         this.socket.clear();
+        window.location.hash = `/?forward=${encodeURIComponent(
+            window.location.pathname,
+        )}`;
     }
 
     public async refreshAccessToken(force?: boolean): Promise<boolean> {
@@ -182,7 +185,13 @@ export class Sdk {
                     return true;
                 } catch (error) {
                     console.error(error);
-                    await this.clear();
+                    const err = error as AxiosError;
+                    if (
+                        err.response?.status === 401 ||
+                        err.response?.status === 403
+                    ) {
+                        await this.clear();
+                    }
                     return false;
                 }
             },
