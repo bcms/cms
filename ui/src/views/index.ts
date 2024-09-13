@@ -14,23 +14,34 @@ import ApiKeysView from './dashboard/api-keys';
 import ApiKeyView from './dashboard/api-key';
 import EntriesView from './dashboard/entries';
 import EntryView from './dashboard/entry';
+import PluginView from '@thebcms/selfhosted-ui/views/dashboard/plugin';
 
 export const views = {
     LoginView,
     SignupAdminView,
     HomeView,
+
     TemplatesView,
     TemplateView,
+
     GroupsView,
     GroupView,
+
     WidgetsView,
     WidgetView,
+
     MediaView,
+
     SettingsView,
+
     ApiKeysView,
     ApiKeyView,
+
     EntriesView,
     EntryView,
+
+    PluginView,
+
     P404View,
 };
 

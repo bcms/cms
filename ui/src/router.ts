@@ -201,6 +201,16 @@ const routes: Array<RouteRecordRawExtended> = [
             import(/* webpackChunkName: "entry" */ './views/dashboard/entry'),
     },
     {
+        path: '/d/plugin/:pluginId',
+        name: 'PluginView',
+        meta: {
+            title: 'Plugin',
+            layout: 'DashboardLayout',
+        },
+        component: () =>
+            import(/* webpackChunkName: "plugin" */ './views/dashboard/plugin'),
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'P404View',
         meta: {

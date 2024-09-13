@@ -151,12 +151,15 @@ export const MediaPreview = defineComponent({
                         onClick={openMedia}
                     >
                         <img
-                            class={`absolute object-cover w-full h-full blur-md ${
+                            class={`absolute object-cover w-full h-full ${
                                 props.imageClass || ''
                             }`}
                             src={src.value}
                             alt={props.media.name}
                         />
+                        <div
+                            class={`absolute bg-white dark:bg-dark bg-opacity-30 dark:bg-opacity-30 backdrop-blur-md top-0 left-0 w-full h-full`}
+                        ></div>
                         <img
                             class={`relative object-contain w-full h-full ${
                                 props.imageClass || ''

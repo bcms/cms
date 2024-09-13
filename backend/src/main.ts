@@ -50,6 +50,8 @@ import { UIProxy } from '@thebcms/selfhosted-backend/ui-proxy';
 import { TypeGeneratorController } from '@thebcms/selfhosted-backend/type-generator/controller';
 import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
 import { createBcmsJobs } from '@thebcms/selfhosted-backend/job/main';
+import { createBcmsPlugins } from '@thebcms/selfhosted-backend/plugin/main';
+import { PluginController } from '@thebcms/selfhosted-backend/plugin/controller';
 
 async function main() {
     await createServer({
@@ -139,6 +141,7 @@ async function main() {
             BackupController,
             FunctionController,
             TypeGeneratorController,
+            PluginController,
         ],
 
         middleware: [IPMiddleware, UIProxy],
@@ -323,6 +326,8 @@ async function main() {
                 },
             },
             createBcmsJobs(),
+
+            createBcmsPlugins(),
         ],
     });
 }

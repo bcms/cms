@@ -1,4 +1,4 @@
-import { computed, defineComponent, ref } from 'vue';
+import { computed, defineComponent, onMounted, ref } from 'vue';
 import { BCMSLogo } from '@thebcms/selfhosted-ui/components/logo';
 import { Icon } from '@thebcms/selfhosted-ui/components/icon';
 import { Tag } from '@thebcms/selfhosted-ui/components/tag';
@@ -9,6 +9,7 @@ import {
 import { UserAvatar } from '@thebcms/selfhosted-ui/components/user-avatar';
 import { Dropdown } from '@thebcms/selfhosted-ui/components/dropdown';
 import { isUserAdmin } from '@thebcms/selfhosted-ui/util/user-role';
+import type { PluginList } from '@thebcms/selfhosted-backend/plugin/models/controller';
 
 export const DashboardLayoutAsideContent = defineComponent({
     emits: {
@@ -23,6 +24,7 @@ export const DashboardLayoutAsideContent = defineComponent({
         const me = computed(() => sdk.store.user.methods.me());
         const templates = computed(() => sdk.store.template.items());
         const baseUri = ref('/d');
+        const plugins = ref<PluginList>();
 
         const navItems = computed(() => {
             const myPolicy = me.value?.customPool.policy;
@@ -31,136 +33,159 @@ export const DashboardLayoutAsideContent = defineComponent({
             }
             const isAdmin = isUserAdmin(me.value);
             const items: DashboardLayoutNavItemProps[] = [];
-            items.push(
-                {
-                    title: 'Administration',
-                    activeOnViews: [
-                        'HomeView',
-                        'TemplatesView',
-                        'TemplateView',
-                        'GroupsView',
-                        'GroupView',
-                        'WidgetsView',
-                        'MediaView',
-                        'SettingsView',
-                        'ApiKeysView',
-                        'ApiKeyView',
-                    ],
+            items.push({
+                title: 'Administration',
+                activeOnViews: [
+                    'HomeView',
+                    'TemplatesView',
+                    'TemplateView',
+                    'GroupsView',
+                    'GroupView',
+                    'WidgetsView',
+                    'MediaView',
+                    'SettingsView',
+                    'ApiKeysView',
+                    'ApiKeyView',
+                ],
+                visible: true,
+                children: [
+                    {
+                        title: 'Templates',
+                        href: `/d/template`,
+                        activeOnViews: ['TemplatesView', 'TemplateView'],
+                        visible: isAdmin,
+                        onClick() {
+                            ctx.emit('closeNav');
+                        },
+                        titleSlot: () =>
+                            navItemSlot(
+                                'Templates',
+                                '/administration/template',
+                            ),
+                    },
+                    {
+                        title: 'Groups',
+                        href: `/d/group`,
+                        activeOnViews: ['GroupsView', 'GroupsView'],
+                        visible: isAdmin,
+                        onClick() {
+                            ctx.emit('closeNav');
+                        },
+                        titleSlot: () =>
+                            navItemSlot('Groups', '/administration/group'),
+                    },
+                    {
+                        title: 'Widgets',
+                        href: `${baseUri.value}/widget`,
+                        activeOnViews: ['WidgetsView'],
+                        visible: isAdmin,
+                        onClick() {
+                            ctx.emit('closeNav');
+                        },
+                        titleSlot: () =>
+                            navItemSlot('Widgets', '/administration/widget'),
+                    },
+                    {
+                        title: 'Media',
+                        href: `${baseUri.value}/media`,
+                        activeOnViews: ['MediaView'],
+                        visible: isAdmin || myPolicy.media.get,
+                        onClick() {
+                            ctx.emit('closeNav');
+                        },
+                        titleSlot: () =>
+                            navItemSlot('Media', '/administration/media'),
+                    },
+                    {
+                        title: 'Settings',
+                        href: `${baseUri.value}/settings`,
+                        activeOnViews: ['SettingsView'],
+                        visible: isAdmin,
+                        onClick() {
+                            ctx.emit('closeNav');
+                        },
+                        titleSlot: () => navItemSlot('Settings', '/cog'),
+                    },
+                    {
+                        title: 'API Keys',
+                        href: `${baseUri.value}/api-key`,
+                        activeOnViews: ['ApiKeysView', 'ApiKeyView'],
+                        visible: isAdmin,
+                        onClick() {
+                            ctx.emit('closeNav');
+                        },
+                        titleSlot: () =>
+                            navItemSlot('Key manager', '/administration/key'),
+                    },
+                ],
+            });
+            if (plugins.value && plugins.value.list.length > 0) {
+                items.push({
+                    title: 'Plugins',
+                    activeOnViews: ['PluginView'],
                     visible: true,
-                    children: [
-                        {
-                            title: 'Templates',
-                            href: `/d/template`,
-                            activeOnViews: ['TemplatesView', 'TemplateView'],
-                            visible: isAdmin,
+                    children: plugins.value.list.map((plugin) => {
+                        return {
+                            title: plugin.name,
+                            activeOnViews: [('PluginView' + plugin.id) as any],
+                            visible: true,
+                            href: `/d/plugin/${plugin.id}`,
                             onClick() {
                                 ctx.emit('closeNav');
                             },
-                            titleSlot: () =>
-                                navItemSlot(
-                                    'Templates',
-                                    '/administration/template',
-                                ),
-                        },
-                        {
-                            title: 'Groups',
-                            href: `/d/group`,
-                            activeOnViews: ['GroupsView', 'GroupsView'],
-                            visible: isAdmin,
+                            titleSlot: () => (
+                                <div class={'flex gap-2'}>
+                                    <div>{plugin.name}</div>
+                                </div>
+                            ),
+                        };
+                    }),
+                });
+            }
+            items.push({
+                title: 'Entries',
+                activeOnViews: ['EntriesView', 'EntryView'],
+                visible: true,
+                children: templates.value
+                    .map((template) => {
+                        const templatePolicy = myPolicy.templates.find(
+                            (e) => e._id === template._id,
+                        );
+                        return {
+                            title: template.label,
+                            activeOnViews: [
+                                ('EntriesView' + template._id) as any,
+                                ('EntryView' + template._id) as any,
+                            ],
+                            visible:
+                                isAdmin || (!!template && templatePolicy?.get),
+                            href: `/d/template/${template._id}/entry`,
                             onClick() {
                                 ctx.emit('closeNav');
                             },
-                            titleSlot: () =>
-                                navItemSlot('Groups', '/administration/group'),
-                        },
-                        {
-                            title: 'Widgets',
-                            href: `${baseUri.value}/widget`,
-                            activeOnViews: ['WidgetsView'],
-                            visible: isAdmin,
-                            onClick() {
-                                ctx.emit('closeNav');
-                            },
-                            titleSlot: () =>
-                                navItemSlot(
-                                    'Widgets',
-                                    '/administration/widget',
-                                ),
-                        },
-                        {
-                            title: 'Media',
-                            href: `${baseUri.value}/media`,
-                            activeOnViews: ['MediaView'],
-                            visible: isAdmin || myPolicy.media.get,
-                            onClick() {
-                                ctx.emit('closeNav');
-                            },
-                            titleSlot: () =>
-                                navItemSlot('Media', '/administration/media'),
-                        },
-                        {
-                            title: 'Settings',
-                            href: `${baseUri.value}/settings`,
-                            activeOnViews: ['SettingsView'],
-                            visible: isAdmin,
-                            onClick() {
-                                ctx.emit('closeNav');
-                            },
-                            titleSlot: () => navItemSlot('Settings', '/cog'),
-                        },
-                        {
-                            title: 'API Keys',
-                            href: `${baseUri.value}/api-key`,
-                            activeOnViews: ['ApiKeysView', 'ApiKeyView'],
-                            visible: isAdmin,
-                            onClick() {
-                                ctx.emit('closeNav');
-                            },
-                            titleSlot: () =>
-                                navItemSlot(
-                                    'Key manager',
-                                    '/administration/key',
-                                ),
-                        },
-                    ],
+                            titleSlot: () => (
+                                <div class={'flex gap-2'}>
+                                    <div>{template.label}</div>
+                                </div>
+                            ),
+                        };
+                    })
+                    .sort((a, b) =>
+                        a.title.toLowerCase() > b.title.toLowerCase() ? 1 : -1,
+                    ),
+            });
+            return items;
+        });
+
+        onMounted(async () => {
+            await throwable(
+                async () => {
+                    return await sdk.plugin.getAll();
                 },
-                {
-                    title: 'Entries',
-                    activeOnViews: ['EntriesView', 'EntryView'],
-                    visible: true,
-                    children: templates.value
-                        .map((template) => {
-                            const templatePolicy = myPolicy.templates.find(
-                                (e) => e._id === template._id,
-                            );
-                            return {
-                                title: template.label,
-                                activeOnViews: [
-                                    ('EntriesView' + template._id) as any,
-                                    ('EntryView' + template._id) as any,
-                                ],
-                                visible:
-                                    isAdmin ||
-                                    (!!template && templatePolicy?.get),
-                                href: `/d/template/${template._id}/entry`,
-                                onClick() {
-                                    ctx.emit('closeNav');
-                                },
-                                titleSlot: () => (
-                                    <div class={'flex gap-2'}>
-                                        <div>{template.label}</div>
-                                    </div>
-                                ),
-                            };
-                        })
-                        .sort((a, b) =>
-                            a.title.toLowerCase() > b.title.toLowerCase()
-                                ? 1
-                                : -1,
-                        ),
+                async (result) => {
+                    plugins.value = result;
                 },
             );
-            return items;
         });
 
         function navItemSlot(name: string, src: string) {

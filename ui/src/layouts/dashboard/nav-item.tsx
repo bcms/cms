@@ -47,6 +47,9 @@ export const DashboardLayoutNavItem = defineComponent({
                                 props.item.activeOnViews.includes(
                                     (route.name as any) +
                                         route.params.templateId,
+                                ) ||
+                                props.item.activeOnViews.includes(
+                                    (route.name as any) + route.params.pluginId,
                                 ))
                                 ? 'text-green dark:text-yellow'
                                 : 'text-black dark:text-white'

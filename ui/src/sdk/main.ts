@@ -19,6 +19,7 @@ import { BackupHandler } from '@thebcms/selfhosted-sdk/handlers/backup';
 import { ApiKeyHandler } from '@thebcms/selfhosted-sdk/handlers/api-key';
 import { FunctionHandler } from '@thebcms/selfhosted-sdk/handlers/functions';
 import { TemplateOrganizerHandler } from '@thebcms/selfhosted-sdk/handlers/template-organizer';
+import { PluginHandler } from '@thebcms/selfhosted-sdk/handlers/plugin';
 
 export interface SdkConfig {
     apiOrigin?: string;
@@ -56,6 +57,7 @@ export class Sdk {
     // typeGenerator = new TypeGeneratorHandler(this);
     fn = new FunctionHandler(this);
     backup = new BackupHandler(this);
+    plugin = new PluginHandler(this);
 
     constructor(
         public store: SdkStore,
@@ -127,6 +129,7 @@ export class Sdk {
         // this.typeGenerator.clear();
         this.backup.clear();
         this.fn.clear();
+        this.plugin.clear();
         this.socket.clear();
         window.location.hash = `/?forward=${encodeURIComponent(
             window.location.pathname,
