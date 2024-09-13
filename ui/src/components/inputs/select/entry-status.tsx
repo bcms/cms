@@ -1,7 +1,7 @@
 import { computed, defineComponent, onMounted } from 'vue';
 import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
 import type { EntryStatus } from '@thebcms/selfhosted-backend/entry-status/models/main';
-import {Select} from "@thebcms/selfhosted-ui/components/inputs/select/main";
+import { Select } from '@thebcms/selfhosted-ui/components/inputs/select/main';
 
 export const EntryStatusSelect = defineComponent({
     props: {
@@ -20,6 +20,7 @@ export const EntryStatusSelect = defineComponent({
     setup(props, ctx) {
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
+        const modal = window.bcms.modalService;
         const statuses = computed(() => sdk.store.entryStatus.items());
 
         onMounted(async () => {
@@ -56,8 +57,7 @@ export const EntryStatusSelect = defineComponent({
                     onChange={(option) => {
                         if (option) {
                             if (option.value === '__edit') {
-                                // TODO
-                                // ModalService.entryStatusEdit.show({});
+                                modal.handlers.entryStatusCreateEdit.open();
                             } else {
                                 const status = statuses.value.find(
                                     (e) => e._id === option.value,

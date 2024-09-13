@@ -27,6 +27,7 @@ import { RefreshTokenService } from '@thebcms/selfhosted-backend/auth/refresh-to
 import { openApiGetObjectRefSchema } from '@thebcms/selfhosted-backend/open-api/schema';
 import { UserFactory } from '@thebcms/selfhosted-backend/user/factory';
 import { LanguageFactory } from '@thebcms/selfhosted-backend/language/factory';
+import { EntryStatusFactory } from '@thebcms/selfhosted-backend/entry-status/factory';
 
 let createAdminServerToken: string | null = null;
 
@@ -160,6 +161,20 @@ export const AuthController = createController({
                                 code: 'en',
                                 default: true,
                                 nativeName: 'English',
+                            }),
+                        );
+                    }
+                    if ((await Repo.entryStatus.findAll()).length === 0) {
+                        await Repo.entryStatus.add(
+                            EntryStatusFactory.create({
+                                label: 'Publised',
+                                userId: 'admin',
+                            }),
+                        );
+                        await Repo.entryStatus.add(
+                            EntryStatusFactory.create({
+                                label: 'Draft',
+                                userId: 'admin',
                             }),
                         );
                     }

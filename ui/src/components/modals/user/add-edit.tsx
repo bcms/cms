@@ -164,7 +164,11 @@ export const ModalUserAddEdit = defineComponent({
                         }
                     },
                     async () => {
-                        notification.success('User added successfully');
+                        if (userToUpdate.value) {
+                            notification.success('User updated successfully');
+                        } else {
+                            notification.success('User added successfully');
+                        }
                     },
                 );
                 return [true, undefined];

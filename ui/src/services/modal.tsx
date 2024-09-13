@@ -62,6 +62,7 @@ import {
     ModalEntryViewModel,
     type ModalEntryViewModelInput,
 } from '@thebcms/selfhosted-ui/components/modals/entry/view-model';
+import { ModalEntryStatusCreateEdit } from '@thebcms/selfhosted-ui/components/modals/entry-status/create-edit';
 
 export interface ModalHandlerOptions<Output = unknown> {
     title?: string;
@@ -169,6 +170,10 @@ export class ModalService {
 
         apiKeyCreateEdit: new ModalHandler<ModalApiKeyCreateEditInput, void>(
             ModalApiKeyCreateEdit,
+        ),
+
+        entryStatusCreateEdit: new ModalHandler<void, void>(
+            ModalEntryStatusCreateEdit,
         ),
     };
 

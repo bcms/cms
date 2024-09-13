@@ -65,7 +65,7 @@ export const EntryView = defineComponent({
                 entryLngChanges.value[language.code].change =
                     data !== entryLngChanges.value[language.code].buffer;
             }
-        }, 10000);
+        }, 1000);
         const entrySync = new EntrySync(
             () => {
                 return entry.value
