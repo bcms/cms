@@ -22,3 +22,13 @@ export function prettyFileSize(size: number): string {
     }
     return `${size} B`;
 }
+
+export function bufferToFile(
+    filename: string,
+    mimetype: string,
+    buffer: Buffer,
+): File {
+    return new File([buffer], filename || `temp.${mimetype.split('/')[1]}`, {
+        type: mimetype,
+    });
+}

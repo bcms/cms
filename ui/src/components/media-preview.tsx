@@ -14,7 +14,7 @@ import {
 } from '@thebcms/selfhosted-backend/media/models/main';
 import { Icon } from '@thebcms/selfhosted-ui/components/icon';
 import { Loader } from '@thebcms/selfhosted-ui/components/loader';
-import type { MediaGetBinBody } from '@thebcms/selfhosted-backend/media/models/controller';
+import { bufferToFile } from '@thebcms/selfhosted-ui/util/file';
 
 const loadQueue: {
     [mediaId: string]: Queue<void>;
@@ -99,21 +99,24 @@ export const MediaPreview = defineComponent({
         async function openMedia() {
             if (!props.doNotOpenOnClick) {
                 loading.value = true;
-                await throwable(async () => {
-                    await sdk.isLoggedIn();
-                    const data: MediaGetBinBody = {
-                        view: true,
-                    };
-                    window.open(
-                        sdk.media.toUri({
+                await throwable(
+                    async () => {
+                        return sdk.media.bin({
                             media: props.media,
-                        }) +
-                            `?at=${sdk.accessTokenRaw}&data=${Buffer.from(
-                                JSON.stringify(data),
-                            ).toString('hex')}`,
-                        '_black',
-                    );
-                });
+                            data: {},
+                        });
+                    },
+                    async (buffer) => {
+                        const fileObjectURL = URL.createObjectURL(
+                            bufferToFile(
+                                props.media.name,
+                                props.media.mimetype,
+                                buffer,
+                            ),
+                        );
+                        window.open(fileObjectURL, '_blank');
+                    },
+                );
                 loading.value = false;
             }
         }
@@ -143,9 +146,19 @@ export const MediaPreview = defineComponent({
                 }`}
             >
                 {typesWithImage.includes(props.media.type) && src.value ? (
-                    <button class={`w-full h-full`} onClick={openMedia}>
+                    <button
+                        class={`relative w-full h-full`}
+                        onClick={openMedia}
+                    >
                         <img
-                            class={`object-cover w-full h-full ${
+                            class={`absolute object-cover w-full h-full blur-md ${
+                                props.imageClass || ''
+                            }`}
+                            src={src.value}
+                            alt={props.media.name}
+                        />
+                        <img
+                            class={`relative object-contain w-full h-full ${
                                 props.imageClass || ''
                             }`}
                             src={src.value}

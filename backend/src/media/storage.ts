@@ -32,7 +32,6 @@ export class MediaStorage {
     ]);
 
     static resolveCloudPath(media: Media, options?: MediaStorageOptions) {
-        console.log({ media });
         if (media.type === 'DIR') {
             return `/${media._id}`;
         }
