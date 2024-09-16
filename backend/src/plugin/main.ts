@@ -24,6 +24,9 @@ export function createBcmsPlugins(): Module {
             const logger = new Logger('Plugins');
             async function init() {
                 const fs = new FS(path.join(process.cwd(), 'plugins'));
+                if (!(await fs.exist(''))) {
+                    return;
+                }
                 const fileNames = await fs.readdir('');
                 for (let i = 0; i < fileNames.length; i++) {
                     let fileName = fileNames[i];

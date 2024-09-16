@@ -8,13 +8,8 @@ COPY . /app
 RUN apt update && apt install ffmpeg zip unzip -y
 # Install dependencies
 RUN npm i
-# Prepare backend code
-RUN npm run build:backend
-# Build and prepare UI code
-RUN cd ui && npm run build
-
-# CLEANUP
-RUN cd ui && rm -rf node_modeuls && cd ../.. && rm -rf node_modeuls
+RUN npm run build:backend && npm run build:ui
+RUN rm -rf _scripts node_modules cli client proxy ui/public ui/node_modules ui/src backend/plugins
 
 WORKDIR /app/backend
 

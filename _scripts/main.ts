@@ -7,6 +7,7 @@ import { buildBackend, buildUtils, packBackend, packUtils } from './backend';
 import { buildSdk, packSdk } from './sdk';
 import { buildUi, buildUiComponents, packUiComponents } from './ui';
 import { publish } from './utils/publish';
+import { createMainDockerImage } from './docker';
 
 async function main() {
     const command = process.argv[2];
@@ -90,6 +91,10 @@ async function main() {
         }
         case '--publish-ui-components': {
             await publish(['ui', 'dist-components']);
+            return;
+        }
+        case '--build-docker-image': {
+            await createMainDockerImage();
             return;
         }
         default: {
