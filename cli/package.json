@@ -1,36 +1,28 @@
 {
     "name": "@thebcms/selfhosted-cli",
     "version": "1.0.0",
-    "description": "CLI tool for selfhosted BCMS.",
+    "description": "Command line tool for the BCMS",
     "author": "BCMS",
     "license": "MIT",
     "main": "./index.mjs",
     "module": "./index.mjs",
     "types": "./index.d.ts",
     "type": "module",
-    "exports": {
-        ".": {
-            "require": "./index.cjs",
-            "import": "./index.mjs",
-            "types": "./index.d.ts"
-        }
-    },
     "scripts": {
-        "dev": "ts-node --project ./tsconfig.commonjs.json -r tsconfig-paths/register src/bin/main.ts",
+        "dev": "vite-node --project tsconfig.json src/bin/main.ts",
         "build:ts:mjs": "tsc --project tsconfig.json",
         "build:ts:cjs": "tsc --project tsconfig.commonjs.json",
-        "test": "jest",
-        "build:noEmit": "tsc -p . --noEmit",
-        "lint": "eslint . --ext .ts"
+        "test": "jest"
     },
     "dependencies": {
+        "@paralleldrive/cuid2": "^2.2.2",
+        "@types/inquirer": "^9.0.7",
         "axios": "^1.6.8",
-        "inquirer": "^11.0.1"
+        "inquirer": "^9.2.22"
     },
     "devDependencies": {
         "@types/jest": "^29.5.12",
-        "@types/node": "^22.5.5",
-        "@types/uuid": "^8.3.0",
+        "@types/node": "^20.12.12",
         "@typescript-eslint/eslint-plugin": "^7.9.0",
         "@typescript-eslint/parser": "^7.9.0",
         "eslint": "^8.56.0",
@@ -38,17 +30,18 @@
         "ts-jest": "^29.1.3",
         "ts-node": "^10.9.2",
         "tsconfig-paths": "^4.2.0",
-        "typescript": "^5.4.5"
+        "typescript": "^5.4.5",
+        "vite-node": "^1.6.0"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/bcms/cms"
+        "url": "git+https://github.com/bcms/cms.git"
     },
     "bugs": {
         "url": "https://github.com/bcms/cms/issues"
     },
-    "homepage": "https://github.com/bcms/cms#readme",
     "bin": {
         "bcms": "bin/main.mjs"
-    }
+    },
+    "homepage": "https://github.com/bcms/cms#readme"
 }

@@ -1,6 +1,9 @@
 import { type Args, argsMap } from '@thebcms/selfhosted-cli/args';
+import { DeployHandler } from '@thebcms/selfhosted-cli/handlers/deploy';
 
 export class Cli {
+    deploy = new DeployHandler(this);
+
     constructor(public args: Args) {}
 
     help() {
