@@ -230,5 +230,24 @@ export class DeployHandler {
             nginxConfig = nginxConfig.replace(/@ssl/g, '');
         }
         await fs.save(['proxy.conf'], nginxConfig);
+        await ChildProcess.advancedExec(
+            `cd ~/${projectName}/cms && docker build . -f proxy.Dockerfile ${projectName}-proxy`,
+            {
+                onChunk(type, chunk) {
+                    process[type].write(chunk);
+                },
+            },
+        ).awaiter;
+        await ChildProcess.advancedExec(
+            `docker run -d -p ${proxyConfig.port}:${proxyConfig.port} --name ${projectName}-proxy --network bcms-net ${projectName}-proxy`,
+            {
+                onChunk(type, chunk) {
+                    process[type].write(chunk);
+                },
+            },
+        ).awaiter;
+        console.log(
+            `\n\nBCMS project was setup successfully\nProject directory is at: ${fs.baseRoot}`,
+        );
     }
 }
