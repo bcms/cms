@@ -1,20 +1,20 @@
-import path from 'path';
 import { ChildProcess } from '@thebcms/selfhosted-utils/child-process';
+import path from 'path';
 import { FS } from '@thebcms/selfhosted-utils/fs';
 import { buildCjs, buildMjs } from './utils/build';
-import { packageJsonExport } from './utils/package-json';
 import { getBackendVersion, getUtilsVersion } from './utils/versions';
+import { packageJsonExport } from './utils/package-json';
 
-export async function packClient() {
+export async function packSdk() {
     await ChildProcess.advancedExec('npm pack', {
-        cwd: path.join(process.cwd(), 'client', 'dist'),
+        cwd: path.join(process.cwd(), 'ui', 'dist-sdk'),
         onChunk(type, chunk) {
             process[type].write(chunk);
         },
     }).awaiter;
 }
 
-export async function buildClient() {
+export async function buildSdk() {
     const basePath = path.join(process.cwd(), 'client');
     const localFs = new FS(basePath);
     if (await localFs.exist(['dist'])) {

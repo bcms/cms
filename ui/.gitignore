@@ -12,6 +12,7 @@ node_modules
 dist
 dist-ssr
 dist-sdk
+dist-components
 coverage
 *.local
 public/extension

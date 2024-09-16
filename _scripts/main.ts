@@ -4,6 +4,9 @@ import { buildTypes } from './build-types';
 import { preCommit } from './pre-commit';
 import { buildClient, packClient } from './client';
 import { buildBackend, buildUtils, packBackend, packUtils } from './backend';
+import { buildSdk, packSdk } from './sdk';
+import { buildUi, buildUiComponents, packUiComponents } from './ui';
+import { publish } from './utils/publish';
 
 async function main() {
     const command = process.argv[2];
@@ -33,6 +36,10 @@ async function main() {
             await packClient();
             return;
         }
+        case '--publish-client': {
+            await publish(['client', 'dist']);
+            return;
+        }
         case '--build-utils': {
             await buildUtils();
             return;
@@ -41,12 +48,48 @@ async function main() {
             await packUtils();
             return;
         }
+        case '--publish-utils': {
+            await publish(['backend', 'dist']);
+            return;
+        }
         case '--build-backend': {
             await buildBackend();
             return;
         }
         case '--pack-backend': {
             await packBackend();
+            return;
+        }
+        case '--publish-backend': {
+            await publish(['backend', 'dist']);
+            return;
+        }
+        case '--build-sdk': {
+            await buildSdk();
+            return;
+        }
+        case '--pack-sdk': {
+            await packSdk();
+            return;
+        }
+        case '--publish-sdk': {
+            await publish(['ui', 'dist-sdk']);
+            return;
+        }
+        case '--build-ui': {
+            await buildUi();
+            return;
+        }
+        case '--build-ui-components': {
+            await buildUiComponents();
+            return;
+        }
+        case '--pack-ui-components': {
+            await packUiComponents();
+            return;
+        }
+        case '--publish-ui-components': {
+            await publish(['ui', 'dist-components']);
             return;
         }
         default: {

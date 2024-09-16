@@ -22,6 +22,8 @@ export function packageJsonExport(files: FSFileTreeItem[], packageJson: any) {
             if (fileInfo.path.rel.endsWith('.mjs')) {
                 packageJson.exports[exportName].import =
                     './' + fileInfo.path.rel;
+                packageJson.exports[exportName].types =
+                    './' + fileInfo.path.rel.replace('.mjs', '.d.ts');
             }
             if (fileInfo.path.rel.endsWith('.cjs')) {
                 packageJson.exports[exportName].require =

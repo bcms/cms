@@ -10,12 +10,14 @@
     "exports": {
         ".": {
             "require": "./index.cjs",
-            "import": "./index.mjs"
+            "import": "./index.mjs",
+            "types": "./index.d.ts"
         }
     },
     "scripts": {
         "build:ts:mjs": "tsc --project tsconfig.json",
         "build:ts:cjs": "tsc --project tsconfig.commonjs.json",
+        "build:noEmit": "tsc --project tsconfig.json --noEmit",
         "test": "jest",
         "_test": "ts-node --project ./tsconfig.commonjs.json -r tsconfig-paths/register src/_test.ts"
     },

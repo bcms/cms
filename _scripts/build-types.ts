@@ -10,10 +10,12 @@ export async function buildTypes() {
     if (await rootFs.exist(['backend', 'dist'])) {
         await rootFs.deleteDir(['backend', 'dist']);
     }
-    await ChildProcess.spawn('npm', ['run', 'build'], {
+    await ChildProcess.advancedExec('npm run build', {
         cwd: path.join(process.cwd(), 'backend'),
-        stdio: 'inherit',
-    });
+        onChunk(type, chunk) {
+            process[type].write(chunk);
+        },
+    }).awaiter;
     const fileTree = await rootFs.fileTree(['backend', 'dist'], '');
     for (let i = 0; i < fileTree.length; i++) {
         const fileInfo = fileTree[i];

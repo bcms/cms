@@ -11,14 +11,21 @@
         "build:types": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-types",
         "build:client": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-client",
         "pack:client": "ts-node -r tsconfig-paths/register _scripts/main.ts --pack-client",
+        "publish:client": "ts-node -r tsconfig-paths/register _scripts/main.ts --publish-client",
         "build:utils": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-utils",
         "pack:utils": "ts-node -r tsconfig-paths/register _scripts/main.ts --pack-utils",
+        "publish:utils": "ts-node -r tsconfig-paths/register _scripts/main.ts --publish-utils",
         "build:backend": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-backend",
         "pack:backend": "ts-node -r tsconfig-paths/register _scripts/main.ts --pack-backend",
+        "publish:backend": "ts-node -r tsconfig-paths/register _scripts/main.ts --publish-backend",
         "build:ui": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-ui",
-        "pack:ui": "ts-node -r tsconfig-paths/register _scripts/main.ts --pack-ui",
+        "build:ui:components": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-ui-components",
+        "pack:ui:components": "ts-node -r tsconfig-paths/register _scripts/main.ts --pack-ui-components",
+        "publish:ui:components": "ts-node -r tsconfig-paths/register _scripts/main.ts --publish-ui-components",
         "build:sdk": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-sdk",
-        "pack:sdk": "ts-node -r tsconfig-paths/register _scripts/main.ts --pack-sdk"
+        "pack:sdk": "ts-node -r tsconfig-paths/register _scripts/main.ts --pack-sdk",
+        "publish:sdk": "ts-node -r tsconfig-paths/register _scripts/main.ts --publish-sdk",
+        "build:docker:image": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-docker-image"
     },
     "repository": {
         "type": "git",

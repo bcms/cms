@@ -6,6 +6,7 @@ export async function preCommit() {
     const whatToCheck = {
         backend: false,
         ui: false,
+        client: false,
     };
     let gitOutput = '';
     await ChildProcess.advancedExec('git status', {
@@ -23,26 +24,50 @@ export async function preCommit() {
             whatToCheck.backend = true;
         } else if (p.startsWith('ui/')) {
             whatToCheck.ui = true;
+        } else if (p.startsWith('client/')) {
+            whatToCheck.ui = true;
         }
     }
     if (whatToCheck.backend) {
-        await ChildProcess.spawn('npm', ['run', 'lint'], {
+        await ChildProcess.advancedExec('npm run lint', {
             cwd: path.join(process.cwd(), 'backend'),
-            stdio: 'inherit',
-        });
-        await ChildProcess.spawn('npm', ['run', 'build:noEmit'], {
+            onChunk(type, chunk) {
+                process[type].write(chunk);
+            },
+        }).awaiter;
+        await ChildProcess.advancedExec('npm run build:noEmit', {
             cwd: path.join(process.cwd(), 'backend'),
-            stdio: 'inherit',
-        });
+            onChunk(type, chunk) {
+                process[type].write(chunk);
+            },
+        }).awaiter;
     }
     if (whatToCheck.ui) {
-        await ChildProcess.spawn('npm', ['run', 'lint'], {
+        await ChildProcess.advancedExec('npm run lint', {
             cwd: path.join(process.cwd(), 'ui'),
-            stdio: 'inherit',
-        });
-        await ChildProcess.spawn('npm', ['run', 'type-check'], {
+            onChunk(type, chunk) {
+                process[type].write(chunk);
+            },
+        }).awaiter;
+        await ChildProcess.advancedExec('npm run type-check', {
             cwd: path.join(process.cwd(), 'ui'),
-            stdio: 'inherit',
-        });
+            onChunk(type, chunk) {
+                process[type].write(chunk);
+            },
+        }).awaiter;
+    }
+    if (whatToCheck.client) {
+        await ChildProcess.advancedExec('npm run lint', {
+            cwd: path.join(process.cwd(), 'client'),
+            onChunk(type, chunk) {
+                process[type].write(chunk);
+            },
+        }).awaiter;
+        await ChildProcess.advancedExec('npm run build:noEmit', {
+            cwd: path.join(process.cwd(), 'client'),
+            onChunk(type, chunk) {
+                process[type].write(chunk);
+            },
+        }).awaiter;
     }
 }
