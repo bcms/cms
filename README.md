@@ -37,7 +37,7 @@ mkdir ~/bcms
 Create directories which will be used for BCMS container volumes:
 
 ```bash
-mkdir ~/bcms/db ~/bcms/uploads ~/bcms/backkups
+mkdir ~/bcms/db ~/bcms/uploads ~/bcms/backups
 ```
 
 Clone the repository:
