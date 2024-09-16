@@ -1,7 +1,7 @@
 import {
     type MongoDBEntry,
     MongoDBEntrySchema,
-} from '@thebcms/selfhosted-backend/server/modules/mongodb';
+} from '@thebcms/selfhosted-backend/_server/modules/mongodb';
 import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-utility';
 
 export interface Language extends MongoDBEntry {

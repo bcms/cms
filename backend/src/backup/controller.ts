@@ -2,7 +2,7 @@ import {
     createController,
     createControllerMethod,
     HttpStatus,
-} from '@thebcms/selfhosted-backend/server';
+} from '@thebcms/selfhosted-backend/_server';
 import {
     RP,
     type RPJwtCheckResult,

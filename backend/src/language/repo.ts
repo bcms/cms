@@ -2,7 +2,7 @@ import {
     type Language,
     LanguageSchema,
 } from '@thebcms/selfhosted-backend/language/models/main';
-import { createMongoDBRepository } from '@thebcms/selfhosted-backend/server/modules/mongodb';
+import { createMongoDBRepository } from '@thebcms/selfhosted-backend/_server/modules/mongodb';
 
 export interface LanguageRepoMethods {
     findByCode(code: string): Promise<Language | null>;

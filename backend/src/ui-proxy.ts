@@ -1,6 +1,6 @@
 import path from 'path';
 import mime from 'mime-types';
-import { createMiddleware } from '@thebcms/selfhosted-backend/server';
+import { createMiddleware } from '@thebcms/selfhosted-backend/_server';
 import { FS } from '@thebcms/selfhosted-utils/fs';
 
 export const UIProxy = createMiddleware({

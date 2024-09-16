@@ -3,9 +3,9 @@ import webSocket, { type WebSocket } from '@fastify/websocket';
 import type { FastifyReply, FastifyRequest } from 'fastify';
 import type { IncomingMessage } from 'http';
 
-import type { Module } from '@thebcms/selfhosted-backend/server/module';
-import { Logger } from '@thebcms/selfhosted-backend/server/logger';
-import { defaultHttpErrorHandler } from '@thebcms/selfhosted-backend/server/http-error';
+import type { Module } from '@thebcms/selfhosted-backend/_server/module';
+import { Logger } from '@thebcms/selfhosted-backend/_server/logger';
+import { defaultHttpErrorHandler } from '@thebcms/selfhosted-backend/_server/http-error';
 
 export interface SocketConnection {
     id: string;

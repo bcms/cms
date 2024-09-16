@@ -21,8 +21,6 @@
             "@thebcms/selfhosted-client/*": ["./src/*"],
             "@thebcms/selfhosted-backend": ["../backend/types"],
             "@thebcms/selfhosted-backend/*": ["../backend/types/*"],
-            "@thebcms/selfhosted-backend/server": ["../backend/types/_server"],
-            "@thebcms/selfhosted-backend/server/*": ["../backend/types/_server/*"],
             "@thebcms/selfhosted-utils/*": ["../backend/src/_utils/*"]
         }
     },

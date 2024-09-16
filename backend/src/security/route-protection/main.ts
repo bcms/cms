@@ -1,7 +1,7 @@
 import type { UserJwt } from '@thebcms/selfhosted-backend/user/models/main';
 import type { ApiKey } from '@thebcms/selfhosted-backend/api-key/models/main';
 import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-utility';
-import type { ControllerMethodPreRequestHandler } from '@thebcms/selfhosted-backend/server';
+import type { ControllerMethodPreRequestHandler } from '@thebcms/selfhosted-backend/_server';
 
 import { RPBodyCheck } from '@thebcms/selfhosted-backend/security/route-protection/body-check';
 import { RPJwt } from '@thebcms/selfhosted-backend/security/route-protection/jwt';

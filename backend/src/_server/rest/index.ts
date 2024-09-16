@@ -1,2 +1,2 @@
-export * from '@thebcms/selfhosted-backend/server/rest/controller';
-export * from '@thebcms/selfhosted-backend/server/rest/middleware';
+export * from '@thebcms/selfhosted-backend/_server/rest/controller';
+export * from '@thebcms/selfhosted-backend/_server/rest/middleware';

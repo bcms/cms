@@ -1,5 +1,5 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import type { Logger } from '@thebcms/selfhosted-backend/server/logger';
+import type { Logger } from '@thebcms/selfhosted-backend/_server/logger';
 
 export class HttpStatus {
     public static readonly 'Continue' = 100;

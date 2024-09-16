@@ -1,12 +1,12 @@
 import {
     type MongoDBEntry,
     MongoDBEntrySchema,
-} from '@thebcms/selfhosted-backend/server/modules/mongodb';
+} from '@thebcms/selfhosted-backend/_server/modules/mongodb';
 import {
     type UserCustomPool,
     UserCustomPoolSchema,
 } from '@thebcms/selfhosted-backend/user/models/custom-pool';
-import type { JWT } from '@thebcms/selfhosted-backend/server/modules/jwt';
+import type { JWT } from '@thebcms/selfhosted-backend/_server/modules/jwt';
 import {
     deleteFromSchema,
     type ObjectSchema,

@@ -3,7 +3,7 @@ import {
     createController,
     createControllerMethod,
     createServer,
-} from '@thebcms/selfhosted-backend/server';
+} from '@thebcms/selfhosted-backend/_server';
 import FastifyMultipart from '@fastify/multipart';
 import FastifyStatic from '@fastify/static';
 import FastifyCors from '@fastify/cors';
@@ -11,11 +11,11 @@ import {
     createJwt,
     JWTError,
     JWTManager,
-} from '@thebcms/selfhosted-backend/server/modules/jwt';
+} from '@thebcms/selfhosted-backend/_server/modules/jwt';
 import { Config } from '@thebcms/selfhosted-backend/config';
-import { createSocket } from '@thebcms/selfhosted-backend/server/modules/socket';
+import { createSocket } from '@thebcms/selfhosted-backend/_server/modules/socket';
 import { Repo } from '@thebcms/selfhosted-backend/repo';
-import { createMongoDB } from '@thebcms/selfhosted-backend/server/modules/mongodb';
+import { createMongoDB } from '@thebcms/selfhosted-backend/_server/modules/mongodb';
 import {
     createMigrations,
     MigrationRepo,

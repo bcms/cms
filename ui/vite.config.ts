@@ -19,9 +19,6 @@ export default defineConfig({
             '@thebcms/selfhosted-backend': fileURLToPath(
                 new URL('../backend/types', import.meta.url),
             ),
-            '@thebcms/selfhosted-backend/server': fileURLToPath(
-                new URL('../backend/types/_server', import.meta.url),
-            ),
             '@thebcms/selfhosted-utils': fileURLToPath(
                 new URL('../backend/src/_utils', import.meta.url),
             ),

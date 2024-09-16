@@ -17,9 +17,7 @@
         "paths": {
             "@thebcms/selfhosted-backend": ["./src"],
             "@thebcms/selfhosted-backend/*": ["./src/*"],
-            "@thebcms/selfhosted-utils/*": ["./src/_utils/*"],
-            "@thebcms/selfhosted-backend/server": ["./src/_server"],
-            "@thebcms/selfhosted-backend/server/*": ["./src/_server/*"]
+            "@thebcms/selfhosted-utils/*": ["./src/_utils/*"]
         }
     },
     "include": ["src/_utils"]

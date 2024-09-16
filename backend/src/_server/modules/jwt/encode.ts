@@ -8,7 +8,7 @@ import {
     JWTHeaderSchema,
     type JWTPayload,
     JWTPayloadSchema,
-} from '@thebcms/selfhosted-backend/server/modules/jwt/models';
+} from '@thebcms/selfhosted-backend/_server/modules/jwt/models';
 
 export class JWTEncode {
     /**

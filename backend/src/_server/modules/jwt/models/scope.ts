@@ -1,5 +1,5 @@
 import type { ObjectSchema } from '@thebcms/selfhosted-utils/object-utility';
-import type { JWTAlgorithm } from '@thebcms/selfhosted-backend/server/modules/jwt/models/header';
+import type { JWTAlgorithm } from '@thebcms/selfhosted-backend/_server/modules/jwt/models/header';
 
 export interface JWTScope {
     secret: string;

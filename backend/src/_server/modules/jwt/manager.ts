@@ -3,13 +3,13 @@ import {
     ObjectUtility,
     ObjectUtilityError,
 } from '@thebcms/selfhosted-utils/object-utility';
-import { JWTEncode } from '@thebcms/selfhosted-backend/server/modules/jwt/encode';
-import { JWTError } from '@thebcms/selfhosted-backend/server/modules/jwt/error';
+import { JWTEncode } from '@thebcms/selfhosted-backend/_server/modules/jwt/encode';
+import { JWTError } from '@thebcms/selfhosted-backend/_server/modules/jwt/error';
 import {
     type JWT,
     JWTSchema,
     type JWTScope,
-} from '@thebcms/selfhosted-backend/server/modules/jwt/models';
+} from '@thebcms/selfhosted-backend/_server/modules/jwt/models';
 
 export interface JWTManagerCreateData<
     PayloadProps = undefined,

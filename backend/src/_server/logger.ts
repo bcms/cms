@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as nodeFs from 'fs/promises';
-import type { Module } from '@thebcms/selfhosted-backend/server/module';
+import type { Module } from '@thebcms/selfhosted-backend/_server/module';
 import { FS } from '@thebcms/selfhosted-utils/fs';
 import { StringUtility } from '@thebcms/selfhosted-utils/string-utility';
 

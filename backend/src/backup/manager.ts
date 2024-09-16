@@ -3,7 +3,7 @@ import nodeFs from 'fs';
 import path from 'path';
 import type { Backup } from '@thebcms/selfhosted-backend/backup/models/main';
 import { createQueue, QueueError } from '@thebcms/selfhosted-utils/queue';
-import { Logger } from '@thebcms/selfhosted-backend/server';
+import { Logger } from '@thebcms/selfhosted-backend/_server';
 import { Repo } from '@thebcms/selfhosted-backend/repo';
 import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
 import { FS } from '@thebcms/selfhosted-utils/fs';

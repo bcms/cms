@@ -1,4 +1,4 @@
-import { createMongoDBRepository } from '@thebcms/selfhosted-backend/server/modules/mongodb';
+import { createMongoDBRepository } from '@thebcms/selfhosted-backend/_server/modules/mongodb';
 import {
     type User,
     UserSchema,

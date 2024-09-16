@@ -1,7 +1,7 @@
 import type { Collection, Filter } from 'mongodb';
-import type { Module } from '@thebcms/selfhosted-backend/server/module';
-import { Logger } from '@thebcms/selfhosted-backend/server/logger';
-import type { MongoDBEntry } from '@thebcms/selfhosted-backend/server/modules/mongodb/entry';
+import type { Module } from '@thebcms/selfhosted-backend/_server/module';
+import { Logger } from '@thebcms/selfhosted-backend/_server/logger';
+import type { MongoDBEntry } from '@thebcms/selfhosted-backend/_server/modules/mongodb/entry';
 import type { Queue } from '@thebcms/selfhosted-utils/queue';
 import { MemCache } from '@thebcms/selfhosted-utils/mem-cache';
 import type { ObjectSchema } from '@thebcms/selfhosted-utils/object-utility';

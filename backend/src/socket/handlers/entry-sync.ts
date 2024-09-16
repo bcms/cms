@@ -1,4 +1,4 @@
-import { SocketManager } from '@thebcms/selfhosted-backend/server/modules/socket';
+import { SocketManager } from '@thebcms/selfhosted-backend/_server/modules/socket';
 import { createSocketEventHandler } from '@thebcms/selfhosted-backend/socket/handlers/_wrapper';
 import type {
     SocketEventName,

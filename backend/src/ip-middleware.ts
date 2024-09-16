@@ -1,5 +1,5 @@
-import { createMiddleware } from '@thebcms/selfhosted-backend/server';
-import type { JWTPayload } from '@thebcms/selfhosted-backend/server/modules/jwt';
+import { createMiddleware } from '@thebcms/selfhosted-backend/_server';
+import type { JWTPayload } from '@thebcms/selfhosted-backend/_server/modules/jwt';
 import type { UserCustomPool } from '@thebcms/selfhosted-backend/user/models/custom-pool';
 
 export const IPMiddleware = createMiddleware({

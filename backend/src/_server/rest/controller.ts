@@ -5,12 +5,12 @@ import type {
     RouteShorthandOptions,
 } from 'fastify';
 import type { OpenAPIV3 } from 'openapi-types';
-import { Logger } from '@thebcms/selfhosted-backend/server/logger';
+import { Logger } from '@thebcms/selfhosted-backend/_server/logger';
 import {
     createHttpErrorHandler,
     type HttpErrorHandler,
-} from '@thebcms/selfhosted-backend/server/http-error';
-import type { ServerConfig } from '@thebcms/selfhosted-backend/server/main';
+} from '@thebcms/selfhosted-backend/_server/http-error';
+import type { ServerConfig } from '@thebcms/selfhosted-backend/_server/main';
 
 /**
  * HTTP method type.

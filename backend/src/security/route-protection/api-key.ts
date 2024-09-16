@@ -1,7 +1,7 @@
 import {
     type HttpErrorHandler,
     HttpStatus,
-} from '@thebcms/selfhosted-backend/server';
+} from '@thebcms/selfhosted-backend/_server';
 import { Repo } from '@thebcms/selfhosted-backend/repo';
 import type { UserPolicyCRUD } from '@thebcms/selfhosted-backend/user/models/policy';
 import type { ApiKey } from '@thebcms/selfhosted-backend/api-key/models/main';

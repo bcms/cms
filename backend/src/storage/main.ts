@@ -1,6 +1,6 @@
 import * as fileSystem from 'fs';
 import * as systemPath from 'path';
-import { Logger } from '@thebcms/selfhosted-backend/server';
+import { Logger } from '@thebcms/selfhosted-backend/_server';
 import { Config } from '@thebcms/selfhosted-backend/config';
 import { FS } from '@thebcms/selfhosted-backend/_utils/fs';
 

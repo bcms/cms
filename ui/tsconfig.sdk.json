@@ -18,10 +18,6 @@
         "moduleResolution": "Node",
         "paths": {
             "@thebcms/selfhosted-backend/*": ["../backend/types/*"],
-            "@thebcms/selfhosted-backend/server": ["../backend/types/_server"],
-            "@thebcms/selfhosted-backend/server/*": [
-                "../backend/types/_server/*"
-            ],
             "@thebcms/selfhosted-utils/*": ["../backend/src/_server/util/*"],
             "@thebcms/selfhosted-sdk": ["./src/sdk"],
             "@thebcms/selfhosted-sdk/*": ["./src/sdk/*"],

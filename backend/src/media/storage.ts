@@ -5,7 +5,7 @@ import { promisify } from 'util';
 import process from 'process';
 import type { ISizeCalculationResult } from 'image-size/dist/types/interface';
 import imageSize from 'image-size';
-import { Logger } from '@thebcms/selfhosted-backend/server';
+import { Logger } from '@thebcms/selfhosted-backend/_server';
 import { FS } from '@thebcms/selfhosted-backend/_utils/fs';
 import { FunctionBuilder } from '@thebcms/selfhosted-backend/util/function-builder';
 import {

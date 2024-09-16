@@ -14,7 +14,11 @@
         "build:utils": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-utils",
         "pack:utils": "ts-node -r tsconfig-paths/register _scripts/main.ts --pack-utils",
         "build:backend": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-backend",
-        "pack:backend": "ts-node -r tsconfig-paths/register _scripts/main.ts --pack-backend"
+        "pack:backend": "ts-node -r tsconfig-paths/register _scripts/main.ts --pack-backend",
+        "build:ui": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-ui",
+        "pack:ui": "ts-node -r tsconfig-paths/register _scripts/main.ts --pack-ui",
+        "build:sdk": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-sdk",
+        "pack:sdk": "ts-node -r tsconfig-paths/register _scripts/main.ts --pack-sdk"
     },
     "repository": {
         "type": "git",

@@ -1,5 +1,5 @@
 import fdb, { type FastifyMongodbOptions } from '@fastify/mongodb';
-import type { Module } from '@thebcms/selfhosted-backend/server/module';
+import type { Module } from '@thebcms/selfhosted-backend/_server/module';
 
 export type MongoDBConfig = FastifyMongodbOptions;
 

@@ -6,7 +6,7 @@ import {
 import {
     type HttpErrorHandler,
     HttpStatus,
-} from '@thebcms/selfhosted-backend/server';
+} from '@thebcms/selfhosted-backend/_server';
 
 export class RPBodyCheck {
     verify<Body = unknown>(

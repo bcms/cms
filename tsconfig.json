@@ -15,8 +15,8 @@
         "esModuleInterop": true,
         "paths": {
             "@thebcms/selfhosted-utils/*": ["./backend/src/_utils/*"],
-            "@thebcms/selfhosted-backend/server": ["./backend/src/_server"],
-            "@thebcms/selfhosted-backend/server/*": ["./backend/src/_server/*"]
+            "@thebcms/selfhosted-backend/_server": ["./backend/src/_server"],
+            "@thebcms/selfhosted-backend/_server/*": ["./backend/src/_server/*"]
         }
     },
     "include": ["_scripts", "backend/src/_utils/**/*.ts"]

@@ -3,8 +3,8 @@ import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-uti
 import {
     createMongoDBRepository,
     type MongoDBEntry,
-} from '@thebcms/selfhosted-backend/server/modules/mongodb';
-import { Logger, type Module } from '@thebcms/selfhosted-backend/server';
+} from '@thebcms/selfhosted-backend/_server/modules/mongodb';
+import { Logger, type Module } from '@thebcms/selfhosted-backend/_server';
 
 interface Migration extends MongoDBEntry {
     lastMigrationId: string;

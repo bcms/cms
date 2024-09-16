@@ -5,7 +5,7 @@ import type {
 import type {
     ControllerConfig,
     MiddlewareConfig,
-} from '@thebcms/selfhosted-backend/server';
+} from '@thebcms/selfhosted-backend/_server';
 
 export function createPlugin(
     init: (data: PluginCreateData) => Promise<Plugin>,

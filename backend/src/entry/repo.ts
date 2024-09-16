@@ -2,7 +2,7 @@ import {
     type Entry,
     EntrySchema,
 } from '@thebcms/selfhosted-backend/entry/models/main';
-import { createMongoDBRepository } from '@thebcms/selfhosted-backend/server/modules/mongodb';
+import { createMongoDBRepository } from '@thebcms/selfhosted-backend/_server/modules/mongodb';
 import {
     createQueue,
     type Queue,

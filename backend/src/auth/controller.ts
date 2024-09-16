@@ -3,7 +3,7 @@ import {
     createController,
     createControllerMethod,
     HttpStatus,
-} from '@thebcms/selfhosted-backend/server';
+} from '@thebcms/selfhosted-backend/_server';
 import {
     AuthLoginBodySchema,
     type AuthLoginBody,
@@ -20,7 +20,7 @@ import {
     JWTEncode,
     JWTError,
     JWTManager,
-} from '@thebcms/selfhosted-backend/server/modules/jwt';
+} from '@thebcms/selfhosted-backend/_server/modules/jwt';
 import type { UserCustomPool } from '@thebcms/selfhosted-backend/user/models/custom-pool';
 import { Config } from '@thebcms/selfhosted-backend/config';
 import { RefreshTokenService } from '@thebcms/selfhosted-backend/auth/refresh-token-service';

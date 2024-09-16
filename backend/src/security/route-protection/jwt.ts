@@ -1,12 +1,12 @@
 import {
     type HttpErrorHandler,
     HttpStatus,
-} from '@thebcms/selfhosted-backend/server';
+} from '@thebcms/selfhosted-backend/_server';
 import type { UserJwt } from '@thebcms/selfhosted-backend/user/models/main';
 import {
     JWTError,
     JWTManager,
-} from '@thebcms/selfhosted-backend/server/modules/jwt';
+} from '@thebcms/selfhosted-backend/_server/modules/jwt';
 import type { UserRoleName } from '@thebcms/selfhosted-backend/user/models/role';
 import type { UserCustomPool } from '@thebcms/selfhosted-backend/user/models/custom-pool';
 

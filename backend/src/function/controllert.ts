@@ -4,7 +4,7 @@ import {
     HttpException,
     HttpStatus,
     Logger,
-} from '@thebcms/selfhosted-backend/server';
+} from '@thebcms/selfhosted-backend/_server';
 import {
     RP,
     type RPApiKeyCheckResult,

@@ -1,3 +1,3 @@
-export * from '@thebcms/selfhosted-backend/server/modules/mongodb/entry';
-export * from '@thebcms/selfhosted-backend/server/modules/mongodb/main';
-export * from '@thebcms/selfhosted-backend/server/modules/mongodb/repository';
+export * from '@thebcms/selfhosted-backend/_server/modules/mongodb/entry';
+export * from '@thebcms/selfhosted-backend/_server/modules/mongodb/main';
+export * from '@thebcms/selfhosted-backend/_server/modules/mongodb/repository';

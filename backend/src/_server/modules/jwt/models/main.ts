@@ -1,11 +1,11 @@
 import {
     type JWTHeader,
     JWTHeaderSchema,
-} from '@thebcms/selfhosted-backend/server/modules/jwt/models/header';
+} from '@thebcms/selfhosted-backend/_server/modules/jwt/models/header';
 import {
     type JWTPayload,
     JWTPayloadSchema,
-} from '@thebcms/selfhosted-backend/server/modules/jwt/models/payload';
+} from '@thebcms/selfhosted-backend/_server/modules/jwt/models/payload';
 import type { ObjectSchema } from '@thebcms/selfhosted-utils/object-utility';
 
 export interface JWT<PayloadProps = undefined> {

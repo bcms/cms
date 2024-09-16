@@ -5,7 +5,7 @@ import {
     Logger,
     type Middleware,
     type Module,
-} from '@thebcms/selfhosted-backend/server';
+} from '@thebcms/selfhosted-backend/_server';
 import { FS } from '@thebcms/selfhosted-utils/fs';
 import path from 'path';
 import { ChildProcess } from '@thebcms/selfhosted-utils/child-process';

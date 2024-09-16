@@ -2,7 +2,7 @@ import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-uti
 import type {
     HttpErrorHandler,
     Logger,
-} from '@thebcms/selfhosted-backend/server';
+} from '@thebcms/selfhosted-backend/_server';
 import type { ApiKey } from '@thebcms/selfhosted-backend/api-key/models/main';
 import type { FastifyRequest } from 'fastify';
 

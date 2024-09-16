@@ -1,7 +1,7 @@
 import {
     createController,
     createControllerMethod,
-} from '@thebcms/selfhosted-backend/server';
+} from '@thebcms/selfhosted-backend/_server';
 import {
     RP,
     type RPJwtCheckResult,

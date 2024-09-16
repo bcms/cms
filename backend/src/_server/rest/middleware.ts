@@ -1,10 +1,10 @@
 import type { IncomingMessage, ServerResponse } from 'http';
-import { Logger } from '@thebcms/selfhosted-backend/server/logger';
+import { Logger } from '@thebcms/selfhosted-backend/_server/logger';
 import {
     createHttpErrorHandler,
     type HttpErrorHandler,
     type HttpException,
-} from '@thebcms/selfhosted-backend/server/http-error';
+} from '@thebcms/selfhosted-backend/_server/http-error';
 
 export interface MiddlewareHandler {
     (

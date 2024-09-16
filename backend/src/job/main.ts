@@ -1,4 +1,4 @@
-import type { Module } from '@thebcms/selfhosted-backend/server';
+import type { Module } from '@thebcms/selfhosted-backend/_server';
 import { FS } from '@thebcms/selfhosted-utils/fs';
 import path from 'path';
 import {

@@ -1,4 +1,4 @@
-import type { Module } from '@thebcms/selfhosted-backend/server';
+import type { Module } from '@thebcms/selfhosted-backend/_server';
 import { keyValueStore } from '@thebcms/selfhosted-backend/key-value-store';
 
 export class EntrySyncChannelHandler {

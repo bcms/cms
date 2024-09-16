@@ -2,7 +2,7 @@ import {
     type Group,
     GroupSchema,
 } from '@thebcms/selfhosted-backend/group/models/main';
-import { createMongoDBRepository } from '@thebcms/selfhosted-backend/server/modules/mongodb';
+import { createMongoDBRepository } from '@thebcms/selfhosted-backend/_server/modules/mongodb';
 import { Config } from '@thebcms/selfhosted-backend/config';
 import { PropType } from '@thebcms/selfhosted-backend/prop/models/main';
 import {
