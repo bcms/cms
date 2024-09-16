@@ -14,6 +14,7 @@ import type {
 import {
     controllerItemResponseDefinitionForRef,
     controllerItemsResponseDefinitionForRef,
+    openApiGetModelRef,
 } from '@thebcms/selfhosted-backend/open-api/schema';
 import { Repo } from '@thebcms/selfhosted-backend/repo';
 import type { Backup } from '@thebcms/selfhosted-backend/backup/models/main';
@@ -21,6 +22,9 @@ import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
 import { BackupFactory } from '@thebcms/selfhosted-backend/backup/factory';
 import { BackupManager } from '@thebcms/selfhosted-backend/backup/manager';
 import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
+import type { MediaRequestUploadTokenResult } from '@thebcms/selfhosted-backend/media/models/controller';
+import crypto from 'crypto';
+import { keyValueStore } from '@thebcms/selfhosted-backend/key-value-store';
 
 export const BackupController = createController({
     name: 'Backup',
@@ -236,6 +240,154 @@ export const BackupController = createController({
                     );
                     return {
                         item: backup,
+                    };
+                },
+            }),
+
+            requestRestoreUploadToken: createControllerMethod<
+                RPJwtCheckResult,
+                MediaRequestUploadTokenResult
+            >({
+                path: '/request/restore-upload-token',
+                type: 'get',
+                openApi: {
+                    tags: [controllerName],
+                    security: [
+                        {
+                            accessToken: [],
+                        },
+                    ],
+                    summary: 'Get restore upload token',
+                    description:
+                        'This token is required to successfully upload binary file.',
+                    responses: {
+                        200: {
+                            description: 'OK',
+                            content: {
+                                'application/json': {
+                                    schema: {
+                                        $ref: openApiGetModelRef(
+                                            'MediaRequestUploadTokenResult',
+                                        ),
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                preRequestHandler: RP.createJwtCheck(['ADMIN']),
+                async handler({ token }) {
+                    const uploadToken =
+                        crypto
+                            .createHash('sha256')
+                            .update(
+                                Date.now() + crypto.randomBytes(16).toString(),
+                            )
+                            .digest('hex') + `.`;
+                    keyValueStore.set(
+                        `backup_restore_upload_token.${token.payload.userId}`,
+                        `${token.payload.userId}.${uploadToken}.`,
+                        {
+                            expIn: 900,
+                        },
+                    );
+                    return {
+                        token: `${token.payload.userId}.${uploadToken}.`,
+                    };
+                },
+            }),
+
+            restore: createControllerMethod<void, { ok: boolean }>({
+                path: '/restore',
+                type: 'post',
+                openApi: {
+                    tags: [controllerName],
+                    security: [
+                        {
+                            accessToken: [],
+                        },
+                    ],
+                    summary: 'Upload restore file',
+                    parameters: [
+                        {
+                            in: 'query',
+                            name: 'token',
+                            description: 'Restore upload token',
+                            required: true,
+                            schema: {
+                                type: 'string',
+                            },
+                        },
+                    ],
+                    requestBody: {
+                        content: {
+                            'multipart/form-data': {
+                                schema: {
+                                    type: 'object',
+                                    required: ['file'],
+                                    properties: {
+                                        file: {
+                                            type: 'string',
+                                            format: 'binary',
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    responses: {
+                        200: {
+                            description: 'OK',
+                            content: {
+                                'application/json': {
+                                    schema: {
+                                        type: 'object',
+                                        required: ['ok'],
+                                        properties: {
+                                            ok: {
+                                                type: 'boolean',
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                async handler({ request, errorHandler }) {
+                    const query = request.query as {
+                        token?: string;
+                    };
+                    if (typeof query.token !== 'string') {
+                        throw errorHandler(
+                            HttpStatus.Unauthorized,
+                            'Missing upload token',
+                        );
+                    }
+                    const tokenParts = query.token.split('.');
+                    const userId = tokenParts[0];
+                    if (
+                        query.token !==
+                        keyValueStore.getDel(
+                            `backup_restore_upload_token.${userId}`,
+                        )
+                    ) {
+                        throw errorHandler(
+                            HttpStatus.Unauthorized,
+                            'Invalid upload token',
+                        );
+                    }
+                    const file = await request.file();
+                    if (!file) {
+                        throw errorHandler(
+                            HttpStatus.NotFound,
+                            'Missing restore file',
+                        );
+                    }
+                    const fileBuffer = await file.toBuffer();
+                    await BackupManager.restore(fileBuffer);
+                    return {
+                        ok: true,
                     };
                 },
             }),

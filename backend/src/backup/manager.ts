@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import nodeFs from 'fs';
 import path from 'path';
 import type { Backup } from '@thebcms/selfhosted-backend/backup/models/main';
@@ -76,12 +77,18 @@ export class BackupManager {
                 if (!(await this.fs.exist('backups'))) {
                     await this.fs.mkdir('backups');
                 }
+                await this.fs.save(
+                    `${backup._id}-metadata.json`,
+                    JSON.stringify({
+                        version: '4',
+                    }),
+                );
                 const cout = {
                     stdout: '',
                     stderr: '',
                 };
                 await ChildProcess.advancedExec(
-                    `zip -r backups/${backup._id}.zip ${backup._id}-db uploads`,
+                    `zip -r backups/${backup._id}.zip ${backup._id}-db uploads ${backup._id}-metadata.json`,
                     {
                         cwd: process.cwd(),
                         onChunk(type, chunk) {
@@ -89,7 +96,8 @@ export class BackupManager {
                         },
                     },
                 ).awaiter;
-                console.log({ cout });
+                await this.fs.deleteDir(`${backup._id}-db`);
+                await this.fs.deleteFile(`${backup._id}-metadata.json`);
                 const zipStats = await new Promise<nodeFs.Stats>(
                     (resolve, reject) => {
                         nodeFs.stat(
@@ -125,5 +133,14 @@ export class BackupManager {
 
     static async remove(backupId: string) {
         await this.fs.deleteFile(['backups', backupId + '.zip']);
+    }
+
+    static async restore(fileBuffer: Buffer): Promise<void> {
+        const id = uuidv4();
+        await this.fs.save(['restore', id, 'data.zip'], fileBuffer);
+        await ChildProcess.spawn('unzip', ['data.zip'], {
+            cwd: path.join(process.cwd(), 'restore', id),
+            stdio: 'inherit',
+        });
     }
 }

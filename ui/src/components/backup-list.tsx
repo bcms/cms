@@ -51,7 +51,8 @@ export const BackupListItem = defineComponent({
                         downloadBuffer({
                             data: await sdk.backup.download(props.backup._id),
                             mimetype: 'application/zip',
-                            filename: 'bcms_backup_' + props.backup.name + '.zip',
+                            filename:
+                                'bcms_backup_' + props.backup.name + '.zip',
                         });
                     });
                 },
@@ -118,6 +119,7 @@ export const BackupList = defineComponent({
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const notification = window.bcms.notification;
+        const modal = window.bcms.modalService;
 
         const backups = computed(() =>
             sdk.store.backup.items().sort((a, b) => b.createdAt - a.createdAt),
@@ -150,23 +152,32 @@ export const BackupList = defineComponent({
             <div id={props.id} style={props.style} class={props.class}>
                 <div class={`flex gap-4 items-center`}>
                     <div class={`text-3xl`}>Backups</div>
-                    <Button
-                        class={`ml-auto`}
-                        onClick={async () => {
-                            await throwable(
-                                async () => {
-                                    await sdk.backup.create();
-                                },
-                                async () => {
-                                    notification.success(
-                                        'Backup creation started',
-                                    );
-                                },
-                            );
-                        }}
-                    >
-                        Create new backup
-                    </Button>
+                    <div class={`ml-auto flex gap-2 items-center`}>
+                        <Button
+                            kind={`ghost`}
+                            onClick={async () => {
+                                modal.handlers.backupRestore.open();
+                            }}
+                        >
+                            Restore
+                        </Button>
+                        <Button
+                            onClick={async () => {
+                                await throwable(
+                                    async () => {
+                                        await sdk.backup.create();
+                                    },
+                                    async () => {
+                                        notification.success(
+                                            'Backup creation started',
+                                        );
+                                    },
+                                );
+                            }}
+                        >
+                            Create new backup
+                        </Button>
+                    </div>
                 </div>
                 {list()}
             </div>

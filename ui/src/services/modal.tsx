@@ -63,6 +63,7 @@ import {
     type ModalEntryViewModelInput,
 } from '@thebcms/selfhosted-ui/components/modals/entry/view-model';
 import { ModalEntryStatusCreateEdit } from '@thebcms/selfhosted-ui/components/modals/entry-status/create-edit';
+import { ModalBackupRestore } from '@thebcms/selfhosted-ui/components/modals/backup/restore';
 
 export interface ModalHandlerOptions<Output = unknown> {
     title?: string;
@@ -175,6 +176,8 @@ export class ModalService {
         entryStatusCreateEdit: new ModalHandler<void, void>(
             ModalEntryStatusCreateEdit,
         ),
+
+        backupRestore: new ModalHandler<void, void>(ModalBackupRestore),
     };
 
     mount() {
