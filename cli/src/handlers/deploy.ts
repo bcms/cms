@@ -188,6 +188,7 @@ export class DeployHandler {
             ]);
             proxyConfig.serverName = serverName.name;
             if (serverName.setupSsl) {
+                proxyConfig.port = '443';
                 const ssl = await inquirer.prompt<{ crt: string; key: string }>(
                     [
                         {
