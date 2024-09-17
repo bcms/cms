@@ -1,6 +1,6 @@
 import { computed, defineComponent } from 'vue';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
-import { EntrySyncElementsAvatar } from '@thebcms/selfhosted-ui/components/entry/sync-elements/avatar';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
+import { EntrySyncElementsAvatar } from '@bcms/selfhosted-ui/components/entry/sync-elements/avatar';
 
 export const EntrySyncElementsFocusAvatar = defineComponent({
     props: {

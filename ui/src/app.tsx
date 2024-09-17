@@ -1,14 +1,14 @@
 import { computed, defineComponent } from 'vue';
 import { RouterView, useRoute, useRouter } from 'vue-router';
-import { useTheme } from '@thebcms/selfhosted-ui/hooks/theme';
-import { type LayoutNames, layouts } from '@thebcms/selfhosted-ui/layouts';
+import { useTheme } from '@bcms/selfhosted-ui/hooks/theme';
+import { type LayoutNames, layouts } from '@bcms/selfhosted-ui/layouts';
 import {
     initializePageTransition,
     usePageTransition
-} from '@thebcms/selfhosted-ui/services/page-transition';
-import Notification from '@thebcms/selfhosted-ui/components/notification';
-import { Tooltip } from '@thebcms/selfhosted-ui/components/tooltip';
-import { modalService } from '@thebcms/selfhosted-ui/services/modal';
+} from '@bcms/selfhosted-ui/services/page-transition';
+import Notification from '@bcms/selfhosted-ui/components/notification';
+import { Tooltip } from '@bcms/selfhosted-ui/components/tooltip';
+import { modalService } from '@bcms/selfhosted-ui/services/modal';
 
 export const App = defineComponent({
     setup() {

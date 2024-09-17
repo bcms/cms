@@ -2,12 +2,12 @@ import { defineComponent, type PropType } from 'vue';
 import {
     DefaultComponentProps,
     type DefaultComponentPropsType,
-} from '@thebcms/selfhosted-ui/components/default';
+} from '@bcms/selfhosted-ui/components/default';
 import {
     TableCell,
     type TableCellProps,
-} from '@thebcms/selfhosted-ui/components/table/cell';
-import type { TableHeaderItem } from '@thebcms/selfhosted-ui/components/table/header';
+} from '@bcms/selfhosted-ui/components/table/cell';
+import type { TableHeaderItem } from '@bcms/selfhosted-ui/components/table/header';
 
 type RowClick = (event: Event) => Promise<void> | void;
 

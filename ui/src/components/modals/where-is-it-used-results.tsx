@@ -2,13 +2,13 @@ import { computed, defineComponent, onMounted, ref } from 'vue';
 import {
     getModalDefaultProps,
     ModalWrapper,
-} from '@thebcms/selfhosted-ui/components/modals/_wrapper';
-import type { TableRowProps } from '@thebcms/selfhosted-ui/components/table/row';
+} from '@bcms/selfhosted-ui/components/modals/_wrapper';
+import type { TableRowProps } from '@bcms/selfhosted-ui/components/table/row';
 import { useRouter } from 'vue-router';
 import {
     Table,
     tableDefaultFilter,
-} from '@thebcms/selfhosted-ui/components/table/table';
+} from '@bcms/selfhosted-ui/components/table/table';
 
 export interface ModalWhereIsItUsedResultsInput {
     entryIds?: string[];

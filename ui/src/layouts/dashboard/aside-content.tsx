@@ -1,15 +1,15 @@
 import { computed, defineComponent, onMounted, ref } from 'vue';
-import { BCMSLogo } from '@thebcms/selfhosted-ui/components/logo';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
-import { Tag } from '@thebcms/selfhosted-ui/components/tag';
+import { BCMSLogo } from '@bcms/selfhosted-ui/components/logo';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
+import { Tag } from '@bcms/selfhosted-ui/components/tag';
 import {
     DashboardLayoutNavItem,
     type DashboardLayoutNavItemProps,
-} from '@thebcms/selfhosted-ui/layouts/dashboard/nav-item';
-import { UserAvatar } from '@thebcms/selfhosted-ui/components/user-avatar';
-import { Dropdown } from '@thebcms/selfhosted-ui/components/dropdown';
-import { isUserAdmin } from '@thebcms/selfhosted-ui/util/user-role';
-import type { PluginList } from '@thebcms/selfhosted-backend/plugin/models/controller';
+} from '@bcms/selfhosted-ui/layouts/dashboard/nav-item';
+import { UserAvatar } from '@bcms/selfhosted-ui/components/user-avatar';
+import { Dropdown } from '@bcms/selfhosted-ui/components/dropdown';
+import { isUserAdmin } from '@bcms/selfhosted-ui/util/user-role';
+import type { PluginList } from '@bcms/selfhosted-backend/plugin/models/controller';
 
 export const DashboardLayoutAsideContent = defineComponent({
     emits: {

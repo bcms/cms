@@ -1,8 +1,8 @@
-import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-utility';
+import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
 import type {
     PropDataParsed,
     PropValue,
-} from '@thebcms/selfhosted-backend/prop/models/main';
+} from '@bcms/selfhosted-backend/prop/models/main';
 
 export interface PropWidgetData {
     _id: string;

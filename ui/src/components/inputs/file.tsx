@@ -1,8 +1,8 @@
 import { defineComponent, onMounted, type PropType, ref } from 'vue';
-import {DefaultComponentProps} from "@thebcms/selfhosted-ui/components/default";
-import {Icon} from "@thebcms/selfhosted-ui/components/icon";
-import {prettyFileSize} from "@thebcms/selfhosted-ui/util/file";
-import {Dropdown} from "@thebcms/selfhosted-ui/components/dropdown";
+import {DefaultComponentProps} from "@bcms/selfhosted-ui/components/default";
+import {Icon} from "@bcms/selfhosted-ui/components/icon";
+import {prettyFileSize} from "@bcms/selfhosted-ui/util/file";
+import {Dropdown} from "@bcms/selfhosted-ui/components/dropdown";
 
 export interface FileInputListItem {
     id: string;

@@ -1,5 +1,5 @@
 import { defineComponent, Transition } from 'vue';
-import { Link } from '@thebcms/selfhosted-ui/components/link';
+import { Link } from '@bcms/selfhosted-ui/components/link';
 
 export const BCMSLogo = defineComponent({
     setup() {

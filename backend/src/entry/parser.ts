@@ -1,43 +1,43 @@
 import type {
     Entry,
     EntryParsed,
-} from '@thebcms/selfhosted-backend/entry/models/main';
-import type { Template } from '@thebcms/selfhosted-backend/template/models/main';
-import type { Group } from '@thebcms/selfhosted-backend/group/models/main';
-import type { Widget } from '@thebcms/selfhosted-backend/widget/models/main';
-import type { Media } from '@thebcms/selfhosted-backend/media/models/main';
-import type { Language } from '@thebcms/selfhosted-backend/language/models/main';
+} from '@bcms/selfhosted-backend/entry/models/main';
+import type { Template } from '@bcms/selfhosted-backend/template/models/main';
+import type { Group } from '@bcms/selfhosted-backend/group/models/main';
+import type { Widget } from '@bcms/selfhosted-backend/widget/models/main';
+import type { Media } from '@bcms/selfhosted-backend/media/models/main';
+import type { Language } from '@bcms/selfhosted-backend/language/models/main';
 import {
     PropType,
     type Prop,
     type PropDataParsed,
     type PropParsed,
     type PropValue,
-} from '@thebcms/selfhosted-backend/prop/models/main';
+} from '@bcms/selfhosted-backend/prop/models/main';
 import type {
     PropMediaDataParsed,
     PropValueMediaData,
-} from '@thebcms/selfhosted-backend/prop/models/media';
-import { MediaStorage } from '@thebcms/selfhosted-backend/media/storage';
+} from '@bcms/selfhosted-backend/prop/models/media';
+import { MediaStorage } from '@bcms/selfhosted-backend/media/storage';
 import type {
     PropGroupPointerData,
     PropGroupPointerDataParsed,
     PropValueGroupPointerData,
-} from '@thebcms/selfhosted-backend/prop/models/group-pointer';
-import type { PropValueDateData } from '@thebcms/selfhosted-backend/prop/models/date';
-import type { PropValueRichTextData } from '@thebcms/selfhosted-backend/prop/models/rich-text';
+} from '@bcms/selfhosted-backend/prop/models/group-pointer';
+import type { PropValueDateData } from '@bcms/selfhosted-backend/prop/models/date';
+import type { PropValueRichTextData } from '@bcms/selfhosted-backend/prop/models/rich-text';
 import type {
     PropEntryPointerData,
     PropValueEntryPointer,
-} from '@thebcms/selfhosted-backend/prop/models/entry-pointer';
-import type { PropEnumData } from '@thebcms/selfhosted-backend/prop/models/enum';
+} from '@bcms/selfhosted-backend/prop/models/entry-pointer';
+import type { PropEnumData } from '@bcms/selfhosted-backend/prop/models/enum';
 import {
     EntryContentNodeType,
     type EntryContentNode,
     type EntryContentNodeWidgetAttr,
     type EntryContentParsedItem,
-} from '@thebcms/selfhosted-backend/entry/models/content';
-import { entryContentNodeToHtml } from '@thebcms/selfhosted-backend/entry/content';
+} from '@bcms/selfhosted-backend/entry/models/content';
+import { entryContentNodeToHtml } from '@bcms/selfhosted-backend/entry/content';
 
 export function parseEntry(
     entry: Entry,

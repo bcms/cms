@@ -1,26 +1,26 @@
 import { computed, defineComponent, onBeforeUpdate, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { Loader } from '@thebcms/selfhosted-ui/components/loader';
-import { LanguageSwitch } from '@thebcms/selfhosted-ui/components/language-switch';
-import { Button } from '@thebcms/selfhosted-ui/components/button';
-import { EmptyState } from '@thebcms/selfhosted-ui/components/empty-state';
-import type { TableHeaderItem } from '@thebcms/selfhosted-ui/components/table/header';
+import { Loader } from '@bcms/selfhosted-ui/components/loader';
+import { LanguageSwitch } from '@bcms/selfhosted-ui/components/language-switch';
+import { Button } from '@bcms/selfhosted-ui/components/button';
+import { EmptyState } from '@bcms/selfhosted-ui/components/empty-state';
+import type { TableHeaderItem } from '@bcms/selfhosted-ui/components/table/header';
 import {
     Table,
     tableDefaultNumberSort,
     tableDefaultSort,
-} from '@thebcms/selfhosted-ui/components/table/table';
-import type { TableRowProps } from '@thebcms/selfhosted-ui/components/table/row';
-import { MediaPreview } from '@thebcms/selfhosted-ui/components/media-preview';
-import { millisToDateString } from '@thebcms/selfhosted-ui/util/date';
+} from '@bcms/selfhosted-ui/components/table/table';
+import type { TableRowProps } from '@bcms/selfhosted-ui/components/table/row';
+import { MediaPreview } from '@bcms/selfhosted-ui/components/media-preview';
+import { millisToDateString } from '@bcms/selfhosted-ui/util/date';
 import {
     Dropdown,
     type DropdownItem,
-} from '@thebcms/selfhosted-ui/components/dropdown';
+} from '@bcms/selfhosted-ui/components/dropdown';
 import type {
     EntryLite,
     EntryLiteInfo,
-} from '@thebcms/selfhosted-backend/entry/models/main';
+} from '@bcms/selfhosted-backend/entry/models/main';
 
 export const EntriesView = defineComponent({
     setup() {

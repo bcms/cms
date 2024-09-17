@@ -1,7 +1,7 @@
 import { computed, defineComponent } from 'vue';
-import { useMedia } from '@thebcms/selfhosted-ui/hooks/media';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
-import type { Media } from '@thebcms/selfhosted-backend/media/models/main';
+import { useMedia } from '@bcms/selfhosted-ui/hooks/media';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
+import type { Media } from '@bcms/selfhosted-backend/media/models/main';
 
 export const Breadcrumb = defineComponent({
     emits: {

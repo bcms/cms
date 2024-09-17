@@ -1,8 +1,8 @@
 import { defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
 import { Color, Vector2 } from 'three';
-import { Grad3C } from '@thebcms/selfhosted-ui/webgl/grad-3c';
-import { type ThemeTypes, useTheme } from '@thebcms/selfhosted-ui/hooks/theme';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
+import { Grad3C } from '@bcms/selfhosted-ui/webgl/grad-3c';
+import { type ThemeTypes, useTheme } from '@bcms/selfhosted-ui/hooks/theme';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
 
 export const BgAuth = defineComponent({
     props: {

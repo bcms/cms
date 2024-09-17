@@ -1,11 +1,11 @@
-import { MemCache } from '@thebcms/selfhosted-utils/mem-cache';
-import type { Group } from '@thebcms/selfhosted-backend/group/models/main';
-import type { Client } from '@thebcms/selfhosted-client/main';
-import type { GroupWhereIsItUsedResult } from '@thebcms/selfhosted-backend/group/models/controller';
+import { MemCache } from '@bcms/selfhosted-utils/mem-cache';
+import type { Group } from '@bcms/selfhosted-backend/group/models/main';
+import type { Client } from '@bcms/selfhosted-client/main';
+import type { GroupWhereIsItUsedResult } from '@bcms/selfhosted-backend/group/models/controller';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
+} from '@bcms/selfhosted-backend/util/controller';
 
 export class GroupHandler {
     private baseUri = `/api/v4/group`;

@@ -2,11 +2,11 @@ import {
     type ObjectSchema,
     ObjectUtility,
     ObjectUtilityError,
-} from '@thebcms/selfhosted-backend/_utils/object-utility';
+} from '@bcms/selfhosted-backend/_utils/object-utility';
 import {
     type HttpErrorHandler,
     HttpStatus,
-} from '@thebcms/selfhosted-backend/_server';
+} from '@bcms/selfhosted-backend/_server';
 
 export class RPBodyCheck {
     verify<Body = unknown>(

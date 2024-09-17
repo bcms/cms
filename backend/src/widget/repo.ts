@@ -1,15 +1,15 @@
-import { createMongoDBRepository } from '@thebcms/selfhosted-backend/_server/modules/mongodb';
+import { createMongoDBRepository } from '@bcms/selfhosted-backend/_server/modules/mongodb';
 import {
     type Widget,
     WidgetSchema,
-} from '@thebcms/selfhosted-backend/widget/models/main';
-import { Config } from '@thebcms/selfhosted-backend/config';
+} from '@bcms/selfhosted-backend/widget/models/main';
+import { Config } from '@bcms/selfhosted-backend/config';
 import {
     createQueue,
     type Queue,
     QueueError,
-} from '@thebcms/selfhosted-backend/_utils/queue';
-import { PropType } from '@thebcms/selfhosted-backend/prop/models/main';
+} from '@bcms/selfhosted-backend/_utils/queue';
+import { PropType } from '@bcms/selfhosted-backend/prop/models/main';
 
 export interface WidgetRepoMethods {
     findAllByPropGroupPointer(groupId: string): Promise<Widget[]>;

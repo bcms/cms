@@ -1,3 +1,3 @@
-import { KeyValueStore } from '@thebcms/selfhosted-backend/_utils/key-value-store';
+import { KeyValueStore } from '@bcms/selfhosted-backend/_utils/key-value-store';
 
 export const keyValueStore = new KeyValueStore();

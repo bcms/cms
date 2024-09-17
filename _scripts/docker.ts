@@ -1,6 +1,6 @@
 import { buildBackend } from './backend';
 import { buildUi } from './ui';
-import { ChildProcess } from '@thebcms/selfhosted-utils/child-process';
+import { ChildProcess } from '@bcms/selfhosted-utils/child-process';
 
 export async function createMainDockerImage() {
     await buildBackend();

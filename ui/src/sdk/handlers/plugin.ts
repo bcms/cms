@@ -1,6 +1,6 @@
 import { Handler } from '@thebcms/selfhosted-sdk/handlers/_handler';
 import { Sdk } from '@thebcms/selfhosted-sdk';
-import type { PluginList } from '@thebcms/selfhosted-backend/plugin/models/controller';
+import type { PluginList } from '@bcms/selfhosted-backend/plugin/models/controller';
 
 export class PluginHandler extends Handler {
     private baseUri = `/api/v4/plugin`;

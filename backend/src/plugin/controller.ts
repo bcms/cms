@@ -1,13 +1,13 @@
 import {
     createController,
     createControllerMethod,
-} from '@thebcms/selfhosted-backend/_server';
+} from '@bcms/selfhosted-backend/_server';
 import {
     RP,
     type RPJwtCheckResult,
-} from '@thebcms/selfhosted-backend/security/route-protection/main';
-import type { PluginList } from '@thebcms/selfhosted-backend/plugin/models/controller';
-import { PluginManager } from '@thebcms/selfhosted-backend/plugin/manager';
+} from '@bcms/selfhosted-backend/security/route-protection/main';
+import type { PluginList } from '@bcms/selfhosted-backend/plugin/models/controller';
+import { PluginManager } from '@bcms/selfhosted-backend/plugin/manager';
 
 export const PluginController = createController({
     name: 'Plugin',

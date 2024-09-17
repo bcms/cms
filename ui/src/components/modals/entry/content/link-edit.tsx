@@ -2,16 +2,16 @@ import { defineComponent, onMounted, ref } from 'vue';
 import {
     getModalDefaultProps,
     ModalWrapper,
-} from '@thebcms/selfhosted-ui/components/modals/_wrapper';
+} from '@bcms/selfhosted-ui/components/modals/_wrapper';
 import {
     createRefValidator,
     createValidationItem,
-} from '@thebcms/selfhosted-ui/util/validation';
-import { TextInput } from '@thebcms/selfhosted-ui/components/inputs/text';
-import { StringUtility } from '@thebcms/selfhosted-utils/string-utility';
-import { Select } from '@thebcms/selfhosted-ui/components/inputs/select/main';
-import { SelectEntryPointer } from '@thebcms/selfhosted-ui/components/inputs/select/entry-pointer';
-import { MediaSelect } from '@thebcms/selfhosted-ui/components/inputs/select/media';
+} from '@bcms/selfhosted-ui/util/validation';
+import { TextInput } from '@bcms/selfhosted-ui/components/inputs/text';
+import { StringUtility } from '@bcms/selfhosted-utils/string-utility';
+import { Select } from '@bcms/selfhosted-ui/components/inputs/select/main';
+import { SelectEntryPointer } from '@bcms/selfhosted-ui/components/inputs/select/entry-pointer';
+import { MediaSelect } from '@bcms/selfhosted-ui/components/inputs/select/media';
 
 type LinkType = 'url' | 'entry' | 'media';
 

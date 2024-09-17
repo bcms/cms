@@ -8,12 +8,12 @@ import {
 import {
     InputProps,
     InputWrapper,
-} from '@thebcms/selfhosted-ui/components/inputs/_wrapper';
-import type { EntrySync } from '@thebcms/selfhosted-ui/services/entry-sync';
+} from '@bcms/selfhosted-ui/components/inputs/_wrapper';
+import type { EntrySync } from '@bcms/selfhosted-ui/services/entry-sync';
 import {
     callAndClearUnsubscribeFns,
     type UnsubscribeFns,
-} from '@thebcms/selfhosted-ui/util/sub';
+} from '@bcms/selfhosted-ui/util/sub';
 
 export const NumberInput = defineComponent({
     props: {

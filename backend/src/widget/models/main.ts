@@ -1,12 +1,12 @@
 import {
     type MongoDBEntry,
     MongoDBEntrySchema,
-} from '@thebcms/selfhosted-backend/_server/modules/mongodb';
-import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-utility';
+} from '@bcms/selfhosted-backend/_server/modules/mongodb';
+import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
 import {
     type Prop,
     PropSchema,
-} from '@thebcms/selfhosted-backend/prop/models/main';
+} from '@bcms/selfhosted-backend/prop/models/main';
 
 export interface Widget extends MongoDBEntry {
     userId: string;

@@ -2,8 +2,8 @@ import { computed, defineComponent, onMounted } from 'vue';
 import {
     getModalDefaultProps,
     ModalWrapper,
-} from '@thebcms/selfhosted-ui/components/modals/_wrapper';
-import { MultiAdd } from '@thebcms/selfhosted-ui/components/inputs/multi-add';
+} from '@bcms/selfhosted-ui/components/modals/_wrapper';
+import { MultiAdd } from '@bcms/selfhosted-ui/components/inputs/multi-add';
 
 export const ModalEntryStatusCreateEdit = defineComponent({
     props: getModalDefaultProps<void, void>(),

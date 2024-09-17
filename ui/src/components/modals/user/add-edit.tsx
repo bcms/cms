@@ -2,18 +2,18 @@ import { computed, defineComponent, onMounted, ref } from 'vue';
 import {
     getModalDefaultProps,
     ModalWrapper,
-} from '@thebcms/selfhosted-ui/components/modals/_wrapper';
+} from '@bcms/selfhosted-ui/components/modals/_wrapper';
 import {
     createRefValidator,
     createValidationItem,
-} from '@thebcms/selfhosted-ui/util/validation';
-import { TextInput } from '@thebcms/selfhosted-ui/components/inputs/text';
-import type { UserRoleName } from '@thebcms/selfhosted-backend/user/models/role';
-import { PasswordInput } from '@thebcms/selfhosted-ui/components/inputs/password';
-import { Select } from '@thebcms/selfhosted-ui/components/inputs/select/main';
-import type { UserProtected } from '@thebcms/selfhosted-backend/user/models/main';
-import { FileInput } from '@thebcms/selfhosted-ui/components/inputs/file';
-import { fileToB64 } from '@thebcms/selfhosted-ui/util/file';
+} from '@bcms/selfhosted-ui/util/validation';
+import { TextInput } from '@bcms/selfhosted-ui/components/inputs/text';
+import type { UserRoleName } from '@bcms/selfhosted-backend/user/models/role';
+import { PasswordInput } from '@bcms/selfhosted-ui/components/inputs/password';
+import { Select } from '@bcms/selfhosted-ui/components/inputs/select/main';
+import type { UserProtected } from '@bcms/selfhosted-backend/user/models/main';
+import { FileInput } from '@bcms/selfhosted-ui/components/inputs/file';
+import { fileToB64 } from '@bcms/selfhosted-ui/util/file';
 
 export interface ModalUserAddEditInput {
     userId?: string;

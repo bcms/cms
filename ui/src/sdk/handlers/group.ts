@@ -4,12 +4,12 @@ import type {
     GroupCreateBody,
     GroupUpdateBody,
     GroupWhereIsItUsedResult,
-} from '@thebcms/selfhosted-backend/group/models/controller';
+} from '@bcms/selfhosted-backend/group/models/controller';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
-import type { Group } from '@thebcms/selfhosted-backend/group/models/main';
+} from '@bcms/selfhosted-backend/util/controller';
+import type { Group } from '@bcms/selfhosted-backend/group/models/main';
 
 export class GroupHandler extends Handler {
     private baseUri = '/api/v4/group';

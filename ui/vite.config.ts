@@ -10,16 +10,16 @@ export default defineConfig({
     plugins: [glsl(), vue(), vueJsx()],
     resolve: {
         alias: {
-            '@thebcms/selfhosted-ui': fileURLToPath(
+            '@bcms/selfhosted-ui': fileURLToPath(
                 new URL('./src', import.meta.url),
             ),
             '@thebcms/selfhosted-sdk': fileURLToPath(
                 new URL('./src/sdk', import.meta.url),
             ),
-            '@thebcms/selfhosted-backend': fileURLToPath(
+            '@bcms/selfhosted-backend': fileURLToPath(
                 new URL('../backend/types', import.meta.url),
             ),
-            '@thebcms/selfhosted-utils': fileURLToPath(
+            '@bcms/selfhosted-utils': fileURLToPath(
                 new URL('../backend/src/_utils', import.meta.url),
             ),
         },

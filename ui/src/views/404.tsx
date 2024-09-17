@@ -1,9 +1,9 @@
 import { defineComponent } from 'vue';
-import { EmptyState } from '@thebcms/selfhosted-ui/components/empty-state';
-import { Link } from '@thebcms/selfhosted-ui/components/link';
-import { BgAuth } from '@thebcms/selfhosted-ui/components/bg-auth';
-import { BCMSLogo } from '@thebcms/selfhosted-ui/components/logo';
-import { delay } from '@thebcms/selfhosted-ui/util/delay';
+import { EmptyState } from '@bcms/selfhosted-ui/components/empty-state';
+import { Link } from '@bcms/selfhosted-ui/components/link';
+import { BgAuth } from '@bcms/selfhosted-ui/components/bg-auth';
+import { BCMSLogo } from '@bcms/selfhosted-ui/components/logo';
+import { delay } from '@bcms/selfhosted-ui/util/delay';
 
 export const P404View = defineComponent({
     setup() {

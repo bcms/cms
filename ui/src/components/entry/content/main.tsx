@@ -29,17 +29,17 @@ import { Dropcursor } from '@tiptap/extension-dropcursor';
 import { Doc } from 'yjs';
 import { Collaboration } from '@tiptap/extension-collaboration';
 import { CollaborationCursor } from '@tiptap/extension-collaboration-cursor';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
-import type { EntryContentNode } from '@thebcms/selfhosted-backend/entry/models/content';
-import type { EntrySync } from '@thebcms/selfhosted-ui/services/entry-sync';
-import type { UserProtected } from '@thebcms/selfhosted-backend/user/models/main';
-import { linkSplitChar } from '@thebcms/selfhosted-ui/components/modals/entry/content/link-edit';
-import { mediaGetPreviewUrl } from '@thebcms/selfhosted-ui/util/media';
-import { EntryContentSyncProvider } from '@thebcms/selfhosted-ui/components/entry/content/sync-provider';
-import { createSlashCommandExtension } from '@thebcms/selfhosted-ui/components/entry/content/extensions/slash-command';
-import { EntryContentNodeWidgetNodeConfig } from '@thebcms/selfhosted-ui/components/entry/content/nodes/widget';
-import { InlineCodeMark } from '@thebcms/selfhosted-ui/components/entry/content/marks/inline-code';
-import { EntryContentEditorToolbar } from '@thebcms/selfhosted-ui/components/entry/content/toolbar';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
+import type { EntryContentNode } from '@bcms/selfhosted-backend/entry/models/content';
+import type { EntrySync } from '@bcms/selfhosted-ui/services/entry-sync';
+import type { UserProtected } from '@bcms/selfhosted-backend/user/models/main';
+import { linkSplitChar } from '@bcms/selfhosted-ui/components/modals/entry/content/link-edit';
+import { mediaGetPreviewUrl } from '@bcms/selfhosted-ui/util/media';
+import { EntryContentSyncProvider } from '@bcms/selfhosted-ui/components/entry/content/sync-provider';
+import { createSlashCommandExtension } from '@bcms/selfhosted-ui/components/entry/content/extensions/slash-command';
+import { EntryContentNodeWidgetNodeConfig } from '@bcms/selfhosted-ui/components/entry/content/nodes/widget';
+import { InlineCodeMark } from '@bcms/selfhosted-ui/components/entry/content/marks/inline-code';
+import { EntryContentEditorToolbar } from '@bcms/selfhosted-ui/components/entry/content/toolbar';
 
 const w = window as any;
 

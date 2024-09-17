@@ -1,4 +1,4 @@
-import { FS } from '@thebcms/selfhosted-utils/fs';
+import { FS } from '@bcms/selfhosted-utils/fs';
 
 export async function setup() {
     const rootFs = new FS(process.cwd());

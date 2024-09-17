@@ -1,8 +1,8 @@
 import {
     type MongoDBEntry,
     MongoDBEntrySchema,
-} from '@thebcms/selfhosted-backend/_server/modules/mongodb';
-import type { ObjectSchema } from '@thebcms/selfhosted-utils/object-utility';
+} from '@bcms/selfhosted-backend/_server/modules/mongodb';
+import type { ObjectSchema } from '@bcms/selfhosted-utils/object-utility';
 
 export interface Backup extends MongoDBEntry {
     doneAt: number;

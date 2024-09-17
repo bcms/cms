@@ -1,20 +1,20 @@
-import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-utility';
+import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
 import {
     type Entry,
     EntrySchema,
-} from '@thebcms/selfhosted-backend/entry/models/main';
+} from '@bcms/selfhosted-backend/entry/models/main';
 import {
     type PropValueDateData,
     PropValueDateDataSchema,
-} from '@thebcms/selfhosted-backend/prop/models/date';
+} from '@bcms/selfhosted-backend/prop/models/date';
 import {
     type PropValueMediaData,
     PropValueMediaDataSchema,
-} from '@thebcms/selfhosted-backend/prop/models/media';
+} from '@bcms/selfhosted-backend/prop/models/media';
 import {
     type PropValueEntryPointer,
     PropValueEntryPointerSchema,
-} from '@thebcms/selfhosted-backend/prop/models/entry-pointer';
+} from '@bcms/selfhosted-backend/prop/models/entry-pointer';
 
 export interface SocketEventDataEntrySyncDefaults {
     entryId: string;

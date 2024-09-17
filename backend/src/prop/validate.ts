@@ -1,9 +1,9 @@
 import {
     type Prop,
     PropType,
-} from '@thebcms/selfhosted-backend/prop/models/main';
-import type { Group } from '@thebcms/selfhosted-backend/group/models/main';
-import type { PropGroupPointerData } from '@thebcms/selfhosted-backend/prop/models/group-pointer';
+} from '@bcms/selfhosted-backend/prop/models/main';
+import type { Group } from '@bcms/selfhosted-backend/group/models/main';
+import type { PropGroupPointerData } from '@bcms/selfhosted-backend/prop/models/group-pointer';
 
 export interface PropsTestInfiniteLoopPointer {
     group: Array<{

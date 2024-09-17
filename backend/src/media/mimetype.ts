@@ -1,4 +1,4 @@
-import { MediaType } from '@thebcms/selfhosted-backend/media/models/main';
+import { MediaType } from '@bcms/selfhosted-backend/media/models/main';
 
 const mimetypeMap: {
     css: string[];

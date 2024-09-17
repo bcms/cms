@@ -3,16 +3,16 @@ import { Sdk } from '@thebcms/selfhosted-sdk';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
+} from '@bcms/selfhosted-backend/util/controller';
 import type {
     Entry,
     EntryLite,
     EntryParsed,
-} from '@thebcms/selfhosted-backend/entry/models/main';
+} from '@bcms/selfhosted-backend/entry/models/main';
 import type {
     EntryCreateBody,
     EntryUpdateBody,
-} from '@thebcms/selfhosted-backend/entry/models/controller';
+} from '@bcms/selfhosted-backend/entry/models/controller';
 
 export class EntryHandler extends Handler {
     private baseUri = '/api/v4/template';

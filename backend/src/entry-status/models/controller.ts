@@ -1,4 +1,4 @@
-import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-utility';
+import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
 
 export interface EntryStatusCreateBody {
     label: string;

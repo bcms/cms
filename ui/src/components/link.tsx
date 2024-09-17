@@ -1,7 +1,7 @@
 import { defineComponent, onMounted } from 'vue';
 import * as uuid from 'uuid';
 import { useRouter } from 'vue-router';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
 
 export const Link = defineComponent({
     props: {

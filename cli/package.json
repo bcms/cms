@@ -1,5 +1,5 @@
 {
-    "name": "@thebcms/selfhosted-cli",
+    "name": "@bcms/selfhosted-cli",
     "version": "1.0.0",
     "description": "Command line tool for the BCMS",
     "author": "BCMS",
@@ -41,7 +41,7 @@
         "url": "https://github.com/bcms/cms/issues"
     },
     "bin": {
-        "bcms": "bin/main.mjs"
+        "selfbcms": "bin/main.mjs"
     },
     "homepage": "https://github.com/bcms/cms#readme"
 }

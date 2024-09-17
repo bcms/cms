@@ -3,37 +3,37 @@ import {
     createController,
     createControllerMethod,
     HttpStatus,
-} from '@thebcms/selfhosted-backend/_server';
+} from '@bcms/selfhosted-backend/_server';
 import {
     RP,
     type RPApiKeyJwtBodyCheckResult,
     type RPApiKeyJwtCheckResult,
-} from '@thebcms/selfhosted-backend/security/route-protection/main';
+} from '@bcms/selfhosted-backend/security/route-protection/main';
 import {
     type TemplateCreateBody,
     TemplateCreateBodySchema,
     type TemplateUpdateBody,
     TemplateUpdateBodySchema,
     type TemplateWhereIsItUsedResult,
-} from '@thebcms/selfhosted-backend/template/models/controller';
+} from '@bcms/selfhosted-backend/template/models/controller';
 import {
     controllerItemResponseDefinitionForRef,
     controllerItemsResponseDefinitionForRef,
     openApiGetModelRef,
-} from '@thebcms/selfhosted-backend/open-api/schema';
-import { Repo } from '@thebcms/selfhosted-backend/repo';
+} from '@bcms/selfhosted-backend/open-api/schema';
+import { Repo } from '@bcms/selfhosted-backend/repo';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
-import type { Template } from '@thebcms/selfhosted-backend/template/models/main';
-import { TemplateFactory } from '@thebcms/selfhosted-backend/template/factory';
-import { PropType } from '@thebcms/selfhosted-backend/prop/models/main';
-import { StringUtility } from '@thebcms/selfhosted-backend/_utils/string-utility';
-import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
-import { propsApplyChanges } from '@thebcms/selfhosted-backend/prop/changes';
-import { removeEntryPointerProps } from '@thebcms/selfhosted-backend/prop/delete';
-import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
+} from '@bcms/selfhosted-backend/util/controller';
+import type { Template } from '@bcms/selfhosted-backend/template/models/main';
+import { TemplateFactory } from '@bcms/selfhosted-backend/template/factory';
+import { PropType } from '@bcms/selfhosted-backend/prop/models/main';
+import { StringUtility } from '@bcms/selfhosted-backend/_utils/string-utility';
+import { SocketManager } from '@bcms/selfhosted-backend/socket/manager';
+import { propsApplyChanges } from '@bcms/selfhosted-backend/prop/changes';
+import { removeEntryPointerProps } from '@bcms/selfhosted-backend/prop/delete';
+import { EventManager } from '@bcms/selfhosted-backend/event/manager';
 
 export const TemplateController = createController({
     name: 'Template',

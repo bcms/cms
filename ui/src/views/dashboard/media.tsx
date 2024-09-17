@@ -1,12 +1,12 @@
 import { computed, defineComponent, onMounted } from 'vue';
-import { useMedia } from '@thebcms/selfhosted-ui/hooks/media';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
-import { EmptyState } from '@thebcms/selfhosted-ui/components/empty-state';
-import { Breadcrumb } from '@thebcms/selfhosted-ui/components/media/breadcrumb';
-import { Button } from '@thebcms/selfhosted-ui/components/button';
-import { MediaList } from '@thebcms/selfhosted-ui/components/media/list';
+import { useMedia } from '@bcms/selfhosted-ui/hooks/media';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
+import { EmptyState } from '@bcms/selfhosted-ui/components/empty-state';
+import { Breadcrumb } from '@bcms/selfhosted-ui/components/media/breadcrumb';
+import { Button } from '@bcms/selfhosted-ui/components/button';
+import { MediaList } from '@bcms/selfhosted-ui/components/media/list';
 import { useRoute, useRouter } from 'vue-router';
-import type { Media } from '@thebcms/selfhosted-backend/media/models/main';
+import type { Media } from '@bcms/selfhosted-backend/media/models/main';
 
 export const MediaView = defineComponent({
     setup() {

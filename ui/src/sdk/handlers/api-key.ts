@@ -3,12 +3,12 @@ import { Sdk } from '@thebcms/selfhosted-sdk';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
-import type { ApiKey } from '@thebcms/selfhosted-backend/api-key/models/main';
+} from '@bcms/selfhosted-backend/util/controller';
+import type { ApiKey } from '@bcms/selfhosted-backend/api-key/models/main';
 import type {
     ApiKeyCreateBody,
     ApiKeyUpdateBody,
-} from '@thebcms/selfhosted-backend/api-key/models/controller';
+} from '@bcms/selfhosted-backend/api-key/models/controller';
 
 export class ApiKeyHandler extends Handler {
     private baseUri = '/api/v4/api-key';

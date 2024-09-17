@@ -1,10 +1,10 @@
 import {
     type Prop,
     PropType,
-} from '@thebcms/selfhosted-backend/prop/models/main';
-import { Repo } from '@thebcms/selfhosted-backend/repo';
-import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
-import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
+} from '@bcms/selfhosted-backend/prop/models/main';
+import { Repo } from '@bcms/selfhosted-backend/repo';
+import { SocketManager } from '@bcms/selfhosted-backend/socket/manager';
+import { EventManager } from '@bcms/selfhosted-backend/event/manager';
 
 function filterGroupPointer(groupId: string, props: Prop[]) {
     return props.filter(

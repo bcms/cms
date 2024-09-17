@@ -1,6 +1,6 @@
 import path from 'path';
-import { ChildProcess } from '@thebcms/selfhosted-utils/child-process';
-import { FS } from '@thebcms/selfhosted-utils/fs';
+import { ChildProcess } from '@bcms/selfhosted-utils/child-process';
+import { FS } from '@bcms/selfhosted-utils/fs';
 import { buildCjs, buildMjs } from './utils/build';
 import { packageJsonExport } from './utils/package-json';
 import { getBackendVersion, getUtilsVersion } from './utils/versions';

@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import type { Group } from '@thebcms/selfhosted-backend/group/models/main';
+import type { Group } from '@bcms/selfhosted-backend/group/models/main';
 
 export class GroupFactory {
     static create(data: Omit<Group, '_id' | 'createdAt' | 'updatedAt'>): Group {

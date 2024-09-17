@@ -1,4 +1,4 @@
-import { createStorage } from '@thebcms/selfhosted-ui/util/browser-storage';
+import { createStorage } from '@bcms/selfhosted-ui/util/browser-storage';
 
 export const Storage = createStorage({
     scope: 'bcms',

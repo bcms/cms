@@ -1,8 +1,8 @@
 import type { AxiosError, AxiosRequestConfig } from 'axios';
 import axios from 'axios';
 import { Buffer } from 'buffer';
-import type { UserJwt } from '@thebcms/selfhosted-backend/user/models/main';
-import { createQueue, QueueError } from '@thebcms/selfhosted-utils/queue';
+import type { UserJwt } from '@bcms/selfhosted-backend/user/models/main';
+import { createQueue, QueueError } from '@bcms/selfhosted-utils/queue';
 import { SocketHandler } from '@thebcms/selfhosted-sdk/handlers/socket';
 import type { SdkStore } from '@thebcms/selfhosted-sdk/store';
 import type { SdkStorage } from '@thebcms/selfhosted-sdk/storage';

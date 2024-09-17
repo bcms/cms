@@ -1,6 +1,6 @@
 import { defineComponent, onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import { Loader } from '@thebcms/selfhosted-ui/components/loader';
+import { Loader } from '@bcms/selfhosted-ui/components/loader';
 
 export const PluginView = defineComponent({
     setup() {

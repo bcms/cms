@@ -1,8 +1,8 @@
 import {
     type Language,
     LanguageSchema,
-} from '@thebcms/selfhosted-backend/language/models/main';
-import { createMongoDBRepository } from '@thebcms/selfhosted-backend/_server/modules/mongodb';
+} from '@bcms/selfhosted-backend/language/models/main';
+import { createMongoDBRepository } from '@bcms/selfhosted-backend/_server/modules/mongodb';
 
 export interface LanguageRepoMethods {
     findByCode(code: string): Promise<Language | null>;

@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import type { EntryStatus } from '@thebcms/selfhosted-backend/entry-status/models/main';
+import type { EntryStatus } from '@bcms/selfhosted-backend/entry-status/models/main';
 
 export class EntryStatusFactory {
     static create(

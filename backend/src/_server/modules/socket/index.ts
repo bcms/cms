@@ -1,1 +1,1 @@
-export * from '@thebcms/selfhosted-backend/_server/modules/socket/main';
+export * from '@bcms/selfhosted-backend/_server/modules/socket/main';

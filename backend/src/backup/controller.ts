@@ -2,29 +2,29 @@ import {
     createController,
     createControllerMethod,
     HttpStatus,
-} from '@thebcms/selfhosted-backend/_server';
+} from '@bcms/selfhosted-backend/_server';
 import {
     RP,
     type RPJwtCheckResult,
-} from '@thebcms/selfhosted-backend/security/route-protection/main';
+} from '@bcms/selfhosted-backend/security/route-protection/main';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
+} from '@bcms/selfhosted-backend/util/controller';
 import {
     controllerItemResponseDefinitionForRef,
     controllerItemsResponseDefinitionForRef,
     openApiGetModelRef,
-} from '@thebcms/selfhosted-backend/open-api/schema';
-import { Repo } from '@thebcms/selfhosted-backend/repo';
-import type { Backup } from '@thebcms/selfhosted-backend/backup/models/main';
-import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
-import { BackupFactory } from '@thebcms/selfhosted-backend/backup/factory';
-import { BackupManager } from '@thebcms/selfhosted-backend/backup/manager';
-import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
-import type { MediaRequestUploadTokenResult } from '@thebcms/selfhosted-backend/media/models/controller';
+} from '@bcms/selfhosted-backend/open-api/schema';
+import { Repo } from '@bcms/selfhosted-backend/repo';
+import type { Backup } from '@bcms/selfhosted-backend/backup/models/main';
+import { SocketManager } from '@bcms/selfhosted-backend/socket/manager';
+import { BackupFactory } from '@bcms/selfhosted-backend/backup/factory';
+import { BackupManager } from '@bcms/selfhosted-backend/backup/manager';
+import { EventManager } from '@bcms/selfhosted-backend/event/manager';
+import type { MediaRequestUploadTokenResult } from '@bcms/selfhosted-backend/media/models/controller';
 import crypto from 'crypto';
-import { keyValueStore } from '@thebcms/selfhosted-backend/key-value-store';
+import { keyValueStore } from '@bcms/selfhosted-backend/key-value-store';
 
 export const BackupController = createController({
     name: 'Backup',

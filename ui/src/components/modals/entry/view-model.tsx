@@ -2,8 +2,8 @@ import { defineComponent, onMounted, ref } from 'vue';
 import {
     getModalDefaultProps,
     ModalWrapper,
-} from '@thebcms/selfhosted-ui/components/modals/_wrapper';
-import { CodeEditor } from '@thebcms/selfhosted-ui/components/inputs/code-editor';
+} from '@bcms/selfhosted-ui/components/modals/_wrapper';
+import { CodeEditor } from '@bcms/selfhosted-ui/components/inputs/code-editor';
 
 export interface ModalEntryViewModelInput {
     entryId: string;

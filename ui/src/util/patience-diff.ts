@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-var */
 
-import type { SocketEventDataEntrySyncStringUpdateChange } from '@thebcms/selfhosted-backend/socket/events/entry-sync';
+import type { SocketEventDataEntrySyncStringUpdateChange } from '@bcms/selfhosted-backend/socket/events/entry-sync';
 
 /**
  * program: "patienceDiff" algorithm implemented in javascript.

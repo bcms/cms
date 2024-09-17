@@ -2,14 +2,14 @@ import * as crypto from 'crypto';
 import {
     ObjectUtility,
     ObjectUtilityError,
-} from '@thebcms/selfhosted-utils/object-utility';
-import { JWTEncode } from '@thebcms/selfhosted-backend/_server/modules/jwt/encode';
-import { JWTError } from '@thebcms/selfhosted-backend/_server/modules/jwt/error';
+} from '@bcms/selfhosted-utils/object-utility';
+import { JWTEncode } from '@bcms/selfhosted-backend/_server/modules/jwt/encode';
+import { JWTError } from '@bcms/selfhosted-backend/_server/modules/jwt/error';
 import {
     type JWT,
     JWTSchema,
     type JWTScope,
-} from '@thebcms/selfhosted-backend/_server/modules/jwt/models';
+} from '@bcms/selfhosted-backend/_server/modules/jwt/models';
 
 export interface JWTManagerCreateData<
     PayloadProps = undefined,

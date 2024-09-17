@@ -4,13 +4,13 @@ import {
     BCMSEventSchema,
     type BCMSEventScope,
     type BCMSEventType,
-} from '@thebcms/selfhosted-backend/event/models/main';
-import { FS } from '@thebcms/selfhosted-utils/fs';
+} from '@bcms/selfhosted-backend/event/models/main';
+import { FS } from '@bcms/selfhosted-utils/fs';
 import path from 'path';
 import {
     ObjectUtility,
     ObjectUtilityError,
-} from '@thebcms/selfhosted-utils/object-utility';
+} from '@bcms/selfhosted-utils/object-utility';
 
 export class EventManager {
     private static events: BCMSEvent[] = [];

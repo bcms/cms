@@ -1,10 +1,10 @@
 import type {
     Prop,
     PropValue,
-} from '@thebcms/selfhosted-backend/prop/models/main';
-import type { Group } from '@thebcms/selfhosted-backend/group/models/main';
-import type { PropValueMediaData } from '@thebcms/selfhosted-backend/prop/models/media';
-import type { PropValueGroupPointerData } from '@thebcms/selfhosted-backend/prop/models/group-pointer';
+} from '@bcms/selfhosted-backend/prop/models/main';
+import type { Group } from '@bcms/selfhosted-backend/group/models/main';
+import type { PropValueMediaData } from '@bcms/selfhosted-backend/prop/models/media';
+import type { PropValueGroupPointerData } from '@bcms/selfhosted-backend/prop/models/group-pointer';
 
 export async function propValuesFromSchema(
     props: Prop[],

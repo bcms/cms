@@ -1,13 +1,13 @@
 import { computed, defineComponent, type PropType, Teleport } from 'vue';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
 import type {
     EntrySync,
     EntrySyncUserData,
-} from '@thebcms/selfhosted-ui/services/entry-sync';
-import type { UserProtected } from '@thebcms/selfhosted-backend/user/models/main';
-import { EntrySyncElementsAvatar } from '@thebcms/selfhosted-ui/components/entry/sync-elements/avatar';
-import { EntrySyncElementsUserCursor } from '@thebcms/selfhosted-ui/components/entry/sync-elements/cursor';
-import { EntrySyncElementsFocusAvatar } from '@thebcms/selfhosted-ui/components/entry/sync-elements/focus-avatar';
+} from '@bcms/selfhosted-ui/services/entry-sync';
+import type { UserProtected } from '@bcms/selfhosted-backend/user/models/main';
+import { EntrySyncElementsAvatar } from '@bcms/selfhosted-ui/components/entry/sync-elements/avatar';
+import { EntrySyncElementsUserCursor } from '@bcms/selfhosted-ui/components/entry/sync-elements/cursor';
+import { EntrySyncElementsFocusAvatar } from '@bcms/selfhosted-ui/components/entry/sync-elements/focus-avatar';
 
 export const EntrySyncElements = defineComponent({
     props: {

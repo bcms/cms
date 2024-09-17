@@ -1,11 +1,11 @@
-import { MemCache } from '@thebcms/selfhosted-utils/mem-cache';
-import type { Widget } from '@thebcms/selfhosted-backend/widget/models/main';
-import type { Client } from '@thebcms/selfhosted-client/main';
-import type { WidgetWhereIsItUsedResult } from '@thebcms/selfhosted-backend/widget/models/controller';
+import { MemCache } from '@bcms/selfhosted-utils/mem-cache';
+import type { Widget } from '@bcms/selfhosted-backend/widget/models/main';
+import type { Client } from '@bcms/selfhosted-client/main';
+import type { WidgetWhereIsItUsedResult } from '@bcms/selfhosted-backend/widget/models/controller';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
+} from '@bcms/selfhosted-backend/util/controller';
 
 export class WidgetHandler {
     private baseUri = `/api/v4/widget`;

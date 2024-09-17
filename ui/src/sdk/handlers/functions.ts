@@ -1,8 +1,8 @@
 import { Handler } from '@thebcms/selfhosted-sdk/handlers/_handler';
 import { Sdk } from '@thebcms/selfhosted-sdk';
-import type { ControllerItemsResponse } from '@thebcms/selfhosted-backend/util/controller';
-import type { BCMSFunctionConfig } from '@thebcms/selfhosted-backend/function/models/main';
-import type { FunctionExecuteResult } from '@thebcms/selfhosted-backend/function/models/controller';
+import type { ControllerItemsResponse } from '@bcms/selfhosted-backend/util/controller';
+import type { BCMSFunctionConfig } from '@bcms/selfhosted-backend/function/models/main';
+import type { FunctionExecuteResult } from '@bcms/selfhosted-backend/function/models/controller';
 
 export class FunctionHandler extends Handler {
     private baseUri = '/api/v4/function';

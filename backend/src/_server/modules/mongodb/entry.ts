@@ -1,5 +1,5 @@
 import type { ObjectId } from '@fastify/mongodb';
-import type { ObjectSchema } from '@thebcms/selfhosted-utils/object-utility';
+import type { ObjectSchema } from '@bcms/selfhosted-utils/object-utility';
 
 export interface MongoDBEntry {
     _id: string;

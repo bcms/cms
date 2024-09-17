@@ -10,13 +10,13 @@ import { Icon } from '../icon';
 import {
     DefaultComponentProps,
     type DefaultComponentPropsType,
-} from '@thebcms/selfhosted-ui/components/default';
+} from '@bcms/selfhosted-ui/components/default';
 import {
     TableCell,
     type TableCellProps,
-} from '@thebcms/selfhosted-ui/components/table/cell';
-import { Storage } from '@thebcms/selfhosted-ui/storage';
-import { Select } from '@thebcms/selfhosted-ui/components/inputs/select/main';
+} from '@bcms/selfhosted-ui/components/table/cell';
+import { Storage } from '@bcms/selfhosted-ui/storage';
+import { Select } from '@bcms/selfhosted-ui/components/inputs/select/main';
 
 export interface TableHeaderItemSort {
     type: string;

@@ -1,5 +1,5 @@
 import spacetime from 'spacetime';
-import { base10Padding } from '@thebcms/selfhosted-ui/util/string';
+import { base10Padding } from '@bcms/selfhosted-ui/util/string';
 
 export const MonthNumToStr = [
     'Jan',

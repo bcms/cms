@@ -1,7 +1,7 @@
 import { computed, defineComponent, onMounted } from 'vue';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
-import type { Language } from '@thebcms/selfhosted-backend/language/models/main';
-import { Select } from '@thebcms/selfhosted-ui/components/inputs/select/main';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
+import type { Language } from '@bcms/selfhosted-backend/language/models/main';
+import { Select } from '@bcms/selfhosted-ui/components/inputs/select/main';
 
 export const LanguageSwitch = defineComponent({
     props: {

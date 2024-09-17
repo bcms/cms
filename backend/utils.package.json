@@ -1,5 +1,5 @@
 {
-    "name": "@thebcms/selfhosted-utils",
+    "name": "@bcms/selfhosted-utils",
     "version": "1.0.0",
     "license": "MIT",
     "exports": {

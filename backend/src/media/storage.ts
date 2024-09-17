@@ -5,18 +5,18 @@ import { promisify } from 'util';
 import process from 'process';
 import type { ISizeCalculationResult } from 'image-size/dist/types/interface';
 import imageSize from 'image-size';
-import { Logger } from '@thebcms/selfhosted-backend/_server';
-import { FS } from '@thebcms/selfhosted-backend/_utils/fs';
-import { FunctionBuilder } from '@thebcms/selfhosted-backend/util/function-builder';
+import { Logger } from '@bcms/selfhosted-backend/_server';
+import { FS } from '@bcms/selfhosted-backend/_utils/fs';
+import { FunctionBuilder } from '@bcms/selfhosted-backend/util/function-builder';
 import {
     type Media,
     MediaType,
-} from '@thebcms/selfhosted-backend/media/models/main';
-import { Storage } from '@thebcms/selfhosted-backend/storage/main';
-import { Config } from '@thebcms/selfhosted-backend/config';
-import { FFmpeg } from '@thebcms/selfhosted-backend/util/ffmpeg';
-import type { MediaGetBinBodyImage } from '@thebcms/selfhosted-backend/media/models/controller';
-import { ChildProcess } from '@thebcms/selfhosted-backend/_utils/child-process';
+} from '@bcms/selfhosted-backend/media/models/main';
+import { Storage } from '@bcms/selfhosted-backend/storage/main';
+import { Config } from '@bcms/selfhosted-backend/config';
+import { FFmpeg } from '@bcms/selfhosted-backend/util/ffmpeg';
+import type { MediaGetBinBodyImage } from '@bcms/selfhosted-backend/media/models/controller';
+import { ChildProcess } from '@bcms/selfhosted-backend/_utils/child-process';
 
 export interface MediaStorageOptions {
     thumbnail?: boolean;

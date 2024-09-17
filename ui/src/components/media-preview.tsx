@@ -6,15 +6,15 @@ import {
     ref,
 } from 'vue';
 import { Buffer } from 'buffer';
-import { createQueue, type Queue } from '@thebcms/selfhosted-utils/queue';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
+import { createQueue, type Queue } from '@bcms/selfhosted-utils/queue';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
 import {
     type Media,
     MediaType,
-} from '@thebcms/selfhosted-backend/media/models/main';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
-import { Loader } from '@thebcms/selfhosted-ui/components/loader';
-import { bufferToFile } from '@thebcms/selfhosted-ui/util/file';
+} from '@bcms/selfhosted-backend/media/models/main';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
+import { Loader } from '@bcms/selfhosted-ui/components/loader';
+import { bufferToFile } from '@bcms/selfhosted-ui/util/file';
 
 const loadQueue: {
     [mediaId: string]: Queue<void>;

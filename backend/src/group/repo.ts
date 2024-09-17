@@ -1,15 +1,15 @@
 import {
     type Group,
     GroupSchema,
-} from '@thebcms/selfhosted-backend/group/models/main';
-import { createMongoDBRepository } from '@thebcms/selfhosted-backend/_server/modules/mongodb';
-import { Config } from '@thebcms/selfhosted-backend/config';
-import { PropType } from '@thebcms/selfhosted-backend/prop/models/main';
+} from '@bcms/selfhosted-backend/group/models/main';
+import { createMongoDBRepository } from '@bcms/selfhosted-backend/_server/modules/mongodb';
+import { Config } from '@bcms/selfhosted-backend/config';
+import { PropType } from '@bcms/selfhosted-backend/prop/models/main';
 import {
     createQueue,
     type Queue,
     QueueError,
-} from '@thebcms/selfhosted-backend/_utils/queue';
+} from '@bcms/selfhosted-backend/_utils/queue';
 
 export interface GroupRepoMethods {
     findAllByPropGroupPointer(groupId: string): Promise<Group[]>;

@@ -1,12 +1,12 @@
-import type { UserJwt } from '@thebcms/selfhosted-backend/user/models/main';
-import type { ApiKey } from '@thebcms/selfhosted-backend/api-key/models/main';
-import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-utility';
-import type { ControllerMethodPreRequestHandler } from '@thebcms/selfhosted-backend/_server';
+import type { UserJwt } from '@bcms/selfhosted-backend/user/models/main';
+import type { ApiKey } from '@bcms/selfhosted-backend/api-key/models/main';
+import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
+import type { ControllerMethodPreRequestHandler } from '@bcms/selfhosted-backend/_server';
 
-import { RPBodyCheck } from '@thebcms/selfhosted-backend/security/route-protection/body-check';
-import { RPJwt } from '@thebcms/selfhosted-backend/security/route-protection/jwt';
-import { RPApiKey } from '@thebcms/selfhosted-backend/security/route-protection/api-key';
-import type { UserRoleName } from '@thebcms/selfhosted-backend/user/models/role';
+import { RPBodyCheck } from '@bcms/selfhosted-backend/security/route-protection/body-check';
+import { RPJwt } from '@bcms/selfhosted-backend/security/route-protection/jwt';
+import { RPApiKey } from '@bcms/selfhosted-backend/security/route-protection/api-key';
+import type { UserRoleName } from '@bcms/selfhosted-backend/user/models/role';
 
 export interface RPBodyCheckResult<Body> {
     body: Body;

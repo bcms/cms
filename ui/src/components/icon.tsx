@@ -3,8 +3,8 @@ import {
     createQueue,
     type Queue,
     QueueError,
-} from '@thebcms/selfhosted-utils/queue';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
+} from '@bcms/selfhosted-utils/queue';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
 
 const cache: {
     [src: string]: string;

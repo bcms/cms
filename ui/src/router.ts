@@ -4,10 +4,10 @@ import {
     type NavigationGuardNext,
     type RouteRecordRaw,
 } from 'vue-router';
-import type { ViewNames } from '@thebcms/selfhosted-ui/views';
-import type { LayoutNames } from '@thebcms/selfhosted-ui/layouts';
+import type { ViewNames } from '@bcms/selfhosted-ui/views';
+import type { LayoutNames } from '@bcms/selfhosted-ui/layouts';
 import type { DefineComponent } from 'vue';
-import { LoginView } from '@thebcms/selfhosted-ui/views/login';
+import { LoginView } from '@bcms/selfhosted-ui/views/login';
 
 interface RouteRecordRawExtended
     extends Omit<RouteRecordRaw, 'name' | 'children' | 'meta'> {

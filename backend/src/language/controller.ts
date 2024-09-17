@@ -2,31 +2,31 @@ import {
     createController,
     createControllerMethod,
     HttpStatus,
-} from '@thebcms/selfhosted-backend/_server';
+} from '@bcms/selfhosted-backend/_server';
 import {
     RP,
     type RPApiKeyJwtCheckResult,
     type RPJwtBodyCheckResult,
     type RPJwtCheckResult,
-} from '@thebcms/selfhosted-backend/security/route-protection/main';
+} from '@bcms/selfhosted-backend/security/route-protection/main';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
-import type { Language } from '@thebcms/selfhosted-backend/language/models/main';
+} from '@bcms/selfhosted-backend/util/controller';
+import type { Language } from '@bcms/selfhosted-backend/language/models/main';
 import {
     controllerItemResponseDefinitionForRef,
     controllerItemsResponseDefinitionForRef,
     openApiGetModelRef,
-} from '@thebcms/selfhosted-backend/open-api/schema';
-import { Repo } from '@thebcms/selfhosted-backend/repo';
+} from '@bcms/selfhosted-backend/open-api/schema';
+import { Repo } from '@bcms/selfhosted-backend/repo';
 import {
     type LanguageCreateBody,
     LanguageCreateBodySchema,
-} from '@thebcms/selfhosted-backend/language/models/controller';
-import { LanguageFactory } from '@thebcms/selfhosted-backend/language/factory';
-import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
-import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
+} from '@bcms/selfhosted-backend/language/models/controller';
+import { LanguageFactory } from '@bcms/selfhosted-backend/language/factory';
+import { SocketManager } from '@bcms/selfhosted-backend/socket/manager';
+import { EventManager } from '@bcms/selfhosted-backend/event/manager';
 
 export const LanguageController = createController({
     name: 'Language',

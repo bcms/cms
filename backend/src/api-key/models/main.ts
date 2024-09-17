@@ -1,12 +1,12 @@
 import {
     type MongoDBEntry,
     MongoDBEntrySchema,
-} from '@thebcms/selfhosted-backend/_server/modules/mongodb';
+} from '@bcms/selfhosted-backend/_server/modules/mongodb';
 import {
     type ApiKeyAccess,
     ApiKeyAccessSchema,
-} from '@thebcms/selfhosted-backend/api-key/models/access';
-import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-utility';
+} from '@bcms/selfhosted-backend/api-key/models/access';
+import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
 
 export interface ApiKey extends MongoDBEntry {
     userId: string;

@@ -9,19 +9,19 @@ import {
 import type {
     Prop,
     PropValue,
-} from '@thebcms/selfhosted-backend/prop/models/main';
-import type { PropValidator } from '@thebcms/selfhosted-ui/util/prop-validation';
-import type { EntrySync } from '@thebcms/selfhosted-ui/services/entry-sync';
-import type { PropValueEntryPointer } from '@thebcms/selfhosted-backend/prop/models/entry-pointer';
+} from '@bcms/selfhosted-backend/prop/models/main';
+import type { PropValidator } from '@bcms/selfhosted-ui/util/prop-validation';
+import type { EntrySync } from '@bcms/selfhosted-ui/services/entry-sync';
+import type { PropValueEntryPointer } from '@bcms/selfhosted-backend/prop/models/entry-pointer';
 import {
     callAndClearUnsubscribeFns,
     type UnsubscribeFns,
-} from '@thebcms/selfhosted-ui/util/sub';
+} from '@bcms/selfhosted-ui/util/sub';
 import {
     PropInputWrapper,
     PropInputWrapperArrayItem,
-} from '@thebcms/selfhosted-ui/components/prop/_input-wrapper';
-import { SelectEntryPointer } from '@thebcms/selfhosted-ui/components/inputs/select/entry-pointer';
+} from '@bcms/selfhosted-ui/components/prop/_input-wrapper';
+import { SelectEntryPointer } from '@bcms/selfhosted-ui/components/inputs/select/entry-pointer';
 
 export const PropEntryPointerInput = defineComponent({
     props: {

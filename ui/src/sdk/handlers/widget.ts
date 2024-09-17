@@ -4,12 +4,12 @@ import type {
     WidgetCreateBody,
     WidgetUpdateBody,
     WidgetWhereIsItUsedResult,
-} from '@thebcms/selfhosted-backend/widget/models/controller';
+} from '@bcms/selfhosted-backend/widget/models/controller';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
-import type { Widget } from '@thebcms/selfhosted-backend/widget/models/main';
+} from '@bcms/selfhosted-backend/util/controller';
+import type { Widget } from '@bcms/selfhosted-backend/widget/models/main';
 
 export class WidgetHandler extends Handler {
     private baseUri = '/api/v4/widget';

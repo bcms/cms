@@ -1,9 +1,9 @@
-import { createMongoDBRepository } from '@thebcms/selfhosted-backend/_server/modules/mongodb';
+import { createMongoDBRepository } from '@bcms/selfhosted-backend/_server/modules/mongodb';
 import {
     type User,
     UserSchema,
-} from '@thebcms/selfhosted-backend/user/models/main';
-import { Config } from '@thebcms/selfhosted-backend/config';
+} from '@bcms/selfhosted-backend/user/models/main';
+import { Config } from '@bcms/selfhosted-backend/config';
 
 export interface UserRepoMethods {
     findByEmail(email: string): Promise<User | null>;

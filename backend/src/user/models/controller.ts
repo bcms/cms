@@ -1,4 +1,4 @@
-import type { ObjectSchema } from '@thebcms/selfhosted-utils/object-utility';
+import type { ObjectSchema } from '@bcms/selfhosted-utils/object-utility';
 import {
     type UserPolicyCRUD,
     UserPolicyCRUDSchema,
@@ -6,8 +6,8 @@ import {
     UserPolicyPluginSchema,
     type UserPolicyTemplate,
     UserPolicyTemplateSchema,
-} from '@thebcms/selfhosted-backend/user/models/policy';
-import type { UserRoleName } from '@thebcms/selfhosted-backend/user/models/role';
+} from '@bcms/selfhosted-backend/user/models/policy';
+import type { UserRoleName } from '@bcms/selfhosted-backend/user/models/role';
 
 export interface UserUpdateBody {
     _id: string;

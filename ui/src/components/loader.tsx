@@ -1,8 +1,8 @@
 import { defineComponent } from 'vue';
-import {DefaultComponentProps} from "@thebcms/selfhosted-ui/components/default";
-import {useTheme} from "@thebcms/selfhosted-ui/hooks/theme";
-import {Icon} from "@thebcms/selfhosted-ui/components/icon";
-import {BgAuth} from "@thebcms/selfhosted-ui/components/bg-auth";
+import {DefaultComponentProps} from "@bcms/selfhosted-ui/components/default";
+import {useTheme} from "@bcms/selfhosted-ui/hooks/theme";
+import {Icon} from "@bcms/selfhosted-ui/components/icon";
+import {BgAuth} from "@bcms/selfhosted-ui/components/bg-auth";
 
 export const Loader = defineComponent({
     props: {

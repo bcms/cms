@@ -1,5 +1,5 @@
-import type { Module } from '@thebcms/selfhosted-backend/_server';
-import { keyValueStore } from '@thebcms/selfhosted-backend/key-value-store';
+import type { Module } from '@bcms/selfhosted-backend/_server';
+import { keyValueStore } from '@bcms/selfhosted-backend/key-value-store';
 
 export class EntrySyncChannelHandler {
     private channelBase = 'entrySync.channel';

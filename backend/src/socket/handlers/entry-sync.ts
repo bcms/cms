@@ -1,9 +1,9 @@
-import { SocketManager } from '@thebcms/selfhosted-backend/_server/modules/socket';
-import { createSocketEventHandler } from '@thebcms/selfhosted-backend/socket/handlers/_wrapper';
+import { SocketManager } from '@bcms/selfhosted-backend/_server/modules/socket';
+import { createSocketEventHandler } from '@bcms/selfhosted-backend/socket/handlers/_wrapper';
 import type {
     SocketEventName,
     SocketEventNamesAndTypes,
-} from '@thebcms/selfhosted-backend/socket/events/main';
+} from '@bcms/selfhosted-backend/socket/events/main';
 import {
     type SocketEventDataEntrySyncBooleanUpdate,
     SocketEventDataEntrySyncBooleanUpdateSchema,
@@ -45,8 +45,8 @@ import {
     type SocketEventDataEntrySyncYSyncRes,
     SocketEventDataEntrySyncYSyncResSchema,
     type SocketEventNamesEntrySync,
-} from '@thebcms/selfhosted-backend/socket/events/entry-sync';
-import { useEntrySyncChannelHandler } from '@thebcms/selfhosted-backend/entry-sync/channel-handler';
+} from '@bcms/selfhosted-backend/socket/events/entry-sync';
+import { useEntrySyncChannelHandler } from '@bcms/selfhosted-backend/entry-sync/channel-handler';
 
 function emit<Name extends SocketEventName>(
     eventName: Name,

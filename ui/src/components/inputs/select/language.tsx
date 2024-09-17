@@ -1,10 +1,10 @@
 import { defineComponent, onMounted, type PropType } from 'vue';
-import { InputProps } from '@thebcms/selfhosted-ui/components/inputs/_wrapper';
+import { InputProps } from '@bcms/selfhosted-ui/components/inputs/_wrapper';
 import {
     type LanguageISO,
     Languages,
-} from '@thebcms/selfhosted-ui/data/language';
-import { MultiSelect } from '@thebcms/selfhosted-ui/components/inputs/select/multi';
+} from '@bcms/selfhosted-ui/data/language';
+import { MultiSelect } from '@bcms/selfhosted-ui/components/inputs/select/multi';
 
 export const LanguageSelect = defineComponent({
     props: {

@@ -1,8 +1,8 @@
-import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-utility';
+import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
 import {
     type ApiKeyAccess,
     ApiKeyAccessSchema,
-} from '@thebcms/selfhosted-backend/api-key/models/access';
+} from '@bcms/selfhosted-backend/api-key/models/access';
 
 export interface ApiKeyCreateBody {
     name: string;

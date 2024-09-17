@@ -22,9 +22,9 @@ import { Collaboration } from '@tiptap/extension-collaboration';
 import {
     InputProps,
     InputWrapper,
-} from '@thebcms/selfhosted-ui/components/inputs/_wrapper';
-import type { EntrySync } from '@thebcms/selfhosted-ui/services/entry-sync';
-import { EntryContentSyncProvider } from '@thebcms/selfhosted-ui/components/entry/content/sync-provider';
+} from '@bcms/selfhosted-ui/components/inputs/_wrapper';
+import type { EntrySync } from '@bcms/selfhosted-ui/services/entry-sync';
+import { EntryContentSyncProvider } from '@bcms/selfhosted-ui/components/entry/content/sync-provider';
 
 export const TextAreaInput = defineComponent({
     props: {

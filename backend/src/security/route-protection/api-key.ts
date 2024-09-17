@@ -1,10 +1,10 @@
 import {
     type HttpErrorHandler,
     HttpStatus,
-} from '@thebcms/selfhosted-backend/_server';
-import { Repo } from '@thebcms/selfhosted-backend/repo';
-import type { UserPolicyCRUD } from '@thebcms/selfhosted-backend/user/models/policy';
-import type { ApiKey } from '@thebcms/selfhosted-backend/api-key/models/main';
+} from '@bcms/selfhosted-backend/_server';
+import { Repo } from '@bcms/selfhosted-backend/repo';
+import type { UserPolicyCRUD } from '@bcms/selfhosted-backend/user/models/policy';
+import type { ApiKey } from '@bcms/selfhosted-backend/api-key/models/main';
 
 export class RPApiKey {
     private canAccessMethod(method: string, access: UserPolicyCRUD) {

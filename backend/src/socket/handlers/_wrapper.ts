@@ -2,8 +2,8 @@ import {
     type ObjectSchema,
     ObjectUtility,
     ObjectUtilityError,
-} from '@thebcms/selfhosted-backend/_utils/object-utility';
-import type { SocketEventHandler } from '@thebcms/selfhosted-backend/_server/modules/socket';
+} from '@bcms/selfhosted-backend/_utils/object-utility';
+import type { SocketEventHandler } from '@bcms/selfhosted-backend/_server/modules/socket';
 
 export function createSocketEventHandler<Data = unknown>(
     dataSchema: ObjectSchema,

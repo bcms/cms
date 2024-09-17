@@ -2,17 +2,17 @@ import {
     createController,
     createControllerMethod,
     HttpStatus,
-} from '@thebcms/selfhosted-backend/_server';
-import { Config } from '@thebcms/selfhosted-backend/config';
+} from '@bcms/selfhosted-backend/_server';
+import { Config } from '@bcms/selfhosted-backend/config';
 import {
     Storage,
     type StorageType,
     StorageTypes,
-} from '@thebcms/selfhosted-backend/storage/main';
+} from '@bcms/selfhosted-backend/storage/main';
 import {
     RP,
     type RPJwtCheckResult,
-} from '@thebcms/selfhosted-backend/security/route-protection/main';
+} from '@bcms/selfhosted-backend/security/route-protection/main';
 
 export const StorageController = createController({
     name: 'Storage',

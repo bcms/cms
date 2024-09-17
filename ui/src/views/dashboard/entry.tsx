@@ -6,22 +6,22 @@ import {
     ref,
 } from 'vue';
 import { useRoute } from 'vue-router';
-import type { Entry } from '@thebcms/selfhosted-backend/entry/models/main';
-import { EntrySync } from '@thebcms/selfhosted-ui/services/entry-sync';
-import { PropValidator } from '@thebcms/selfhosted-ui/util/prop-validation';
-import type { Language } from '@thebcms/selfhosted-backend/language/models/main';
-import { entryNewFromTemplate } from '@thebcms/selfhosted-ui/util/entry';
+import type { Entry } from '@bcms/selfhosted-backend/entry/models/main';
+import { EntrySync } from '@bcms/selfhosted-ui/services/entry-sync';
+import { PropValidator } from '@bcms/selfhosted-ui/util/prop-validation';
+import type { Language } from '@bcms/selfhosted-backend/language/models/main';
+import { entryNewFromTemplate } from '@bcms/selfhosted-ui/util/entry';
 import type {
     EntryContentNode,
     EntryContentNodeWidgetAttr,
-} from '@thebcms/selfhosted-backend/entry/models/content';
-import { EntrySyncElements } from '@thebcms/selfhosted-ui/components/entry/sync-elements/main';
-import { LanguageSwitch } from '@thebcms/selfhosted-ui/components/language-switch';
-import { EntryStatusSelect } from '@thebcms/selfhosted-ui/components/inputs/select/entry-status';
-import { Button } from '@thebcms/selfhosted-ui/components/button';
-import { EntryEditor } from '@thebcms/selfhosted-ui/components/entry/editor';
-import { StringUtility } from '@thebcms/selfhosted-utils/string-utility';
-import { Loader } from '@thebcms/selfhosted-ui/components/loader';
+} from '@bcms/selfhosted-backend/entry/models/content';
+import { EntrySyncElements } from '@bcms/selfhosted-ui/components/entry/sync-elements/main';
+import { LanguageSwitch } from '@bcms/selfhosted-ui/components/language-switch';
+import { EntryStatusSelect } from '@bcms/selfhosted-ui/components/inputs/select/entry-status';
+import { Button } from '@bcms/selfhosted-ui/components/button';
+import { EntryEditor } from '@bcms/selfhosted-ui/components/entry/editor';
+import { StringUtility } from '@bcms/selfhosted-utils/string-utility';
+import { Loader } from '@bcms/selfhosted-ui/components/loader';
 
 export const EntryView = defineComponent({
     setup() {

@@ -3,15 +3,15 @@ import { Sdk } from '@thebcms/selfhosted-sdk';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
-import type { Backup } from '@thebcms/selfhosted-backend/backup/models/main';
+} from '@bcms/selfhosted-backend/util/controller';
+import type { Backup } from '@bcms/selfhosted-backend/backup/models/main';
 import {
     callAndClearUnsubscribeFns,
     type UnsubscribeFns,
-} from '@thebcms/selfhosted-ui/util/sub';
+} from '@bcms/selfhosted-ui/util/sub';
 import type { AxiosProgressEvent } from 'axios';
-import type { Media } from '@thebcms/selfhosted-backend/media/models/main';
-import type { MediaRequestUploadTokenResult } from '@thebcms/selfhosted-backend/media/models/controller';
+import type { Media } from '@bcms/selfhosted-backend/media/models/main';
+import type { MediaRequestUploadTokenResult } from '@bcms/selfhosted-backend/media/models/controller';
 
 export class BackupHandler extends Handler {
     private baseUri = '/api/v4/backup';

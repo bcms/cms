@@ -1,16 +1,16 @@
 import { computed, defineComponent, onMounted, type PropType } from 'vue';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
-import { throwable } from '@thebcms/selfhosted-ui/util/throwable';
-import { UserAvatar } from '@thebcms/selfhosted-ui/components/user-avatar';
-import { Tag } from '@thebcms/selfhosted-ui/components/tag';
-import { userHasRole } from '@thebcms/selfhosted-ui/util/role';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
+import { throwable } from '@bcms/selfhosted-ui/util/throwable';
+import { UserAvatar } from '@bcms/selfhosted-ui/components/user-avatar';
+import { Tag } from '@bcms/selfhosted-ui/components/tag';
+import { userHasRole } from '@bcms/selfhosted-ui/util/role';
 import {
     Dropdown,
     type DropdownItem,
-} from '@thebcms/selfhosted-ui/components/dropdown';
-import { confirm } from '@thebcms/selfhosted-ui/services/confirm';
-import { Button } from '@thebcms/selfhosted-ui/components/button';
-import type { UserProtected } from '@thebcms/selfhosted-backend/user/models/main';
+} from '@bcms/selfhosted-ui/components/dropdown';
+import { confirm } from '@bcms/selfhosted-ui/services/confirm';
+import { Button } from '@bcms/selfhosted-ui/components/button';
+import type { UserProtected } from '@bcms/selfhosted-backend/user/models/main';
 
 export const UserListItem = defineComponent({
     props: {

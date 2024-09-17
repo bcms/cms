@@ -3,12 +3,12 @@ import { Sdk } from '@thebcms/selfhosted-sdk';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
-import type { TemplateOrganizer } from '@thebcms/selfhosted-backend/template-organizer/models/main';
+} from '@bcms/selfhosted-backend/util/controller';
+import type { TemplateOrganizer } from '@bcms/selfhosted-backend/template-organizer/models/main';
 import type {
     TemplateOrganizerCreateBody,
     TemplateOrganizerUpdateBody,
-} from '@thebcms/selfhosted-backend/template-organizer/models/controller';
+} from '@bcms/selfhosted-backend/template-organizer/models/controller';
 
 export class TemplateOrganizerHandler extends Handler {
     private baseUri = '/api/v4/templateOrganizer';

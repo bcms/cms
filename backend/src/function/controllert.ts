@@ -4,17 +4,17 @@ import {
     HttpException,
     HttpStatus,
     Logger,
-} from '@thebcms/selfhosted-backend/_server';
+} from '@bcms/selfhosted-backend/_server';
 import {
     RP,
     type RPApiKeyCheckResult,
     type RPApiKeyJwtCheckResult,
-} from '@thebcms/selfhosted-backend/security/route-protection/main';
-import type { ControllerItemsResponse } from '@thebcms/selfhosted-backend/util/controller';
-import type { BCMSFunctionConfig } from '@thebcms/selfhosted-backend/function/models/main';
-import { controllerItemResponseDefinitionForRef } from '@thebcms/selfhosted-backend/open-api/schema';
-import { FunctionManager } from '@thebcms/selfhosted-backend/function/main';
-import type { FunctionExecuteResult } from '@thebcms/selfhosted-backend/function/models/controller';
+} from '@bcms/selfhosted-backend/security/route-protection/main';
+import type { ControllerItemsResponse } from '@bcms/selfhosted-backend/util/controller';
+import type { BCMSFunctionConfig } from '@bcms/selfhosted-backend/function/models/main';
+import { controllerItemResponseDefinitionForRef } from '@bcms/selfhosted-backend/open-api/schema';
+import { FunctionManager } from '@bcms/selfhosted-backend/function/main';
+import type { FunctionExecuteResult } from '@bcms/selfhosted-backend/function/models/controller';
 
 export const FunctionController = createController({
     name: 'Function',

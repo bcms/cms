@@ -1,2 +1,2 @@
-export * from '@thebcms/selfhosted-client/image';
-export * from '@thebcms/selfhosted-client/main';
+export * from '@bcms/selfhosted-client/image';
+export * from '@bcms/selfhosted-client/main';

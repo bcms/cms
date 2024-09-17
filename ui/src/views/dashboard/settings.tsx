@@ -1,13 +1,13 @@
 import { computed, defineComponent, onMounted } from 'vue';
-import { UserList } from '@thebcms/selfhosted-ui/components/user-list';
-import { BackupList } from '@thebcms/selfhosted-ui/components/backup-list';
+import { UserList } from '@bcms/selfhosted-ui/components/user-list';
+import { BackupList } from '@bcms/selfhosted-ui/components/backup-list';
 import {
     Select,
     type SelectOption,
-} from '@thebcms/selfhosted-ui/components/inputs/select/main';
-import { Languages } from '@thebcms/selfhosted-ui/data/language';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
-import type { Language } from '@thebcms/selfhosted-backend/language/models/main';
+} from '@bcms/selfhosted-ui/components/inputs/select/main';
+import { Languages } from '@bcms/selfhosted-ui/data/language';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
+import type { Language } from '@bcms/selfhosted-backend/language/models/main';
 
 export const SettingsView = defineComponent({
     setup() {

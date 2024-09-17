@@ -2,15 +2,15 @@ import { defineComponent, onMounted, ref } from 'vue';
 import {
     getModalDefaultProps,
     ModalWrapper,
-} from '@thebcms/selfhosted-ui/components/modals/_wrapper';
+} from '@bcms/selfhosted-ui/components/modals/_wrapper';
 import {
     createRefValidator,
     createValidationItem,
-} from '@thebcms/selfhosted-ui/util/validation';
-import { TextInput } from '@thebcms/selfhosted-ui/components/inputs/text';
-import type { Template } from '@thebcms/selfhosted-backend/template/models/main';
-import { TextAreaInput } from '@thebcms/selfhosted-ui/components/inputs/text-area';
-import { Toggle } from '@thebcms/selfhosted-ui/components/inputs/toggle';
+} from '@bcms/selfhosted-ui/util/validation';
+import { TextInput } from '@bcms/selfhosted-ui/components/inputs/text';
+import type { Template } from '@bcms/selfhosted-backend/template/models/main';
+import { TextAreaInput } from '@bcms/selfhosted-ui/components/inputs/text-area';
+import { Toggle } from '@bcms/selfhosted-ui/components/inputs/toggle';
 
 export interface ModalTemplateCreateEditInput {
     templateId?: string;

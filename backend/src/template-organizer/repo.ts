@@ -1,9 +1,9 @@
-import { createMongoDBRepository } from '@thebcms/selfhosted-backend/_server/modules/mongodb';
-import { Config } from '@thebcms/selfhosted-backend/config';
+import { createMongoDBRepository } from '@bcms/selfhosted-backend/_server/modules/mongodb';
+import { Config } from '@bcms/selfhosted-backend/config';
 import {
     type TemplateOrganizer,
     TemplateOrganizerSchema,
-} from '@thebcms/selfhosted-backend/template-organizer/models/main';
+} from '@bcms/selfhosted-backend/template-organizer/models/main';
 
 export const TemplateOrganizerRepo = createMongoDBRepository<
     TemplateOrganizer,

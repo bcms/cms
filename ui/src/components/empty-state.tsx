@@ -1,6 +1,6 @@
 import { defineComponent, type PropType } from 'vue';
-import { Button } from '@thebcms/selfhosted-ui/components/button';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
+import { Button } from '@bcms/selfhosted-ui/components/button';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
 
 export const EmptyState = defineComponent({
     props: {

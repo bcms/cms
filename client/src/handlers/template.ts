@@ -1,14 +1,14 @@
-import { MemCache } from '@thebcms/selfhosted-utils/mem-cache';
-import { Template } from '@thebcms/selfhosted-backend/template/models/main';
-import { Client } from '@thebcms/selfhosted-client/main';
+import { MemCache } from '@bcms/selfhosted-utils/mem-cache';
+import { Template } from '@bcms/selfhosted-backend/template/models/main';
+import { Client } from '@bcms/selfhosted-client/main';
 import {
     TemplateUpdateBody,
     TemplateWhereIsItUsedResult,
-} from '@thebcms/selfhosted-backend/template/models/controller';
+} from '@bcms/selfhosted-backend/template/models/controller';
 import {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
+} from '@bcms/selfhosted-backend/util/controller';
 
 export class TemplateHandler {
     private baseUri = '/api/v4/template';

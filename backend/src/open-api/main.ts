@@ -1,89 +1,89 @@
 import {
     objectSchemaToOpenApi3Schema,
     openApiCreateSchema,
-} from '@thebcms/selfhosted-backend/open-api/schema';
+} from '@bcms/selfhosted-backend/open-api/schema';
 import type { OpenAPIV3 } from 'openapi-types';
 import {
     AuthLoginBodySchema,
     AuthLoginResponseSchema,
     AuthSignUpAdminBodySchema,
-} from '@thebcms/selfhosted-backend/auth/models/controller';
+} from '@bcms/selfhosted-backend/auth/models/controller';
 import {
     UserProtectedSchema,
     UserSchema,
-} from '@thebcms/selfhosted-backend/user/models/main';
-import { UserAddressSchema } from '@thebcms/selfhosted-backend/user/models/address';
-import { UserPersonalSchema } from '@thebcms/selfhosted-backend/user/models/personal';
+} from '@bcms/selfhosted-backend/user/models/main';
+import { UserAddressSchema } from '@bcms/selfhosted-backend/user/models/address';
+import { UserPersonalSchema } from '@bcms/selfhosted-backend/user/models/personal';
 import {
     UserPolicyCRUDSchema,
     UserPolicyPluginOptionSchema,
     UserPolicyPluginSchema,
     UserPolicySchema,
     UserPolicyTemplateSchema,
-} from '@thebcms/selfhosted-backend/user/models/policy';
-import { UserCustomPoolSchema } from '@thebcms/selfhosted-backend/user/models/custom-pool';
+} from '@bcms/selfhosted-backend/user/models/policy';
+import { UserCustomPoolSchema } from '@bcms/selfhosted-backend/user/models/custom-pool';
 import {
     UserCreateBodySchema,
     UserStatsResponseSchema,
     UserUpdateBodySchema,
-} from '@thebcms/selfhosted-backend/user/models/controller';
-import { ApiKeyAccessSchema } from '@thebcms/selfhosted-backend/api-key/models/access';
-import { ApiKeySchema } from '@thebcms/selfhosted-backend/api-key/models/main';
+} from '@bcms/selfhosted-backend/user/models/controller';
+import { ApiKeyAccessSchema } from '@bcms/selfhosted-backend/api-key/models/access';
+import { ApiKeySchema } from '@bcms/selfhosted-backend/api-key/models/main';
 import {
     MediaSchema,
     MediaType,
-} from '@thebcms/selfhosted-backend/media/models/main';
+} from '@bcms/selfhosted-backend/media/models/main';
 import {
     MediaCreateDirBodySchema,
     MediaDeleteBodySchema,
     MediaGetBinBodySchema,
     MediaRequestUploadTokenResultSchema,
     MediaUpdateBodySchema,
-} from '@thebcms/selfhosted-backend/media/models/controller';
-import { EntryLiteSchema } from '@thebcms/selfhosted-backend/entry/models/main';
+} from '@bcms/selfhosted-backend/media/models/controller';
+import { EntryLiteSchema } from '@bcms/selfhosted-backend/entry/models/main';
 import {
     PropDateDataSchema,
     PropValueDateDataSchema,
-} from '@thebcms/selfhosted-backend/prop/models/date';
-import { PropEnumDataSchema } from '@thebcms/selfhosted-backend/prop/models/enum';
-import { PropEntryPointerDataSchema } from '@thebcms/selfhosted-backend/prop/models/entry-pointer';
-import { PropGroupPointerDataSchema } from '@thebcms/selfhosted-backend/prop/models/group-pointer';
-import { PropWidgetDataSchema } from '@thebcms/selfhosted-backend/prop/models/widget';
+} from '@bcms/selfhosted-backend/prop/models/date';
+import { PropEnumDataSchema } from '@bcms/selfhosted-backend/prop/models/enum';
+import { PropEntryPointerDataSchema } from '@bcms/selfhosted-backend/prop/models/entry-pointer';
+import { PropGroupPointerDataSchema } from '@bcms/selfhosted-backend/prop/models/group-pointer';
+import { PropWidgetDataSchema } from '@bcms/selfhosted-backend/prop/models/widget';
 import {
     PropChangeTransformSchema,
     PropChangeUpdateSchema,
-} from '@thebcms/selfhosted-backend/prop/models/change';
+} from '@bcms/selfhosted-backend/prop/models/change';
 import {
     GroupCreateBodySchema,
     GroupWhereIsItUsedResultSchema,
-} from '@thebcms/selfhosted-backend/group/models/controller';
+} from '@bcms/selfhosted-backend/group/models/controller';
 import {
     TemplateCreateBodySchema,
     TemplateWhereIsItUsedResultSchema,
-} from '@thebcms/selfhosted-backend/template/models/controller';
+} from '@bcms/selfhosted-backend/template/models/controller';
 import {
     WidgetCreateBodySchema,
     WidgetWhereIsItUsedResultSchema,
-} from '@thebcms/selfhosted-backend/widget/models/controller';
-import { LanguageSchema } from '@thebcms/selfhosted-backend/language/models/main';
-import { LanguageCreateBodySchema } from '@thebcms/selfhosted-backend/language/models/controller';
-import { EntryStatusSchema } from '@thebcms/selfhosted-backend/entry-status/models/main';
+} from '@bcms/selfhosted-backend/widget/models/controller';
+import { LanguageSchema } from '@bcms/selfhosted-backend/language/models/main';
+import { LanguageCreateBodySchema } from '@bcms/selfhosted-backend/language/models/controller';
+import { EntryStatusSchema } from '@bcms/selfhosted-backend/entry-status/models/main';
 import {
     EntryStatusCreateBodySchema,
     EntryStatusUpdateBodySchema,
-} from '@thebcms/selfhosted-backend/entry-status/models/controller';
+} from '@bcms/selfhosted-backend/entry-status/models/controller';
 import {
     ApiKeyCreateBodySchema,
     ApiKeyUpdateBodySchema,
-} from '@thebcms/selfhosted-backend/api-key/models/controller';
-import { TemplateOrganizerSchema } from '@thebcms/selfhosted-backend/template-organizer/models/main';
+} from '@bcms/selfhosted-backend/api-key/models/controller';
+import { TemplateOrganizerSchema } from '@bcms/selfhosted-backend/template-organizer/models/main';
 import {
     TemplateOrganizerCreateBodySchema,
     TemplateOrganizerUpdateBodySchema,
-} from '@thebcms/selfhosted-backend/template-organizer/models/controller';
-import { BackupSchema } from '@thebcms/selfhosted-backend/backup/models/main';
-import { BCMSFunctionConfigSchema } from '@thebcms/selfhosted-backend/function/models/main';
-import { TypeGeneratorFileSchema } from '@thebcms/selfhosted-backend/type-generator/generator/main';
+} from '@bcms/selfhosted-backend/template-organizer/models/controller';
+import { BackupSchema } from '@bcms/selfhosted-backend/backup/models/main';
+import { BCMSFunctionConfigSchema } from '@bcms/selfhosted-backend/function/models/main';
+import { TypeGeneratorFileSchema } from '@bcms/selfhosted-backend/type-generator/generator/main';
 
 export function getObjectPropertyByPath<Property = unknown>(
     object: any,

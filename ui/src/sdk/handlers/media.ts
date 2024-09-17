@@ -1,20 +1,20 @@
 import { Buffer } from 'buffer';
 import type { AxiosProgressEvent } from 'axios';
 import { Handler } from '@thebcms/selfhosted-sdk/handlers/_handler';
-import { createQueue, QueueError } from '@thebcms/selfhosted-utils/queue';
-import type { Media } from '@thebcms/selfhosted-backend/media/models/main';
+import { createQueue, QueueError } from '@bcms/selfhosted-utils/queue';
+import type { Media } from '@bcms/selfhosted-backend/media/models/main';
 import { Sdk } from '@thebcms/selfhosted-sdk';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
+} from '@bcms/selfhosted-backend/util/controller';
 import type {
     MediaCreateDirBody,
     MediaDeleteBody,
     MediaGetBinBody,
     MediaRequestUploadTokenResult,
     MediaUpdateBody,
-} from '@thebcms/selfhosted-backend/media/models/controller';
+} from '@bcms/selfhosted-backend/media/models/controller';
 
 export class MediaHandler extends Handler {
     private baseUri = '/api/v4/media';

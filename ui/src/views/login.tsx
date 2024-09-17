@@ -1,12 +1,12 @@
 import { defineComponent, onMounted, ref } from 'vue';
-import { TextInput } from '@thebcms/selfhosted-ui/components/inputs/text';
+import { TextInput } from '@bcms/selfhosted-ui/components/inputs/text';
 import {
     createRefValidator,
     createValidationItem,
-} from '@thebcms/selfhosted-ui/util/validation';
-import { PasswordInput } from '@thebcms/selfhosted-ui/components/inputs/password';
-import { Button } from '@thebcms/selfhosted-ui/components/button';
-import { throwable } from '@thebcms/selfhosted-ui/util/throwable';
+} from '@bcms/selfhosted-ui/util/validation';
+import { PasswordInput } from '@bcms/selfhosted-ui/components/inputs/password';
+import { Button } from '@bcms/selfhosted-ui/components/button';
+import { throwable } from '@bcms/selfhosted-ui/util/throwable';
 import { useRoute, useRouter } from 'vue-router';
 
 export const LoginView = defineComponent({

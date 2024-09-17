@@ -1,16 +1,16 @@
 import {
     type UserAddress,
     UserAddressSchema,
-} from '@thebcms/selfhosted-backend/user/models/address';
+} from '@bcms/selfhosted-backend/user/models/address';
 import {
     type UserPolicy,
     UserPolicySchema,
-} from '@thebcms/selfhosted-backend/user/models/policy';
-import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-utility';
+} from '@bcms/selfhosted-backend/user/models/policy';
+import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
 import {
     type UserPersonal,
     UserPersonalSchema,
-} from '@thebcms/selfhosted-backend/user/models/personal';
+} from '@bcms/selfhosted-backend/user/models/personal';
 
 export interface UserCustomPool {
     personal: UserPersonal;

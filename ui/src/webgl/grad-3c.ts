@@ -8,10 +8,10 @@ import {
     Vector2,
     WebGLRenderer,
 } from 'three';
-import { ShaderManager } from '@thebcms/selfhosted-ui/webgl/shaders/manager';
-import { useTheme } from '@thebcms/selfhosted-ui/hooks/theme';
-import vsh from '@thebcms/selfhosted-ui/webgl/shaders/grad-3c.vert';
-import fsh from '@thebcms/selfhosted-ui/webgl/shaders/grad-3c.frag';
+import { ShaderManager } from '@bcms/selfhosted-ui/webgl/shaders/manager';
+import { useTheme } from '@bcms/selfhosted-ui/hooks/theme';
+import vsh from '@bcms/selfhosted-ui/webgl/shaders/grad-3c.vert';
+import fsh from '@bcms/selfhosted-ui/webgl/shaders/grad-3c.frag';
 
 export interface Grad3COptions {
     useNoise?: boolean;

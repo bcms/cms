@@ -2,38 +2,38 @@ import {
     createController,
     createControllerMethod,
     HttpStatus,
-} from '@thebcms/selfhosted-backend/_server';
+} from '@bcms/selfhosted-backend/_server';
 import {
     RP,
     type RPApiKeyJwtCheckResult,
     type RPJwtBodyCheckResult,
     type RPJwtCheckResult,
-} from '@thebcms/selfhosted-backend/security/route-protection/main';
+} from '@bcms/selfhosted-backend/security/route-protection/main';
 import {
     type GroupCreateBody,
     GroupCreateBodySchema,
     type GroupUpdateBody,
     GroupUpdateBodySchema,
     type GroupWhereIsItUsedResult,
-} from '@thebcms/selfhosted-backend/group/models/controller';
+} from '@bcms/selfhosted-backend/group/models/controller';
 import {
     controllerItemResponseDefinitionForRef,
     controllerItemsResponseDefinitionForRef,
     openApiGetModelRef,
-} from '@thebcms/selfhosted-backend/open-api/schema';
-import { Repo } from '@thebcms/selfhosted-backend/repo';
+} from '@bcms/selfhosted-backend/open-api/schema';
+import { Repo } from '@bcms/selfhosted-backend/repo';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
-import type { Group } from '@thebcms/selfhosted-backend/group/models/main';
-import { GroupFactory } from '@thebcms/selfhosted-backend/group/factory';
-import { StringUtility } from '@thebcms/selfhosted-backend/_utils/string-utility';
-import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
-import { propsApplyChanges } from '@thebcms/selfhosted-backend/prop/changes';
-import { propsValidationTestInfiniteLoop } from '@thebcms/selfhosted-backend/prop/validate';
-import { removeGroupPointerProps } from '@thebcms/selfhosted-backend/prop/delete';
-import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
+} from '@bcms/selfhosted-backend/util/controller';
+import type { Group } from '@bcms/selfhosted-backend/group/models/main';
+import { GroupFactory } from '@bcms/selfhosted-backend/group/factory';
+import { StringUtility } from '@bcms/selfhosted-backend/_utils/string-utility';
+import { SocketManager } from '@bcms/selfhosted-backend/socket/manager';
+import { propsApplyChanges } from '@bcms/selfhosted-backend/prop/changes';
+import { propsValidationTestInfiniteLoop } from '@bcms/selfhosted-backend/prop/validate';
+import { removeGroupPointerProps } from '@bcms/selfhosted-backend/prop/delete';
+import { EventManager } from '@bcms/selfhosted-backend/event/manager';
 
 export const GroupController = createController({
     name: 'Group',

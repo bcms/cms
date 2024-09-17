@@ -3,7 +3,7 @@ import {
     type Prop,
     type PropData,
     PropType,
-} from '@thebcms/selfhosted-backend/prop/models/main';
+} from '@bcms/selfhosted-backend/prop/models/main';
 
 export class PropFactory {
     static create(type: PropType, array?: boolean): Prop | null {

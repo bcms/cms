@@ -1,12 +1,12 @@
-import type { ObjectSchema } from '@thebcms/selfhosted-utils/object-utility';
-import type { Template } from '@thebcms/selfhosted-backend/template/models/main';
-import type { Group } from '@thebcms/selfhosted-backend/group/models/main';
-import type { Widget } from '@thebcms/selfhosted-backend/widget/models/main';
-import type { Language } from '@thebcms/selfhosted-backend/language/models/main';
+import type { ObjectSchema } from '@bcms/selfhosted-utils/object-utility';
+import type { Template } from '@bcms/selfhosted-backend/template/models/main';
+import type { Group } from '@bcms/selfhosted-backend/group/models/main';
+import type { Widget } from '@bcms/selfhosted-backend/widget/models/main';
+import type { Language } from '@bcms/selfhosted-backend/language/models/main';
 import {
     generateTypescriptFileContent,
     typeGeneratorTypescriptStaticTypes,
-} from '@thebcms/selfhosted-backend/type-generator/generator/typescript';
+} from '@bcms/selfhosted-backend/type-generator/generator/typescript';
 
 export type TypeGeneratorLanguage = 'ts' | 'rust' | 'golang' | 'gql';
 export const TypeGeneratorAllowedLanguages: TypeGeneratorLanguage[] = [

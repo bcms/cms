@@ -3,15 +3,15 @@ import { useRoute, useRouter } from 'vue-router';
 import {
     Dropdown,
     type DropdownItem,
-} from '@thebcms/selfhosted-ui/components/dropdown';
-import { Loader } from '@thebcms/selfhosted-ui/components/loader';
-import { Breadcrumb } from '@thebcms/selfhosted-ui/components/breadcrumb';
-import { Button } from '@thebcms/selfhosted-ui/components/button';
-import { millisToDateString } from '@thebcms/selfhosted-ui/util/date';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
-import type { UserPolicyCRUD } from '@thebcms/selfhosted-backend/user/models/policy';
-import { CheckBox } from '@thebcms/selfhosted-ui/components/inputs/check-box';
-import type { BCMSFunctionConfig } from '@thebcms/selfhosted-backend/function/models/main';
+} from '@bcms/selfhosted-ui/components/dropdown';
+import { Loader } from '@bcms/selfhosted-ui/components/loader';
+import { Breadcrumb } from '@bcms/selfhosted-ui/components/breadcrumb';
+import { Button } from '@bcms/selfhosted-ui/components/button';
+import { millisToDateString } from '@bcms/selfhosted-ui/util/date';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
+import type { UserPolicyCRUD } from '@bcms/selfhosted-backend/user/models/policy';
+import { CheckBox } from '@bcms/selfhosted-ui/components/inputs/check-box';
+import type { BCMSFunctionConfig } from '@bcms/selfhosted-backend/function/models/main';
 
 export interface TemplateConfig {
     id: string;

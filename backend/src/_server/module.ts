@@ -2,8 +2,8 @@ import type { FastifyInstance } from 'fastify';
 import type {
     Controller,
     Middleware,
-} from '@thebcms/selfhosted-backend/_server/rest';
-import type { ServerConfig } from '@thebcms/selfhosted-backend/_server/main';
+} from '@bcms/selfhosted-backend/_server/rest';
+import type { ServerConfig } from '@bcms/selfhosted-backend/_server/main';
 
 export interface ModuleConfig {
     name: string;

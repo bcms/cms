@@ -1,40 +1,40 @@
-import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-utility';
+import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
 import {
     type PropDateData,
     PropDateDataSchema,
-} from '@thebcms/selfhosted-backend/prop/models/date';
+} from '@bcms/selfhosted-backend/prop/models/date';
 import {
     type PropEnumData,
     PropEnumDataSchema,
-} from '@thebcms/selfhosted-backend/prop/models/enum';
+} from '@bcms/selfhosted-backend/prop/models/enum';
 import {
     type PropEntryPointerData,
     PropEntryPointerDataSchema,
     type PropValueEntryPointer,
-} from '@thebcms/selfhosted-backend/prop/models/entry-pointer';
+} from '@bcms/selfhosted-backend/prop/models/entry-pointer';
 import {
     type PropGroupPointerData,
     type PropGroupPointerDataParsed,
     PropGroupPointerDataSchema,
     type PropValueGroupPointerData,
-} from '@thebcms/selfhosted-backend/prop/models/group-pointer';
+} from '@bcms/selfhosted-backend/prop/models/group-pointer';
 import type {
     PropMediaData,
     PropMediaDataParsed,
     PropValueMediaData,
-} from '@thebcms/selfhosted-backend/prop/models/media';
+} from '@bcms/selfhosted-backend/prop/models/media';
 import {
     type PropValueWidgetData,
     type PropWidgetData,
     type PropWidgetDataParsed,
     PropWidgetDataSchema,
-} from '@thebcms/selfhosted-backend/prop/models/widget';
+} from '@bcms/selfhosted-backend/prop/models/widget';
 import type {
     PropRichTextData,
     PropRichTextDataParsed,
     PropValueRichTextData,
-} from '@thebcms/selfhosted-backend/prop/models/rich-text';
-import type { EntryParsed } from '@thebcms/selfhosted-backend/entry/models/main';
+} from '@bcms/selfhosted-backend/prop/models/rich-text';
+import type { EntryParsed } from '@bcms/selfhosted-backend/entry/models/main';
 
 // eslint-disable-next-line no-shadow
 export enum PropType {

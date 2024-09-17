@@ -1,6 +1,6 @@
 import type { OpenAPIV3 } from 'openapi-types';
-import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-utility';
-import type { OpenApiModelNames } from '@thebcms/selfhosted-backend/open-api/main';
+import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
+import type { OpenApiModelNames } from '@bcms/selfhosted-backend/open-api/main';
 
 export function objectSchemaToOpenApi3Schema(
     schema: ObjectSchema,

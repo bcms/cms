@@ -2,68 +2,68 @@ import type { DefineComponent } from 'vue';
 import {
     ModalConfirm,
     type ModalConfirmInput,
-} from '@thebcms/selfhosted-ui/components/modals/confirm';
-import { ModalMediaCreateDir } from '@thebcms/selfhosted-ui/components/modals/media/create-dir';
-import { ModalMediaCreateFile } from '@thebcms/selfhosted-ui/components/modals/media/create-file';
+} from '@bcms/selfhosted-ui/components/modals/confirm';
+import { ModalMediaCreateDir } from '@bcms/selfhosted-ui/components/modals/media/create-dir';
+import { ModalMediaCreateFile } from '@bcms/selfhosted-ui/components/modals/media/create-file';
 import {
     type ModalEntryContentLindEditInput,
     type ModalEntryContentLindEditOutput,
     ModalEntryContentLinkEdit,
-} from '@thebcms/selfhosted-ui/components/modals/entry/content/link-edit';
+} from '@bcms/selfhosted-ui/components/modals/entry/content/link-edit';
 import {
     ModalTemplateCreateEdit,
     type ModalTemplateCreateEditInput,
-} from '@thebcms/selfhosted-ui/components/modals/template/create-edit';
+} from '@bcms/selfhosted-ui/components/modals/template/create-edit';
 import {
     ModalPropCreate,
     type ModalPropCreateInput,
     type ModalPropCreateOutput,
-} from '@thebcms/selfhosted-ui/components/modals/props/create';
+} from '@bcms/selfhosted-ui/components/modals/props/create';
 import {
     ModalGroupCreateEdit,
     type ModalGroupCreateEditInput,
-} from '@thebcms/selfhosted-ui/components/modals/group/create-edit';
+} from '@bcms/selfhosted-ui/components/modals/group/create-edit';
 import {
     ModalPropUpdate,
     type ModalPropUpdateInput,
     type ModalPropUpdateOutput,
-} from '@thebcms/selfhosted-ui/components/modals/props/update';
+} from '@bcms/selfhosted-ui/components/modals/props/update';
 import {
     ModalWhereIsItUsedResults,
     type ModalWhereIsItUsedResultsInput,
-} from '@thebcms/selfhosted-ui/components/modals/where-is-it-used-results';
+} from '@bcms/selfhosted-ui/components/modals/where-is-it-used-results';
 import {
     ModalWidgetCreateEdit,
     type ModalWidgetCreateEditInput,
-} from '@thebcms/selfhosted-ui/components/modals/widget/create-edit';
+} from '@bcms/selfhosted-ui/components/modals/widget/create-edit';
 import {
     ModalUserAddEdit,
     type ModalUserAddEditInput,
-} from '@thebcms/selfhosted-ui/components/modals/user/add-edit';
+} from '@bcms/selfhosted-ui/components/modals/user/add-edit';
 import {
     ModalUserPolicy,
     type ModalUserPolicyInput,
-} from '@thebcms/selfhosted-ui/components/modals/user/policy';
+} from '@bcms/selfhosted-ui/components/modals/user/policy';
 import {
     ModalApiKeyCreateEdit,
     type ModalApiKeyCreateEditInput,
-} from '@thebcms/selfhosted-ui/components/modals/api-key/create-edit';
+} from '@bcms/selfhosted-ui/components/modals/api-key/create-edit';
 import {
     ModalMediaSelect,
     type ModalMediaSelectInput,
     type ModalMediaSelectOutput,
-} from '@thebcms/selfhosted-ui/components/modals/media/select';
+} from '@bcms/selfhosted-ui/components/modals/media/select';
 import {
     ModalMediaEditAltCaption,
     type ModalMediaEditAltCaptionInput,
     type ModalMediaEditAltCaptionOutput,
-} from '@thebcms/selfhosted-ui/components/modals/media/edit-alt-caption';
+} from '@bcms/selfhosted-ui/components/modals/media/edit-alt-caption';
 import {
     ModalEntryViewModel,
     type ModalEntryViewModelInput,
-} from '@thebcms/selfhosted-ui/components/modals/entry/view-model';
-import { ModalEntryStatusCreateEdit } from '@thebcms/selfhosted-ui/components/modals/entry-status/create-edit';
-import { ModalBackupRestore } from '@thebcms/selfhosted-ui/components/modals/backup/restore';
+} from '@bcms/selfhosted-ui/components/modals/entry/view-model';
+import { ModalEntryStatusCreateEdit } from '@bcms/selfhosted-ui/components/modals/entry-status/create-edit';
+import { ModalBackupRestore } from '@bcms/selfhosted-ui/components/modals/backup/restore';
 
 export interface ModalHandlerOptions<Output = unknown> {
     title?: string;

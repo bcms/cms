@@ -2,20 +2,20 @@ import {
     createController,
     createControllerMethod,
     HttpStatus,
-} from '@thebcms/selfhosted-backend/_server';
+} from '@bcms/selfhosted-backend/_server';
 import {
     RP,
     type RPApiKeyJwtCheckResult,
-} from '@thebcms/selfhosted-backend/security/route-protection/main';
-import type { ControllerItemsResponse } from '@thebcms/selfhosted-backend/util/controller';
+} from '@bcms/selfhosted-backend/security/route-protection/main';
+import type { ControllerItemsResponse } from '@bcms/selfhosted-backend/util/controller';
 import {
     TypeGenerator,
     TypeGeneratorAllowedLanguages,
     type TypeGeneratorFile,
     type TypeGeneratorLanguage,
-} from '@thebcms/selfhosted-backend/type-generator/generator/main';
-import { controllerItemsResponseDefinitionForRef } from '@thebcms/selfhosted-backend/open-api/schema';
-import { Repo } from '@thebcms/selfhosted-backend/repo';
+} from '@bcms/selfhosted-backend/type-generator/generator/main';
+import { controllerItemsResponseDefinitionForRef } from '@bcms/selfhosted-backend/open-api/schema';
+import { Repo } from '@bcms/selfhosted-backend/repo';
 
 export const TypeGeneratorController = createController({
     name: 'TypeGenerator',

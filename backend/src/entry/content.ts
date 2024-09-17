@@ -3,7 +3,7 @@ import {
     type EntryContentNodeHeadingAttr,
     EntryContentNodeMarkerType,
     EntryContentNodeType,
-} from '@thebcms/selfhosted-backend/entry/models/content';
+} from '@bcms/selfhosted-backend/entry/models/content';
 
 export function entryContentNodeToHtml(node: EntryContentNode): string {
     let output = '';

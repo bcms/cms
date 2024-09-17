@@ -9,7 +9,7 @@ import {
 import type {
     Prop,
     PropValue,
-} from '@thebcms/selfhosted-backend/prop/models/main';
+} from '@bcms/selfhosted-backend/prop/models/main';
 import {
     propApplyValueChangeFromPath,
     propPathToArray,
@@ -17,25 +17,25 @@ import {
     propValueMoveArrayItem,
     propValueRemoveArrayItem,
     propValuesFromSchema,
-} from '@thebcms/selfhosted-ui/util/prop';
-import type { PropValueDateData } from '@thebcms/selfhosted-backend/prop/models/date';
-import type { PropValueMediaData } from '@thebcms/selfhosted-backend/prop/models/media';
-import type { PropValueRichTextData } from '@thebcms/selfhosted-backend/prop/models/rich-text';
-import type { PropValueGroupPointerData } from '@thebcms/selfhosted-backend/prop/models/group-pointer';
-import type { PropValueEntryPointer } from '@thebcms/selfhosted-backend/prop/models/entry-pointer';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
-import type { Entry } from '@thebcms/selfhosted-backend/entry/models/main';
-import type { PropValidator } from '@thebcms/selfhosted-ui/util/prop-validation';
-import type { EntrySync } from '@thebcms/selfhosted-ui/services/entry-sync';
+} from '@bcms/selfhosted-ui/util/prop';
+import type { PropValueDateData } from '@bcms/selfhosted-backend/prop/models/date';
+import type { PropValueMediaData } from '@bcms/selfhosted-backend/prop/models/media';
+import type { PropValueRichTextData } from '@bcms/selfhosted-backend/prop/models/rich-text';
+import type { PropValueGroupPointerData } from '@bcms/selfhosted-backend/prop/models/group-pointer';
+import type { PropValueEntryPointer } from '@bcms/selfhosted-backend/prop/models/entry-pointer';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
+import type { Entry } from '@bcms/selfhosted-backend/entry/models/main';
+import type { PropValidator } from '@bcms/selfhosted-ui/util/prop-validation';
+import type { EntrySync } from '@bcms/selfhosted-ui/services/entry-sync';
 import {
     callAndClearUnsubscribeFns,
     type UnsubscribeFns,
-} from '@thebcms/selfhosted-ui/util/sub';
-import { TextAreaInput } from '@thebcms/selfhosted-ui/components/inputs/text-area';
-import { TextInput } from '@thebcms/selfhosted-ui/components/inputs/text';
-import { StringUtility } from '@thebcms/selfhosted-utils/string-utility';
-import { EntryMetaEditor } from '@thebcms/selfhosted-ui/components/entry/meta';
-import { EntryContentEditor } from '@thebcms/selfhosted-ui/components/entry/content';
+} from '@bcms/selfhosted-ui/util/sub';
+import { TextAreaInput } from '@bcms/selfhosted-ui/components/inputs/text-area';
+import { TextInput } from '@bcms/selfhosted-ui/components/inputs/text';
+import { StringUtility } from '@bcms/selfhosted-utils/string-utility';
+import { EntryMetaEditor } from '@bcms/selfhosted-ui/components/entry/meta';
+import { EntryContentEditor } from '@bcms/selfhosted-ui/components/entry/content';
 
 export async function entryEditorMetaOnAddPropValue(
     props: PropValue[],

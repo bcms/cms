@@ -1,16 +1,16 @@
-import type { SocketEventNamesUser } from '@thebcms/selfhosted-backend/socket/events/user';
-import type { SocketEventNamesGroup } from '@thebcms/selfhosted-backend/socket/events/group';
-import type { SocketEventNamesTemplate } from '@thebcms/selfhosted-backend/socket/events/template';
-import type { SocketEventNamesWidget } from '@thebcms/selfhosted-backend/socket/events/widget';
-import type { SocketEventNamesMedia } from '@thebcms/selfhosted-backend/socket/events/media';
-import type { SocketEventNamesApiKey } from '@thebcms/selfhosted-backend/socket/events/api-key';
-import type { SocketEventNamesLanguage } from '@thebcms/selfhosted-backend/socket/events/language';
-import type { SocketEventNamesEntry } from '@thebcms/selfhosted-backend/socket/events/entry';
-import type { SocketEventNamesEntryStatus } from '@thebcms/selfhosted-backend/socket/events/entry-status';
-import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-utility';
-import type { SocketEventNamesEntrySync } from '@thebcms/selfhosted-backend/socket/events/entry-sync';
-import type { SocketEventNamesTemplateOrganizer } from '@thebcms/selfhosted-backend/socket/events/template-organizer';
-import type { SocketEventNamesBackup } from '@thebcms/selfhosted-backend/socket/events/backup';
+import type { SocketEventNamesUser } from '@bcms/selfhosted-backend/socket/events/user';
+import type { SocketEventNamesGroup } from '@bcms/selfhosted-backend/socket/events/group';
+import type { SocketEventNamesTemplate } from '@bcms/selfhosted-backend/socket/events/template';
+import type { SocketEventNamesWidget } from '@bcms/selfhosted-backend/socket/events/widget';
+import type { SocketEventNamesMedia } from '@bcms/selfhosted-backend/socket/events/media';
+import type { SocketEventNamesApiKey } from '@bcms/selfhosted-backend/socket/events/api-key';
+import type { SocketEventNamesLanguage } from '@bcms/selfhosted-backend/socket/events/language';
+import type { SocketEventNamesEntry } from '@bcms/selfhosted-backend/socket/events/entry';
+import type { SocketEventNamesEntryStatus } from '@bcms/selfhosted-backend/socket/events/entry-status';
+import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
+import type { SocketEventNamesEntrySync } from '@bcms/selfhosted-backend/socket/events/entry-sync';
+import type { SocketEventNamesTemplateOrganizer } from '@bcms/selfhosted-backend/socket/events/template-organizer';
+import type { SocketEventNamesBackup } from '@bcms/selfhosted-backend/socket/events/backup';
 
 export interface SocketEventDataDefault {
     /**

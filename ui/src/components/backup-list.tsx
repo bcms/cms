@@ -1,15 +1,15 @@
 import { computed, defineComponent, onMounted, type PropType } from 'vue';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
-import { Tag } from '@thebcms/selfhosted-ui/components/tag';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
+import { Tag } from '@bcms/selfhosted-ui/components/tag';
 import {
     Dropdown,
     type DropdownItem,
-} from '@thebcms/selfhosted-ui/components/dropdown';
-import { confirm } from '@thebcms/selfhosted-ui/services/confirm';
-import { Button } from '@thebcms/selfhosted-ui/components/button';
-import type { Backup } from '@thebcms/selfhosted-backend/backup/models/main';
-import { downloadBuffer } from '@thebcms/selfhosted-ui/util/download';
-import { millisToDateString } from '@thebcms/selfhosted-ui/util/date';
+} from '@bcms/selfhosted-ui/components/dropdown';
+import { confirm } from '@bcms/selfhosted-ui/services/confirm';
+import { Button } from '@bcms/selfhosted-ui/components/button';
+import type { Backup } from '@bcms/selfhosted-backend/backup/models/main';
+import { downloadBuffer } from '@bcms/selfhosted-ui/util/download';
+import { millisToDateString } from '@bcms/selfhosted-ui/util/date';
 
 export const BackupListItem = defineComponent({
     props: {

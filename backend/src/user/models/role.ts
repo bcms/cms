@@ -1,4 +1,4 @@
-import type { ObjectSchema } from '@thebcms/selfhosted-utils/object-utility';
+import type { ObjectSchema } from '@bcms/selfhosted-utils/object-utility';
 
 export type UserRolePermissionName = 'READ' | 'WRITE' | 'DELETE' | 'EXECUTE';
 

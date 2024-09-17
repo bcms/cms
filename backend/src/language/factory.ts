@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import type { Language } from '@thebcms/selfhosted-backend/language/models/main';
+import type { Language } from '@bcms/selfhosted-backend/language/models/main';
 
 export class LanguageFactory {
     static create(

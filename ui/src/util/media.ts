@@ -1,10 +1,10 @@
 import { Buffer } from 'buffer';
-import { createQueue, type QueueResult } from '@thebcms/selfhosted-utils/queue';
+import { createQueue, type QueueResult } from '@bcms/selfhosted-utils/queue';
 import type {
     Media,
     MediaType,
-} from '@thebcms/selfhosted-backend/media/models/main';
-import type { MediaGetBinBody } from '@thebcms/selfhosted-backend/media/models/controller';
+} from '@bcms/selfhosted-backend/media/models/main';
+import type { MediaGetBinBody } from '@bcms/selfhosted-backend/media/models/controller';
 
 const loadQueue = createQueue<string>();
 const typesWithImage: Array<keyof typeof MediaType> = ['IMG', 'GIF', 'VID'];

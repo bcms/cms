@@ -1,18 +1,18 @@
 import {
     type EntryStatusValue,
     EntryStatusValueSchema,
-} from '@thebcms/selfhosted-backend/entry/models/status';
+} from '@bcms/selfhosted-backend/entry/models/status';
 import {
     type EntryMeta,
     EntryMetaSchema,
-} from '@thebcms/selfhosted-backend/entry/models/meta';
+} from '@bcms/selfhosted-backend/entry/models/meta';
 import {
     type EntryContent,
     type EntryContentNode,
     EntryContentSchema,
-} from '@thebcms/selfhosted-backend/entry/models/content';
-import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-utility';
-import type { PropValue } from '@thebcms/selfhosted-backend/prop/models/main';
+} from '@bcms/selfhosted-backend/entry/models/content';
+import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
+import type { PropValue } from '@bcms/selfhosted-backend/prop/models/main';
 
 export interface EntryCreateBody {
     statuses: EntryStatusValue[];

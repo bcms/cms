@@ -1,6 +1,6 @@
-import type { Module } from '@thebcms/selfhosted-backend/_server/module';
-import { JWTManager } from '@thebcms/selfhosted-backend/_server/modules/jwt/manager';
-import type { JWTScope } from '@thebcms/selfhosted-backend/_server/modules/jwt/models';
+import type { Module } from '@bcms/selfhosted-backend/_server/module';
+import { JWTManager } from '@bcms/selfhosted-backend/_server/modules/jwt/manager';
+import type { JWTScope } from '@bcms/selfhosted-backend/_server/modules/jwt/models';
 
 export interface JWTConfig {
     scopes: JWTScope[];

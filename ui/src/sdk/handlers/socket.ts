@@ -1,14 +1,14 @@
 import { v4 as uuidv4 } from 'uuid';
 import WebSocket from 'isomorphic-ws';
 import { Handler } from '@thebcms/selfhosted-sdk/handlers/_handler';
-import { createQueue, QueueError } from '@thebcms/selfhosted-utils/queue';
+import { createQueue, QueueError } from '@bcms/selfhosted-utils/queue';
 import { Sdk } from '@thebcms/selfhosted-sdk';
 import type {
     SocketEventData,
     SocketEventDataConnection,
     SocketEventName,
     SocketEventNamesAndTypes,
-} from '@thebcms/selfhosted-backend/socket/events/main';
+} from '@bcms/selfhosted-backend/socket/events/main';
 
 export interface SocketEventHandler<
     Name extends SocketEventName,

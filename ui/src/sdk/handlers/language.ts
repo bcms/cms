@@ -3,9 +3,9 @@ import { Sdk } from '@thebcms/selfhosted-sdk';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
-import type { Language } from '@thebcms/selfhosted-backend/language/models/main';
-import type { LanguageCreateBody } from '@thebcms/selfhosted-backend/language/models/controller';
+} from '@bcms/selfhosted-backend/util/controller';
+import type { Language } from '@bcms/selfhosted-backend/language/models/main';
+import type { LanguageCreateBody } from '@bcms/selfhosted-backend/language/models/controller';
 
 export class LanguageHandler extends Handler {
     private baseUri = '/api/v4/language';

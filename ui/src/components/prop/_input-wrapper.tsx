@@ -8,10 +8,10 @@ import {
     ref,
 } from 'vue';
 import type { JSX } from 'vue/jsx-runtime';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
-import { findParent } from '@thebcms/selfhosted-ui/util/dom';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
-import { Button } from '@thebcms/selfhosted-ui/components/button';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
+import { findParent } from '@bcms/selfhosted-ui/util/dom';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
+import { Button } from '@bcms/selfhosted-ui/components/button';
 
 function findNodeById(el: HTMLElement, id: string) {
     if (el.id === id) {

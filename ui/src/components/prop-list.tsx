@@ -1,9 +1,9 @@
 import { defineComponent, type PropType, ref } from 'vue';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
-import type { Prop } from '@thebcms/selfhosted-backend/prop/models/main';
-import { Link } from '@thebcms/selfhosted-ui/components/link';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
-import { Tag } from '@thebcms/selfhosted-ui/components/tag';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
+import type { Prop } from '@bcms/selfhosted-backend/prop/models/main';
+import { Link } from '@bcms/selfhosted-ui/components/link';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
+import { Tag } from '@bcms/selfhosted-ui/components/tag';
 
 export const PropList = defineComponent({
     props: {

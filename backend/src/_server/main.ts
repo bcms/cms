@@ -13,17 +13,17 @@ import {
     Logger,
     createLogger,
     type LoggerConfig,
-} from '@thebcms/selfhosted-backend/_server/logger';
+} from '@bcms/selfhosted-backend/_server/logger';
 import {
     type HttpException,
     HttpStatus,
-} from '@thebcms/selfhosted-backend/_server/http-error';
+} from '@bcms/selfhosted-backend/_server/http-error';
 import type {
     Controller,
     ControllerData,
     Middleware,
-} from '@thebcms/selfhosted-backend/_server/rest';
-import type { Module } from '@thebcms/selfhosted-backend/_server/module';
+} from '@bcms/selfhosted-backend/_server/rest';
+import type { Module } from '@bcms/selfhosted-backend/_server/module';
 import type { OpenAPIV3 } from 'openapi-types';
 
 export interface ServerType extends Omit<FastifyListenOptions, 'port'> {

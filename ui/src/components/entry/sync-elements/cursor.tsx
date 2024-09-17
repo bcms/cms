@@ -5,8 +5,8 @@ import {
     onMounted,
     ref,
 } from 'vue';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
 
 export const EntrySyncElementsUserCursor = defineComponent({
     props: {

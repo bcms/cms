@@ -1,11 +1,11 @@
 import type {
     Plugin,
     PluginCreateData,
-} from '@thebcms/selfhosted-backend/plugin/models/main';
+} from '@bcms/selfhosted-backend/plugin/models/main';
 import type {
     ControllerConfig,
     MiddlewareConfig,
-} from '@thebcms/selfhosted-backend/_server';
+} from '@bcms/selfhosted-backend/_server';
 
 export function createPlugin(
     init: (data: PluginCreateData) => Promise<Plugin>,

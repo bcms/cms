@@ -3,19 +3,19 @@ import type {
     Entry,
     EntryLite,
     EntryLiteInfo,
-} from '@thebcms/selfhosted-backend/entry/models/main';
+} from '@bcms/selfhosted-backend/entry/models/main';
 import {
     PropType,
     type Prop,
     type PropValue,
-} from '@thebcms/selfhosted-backend/prop/models/main';
-import type { Group } from '@thebcms/selfhosted-backend/group/models/main';
+} from '@bcms/selfhosted-backend/prop/models/main';
+import type { Group } from '@bcms/selfhosted-backend/group/models/main';
 import type {
     PropGroupPointerData,
     PropValueGroupPointerData,
-} from '@thebcms/selfhosted-backend/prop/models/group-pointer';
-import type { Template } from '@thebcms/selfhosted-backend/template/models/main';
-import type { PropValueMediaData } from '@thebcms/selfhosted-backend/prop/models/media';
+} from '@bcms/selfhosted-backend/prop/models/group-pointer';
+import type { Template } from '@bcms/selfhosted-backend/template/models/main';
+import type { PropValueMediaData } from '@bcms/selfhosted-backend/prop/models/media';
 
 export class EntryFactory {
     static create(data: Omit<Entry, '_id' | 'createdAt' | 'updatedAt'>): Entry {

@@ -1,18 +1,18 @@
 import {
     type Prop,
     PropType,
-} from '@thebcms/selfhosted-backend/prop/models/main';
+} from '@bcms/selfhosted-backend/prop/models/main';
 import {
     TypeGenerator,
     type TypeGeneratorEnumsMap,
     type TypeGeneratorGeneratedProp,
     type TypeGeneratorImportsMap,
-} from '@thebcms/selfhosted-backend/type-generator/generator/main';
-import type { Template } from '@thebcms/selfhosted-backend/template/models/main';
-import type { Group } from '@thebcms/selfhosted-backend/group/models/main';
-import type { PropEntryPointerData } from '@thebcms/selfhosted-backend/prop/models/entry-pointer';
-import type { PropEnumData } from '@thebcms/selfhosted-backend/prop/models/enum';
-import type { PropGroupPointerData } from '@thebcms/selfhosted-backend/prop/models/group-pointer';
+} from '@bcms/selfhosted-backend/type-generator/generator/main';
+import type { Template } from '@bcms/selfhosted-backend/template/models/main';
+import type { Group } from '@bcms/selfhosted-backend/group/models/main';
+import type { PropEntryPointerData } from '@bcms/selfhosted-backend/prop/models/entry-pointer';
+import type { PropEnumData } from '@bcms/selfhosted-backend/prop/models/enum';
+import type { PropGroupPointerData } from '@bcms/selfhosted-backend/prop/models/group-pointer';
 
 export function generateTypescriptFileContent(
     props: Prop[],

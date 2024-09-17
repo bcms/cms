@@ -3,13 +3,13 @@ import { defineComponent, onMounted, ref } from 'vue';
 import {
     getModalDefaultProps,
     ModalWrapper,
-} from '@thebcms/selfhosted-ui/components/modals/_wrapper';
-import { useMedia } from '@thebcms/selfhosted-ui/hooks/media';
+} from '@bcms/selfhosted-ui/components/modals/_wrapper';
+import { useMedia } from '@bcms/selfhosted-ui/hooks/media';
 import {
     FileInput,
     type FileInputListItem,
-} from '@thebcms/selfhosted-ui/components/inputs/file';
-import { fileToB64 } from '@thebcms/selfhosted-ui/util/file';
+} from '@bcms/selfhosted-ui/components/inputs/file';
+import { fileToB64 } from '@bcms/selfhosted-ui/util/file';
 
 export const ModalMediaCreateFile = defineComponent({
     props: getModalDefaultProps<void, void>(),

@@ -1,10 +1,10 @@
-import { MemCache } from '@thebcms/selfhosted-utils/mem-cache';
-import type { EntryStatus } from '@thebcms/selfhosted-backend/entry-status/models/main';
-import type { Client } from '@thebcms/selfhosted-client/main';
+import { MemCache } from '@bcms/selfhosted-utils/mem-cache';
+import type { EntryStatus } from '@bcms/selfhosted-backend/entry-status/models/main';
+import type { Client } from '@bcms/selfhosted-client/main';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
+} from '@bcms/selfhosted-backend/util/controller';
 
 export class EntryStatusHandler {
     private baseUri = `/api/v4/entry-status`;

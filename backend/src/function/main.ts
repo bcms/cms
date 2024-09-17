@@ -2,13 +2,13 @@ import path from 'path';
 import {
     type BCMSFunction,
     BCMSFunctionSchema,
-} from '@thebcms/selfhosted-backend/function/models/main';
-import { FS } from '@thebcms/selfhosted-backend/_utils/fs';
+} from '@bcms/selfhosted-backend/function/models/main';
+import { FS } from '@bcms/selfhosted-backend/_utils/fs';
 import {
     ObjectUtility,
     ObjectUtilityError,
-} from '@thebcms/selfhosted-backend/_utils/object-utility';
-import { StringUtility } from '@thebcms/selfhosted-backend/_utils/string-utility';
+} from '@bcms/selfhosted-backend/_utils/object-utility';
+import { StringUtility } from '@bcms/selfhosted-backend/_utils/string-utility';
 
 export class FunctionManager {
     private static fns: BCMSFunction[] = [];

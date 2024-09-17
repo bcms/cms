@@ -1,4 +1,4 @@
-import { ChildProcess } from '@thebcms/selfhosted-utils/child-process';
+import { ChildProcess } from '@bcms/selfhosted-utils/child-process';
 import path from 'path';
 
 export async function publish(basePath: string[]) {

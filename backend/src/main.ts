@@ -3,7 +3,7 @@ import {
     createController,
     createControllerMethod,
     createServer,
-} from '@thebcms/selfhosted-backend/_server';
+} from '@bcms/selfhosted-backend/_server';
 import FastifyMultipart from '@fastify/multipart';
 import FastifyStatic from '@fastify/static';
 import FastifyCors from '@fastify/cors';
@@ -11,47 +11,47 @@ import {
     createJwt,
     JWTError,
     JWTManager,
-} from '@thebcms/selfhosted-backend/_server/modules/jwt';
-import { Config } from '@thebcms/selfhosted-backend/config';
-import { createSocket } from '@thebcms/selfhosted-backend/_server/modules/socket';
-import { Repo } from '@thebcms/selfhosted-backend/repo';
-import { createMongoDB } from '@thebcms/selfhosted-backend/_server/modules/mongodb';
+} from '@bcms/selfhosted-backend/_server/modules/jwt';
+import { Config } from '@bcms/selfhosted-backend/config';
+import { createSocket } from '@bcms/selfhosted-backend/_server/modules/socket';
+import { Repo } from '@bcms/selfhosted-backend/repo';
+import { createMongoDB } from '@bcms/selfhosted-backend/_server/modules/mongodb';
 import {
     createMigrations,
     MigrationRepo,
-} from '@thebcms/selfhosted-backend/migrations';
-import { FS } from '@thebcms/selfhosted-backend/_utils/fs';
-import { IPMiddleware } from '@thebcms/selfhosted-backend/ip-middleware';
+} from '@bcms/selfhosted-backend/migrations';
+import { FS } from '@bcms/selfhosted-backend/_utils/fs';
+import { IPMiddleware } from '@bcms/selfhosted-backend/ip-middleware';
 import {
     AuthController,
     setAuthCreateAdminServerToken,
-} from '@thebcms/selfhosted-backend/auth/controller';
-import { UserController } from '@thebcms/selfhosted-backend/user/controller';
-import { StorageController } from '@thebcms/selfhosted-backend/storage/controller';
-import type { UserCustomPool } from '@thebcms/selfhosted-backend/user/models/custom-pool';
-import { socketEventHandlersEntrySync } from '@thebcms/selfhosted-backend/socket/handlers/entry-sync';
+} from '@bcms/selfhosted-backend/auth/controller';
+import { UserController } from '@bcms/selfhosted-backend/user/controller';
+import { StorageController } from '@bcms/selfhosted-backend/storage/controller';
+import type { UserCustomPool } from '@bcms/selfhosted-backend/user/models/custom-pool';
+import { socketEventHandlersEntrySync } from '@bcms/selfhosted-backend/socket/handlers/entry-sync';
 import {
     createEntrySyncChannelHandler,
     useEntrySyncChannelHandler,
-} from '@thebcms/selfhosted-backend/entry-sync/channel-handler';
-import { MediaController } from '@thebcms/selfhosted-backend/media/controller';
-import { ApiKeyController } from '@thebcms/selfhosted-backend/api-key/controller';
-import { EntryController } from '@thebcms/selfhosted-backend/entry/controller';
-import { EntryStatusController } from '@thebcms/selfhosted-backend/entry-status/controller';
-import { GroupController } from '@thebcms/selfhosted-backend/group/controller';
-import { LanguageController } from '@thebcms/selfhosted-backend/language/controller';
-import { TemplateController } from '@thebcms/selfhosted-backend/template/controller';
-import { WidgetController } from '@thebcms/selfhosted-backend/widget/controller';
-import { TemplateOrganizerController } from '@thebcms/selfhosted-backend/template-organizer/controller';
-import { BackupController } from '@thebcms/selfhosted-backend/backup/controller';
-import { FunctionController } from '@thebcms/selfhosted-backend/function/controllert';
-import { FunctionManager } from '@thebcms/selfhosted-backend/function/main';
-import { UIProxy } from '@thebcms/selfhosted-backend/ui-proxy';
-import { TypeGeneratorController } from '@thebcms/selfhosted-backend/type-generator/controller';
-import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
-import { createBcmsJobs } from '@thebcms/selfhosted-backend/job/main';
-import { createBcmsPlugins } from '@thebcms/selfhosted-backend/plugin/main';
-import { PluginController } from '@thebcms/selfhosted-backend/plugin/controller';
+} from '@bcms/selfhosted-backend/entry-sync/channel-handler';
+import { MediaController } from '@bcms/selfhosted-backend/media/controller';
+import { ApiKeyController } from '@bcms/selfhosted-backend/api-key/controller';
+import { EntryController } from '@bcms/selfhosted-backend/entry/controller';
+import { EntryStatusController } from '@bcms/selfhosted-backend/entry-status/controller';
+import { GroupController } from '@bcms/selfhosted-backend/group/controller';
+import { LanguageController } from '@bcms/selfhosted-backend/language/controller';
+import { TemplateController } from '@bcms/selfhosted-backend/template/controller';
+import { WidgetController } from '@bcms/selfhosted-backend/widget/controller';
+import { TemplateOrganizerController } from '@bcms/selfhosted-backend/template-organizer/controller';
+import { BackupController } from '@bcms/selfhosted-backend/backup/controller';
+import { FunctionController } from '@bcms/selfhosted-backend/function/controllert';
+import { FunctionManager } from '@bcms/selfhosted-backend/function/main';
+import { UIProxy } from '@bcms/selfhosted-backend/ui-proxy';
+import { TypeGeneratorController } from '@bcms/selfhosted-backend/type-generator/controller';
+import { EventManager } from '@bcms/selfhosted-backend/event/manager';
+import { createBcmsJobs } from '@bcms/selfhosted-backend/job/main';
+import { createBcmsPlugins } from '@bcms/selfhosted-backend/plugin/main';
+import { PluginController } from '@bcms/selfhosted-backend/plugin/controller';
 
 async function main() {
     await createServer({

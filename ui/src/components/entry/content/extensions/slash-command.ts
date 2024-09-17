@@ -4,13 +4,13 @@ import type { Instance, Props } from 'tippy.js';
 import { Suggestion, type SuggestionProps } from '@tiptap/suggestion';
 import { type CommandProps, type Range, VueRenderer } from '@tiptap/vue-3';
 import type { Sdk } from '@thebcms/selfhosted-sdk';
-import type { Widget } from '@thebcms/selfhosted-backend/widget/models/main';
+import type { Widget } from '@bcms/selfhosted-backend/widget/models/main';
 import {
     SlackCommandList,
     type SlashCommandListItem,
-} from '@thebcms/selfhosted-ui/components/entry/content/extensions/slash-command-list';
-import { propValuesFromSchema } from '@thebcms/selfhosted-ui/util/prop';
-import type { Media } from '@thebcms/selfhosted-backend/media/models/main';
+} from '@bcms/selfhosted-ui/components/entry/content/extensions/slash-command-list';
+import { propValuesFromSchema } from '@bcms/selfhosted-ui/util/prop';
+import type { Media } from '@bcms/selfhosted-backend/media/models/main';
 
 export interface SlashCommandData {
     editor: CommandProps;

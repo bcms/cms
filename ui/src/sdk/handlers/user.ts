@@ -1,16 +1,16 @@
 import { Handler } from '@thebcms/selfhosted-sdk/handlers/_handler';
 import { Sdk } from '@thebcms/selfhosted-sdk';
-import { createQueue, QueueError } from '@thebcms/selfhosted-utils/queue';
-import type { UserProtected } from '@thebcms/selfhosted-backend/user/models/main';
+import { createQueue, QueueError } from '@bcms/selfhosted-utils/queue';
+import type { UserProtected } from '@bcms/selfhosted-backend/user/models/main';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
+} from '@bcms/selfhosted-backend/util/controller';
 import type {
     UserCreateBody,
     UserStatsResponse,
     UserUpdateBody,
-} from '@thebcms/selfhosted-backend/user/models/controller';
+} from '@bcms/selfhosted-backend/user/models/controller';
 
 export class UserHandler extends Handler {
     private baseUri = '/api/v4/user';

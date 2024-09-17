@@ -7,9 +7,9 @@ import {
     Teleport,
 } from 'vue';
 import { type Editor, posToDOMRect } from '@tiptap/vue-3';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
-import { findParent } from '@thebcms/selfhosted-ui/util/dom';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
+import { findParent } from '@bcms/selfhosted-ui/util/dom';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
 
 export interface EntryContentEditorToolbarItem {
     id: string;

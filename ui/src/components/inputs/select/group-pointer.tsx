@@ -1,8 +1,8 @@
 import { computed, defineComponent, type PropType } from 'vue';
 import { useRoute } from 'vue-router';
-import { InputProps } from '@thebcms/selfhosted-ui/components/inputs/_wrapper';
-import type { Group } from '@thebcms/selfhosted-backend/group/models/main';
-import { Select } from '@thebcms/selfhosted-ui/components/inputs/select/main';
+import { InputProps } from '@bcms/selfhosted-ui/components/inputs/_wrapper';
+import type { Group } from '@bcms/selfhosted-backend/group/models/main';
+import { Select } from '@bcms/selfhosted-ui/components/inputs/select/main';
 
 export const SelectGroupPointer = defineComponent({
     props: {

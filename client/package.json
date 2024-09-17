@@ -1,5 +1,5 @@
 {
-    "name": "@thebcms/selfhosted-client",
+    "name": "@bcms/selfhosted-client",
     "version": "1.0.0",
     "description": "Make external communication with BCMS easy.",
     "author": "BCMS",

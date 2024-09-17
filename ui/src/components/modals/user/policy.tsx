@@ -2,17 +2,17 @@ import { computed, defineComponent, onMounted, ref } from 'vue';
 import {
     getModalDefaultProps,
     ModalWrapper,
-} from '@thebcms/selfhosted-ui/components/modals/_wrapper';
-import type { UserProtected } from '@thebcms/selfhosted-backend/user/models/main';
+} from '@bcms/selfhosted-ui/components/modals/_wrapper';
+import type { UserProtected } from '@bcms/selfhosted-backend/user/models/main';
 import type {
     UserPolicy,
     UserPolicyCRUD,
     UserPolicyTemplate,
-} from '@thebcms/selfhosted-backend/user/models/policy';
-import { Toggle } from '@thebcms/selfhosted-ui/components/inputs/toggle';
-import { CheckBox } from '@thebcms/selfhosted-ui/components/inputs/check-box';
-import type { Template } from '@thebcms/selfhosted-backend/template/models/main';
-import { Button } from '@thebcms/selfhosted-ui/components/button';
+} from '@bcms/selfhosted-backend/user/models/policy';
+import { Toggle } from '@bcms/selfhosted-ui/components/inputs/toggle';
+import { CheckBox } from '@bcms/selfhosted-ui/components/inputs/check-box';
+import type { Template } from '@bcms/selfhosted-backend/template/models/main';
+import { Button } from '@bcms/selfhosted-ui/components/button';
 
 interface UserPolicyTemplateExtended extends UserPolicyTemplate {
     template: Template;

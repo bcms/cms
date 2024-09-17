@@ -2,14 +2,14 @@ import { defineComponent, onMounted, ref } from 'vue';
 import {
     getModalDefaultProps,
     ModalWrapper,
-} from '@thebcms/selfhosted-ui/components/modals/_wrapper';
+} from '@bcms/selfhosted-ui/components/modals/_wrapper';
 import {
     createRefValidator,
     createValidationItem,
-} from '@thebcms/selfhosted-ui/util/validation';
-import { TextInput } from '@thebcms/selfhosted-ui/components/inputs/text';
-import { TextAreaInput } from '@thebcms/selfhosted-ui/components/inputs/text-area';
-import type { Group } from '@thebcms/selfhosted-backend/group/models/main';
+} from '@bcms/selfhosted-ui/util/validation';
+import { TextInput } from '@bcms/selfhosted-ui/components/inputs/text';
+import { TextAreaInput } from '@bcms/selfhosted-ui/components/inputs/text-area';
+import type { Group } from '@bcms/selfhosted-backend/group/models/main';
 
 export interface ModalGroupCreateEditInput {
     groupId?: string;

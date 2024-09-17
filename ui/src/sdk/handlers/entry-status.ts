@@ -3,12 +3,12 @@ import { Sdk } from '@thebcms/selfhosted-sdk';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
-import type { EntryStatus } from '@thebcms/selfhosted-backend/entry-status/models/main';
+} from '@bcms/selfhosted-backend/util/controller';
+import type { EntryStatus } from '@bcms/selfhosted-backend/entry-status/models/main';
 import type {
     EntryStatusCreateBody,
     EntryStatusUpdateBody,
-} from '@thebcms/selfhosted-backend/entry-status/models/controller';
+} from '@bcms/selfhosted-backend/entry-status/models/controller';
 
 export class EntryStatusHandler extends Handler {
     private baseUri = '/api/v4/entry-status';

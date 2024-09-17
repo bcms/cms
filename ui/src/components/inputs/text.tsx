@@ -2,14 +2,14 @@ import { defineComponent, onMounted, type PropType, ref } from 'vue';
 import {
     InputProps,
     InputWrapper,
-} from '@thebcms/selfhosted-ui/components/inputs/_wrapper';
-import type { EntrySync } from '@thebcms/selfhosted-ui/services/entry-sync';
-import type { UnsubscribeFns } from '@thebcms/selfhosted-ui/util/sub';
+} from '@bcms/selfhosted-ui/components/inputs/_wrapper';
+import type { EntrySync } from '@bcms/selfhosted-ui/services/entry-sync';
+import type { UnsubscribeFns } from '@bcms/selfhosted-ui/util/sub';
 import {
     patienceDiff,
     patienceDiffMerge,
     patienceDiffToSocketEvent,
-} from '@thebcms/selfhosted-ui/util/patience-diff';
+} from '@bcms/selfhosted-ui/util/patience-diff';
 
 export const TextInput = defineComponent({
     inheritAttrs: true,

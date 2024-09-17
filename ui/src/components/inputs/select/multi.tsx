@@ -2,12 +2,12 @@ import { defineComponent, type PropType } from 'vue';
 import {
     InputProps,
     InputWrapper,
-} from '@thebcms/selfhosted-ui/components/inputs/_wrapper';
+} from '@bcms/selfhosted-ui/components/inputs/_wrapper';
 import {
     Select,
     type SelectOption,
-} from '@thebcms/selfhosted-ui/components/inputs/select/main';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
+} from '@bcms/selfhosted-ui/components/inputs/select/main';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
 
 export const MultiSelect = defineComponent({
     props: {

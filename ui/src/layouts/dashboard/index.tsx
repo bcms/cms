@@ -1,9 +1,9 @@
 import { defineComponent, onMounted, ref, Teleport } from 'vue';
-import { delay } from '@thebcms/selfhosted-ui/util/delay';
-import { BgDashboard } from '@thebcms/selfhosted-ui/components/bg-dashboard';
-import { DashboardLayoutAsideContent } from '@thebcms/selfhosted-ui/layouts/dashboard/aside-content';
-import { BCMSLogo } from '@thebcms/selfhosted-ui/components/logo';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
+import { delay } from '@bcms/selfhosted-ui/util/delay';
+import { BgDashboard } from '@bcms/selfhosted-ui/components/bg-dashboard';
+import { DashboardLayoutAsideContent } from '@bcms/selfhosted-ui/layouts/dashboard/aside-content';
+import { BCMSLogo } from '@bcms/selfhosted-ui/components/logo';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
 
 export const DashboardLayout = defineComponent({
     setup(_, ctx) {

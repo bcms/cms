@@ -2,8 +2,8 @@ import { defineComponent, type PropType, ref } from 'vue';
 import {
     InputProps,
     InputWrapper,
-} from '@thebcms/selfhosted-ui/components/inputs/_wrapper';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
+} from '@bcms/selfhosted-ui/components/inputs/_wrapper';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
 
 export const MultiAdd = defineComponent({
     props: {

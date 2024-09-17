@@ -1,8 +1,8 @@
 import { defineComponent, type PropType } from 'vue';
 import type { JSX } from 'vue/jsx-runtime';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
-import { Link } from '@thebcms/selfhosted-ui/components/link';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
+import { Link } from '@bcms/selfhosted-ui/components/link';
 
 export interface BreadcrumbItem {
     text: string;

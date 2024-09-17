@@ -1,6 +1,6 @@
 import path from 'path';
-import { ChildProcess } from '@thebcms/selfhosted-utils/child-process';
-import { FS } from '@thebcms/selfhosted-utils/fs';
+import { ChildProcess } from '@bcms/selfhosted-utils/child-process';
+import { FS } from '@bcms/selfhosted-utils/fs';
 
 export async function buildTypes() {
     const rootFs = new FS(process.cwd());

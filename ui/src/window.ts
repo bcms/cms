@@ -1,17 +1,17 @@
 import { Sdk } from '@thebcms/selfhosted-sdk';
-import type { HeadMetaService } from '@thebcms/selfhosted-ui/services/head-meta';
-import type { NotificationService } from '@thebcms/selfhosted-ui/services/notification';
-import type { TooltipService } from '@thebcms/selfhosted-ui/services/tooltip';
-import type { Throwable } from '@thebcms/selfhosted-ui/util/throwable';
-import type { ModalService } from '@thebcms/selfhosted-ui/services/modal';
-import type { UseLanguage } from '@thebcms/selfhosted-ui/hooks/language';
-import type { ConfirmService } from '@thebcms/selfhosted-ui/services/confirm';
-import type { PropValidator } from '@thebcms/selfhosted-ui/util/prop-validation';
+import type { HeadMetaService } from '@bcms/selfhosted-ui/services/head-meta';
+import type { NotificationService } from '@bcms/selfhosted-ui/services/notification';
+import type { TooltipService } from '@bcms/selfhosted-ui/services/tooltip';
+import type { Throwable } from '@bcms/selfhosted-ui/util/throwable';
+import type { ModalService } from '@bcms/selfhosted-ui/services/modal';
+import type { UseLanguage } from '@bcms/selfhosted-ui/hooks/language';
+import type { ConfirmService } from '@bcms/selfhosted-ui/services/confirm';
+import type { PropValidator } from '@bcms/selfhosted-ui/util/prop-validation';
 import type {
     PageTransition
-} from "@thebcms/selfhosted-ui/services/page-transition";
-import type {UseTheme} from "@thebcms/selfhosted-ui/hooks/theme";
-import type {UseScreenSize} from "@thebcms/selfhosted-ui/hooks/screen";
+} from "@bcms/selfhosted-ui/services/page-transition";
+import type {UseTheme} from "@bcms/selfhosted-ui/hooks/theme";
+import type {UseScreenSize} from "@bcms/selfhosted-ui/hooks/screen";
 
 export interface GlobalScopeMain {
     // <

@@ -2,24 +2,24 @@ import { computed, defineComponent, onMounted, ref } from 'vue';
 import {
     getModalDefaultProps,
     ModalWrapper,
-} from '@thebcms/selfhosted-ui/components/modals/_wrapper';
+} from '@bcms/selfhosted-ui/components/modals/_wrapper';
 import {
     createRefValidator,
     createValidationItem,
-} from '@thebcms/selfhosted-ui/util/validation';
+} from '@bcms/selfhosted-ui/util/validation';
 import type {
     Prop,
     PropData,
     PropType,
-} from '@thebcms/selfhosted-backend/prop/models/main';
-import { Button } from '@thebcms/selfhosted-ui/components/button';
-import { TextInput } from '@thebcms/selfhosted-ui/components/inputs/text';
-import type { PropChangeAdd } from '@thebcms/selfhosted-backend/prop/models/change';
-import { StringUtility } from '@thebcms/selfhosted-utils/string-utility';
-import { Toggle } from '@thebcms/selfhosted-ui/components/inputs/toggle';
-import { MultiSelect } from '@thebcms/selfhosted-ui/components/inputs/select/multi';
-import { MultiAdd } from '@thebcms/selfhosted-ui/components/inputs/multi-add';
-import { SelectGroupPointer } from '@thebcms/selfhosted-ui/components/inputs/select/group-pointer';
+} from '@bcms/selfhosted-backend/prop/models/main';
+import { Button } from '@bcms/selfhosted-ui/components/button';
+import { TextInput } from '@bcms/selfhosted-ui/components/inputs/text';
+import type { PropChangeAdd } from '@bcms/selfhosted-backend/prop/models/change';
+import { StringUtility } from '@bcms/selfhosted-utils/string-utility';
+import { Toggle } from '@bcms/selfhosted-ui/components/inputs/toggle';
+import { MultiSelect } from '@bcms/selfhosted-ui/components/inputs/select/multi';
+import { MultiAdd } from '@bcms/selfhosted-ui/components/inputs/multi-add';
+import { SelectGroupPointer } from '@bcms/selfhosted-ui/components/inputs/select/group-pointer';
 
 interface PropTypeOption {
     name: string;

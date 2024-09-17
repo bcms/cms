@@ -1,8 +1,8 @@
-import { SocketManager as _SocketManager } from '@thebcms/selfhosted-backend/_server/modules/socket';
+import { SocketManager as _SocketManager } from '@bcms/selfhosted-backend/_server/modules/socket';
 import type {
     SocketEventName,
     SocketEventNamesAndTypes,
-} from '@thebcms/selfhosted-backend/socket/events/main';
+} from '@bcms/selfhosted-backend/socket/events/main';
 
 export class SocketManager {
     static channelEmit<Name extends SocketEventName>(

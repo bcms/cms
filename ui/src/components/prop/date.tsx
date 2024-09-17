@@ -9,19 +9,19 @@ import {
 import type {
     Prop,
     PropValue,
-} from '@thebcms/selfhosted-backend/prop/models/main';
-import type { PropValidator } from '@thebcms/selfhosted-ui/util/prop-validation';
-import type { EntrySync } from '@thebcms/selfhosted-ui/services/entry-sync';
+} from '@bcms/selfhosted-backend/prop/models/main';
+import type { PropValidator } from '@bcms/selfhosted-ui/util/prop-validation';
+import type { EntrySync } from '@bcms/selfhosted-ui/services/entry-sync';
 import {
     callAndClearUnsubscribeFns,
     type UnsubscribeFns,
-} from '@thebcms/selfhosted-ui/util/sub';
-import type { PropValueDateData } from '@thebcms/selfhosted-backend/prop/models/date';
+} from '@bcms/selfhosted-ui/util/sub';
+import type { PropValueDateData } from '@bcms/selfhosted-backend/prop/models/date';
 import {
     PropInputWrapper,
     PropInputWrapperArrayItem,
-} from '@thebcms/selfhosted-ui/components/prop/_input-wrapper';
-import { DateInput } from '@thebcms/selfhosted-ui/components/inputs/date';
+} from '@bcms/selfhosted-ui/components/prop/_input-wrapper';
+import { DateInput } from '@bcms/selfhosted-ui/components/inputs/date';
 
 export const PropDateInput = defineComponent({
     props: {

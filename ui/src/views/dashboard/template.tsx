@@ -1,15 +1,15 @@
 import { computed, defineComponent, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { Loader } from '@thebcms/selfhosted-ui/components/loader';
-import { Breadcrumb } from '@thebcms/selfhosted-ui/components/breadcrumb';
+import { Loader } from '@bcms/selfhosted-ui/components/loader';
+import { Breadcrumb } from '@bcms/selfhosted-ui/components/breadcrumb';
 import {
     Dropdown,
     type DropdownItem,
-} from '@thebcms/selfhosted-ui/components/dropdown';
-import { Button } from '@thebcms/selfhosted-ui/components/button';
-import { millisToDateString } from '@thebcms/selfhosted-ui/util/date';
-import { PropList } from '@thebcms/selfhosted-ui/components/prop-list';
-import type { Template } from '@thebcms/selfhosted-backend/template/models/main';
+} from '@bcms/selfhosted-ui/components/dropdown';
+import { Button } from '@bcms/selfhosted-ui/components/button';
+import { millisToDateString } from '@bcms/selfhosted-ui/util/date';
+import { PropList } from '@bcms/selfhosted-ui/components/prop-list';
+import type { Template } from '@bcms/selfhosted-backend/template/models/main';
 
 export const TemplateView = defineComponent({
     setup() {

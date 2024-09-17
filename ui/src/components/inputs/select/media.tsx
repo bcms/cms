@@ -8,16 +8,16 @@ import {
 import {
     InputProps,
     InputWrapper,
-} from '@thebcms/selfhosted-ui/components/inputs/_wrapper';
-import type { EntrySync } from '@thebcms/selfhosted-ui/services/entry-sync';
-import type { Media } from '@thebcms/selfhosted-backend/media/models/main';
+} from '@bcms/selfhosted-ui/components/inputs/_wrapper';
+import type { EntrySync } from '@bcms/selfhosted-ui/services/entry-sync';
+import type { Media } from '@bcms/selfhosted-backend/media/models/main';
 import {
     callAndClearUnsubscribeFns,
     type UnsubscribeFns,
-} from '@thebcms/selfhosted-ui/util/sub';
-import { MediaPreview } from '@thebcms/selfhosted-ui/components/media-preview';
-import { prettyFileSize } from '@thebcms/selfhosted-ui/util/file';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
+} from '@bcms/selfhosted-ui/util/sub';
+import { MediaPreview } from '@bcms/selfhosted-ui/components/media-preview';
+import { prettyFileSize } from '@bcms/selfhosted-ui/util/file';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
 
 export const MediaSelect = defineComponent({
     props: {

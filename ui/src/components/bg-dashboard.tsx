@@ -1,8 +1,8 @@
 import { defineComponent, onBeforeUnmount, onMounted, ref } from 'vue';
 import { Color, Vector2 } from 'three';
-import { type ThemeTypes, useTheme } from '@thebcms/selfhosted-ui/hooks/theme';
-import { Grad3C } from '@thebcms/selfhosted-ui/webgl/grad-3c';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
+import { type ThemeTypes, useTheme } from '@bcms/selfhosted-ui/hooks/theme';
+import { Grad3C } from '@bcms/selfhosted-ui/webgl/grad-3c';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
 
 export const BgDashboard = defineComponent({
     props: {

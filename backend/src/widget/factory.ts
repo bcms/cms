@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import type { Widget } from '@thebcms/selfhosted-backend/widget/models/main';
+import type { Widget } from '@bcms/selfhosted-backend/widget/models/main';
 
 export class WidgetFactory {
     static create(

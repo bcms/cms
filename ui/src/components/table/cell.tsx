@@ -3,7 +3,7 @@ import type { JSX } from 'vue/jsx-runtime';
 import {
     DefaultComponentProps,
     type DefaultComponentPropsType,
-} from '@thebcms/selfhosted-ui/components/default';
+} from '@bcms/selfhosted-ui/components/default';
 
 export interface TableCellProps extends DefaultComponentPropsType {
     innerClass?: string;

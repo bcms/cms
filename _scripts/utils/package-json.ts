@@ -1,4 +1,4 @@
-import { FSFileTreeItem } from '@thebcms/selfhosted-utils/fs';
+import { FSFileTreeItem } from '@bcms/selfhosted-utils/fs';
 
 export function packageJsonExport(files: FSFileTreeItem[], packageJson: any) {
     for (let i = 0; i < files.length; i++) {

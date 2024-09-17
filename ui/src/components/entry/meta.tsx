@@ -2,18 +2,18 @@ import { defineComponent, type PropType } from 'vue';
 import type {
     Prop,
     PropValue,
-} from '@thebcms/selfhosted-backend/prop/models/main';
-import type { PropValidator } from '@thebcms/selfhosted-ui/util/prop-validation';
-import type { EntrySync } from '@thebcms/selfhosted-ui/services/entry-sync';
-import { PropStringInput } from '@thebcms/selfhosted-ui/components/prop/string';
-import { PropNumberInput } from '@thebcms/selfhosted-ui/components/prop/number';
-import { PropBooleanInput } from '@thebcms/selfhosted-ui/components/prop/boolean';
-import { PropDateInput } from '@thebcms/selfhosted-ui/components/prop/date';
-import { PropEnumInput } from '@thebcms/selfhosted-ui/components/prop/enum';
-import { PropMediaInput } from '@thebcms/selfhosted-ui/components/prop/media';
-import { PropRichTextInput } from '@thebcms/selfhosted-ui/components/prop/rich-text';
-import { PropGroupPointerInput } from '@thebcms/selfhosted-ui/components/prop/group-pointer';
-import { PropEntryPointerInput } from '@thebcms/selfhosted-ui/components/prop/entry-pointer';
+} from '@bcms/selfhosted-backend/prop/models/main';
+import type { PropValidator } from '@bcms/selfhosted-ui/util/prop-validation';
+import type { EntrySync } from '@bcms/selfhosted-ui/services/entry-sync';
+import { PropStringInput } from '@bcms/selfhosted-ui/components/prop/string';
+import { PropNumberInput } from '@bcms/selfhosted-ui/components/prop/number';
+import { PropBooleanInput } from '@bcms/selfhosted-ui/components/prop/boolean';
+import { PropDateInput } from '@bcms/selfhosted-ui/components/prop/date';
+import { PropEnumInput } from '@bcms/selfhosted-ui/components/prop/enum';
+import { PropMediaInput } from '@bcms/selfhosted-ui/components/prop/media';
+import { PropRichTextInput } from '@bcms/selfhosted-ui/components/prop/rich-text';
+import { PropGroupPointerInput } from '@bcms/selfhosted-ui/components/prop/group-pointer';
+import { PropEntryPointerInput } from '@bcms/selfhosted-ui/components/prop/entry-pointer';
 
 export const EntryMetaEditor = defineComponent({
     props: {

@@ -7,9 +7,9 @@ import {
     Teleport,
 } from 'vue';
 import type { JSX } from 'vue/jsx-runtime';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
-import { Button } from '@thebcms/selfhosted-ui/components/button';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
+import { Button } from '@bcms/selfhosted-ui/components/button';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
 
 export interface DropdownItem {
     text: string | JSX.Element;

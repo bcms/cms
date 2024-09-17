@@ -1,14 +1,14 @@
 import {
     type HttpErrorHandler,
     HttpStatus,
-} from '@thebcms/selfhosted-backend/_server';
-import type { UserJwt } from '@thebcms/selfhosted-backend/user/models/main';
+} from '@bcms/selfhosted-backend/_server';
+import type { UserJwt } from '@bcms/selfhosted-backend/user/models/main';
 import {
     JWTError,
     JWTManager,
-} from '@thebcms/selfhosted-backend/_server/modules/jwt';
-import type { UserRoleName } from '@thebcms/selfhosted-backend/user/models/role';
-import type { UserCustomPool } from '@thebcms/selfhosted-backend/user/models/custom-pool';
+} from '@bcms/selfhosted-backend/_server/modules/jwt';
+import type { UserRoleName } from '@bcms/selfhosted-backend/user/models/role';
+import type { UserCustomPool } from '@bcms/selfhosted-backend/user/models/custom-pool';
 
 export class RPJwt {
     verify(

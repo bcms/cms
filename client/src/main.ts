@@ -1,13 +1,13 @@
 import axios, { type AxiosRequestConfig } from 'axios';
-import { TemplateHandler } from '@thebcms/selfhosted-client/handlers/template';
-import { TypeGeneratorHandler } from '@thebcms/selfhosted-client/handlers/type-generator';
-import { EntryHandler } from '@thebcms/selfhosted-client/handlers/entry';
-import { EntryStatusHandler } from '@thebcms/selfhosted-client/handlers/entry-status';
-import { GroupHandler } from '@thebcms/selfhosted-client/handlers/group';
-import { LanguageHandler } from '@thebcms/selfhosted-client/handlers/language';
-import { MediaHandler } from '@thebcms/selfhosted-client/handlers/media';
-import { WidgetHandler } from '@thebcms/selfhosted-client/handlers/widget';
-import { SocketHandler } from '@thebcms/selfhosted-client/handlers/socket';
+import { TemplateHandler } from '@bcms/selfhosted-client/handlers/template';
+import { TypeGeneratorHandler } from '@bcms/selfhosted-client/handlers/type-generator';
+import { EntryHandler } from '@bcms/selfhosted-client/handlers/entry';
+import { EntryStatusHandler } from '@bcms/selfhosted-client/handlers/entry-status';
+import { GroupHandler } from '@bcms/selfhosted-client/handlers/group';
+import { LanguageHandler } from '@bcms/selfhosted-client/handlers/language';
+import { MediaHandler } from '@bcms/selfhosted-client/handlers/media';
+import { WidgetHandler } from '@bcms/selfhosted-client/handlers/widget';
+import { SocketHandler } from '@bcms/selfhosted-client/handlers/socket';
 
 export interface ClientApiKey {
     id: string;

@@ -1,5 +1,5 @@
-import { ChildProcess } from '@thebcms/selfhosted-utils/child-process';
-import { StringUtility } from '@thebcms/selfhosted-utils/string-utility';
+import { ChildProcess } from '@bcms/selfhosted-utils/child-process';
+import { StringUtility } from '@bcms/selfhosted-utils/string-utility';
 import path from 'path';
 
 export async function preCommit() {

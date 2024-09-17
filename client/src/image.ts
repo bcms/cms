@@ -2,10 +2,10 @@ import { Buffer } from 'buffer';
 import type {
     Media,
     MediaType,
-} from '@thebcms/selfhosted-backend/media/models/main';
-import type { Client } from '@thebcms/selfhosted-client/main';
-import type { MediaExtended } from '@thebcms/selfhosted-client/handlers/media';
-import type { PropMediaDataParsed } from '@thebcms/selfhosted-backend/prop/models/media';
+} from '@bcms/selfhosted-backend/media/models/main';
+import type { Client } from '@bcms/selfhosted-client/main';
+import type { MediaExtended } from '@bcms/selfhosted-client/handlers/media';
+import type { PropMediaDataParsed } from '@bcms/selfhosted-backend/prop/models/media';
 
 export interface ImageHandlerOptionSize {
     width: number;

@@ -3,31 +3,31 @@ import {
     createController,
     createControllerMethod,
     HttpStatus,
-} from '@thebcms/selfhosted-backend/_server';
+} from '@bcms/selfhosted-backend/_server';
 import {
     AuthLoginBodySchema,
     type AuthLoginBody,
     type AuthLoginResponse,
     type AuthSignUpAdminBody,
-} from '@thebcms/selfhosted-backend/auth/models/controller';
+} from '@bcms/selfhosted-backend/auth/models/controller';
 import {
     RP,
     type RPBodyCheckResult,
-} from '@thebcms/selfhosted-backend/security/route-protection/main';
-import { Repo } from '@thebcms/selfhosted-backend/repo';
+} from '@bcms/selfhosted-backend/security/route-protection/main';
+import { Repo } from '@bcms/selfhosted-backend/repo';
 import bcrypt from 'bcryptjs';
 import {
     JWTEncode,
     JWTError,
     JWTManager,
-} from '@thebcms/selfhosted-backend/_server/modules/jwt';
-import type { UserCustomPool } from '@thebcms/selfhosted-backend/user/models/custom-pool';
-import { Config } from '@thebcms/selfhosted-backend/config';
-import { RefreshTokenService } from '@thebcms/selfhosted-backend/auth/refresh-token-service';
-import { openApiGetObjectRefSchema } from '@thebcms/selfhosted-backend/open-api/schema';
-import { UserFactory } from '@thebcms/selfhosted-backend/user/factory';
-import { LanguageFactory } from '@thebcms/selfhosted-backend/language/factory';
-import { EntryStatusFactory } from '@thebcms/selfhosted-backend/entry-status/factory';
+} from '@bcms/selfhosted-backend/_server/modules/jwt';
+import type { UserCustomPool } from '@bcms/selfhosted-backend/user/models/custom-pool';
+import { Config } from '@bcms/selfhosted-backend/config';
+import { RefreshTokenService } from '@bcms/selfhosted-backend/auth/refresh-token-service';
+import { openApiGetObjectRefSchema } from '@bcms/selfhosted-backend/open-api/schema';
+import { UserFactory } from '@bcms/selfhosted-backend/user/factory';
+import { LanguageFactory } from '@bcms/selfhosted-backend/language/factory';
+import { EntryStatusFactory } from '@bcms/selfhosted-backend/entry-status/factory';
 
 let createAdminServerToken: string | null = null;
 

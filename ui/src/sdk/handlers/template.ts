@@ -1,16 +1,16 @@
 import { Handler } from '@thebcms/selfhosted-sdk/handlers/_handler';
-import { createQueue, QueueError } from '@thebcms/selfhosted-utils/queue';
-import type { Template } from '@thebcms/selfhosted-backend/template/models/main';
+import { createQueue, QueueError } from '@bcms/selfhosted-utils/queue';
+import type { Template } from '@bcms/selfhosted-backend/template/models/main';
 import { Sdk } from '@thebcms/selfhosted-sdk';
 import type {
     TemplateCreateBody,
     TemplateUpdateBody,
     TemplateWhereIsItUsedResult,
-} from '@thebcms/selfhosted-backend/template/models/controller';
+} from '@bcms/selfhosted-backend/template/models/controller';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
+} from '@bcms/selfhosted-backend/util/controller';
 
 export class TemplateHandler extends Handler {
     private baseUri = '/api/v4/template';

@@ -1,7 +1,7 @@
 // #!/usr/bin/env node
 
-import { getArgs } from '@thebcms/selfhosted-cli/args';
-import { Cli } from '@thebcms/selfhosted-cli';
+import { getArgs } from '@bcms/selfhosted-cli/args';
+import { Cli } from '@bcms/selfhosted-cli';
 
 async function main() {
     const args = getArgs();

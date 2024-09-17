@@ -2,7 +2,7 @@ import type {
     ControllerConfig,
     MiddlewareConfig,
     ServerConfig,
-} from '@thebcms/selfhosted-backend/_server';
+} from '@bcms/selfhosted-backend/_server';
 import type { FastifyInstance } from 'fastify';
 
 export type PluginPolicyType =

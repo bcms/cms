@@ -1,12 +1,12 @@
 import { computed, defineComponent, onMounted, ref } from 'vue';
-import { throwable } from '@thebcms/selfhosted-ui/util/throwable';
-import { Loader } from '@thebcms/selfhosted-ui/components/loader';
-import { Button } from '@thebcms/selfhosted-ui/components/button';
-import type { UserStatsResponse } from '@thebcms/selfhosted-backend/user/models/controller';
-import { Link } from '@thebcms/selfhosted-ui/components/link';
-import { MediaPreview } from '@thebcms/selfhosted-ui/components/media-preview';
-import { UserList } from '@thebcms/selfhosted-ui/components/user-list';
-import { userHasRole } from '@thebcms/selfhosted-ui/util/role';
+import { throwable } from '@bcms/selfhosted-ui/util/throwable';
+import { Loader } from '@bcms/selfhosted-ui/components/loader';
+import { Button } from '@bcms/selfhosted-ui/components/button';
+import type { UserStatsResponse } from '@bcms/selfhosted-backend/user/models/controller';
+import { Link } from '@bcms/selfhosted-ui/components/link';
+import { MediaPreview } from '@bcms/selfhosted-ui/components/media-preview';
+import { UserList } from '@bcms/selfhosted-ui/components/user-list';
+import { userHasRole } from '@bcms/selfhosted-ui/util/role';
 
 export const HomeView = defineComponent({
     setup() {

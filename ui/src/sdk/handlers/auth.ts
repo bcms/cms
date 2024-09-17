@@ -4,7 +4,7 @@ import type {
     AuthLoginBody,
     AuthLoginResponse,
     AuthSignUpAdminBody,
-} from '@thebcms/selfhosted-backend/auth/models/controller';
+} from '@bcms/selfhosted-backend/auth/models/controller';
 
 export class AuthHandler extends Handler {
     private baseUri = '/api/v4/auth';

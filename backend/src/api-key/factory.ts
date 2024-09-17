@@ -1,6 +1,6 @@
-import type { ApiKey } from '@thebcms/selfhosted-backend/api-key/models/main';
+import type { ApiKey } from '@bcms/selfhosted-backend/api-key/models/main';
 import { ObjectId } from '@fastify/mongodb';
-import { FunctionManager } from '@thebcms/selfhosted-backend/function/main';
+import { FunctionManager } from '@bcms/selfhosted-backend/function/main';
 
 export class ApiKeyFactory {
     static create(

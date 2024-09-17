@@ -1,5 +1,5 @@
 import { defineComponent } from 'vue';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
 
 export const Tag = defineComponent({
     props: {

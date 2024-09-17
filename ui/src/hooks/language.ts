@@ -1,5 +1,5 @@
 import { onBeforeUnmount, type Ref, ref } from 'vue';
-import { Storage } from '@thebcms/selfhosted-ui/storage';
+import { Storage } from '@bcms/selfhosted-ui/storage';
 
 let lngCode: Ref<string>;
 

@@ -1,5 +1,5 @@
-import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-utility';
-import type { MediaType } from '@thebcms/selfhosted-backend/media/models/main';
+import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
+import type { MediaType } from '@bcms/selfhosted-backend/media/models/main';
 
 export type PropMediaData = string;
 

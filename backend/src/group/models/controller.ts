@@ -1,8 +1,8 @@
-import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-utility';
+import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
 import {
     type PropChange,
     PropChangeSchema,
-} from '@thebcms/selfhosted-backend/prop/models/change';
+} from '@bcms/selfhosted-backend/prop/models/change';
 
 export interface GroupWhereIsItUsedResult {
     groupIds: string[];

@@ -1,11 +1,11 @@
-import type { Cli } from '@thebcms/selfhosted-cli';
-import { ChildProcess } from '@thebcms/selfhosted-utils/child-process';
+import type { Cli } from '@bcms/selfhosted-cli';
+import { ChildProcess } from '@bcms/selfhosted-utils/child-process';
 import inquirer from 'inquirer';
-import { StringUtility } from '@thebcms/selfhosted-utils/string-utility';
+import { StringUtility } from '@bcms/selfhosted-utils/string-utility';
 import * as os from 'node:os';
 import * as path from 'node:path';
 import cuid2 from '@paralleldrive/cuid2';
-import { FS } from '@thebcms/selfhosted-utils/fs';
+import { FS } from '@bcms/selfhosted-utils/fs';
 
 export class DeployHandler {
     constructor(private cli: Cli) {}
@@ -73,8 +73,18 @@ export class DeployHandler {
             ]);
             projectName = StringUtility.toSlug(answer.projectName);
         }
+        const fs = new FS(path.join(os.homedir(), projectName));
+        const dirsToCreate = ['', 'db', 'uploads', 'backups'];
+        for (let i = 0; i < dirsToCreate.length; i++) {
+            if (!(await fs.exist(dirsToCreate[i]))) {
+                await fs.mkdir(dirsToCreate[i]);
+            }
+        }
+        if (await fs.exist('cms')) {
+            await fs.deleteDir('cms');
+        }
         await ChildProcess.advancedExec(
-            `mkdir ~/${projectName} ~/${projectName}/db ~/${projectName}/uploads ~/${projectName}/backups && cd ~/${projectName} && git clone https://github.com/bcms/cms`,
+            `cd ~/${projectName} && git clone https://github.com/bcms/cms`,
             {
                 onChunk(type, chunk) {
                     process[type].write(chunk);
@@ -112,10 +122,9 @@ export class DeployHandler {
             {
                 name: 'yes',
                 type: 'confirm',
-                message: `Would you like to create a MongoDB?`,
+                message: `Would you like to create a MongoDB database?`,
             },
         ]);
-        const fs = new FS(path.join(os.homedir(), projectName));
         let dbUrl = '';
         if (createDb.yes) {
             const username = StringUtility.toSlug(cuid2.createId());
@@ -146,9 +155,9 @@ export class DeployHandler {
             ]);
             dbUrl = answer.dbUrl;
         }
-        await fs.save('app.env', [`DB_URL=${dbUrl}`].join('\n'));
+        await fs.save('cms.env', [`DB_URL=${dbUrl}`].join('\n'));
         await ChildProcess.advancedExec(
-            `cd ~/${projectName} && chmod 600 app.env && docker run -d --name ${projectName} -v ~/${projectName}/uploads:/app/backend/uploads -v ~/${projectName}/backups:/app/backend/backups --env-file ~/${projectName}/app.env --network bcms-net ${projectName}`,
+            `cd ~/${projectName} && chmod 600 cms.env && docker run -d --name ${projectName} -v ~/${projectName}/uploads:/app/backend/uploads -v ~/${projectName}/backups:/app/backend/backups --env-file ~/${projectName}/cms.env --network bcms-net ${projectName}`,
             {
                 onChunk(type, chunk) {
                     process[type].write(chunk);
@@ -247,7 +256,7 @@ export class DeployHandler {
             },
         ).awaiter;
         console.log(
-            `\n\nBCMS project was setup successfully\nProject directory is at: ${fs.baseRoot}`,
+            `\n\nBCMS project was setup successfully with path at: ${fs.baseRoot}`,
         );
     }
 }

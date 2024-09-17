@@ -4,7 +4,7 @@ import {
     type DefaultComponentPropsType,
     PropStringOrJsx,
     type PropStringOrJsxType,
-} from '@thebcms/selfhosted-ui/components/default';
+} from '@bcms/selfhosted-ui/components/default';
 
 export interface InputPropsType extends DefaultComponentPropsType {
     label?: PropStringOrJsxType;

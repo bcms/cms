@@ -1,8 +1,8 @@
 import { defineComponent, type PropType } from 'vue';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
-import type { Media } from '@thebcms/selfhosted-backend/media/models/main';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
-import { MediaPreview } from '@thebcms/selfhosted-ui/components/media-preview';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
+import type { Media } from '@bcms/selfhosted-backend/media/models/main';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
+import { MediaPreview } from '@bcms/selfhosted-ui/components/media-preview';
 
 export const MediaListItem = defineComponent({
     props: {

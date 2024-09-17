@@ -15,9 +15,9 @@
         "esModuleInterop": true,
         "moduleResolution": "Node",
         "paths": {
-            "@thebcms/selfhosted-backend": ["./src"],
-            "@thebcms/selfhosted-backend/*": ["./src/*"],
-            "@thebcms/selfhosted-utils/*": ["./src/_utils/*"]
+            "@bcms/selfhosted-backend": ["./src"],
+            "@bcms/selfhosted-backend/*": ["./src/*"],
+            "@bcms/selfhosted-utils/*": ["./src/_utils/*"]
         }
     },
     "include": ["src"]

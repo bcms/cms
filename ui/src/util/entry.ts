@@ -1,12 +1,12 @@
-import type { Template } from '@thebcms/selfhosted-backend/template/models/main';
-import type { Entry } from '@thebcms/selfhosted-backend/entry/models/main';
-import { propValuesFromSchema } from '@thebcms/selfhosted-ui/util/prop';
-import type { EntryMeta } from '@thebcms/selfhosted-backend/entry/models/meta';
+import type { Template } from '@bcms/selfhosted-backend/template/models/main';
+import type { Entry } from '@bcms/selfhosted-backend/entry/models/main';
+import { propValuesFromSchema } from '@bcms/selfhosted-ui/util/prop';
+import type { EntryMeta } from '@bcms/selfhosted-backend/entry/models/meta';
 import type {
     EntryContent,
     EntryContentNode,
     EntryContentNodeWidgetAttr,
-} from '@thebcms/selfhosted-backend/entry/models/content';
+} from '@bcms/selfhosted-backend/entry/models/content';
 
 export async function entryNewFromTemplate(
     template: Template,

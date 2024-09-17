@@ -1,8 +1,8 @@
 import * as fileSystem from 'fs';
 import * as systemPath from 'path';
-import { Logger } from '@thebcms/selfhosted-backend/_server';
-import { Config } from '@thebcms/selfhosted-backend/config';
-import { FS } from '@thebcms/selfhosted-backend/_utils/fs';
+import { Logger } from '@bcms/selfhosted-backend/_server';
+import { Config } from '@bcms/selfhosted-backend/config';
+import { FS } from '@bcms/selfhosted-backend/_utils/fs';
 
 export const StorageTypes = {
     'user-avatar': 'user-avatar',

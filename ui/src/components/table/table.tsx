@@ -16,16 +16,16 @@ import {
     type TableHeaderItemFilter,
     type TableHeaderItemSort,
     type TableHeaderSortable,
-} from '@thebcms/selfhosted-ui/components/table/header';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
+} from '@bcms/selfhosted-ui/components/table/header';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
 import {
     TableRow,
     type TableRowProps,
-} from '@thebcms/selfhosted-ui/components/table/row';
-import { Storage } from '@thebcms/selfhosted-ui/storage';
-import { TextInput } from '@thebcms/selfhosted-ui/components/inputs/text';
-import { Link } from '@thebcms/selfhosted-ui/components/link';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
+} from '@bcms/selfhosted-ui/components/table/row';
+import { Storage } from '@bcms/selfhosted-ui/storage';
+import { TextInput } from '@bcms/selfhosted-ui/components/inputs/text';
+import { Link } from '@bcms/selfhosted-ui/components/link';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
 
 export function tableDefaultSort(): TableHeaderSortable {
     return {

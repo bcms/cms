@@ -1,7 +1,7 @@
 import type {
     User,
     UserProtected,
-} from '@thebcms/selfhosted-backend/user/models/main';
+} from '@bcms/selfhosted-backend/user/models/main';
 import { ObjectId } from '@fastify/mongodb';
 
 export class UserFactory {

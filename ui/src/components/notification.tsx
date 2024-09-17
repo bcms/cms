@@ -3,8 +3,8 @@ import { defineComponent, ref, onUnmounted } from 'vue';
 import type {
     NotificationMessage,
     NotificationMessageType,
-} from '@thebcms/selfhosted-ui/services/notification';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
+} from '@bcms/selfhosted-ui/services/notification';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
 
 const component = defineComponent({
     setup() {

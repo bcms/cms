@@ -5,3 +5,4 @@
 /backups
 .idea
 *.env
+.npmrc

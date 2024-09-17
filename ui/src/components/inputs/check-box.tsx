@@ -2,7 +2,7 @@ import { defineComponent } from 'vue';
 import {
     InputProps,
     InputWrapper,
-} from '@thebcms/selfhosted-ui/components/inputs/_wrapper';
+} from '@bcms/selfhosted-ui/components/inputs/_wrapper';
 
 export const CheckBox = defineComponent({
     props: {

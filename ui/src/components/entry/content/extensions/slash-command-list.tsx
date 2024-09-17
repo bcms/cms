@@ -1,8 +1,8 @@
 import { computed, defineComponent, onMounted, type PropType, ref } from 'vue';
-import type { Media } from '@thebcms/selfhosted-backend/media/models/main';
-import type { SlashCommandData } from '@thebcms/selfhosted-ui/components/entry/content/extensions/slash-command';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
-import { MediaPreview } from '@thebcms/selfhosted-ui/components/media-preview';
+import type { Media } from '@bcms/selfhosted-backend/media/models/main';
+import type { SlashCommandData } from '@bcms/selfhosted-ui/components/entry/content/extensions/slash-command';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
+import { MediaPreview } from '@bcms/selfhosted-ui/components/media-preview';
 
 export interface SlashCommandListItem {
     id: string;

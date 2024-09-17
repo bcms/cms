@@ -10,8 +10,8 @@ import * as encoding from 'lib0/encoding';
 import * as decoding from 'lib0/decoding';
 import type { Editor } from '@tiptap/vue-3';
 import type { Ref } from 'vue';
-import type { EntrySync } from '@thebcms/selfhosted-ui/services/entry-sync';
-import type { EntryContentNode } from '@thebcms/selfhosted-backend/entry/models/content';
+import type { EntrySync } from '@bcms/selfhosted-ui/services/entry-sync';
+import type { EntryContentNode } from '@bcms/selfhosted-backend/entry/models/content';
 
 export class EntryContentSyncProvider extends ObservableV2<string> {
     private unsub: Array<() => void> = [];

@@ -1,1 +1,1 @@
-export * from '@thebcms/selfhosted-cli/main';
+export * from '@bcms/selfhosted-cli/main';

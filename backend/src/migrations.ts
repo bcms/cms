@@ -1,10 +1,10 @@
 import { ObjectId } from 'mongodb';
-import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-utility';
+import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
 import {
     createMongoDBRepository,
     type MongoDBEntry,
-} from '@thebcms/selfhosted-backend/_server/modules/mongodb';
-import { Logger, type Module } from '@thebcms/selfhosted-backend/_server';
+} from '@bcms/selfhosted-backend/_server/modules/mongodb';
+import { Logger, type Module } from '@bcms/selfhosted-backend/_server';
 
 interface Migration extends MongoDBEntry {
     lastMigrationId: string;

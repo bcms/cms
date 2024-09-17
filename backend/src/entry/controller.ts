@@ -2,40 +2,40 @@ import {
     createController,
     createControllerMethod,
     HttpStatus,
-} from '@thebcms/selfhosted-backend/_server';
+} from '@bcms/selfhosted-backend/_server';
 import {
     RP,
     type RPApiKeyJwtBodyCheckResult,
     type RPApiKeyJwtCheckResult,
     type RPJwtCheckResult,
-} from '@thebcms/selfhosted-backend/security/route-protection/main';
+} from '@bcms/selfhosted-backend/security/route-protection/main';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
+} from '@bcms/selfhosted-backend/util/controller';
 import type {
     Entry,
     EntryLite,
     EntryParsed,
-} from '@thebcms/selfhosted-backend/entry/models/main';
+} from '@bcms/selfhosted-backend/entry/models/main';
 import {
     controllerItemResponseDefinitionForRef,
     controllerItemsResponseDefinitionForRef,
     openApiGetModelRef,
-} from '@thebcms/selfhosted-backend/open-api/schema';
-import { Repo } from '@thebcms/selfhosted-backend/repo';
-import { EntryFactory } from '@thebcms/selfhosted-backend/entry/factory';
-import { parseEntry } from '@thebcms/selfhosted-backend/entry/parser';
+} from '@bcms/selfhosted-backend/open-api/schema';
+import { Repo } from '@bcms/selfhosted-backend/repo';
+import { EntryFactory } from '@bcms/selfhosted-backend/entry/factory';
+import { parseEntry } from '@bcms/selfhosted-backend/entry/parser';
 import {
     type EntryCreateBody,
     EntryCreateBodySchema,
     type EntryUpdateBody,
     EntryUpdateBodySchema,
-} from '@thebcms/selfhosted-backend/entry/models/controller';
-import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
-import { propsValueCheck } from '@thebcms/selfhosted-backend/prop/values';
-import { entryContentNodeToHtml } from '@thebcms/selfhosted-backend/entry/content';
-import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
+} from '@bcms/selfhosted-backend/entry/models/controller';
+import { SocketManager } from '@bcms/selfhosted-backend/socket/manager';
+import { propsValueCheck } from '@bcms/selfhosted-backend/prop/values';
+import { entryContentNodeToHtml } from '@bcms/selfhosted-backend/entry/content';
+import { EventManager } from '@bcms/selfhosted-backend/event/manager';
 
 export const EntryController = createController({
     name: 'Entry',

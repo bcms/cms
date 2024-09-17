@@ -1,10 +1,10 @@
 import type { JSX } from 'vue/jsx-runtime';
 import { computed, defineComponent, type PropType, ref } from 'vue';
 import { useRoute } from 'vue-router';
-import type { ViewNames } from '@thebcms/selfhosted-ui/views';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
-import { Link } from '@thebcms/selfhosted-ui/components/link';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
+import type { ViewNames } from '@bcms/selfhosted-ui/views';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
+import { Link } from '@bcms/selfhosted-ui/components/link';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
 
 export interface DashboardLayoutNavItemProps {
     title: string;

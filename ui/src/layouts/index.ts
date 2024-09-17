@@ -1,6 +1,6 @@
-import { AuthLayout } from '@thebcms/selfhosted-ui/layouts/auth';
+import { AuthLayout } from '@bcms/selfhosted-ui/layouts/auth';
 import { NoneLayout } from './none';
-import { DashboardLayout } from '@thebcms/selfhosted-ui/layouts/dashboard';
+import { DashboardLayout } from '@bcms/selfhosted-ui/layouts/dashboard';
 
 export const layouts = {
     AuthLayout,

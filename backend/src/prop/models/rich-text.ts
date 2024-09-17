@@ -1,7 +1,7 @@
 import type {
     EntryContentNode,
     EntryContentParsedItem,
-} from '@thebcms/selfhosted-backend/entry/models/content';
+} from '@bcms/selfhosted-backend/entry/models/content';
 
 export interface PropRichTextData {
     nodes: EntryContentNode[];

@@ -2,17 +2,17 @@ import { computed, defineComponent, onMounted, ref } from 'vue';
 import {
     getModalDefaultProps,
     ModalWrapper,
-} from '@thebcms/selfhosted-ui/components/modals/_wrapper';
-import { TextInput } from '@thebcms/selfhosted-ui/components/inputs/text';
-import type { Media } from '@thebcms/selfhosted-backend/media/models/main';
+} from '@bcms/selfhosted-ui/components/modals/_wrapper';
+import { TextInput } from '@bcms/selfhosted-ui/components/inputs/text';
+import type { Media } from '@bcms/selfhosted-backend/media/models/main';
 import {
     Breadcrumb,
     type BreadcrumbItem,
-} from '@thebcms/selfhosted-ui/components/breadcrumb';
-import { MediaPreview } from '@thebcms/selfhosted-ui/components/media-preview';
-import { prettyFileSize } from '@thebcms/selfhosted-ui/util/file';
-import { Button } from '@thebcms/selfhosted-ui/components/button';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
+} from '@bcms/selfhosted-ui/components/breadcrumb';
+import { MediaPreview } from '@bcms/selfhosted-ui/components/media-preview';
+import { prettyFileSize } from '@bcms/selfhosted-ui/util/file';
+import { Button } from '@bcms/selfhosted-ui/components/button';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
 
 export interface ModalMediaSelectInput {
     mediaId?: string;

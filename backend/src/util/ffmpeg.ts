@@ -1,13 +1,13 @@
 import * as systemPath from 'path';
-import { FS } from '@thebcms/selfhosted-backend/_utils/fs';
+import { FS } from '@bcms/selfhosted-backend/_utils/fs';
 import {
     type Media,
     MediaType,
-} from '@thebcms/selfhosted-backend/media/models/main';
+} from '@bcms/selfhosted-backend/media/models/main';
 import {
     ChildProcess,
     type ChildProcessOnChunkHelperOutput,
-} from '@thebcms/selfhosted-backend/_utils/child-process';
+} from '@bcms/selfhosted-backend/_utils/child-process';
 
 export class FFmpeg {
     private static tempFs = new FS(systemPath.join(process.cwd(), 'media-tmp'));

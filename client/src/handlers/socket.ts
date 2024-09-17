@@ -5,9 +5,9 @@ import type {
     SocketEventDataConnection,
     SocketEventName,
     SocketEventNamesAndTypes,
-} from '@thebcms/selfhosted-backend/socket/events/main';
-import { createQueue, QueueError } from '@thebcms/selfhosted-utils/queue';
-import type { Client } from '@thebcms/selfhosted-client/main';
+} from '@bcms/selfhosted-backend/socket/events/main';
+import { createQueue, QueueError } from '@bcms/selfhosted-utils/queue';
+import type { Client } from '@bcms/selfhosted-client/main';
 
 export interface SocketEventHandler<
     Name extends SocketEventName,

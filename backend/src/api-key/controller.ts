@@ -3,34 +3,34 @@ import {
     createController,
     createControllerMethod,
     HttpStatus,
-} from '@thebcms/selfhosted-backend/_server';
+} from '@bcms/selfhosted-backend/_server';
 import {
     RP,
     type RPApiKeyJwtCheckResult,
     type RPJwtBodyCheckResult,
     type RPJwtCheckResult,
-} from '@thebcms/selfhosted-backend/security/route-protection/main';
+} from '@bcms/selfhosted-backend/security/route-protection/main';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
-import type { ApiKey } from '@thebcms/selfhosted-backend/api-key/models/main';
+} from '@bcms/selfhosted-backend/util/controller';
+import type { ApiKey } from '@bcms/selfhosted-backend/api-key/models/main';
 import {
     controllerItemResponseDefinitionForRef,
     controllerItemsResponseDefinitionForRef,
     openApiGetModelRef,
-} from '@thebcms/selfhosted-backend/open-api/schema';
-import { Repo } from '@thebcms/selfhosted-backend/repo';
+} from '@bcms/selfhosted-backend/open-api/schema';
+import { Repo } from '@bcms/selfhosted-backend/repo';
 import {
     type ApiKeyCreateBody,
     ApiKeyCreateBodySchema,
     type ApiKeyUpdateBody,
     ApiKeyUpdateBodySchema,
-} from '@thebcms/selfhosted-backend/api-key/models/controller';
-import { ApiKeyFactory } from '@thebcms/selfhosted-backend/api-key/factory';
-import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
-import { FunctionManager } from '@thebcms/selfhosted-backend/function/main';
-import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
+} from '@bcms/selfhosted-backend/api-key/models/controller';
+import { ApiKeyFactory } from '@bcms/selfhosted-backend/api-key/factory';
+import { SocketManager } from '@bcms/selfhosted-backend/socket/manager';
+import { FunctionManager } from '@bcms/selfhosted-backend/function/main';
+import { EventManager } from '@bcms/selfhosted-backend/event/manager';
 
 export const ApiKeyController = createController({
     name: 'ApiKey',

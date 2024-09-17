@@ -1,25 +1,25 @@
 import {
     type MongoDBEntry,
     MongoDBEntrySchema,
-} from '@thebcms/selfhosted-backend/_server/modules/mongodb';
+} from '@bcms/selfhosted-backend/_server/modules/mongodb';
 import {
     deleteFromSchema,
     type ObjectSchema,
-} from '@thebcms/selfhosted-backend/_utils/object-utility';
+} from '@bcms/selfhosted-backend/_utils/object-utility';
 import {
     type EntryStatusValue,
     EntryStatusValueSchema,
-} from '@thebcms/selfhosted-backend/entry/models/status';
+} from '@bcms/selfhosted-backend/entry/models/status';
 import {
     type EntryMeta,
     type EntryMetaParsed,
     EntryMetaSchema,
-} from '@thebcms/selfhosted-backend/entry/models/meta';
+} from '@bcms/selfhosted-backend/entry/models/meta';
 import {
     type EntryContent,
     type EntryContentParsed,
     EntryContentSchema,
-} from '@thebcms/selfhosted-backend/entry/models/content';
+} from '@bcms/selfhosted-backend/entry/models/content';
 
 export interface Entry extends MongoDBEntry {
     templateId: string;

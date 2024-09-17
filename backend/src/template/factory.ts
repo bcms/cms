@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import type { Template } from '@thebcms/selfhosted-backend/template/models/main';
+import type { Template } from '@bcms/selfhosted-backend/template/models/main';
 
 export class TemplateFactory {
     static create(

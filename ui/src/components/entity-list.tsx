@@ -1,8 +1,8 @@
 import { defineComponent, type PropType } from 'vue';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
-import { Link } from '@thebcms/selfhosted-ui/components/link';
-import { millisToDateString } from '@thebcms/selfhosted-ui/util/date';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
+import { Link } from '@bcms/selfhosted-ui/components/link';
+import { millisToDateString } from '@bcms/selfhosted-ui/util/date';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
 import type { JSX } from 'vue/jsx-runtime';
 
 export const EntityList = defineComponent({

@@ -1,9 +1,9 @@
 import { computed, defineComponent, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
-import { Button } from '@thebcms/selfhosted-ui/components/button';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
-import { EntityList } from '@thebcms/selfhosted-ui/components/entity-list';
-import { EmptyState } from '@thebcms/selfhosted-ui/components/empty-state';
+import { Button } from '@bcms/selfhosted-ui/components/button';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
+import { EntityList } from '@bcms/selfhosted-ui/components/entity-list';
+import { EmptyState } from '@bcms/selfhosted-ui/components/empty-state';
 
 export const GroupsView = defineComponent({
     setup() {

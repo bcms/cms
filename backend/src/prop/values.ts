@@ -2,36 +2,36 @@ import {
     type Prop,
     PropType,
     type PropValue,
-} from '@thebcms/selfhosted-backend/prop/models/main';
-import type { Widget } from '@thebcms/selfhosted-backend/widget/models/main';
-import type { Group } from '@thebcms/selfhosted-backend/group/models/main';
-import type { Template } from '@thebcms/selfhosted-backend/template/models/main';
-import type { Media } from '@thebcms/selfhosted-backend/media/models/main';
+} from '@bcms/selfhosted-backend/prop/models/main';
+import type { Widget } from '@bcms/selfhosted-backend/widget/models/main';
+import type { Group } from '@bcms/selfhosted-backend/group/models/main';
+import type { Template } from '@bcms/selfhosted-backend/template/models/main';
+import type { Media } from '@bcms/selfhosted-backend/media/models/main';
 import {
     ObjectUtility,
     ObjectUtilityError,
-} from '@thebcms/selfhosted-backend/_utils/object-utility';
+} from '@bcms/selfhosted-backend/_utils/object-utility';
 import {
     type PropValueDateData,
     PropValueDateDataSchema,
-} from '@thebcms/selfhosted-backend/prop/models/date';
+} from '@bcms/selfhosted-backend/prop/models/date';
 import {
     type PropValueMediaData,
     PropValueMediaDataSchema,
-} from '@thebcms/selfhosted-backend/prop/models/media';
+} from '@bcms/selfhosted-backend/prop/models/media';
 import type {
     PropValueWidgetData,
     PropWidgetData,
-} from '@thebcms/selfhosted-backend/prop/models/widget';
+} from '@bcms/selfhosted-backend/prop/models/widget';
 import type {
     PropGroupPointerData,
     PropValueGroupPointerData,
-} from '@thebcms/selfhosted-backend/prop/models/group-pointer';
+} from '@bcms/selfhosted-backend/prop/models/group-pointer';
 import {
     type PropEntryPointerData,
     type PropValueEntryPointer,
     PropValueEntryPointerSchema,
-} from '@thebcms/selfhosted-backend/prop/models/entry-pointer';
+} from '@bcms/selfhosted-backend/prop/models/entry-pointer';
 
 export function propsValueCheck(
     props: Prop[],

@@ -1,14 +1,14 @@
-import type { Module } from '@thebcms/selfhosted-backend/_server';
-import { FS } from '@thebcms/selfhosted-utils/fs';
+import type { Module } from '@bcms/selfhosted-backend/_server';
+import { FS } from '@bcms/selfhosted-utils/fs';
 import path from 'path';
 import {
     ObjectUtility,
     ObjectUtilityError,
-} from '@thebcms/selfhosted-utils/object-utility';
+} from '@bcms/selfhosted-utils/object-utility';
 import {
     type BCMSJob,
     BCMSJobSchema,
-} from '@thebcms/selfhosted-backend/job/models/main';
+} from '@bcms/selfhosted-backend/job/models/main';
 import { CronJob } from 'cron';
 
 export function createBcmsJobs(): Module {

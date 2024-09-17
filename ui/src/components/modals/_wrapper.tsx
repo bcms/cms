@@ -1,12 +1,12 @@
 import { defineComponent, onMounted, type PropType, ref, Teleport } from 'vue';
 import type { JSX } from 'vue/jsx-runtime';
-import { type DefaultComponentPropsType } from '@thebcms/selfhosted-ui/components/default';
+import { type DefaultComponentPropsType } from '@bcms/selfhosted-ui/components/default';
 import type {
     ModalHandler,
     ModalHandlerOptions,
-} from '@thebcms/selfhosted-ui/services/modal';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
-import { Button } from '@thebcms/selfhosted-ui/components/button';
+} from '@bcms/selfhosted-ui/services/modal';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
+import { Button } from '@bcms/selfhosted-ui/components/button';
 
 export interface ModalDefaultPropsType<Input = unknown, Output = unknown>
     extends DefaultComponentPropsType {

@@ -2,12 +2,12 @@ import {
     type PropData,
     PropDataSchema,
     type PropType,
-} from '@thebcms/selfhosted-backend/prop/models/main';
-import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-utility';
+} from '@bcms/selfhosted-backend/prop/models/main';
+import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
 import {
     type PropEntryPointerData,
     PropEntryPointerDataSchema,
-} from '@thebcms/selfhosted-backend/prop/models/entry-pointer';
+} from '@bcms/selfhosted-backend/prop/models/entry-pointer';
 
 export interface PropChangeTransform {
     /** ID on property which will be transformed. */

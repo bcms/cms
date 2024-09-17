@@ -1,7 +1,7 @@
 import { computed, defineComponent, onMounted } from 'vue';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
-import type { EntryStatus } from '@thebcms/selfhosted-backend/entry-status/models/main';
-import { Select } from '@thebcms/selfhosted-ui/components/inputs/select/main';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
+import type { EntryStatus } from '@bcms/selfhosted-backend/entry-status/models/main';
+import { Select } from '@bcms/selfhosted-ui/components/inputs/select/main';
 
 export const EntryStatusSelect = defineComponent({
     props: {

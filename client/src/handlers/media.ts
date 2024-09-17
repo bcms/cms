@@ -1,15 +1,15 @@
 import { Buffer } from 'buffer';
-import type { Media } from '@thebcms/selfhosted-backend/media/models/main';
+import type { Media } from '@bcms/selfhosted-backend/media/models/main';
 import type {
     MediaGetBinBody,
     MediaGetBinBodyImage,
-} from '@thebcms/selfhosted-backend/media/models/controller';
-import { MemCache } from '@thebcms/selfhosted-utils/mem-cache';
-import type { Client } from '@thebcms/selfhosted-client/main';
+} from '@bcms/selfhosted-backend/media/models/controller';
+import { MemCache } from '@bcms/selfhosted-utils/mem-cache';
+import type { Client } from '@bcms/selfhosted-client/main';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
+} from '@bcms/selfhosted-backend/util/controller';
 
 export interface MediaExtended extends Media {
     svg?: string;

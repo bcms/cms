@@ -3,34 +3,34 @@ import {
     createController,
     createControllerMethod,
     HttpStatus,
-} from '@thebcms/selfhosted-backend/_server';
+} from '@bcms/selfhosted-backend/_server';
 import {
     RP,
     type RPJwtBodyCheckResult,
     type RPJwtCheckResult,
-} from '@thebcms/selfhosted-backend/security/route-protection/main';
+} from '@bcms/selfhosted-backend/security/route-protection/main';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
-import { Repo } from '@thebcms/selfhosted-backend/repo';
-import { UserFactory } from '@thebcms/selfhosted-backend/user/factory';
+} from '@bcms/selfhosted-backend/util/controller';
+import { Repo } from '@bcms/selfhosted-backend/repo';
+import { UserFactory } from '@bcms/selfhosted-backend/user/factory';
 import {
     controllerItemResponseDefinitionForRef,
     controllerItemsResponseDefinitionForRef,
     openApiGetObjectRefSchema,
-} from '@thebcms/selfhosted-backend/open-api/schema';
-import { Storage } from '@thebcms/selfhosted-backend/storage/main';
-import type { UserProtected } from '@thebcms/selfhosted-backend/user/models/main';
+} from '@bcms/selfhosted-backend/open-api/schema';
+import { Storage } from '@bcms/selfhosted-backend/storage/main';
+import type { UserProtected } from '@bcms/selfhosted-backend/user/models/main';
 import {
     type UserCreateBody,
     UserCreateBodySchema,
     type UserStatsResponse,
     type UserUpdateBody,
     UserUpdateBodySchema,
-} from '@thebcms/selfhosted-backend/user/models/controller';
-import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
-import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
+} from '@bcms/selfhosted-backend/user/models/controller';
+import { SocketManager } from '@bcms/selfhosted-backend/socket/manager';
+import { EventManager } from '@bcms/selfhosted-backend/event/manager';
 
 export const UserController = createController({
     name: 'User',

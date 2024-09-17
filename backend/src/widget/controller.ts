@@ -2,36 +2,36 @@ import {
     createController,
     createControllerMethod,
     HttpStatus,
-} from '@thebcms/selfhosted-backend/_server';
+} from '@bcms/selfhosted-backend/_server';
 import {
     RP,
     type RPApiKeyJwtCheckResult,
     type RPJwtBodyCheckResult,
     type RPJwtCheckResult,
-} from '@thebcms/selfhosted-backend/security/route-protection/main';
+} from '@bcms/selfhosted-backend/security/route-protection/main';
 import {
     type WidgetCreateBody,
     WidgetCreateBodySchema,
     type WidgetUpdateBody,
     WidgetUpdateBodySchema,
     type WidgetWhereIsItUsedResult,
-} from '@thebcms/selfhosted-backend/widget/models/controller';
+} from '@bcms/selfhosted-backend/widget/models/controller';
 import {
     controllerItemResponseDefinitionForRef,
     controllerItemsResponseDefinitionForRef,
     openApiGetModelRef,
-} from '@thebcms/selfhosted-backend/open-api/schema';
-import { Repo } from '@thebcms/selfhosted-backend/repo';
+} from '@bcms/selfhosted-backend/open-api/schema';
+import { Repo } from '@bcms/selfhosted-backend/repo';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
-import type { Widget } from '@thebcms/selfhosted-backend/widget/models/main';
-import { WidgetFactory } from '@thebcms/selfhosted-backend/widget/factory';
-import { StringUtility } from '@thebcms/selfhosted-backend/_utils/string-utility';
-import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
-import { propsApplyChanges } from '@thebcms/selfhosted-backend/prop/changes';
-import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
+} from '@bcms/selfhosted-backend/util/controller';
+import type { Widget } from '@bcms/selfhosted-backend/widget/models/main';
+import { WidgetFactory } from '@bcms/selfhosted-backend/widget/factory';
+import { StringUtility } from '@bcms/selfhosted-backend/_utils/string-utility';
+import { SocketManager } from '@bcms/selfhosted-backend/socket/manager';
+import { propsApplyChanges } from '@bcms/selfhosted-backend/prop/changes';
+import { EventManager } from '@bcms/selfhosted-backend/event/manager';
 
 export const WidgetController = createController({
     name: 'Widget',

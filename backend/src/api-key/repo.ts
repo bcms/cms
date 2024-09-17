@@ -1,9 +1,9 @@
-import { createMongoDBRepository } from '@thebcms/selfhosted-backend/_server/modules/mongodb';
+import { createMongoDBRepository } from '@bcms/selfhosted-backend/_server/modules/mongodb';
 import {
     type ApiKey,
     ApiKeySchema,
-} from '@thebcms/selfhosted-backend/api-key/models/main';
-import { Config } from '@thebcms/selfhosted-backend/config';
+} from '@bcms/selfhosted-backend/api-key/models/main';
+import { Config } from '@bcms/selfhosted-backend/config';
 
 export const ApiKeyRepo = createMongoDBRepository<ApiKey, void>({
     name: 'ApiKey',

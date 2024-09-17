@@ -8,17 +8,17 @@ import {
 import type {
     Prop,
     PropValue,
-} from '@thebcms/selfhosted-backend/prop/models/main';
-import type { PropValidator } from '@thebcms/selfhosted-ui/util/prop-validation';
-import type { EntrySync } from '@thebcms/selfhosted-ui/services/entry-sync';
-import type { PropValueGroupPointerData } from '@thebcms/selfhosted-backend/prop/models/group-pointer';
-import { EntryMetaEditor } from '@thebcms/selfhosted-ui/components/entry/meta';
-import type { Group } from '@thebcms/selfhosted-backend/group/models/main';
-import { Button } from '@thebcms/selfhosted-ui/components/button';
+} from '@bcms/selfhosted-backend/prop/models/main';
+import type { PropValidator } from '@bcms/selfhosted-ui/util/prop-validation';
+import type { EntrySync } from '@bcms/selfhosted-ui/services/entry-sync';
+import type { PropValueGroupPointerData } from '@bcms/selfhosted-backend/prop/models/group-pointer';
+import { EntryMetaEditor } from '@bcms/selfhosted-ui/components/entry/meta';
+import type { Group } from '@bcms/selfhosted-backend/group/models/main';
+import { Button } from '@bcms/selfhosted-ui/components/button';
 import {
     PropInputWrapper,
     PropInputWrapperArrayItem,
-} from '@thebcms/selfhosted-ui/components/prop/_input-wrapper';
+} from '@bcms/selfhosted-ui/components/prop/_input-wrapper';
 
 export const PropGroupPointerInput = defineComponent({
     props: {

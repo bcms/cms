@@ -2,16 +2,16 @@ import { defineComponent, onMounted, ref } from 'vue';
 import {
     getModalDefaultProps,
     ModalWrapper,
-} from '@thebcms/selfhosted-ui/components/modals/_wrapper';
+} from '@bcms/selfhosted-ui/components/modals/_wrapper';
 import {
     createRefValidator,
     createValidationItem,
-} from '@thebcms/selfhosted-ui/util/validation';
-import { delay } from '@thebcms/selfhosted-ui/util/delay';
+} from '@bcms/selfhosted-ui/util/validation';
+import { delay } from '@bcms/selfhosted-ui/util/delay';
 import {
     FileInput,
     type FileInputListItem,
-} from '@thebcms/selfhosted-ui/components/inputs/file';
+} from '@bcms/selfhosted-ui/components/inputs/file';
 
 export const ModalBackupRestore = defineComponent({
     props: getModalDefaultProps<void, void>(),

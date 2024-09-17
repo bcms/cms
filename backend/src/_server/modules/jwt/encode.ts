@@ -1,14 +1,14 @@
 import {
     ObjectUtility,
     ObjectUtilityError,
-} from '@thebcms/selfhosted-utils/object-utility';
+} from '@bcms/selfhosted-utils/object-utility';
 import {
     type JWT,
     type JWTHeader,
     JWTHeaderSchema,
     type JWTPayload,
     JWTPayloadSchema,
-} from '@thebcms/selfhosted-backend/_server/modules/jwt/models';
+} from '@bcms/selfhosted-backend/_server/modules/jwt/models';
 
 export class JWTEncode {
     /**

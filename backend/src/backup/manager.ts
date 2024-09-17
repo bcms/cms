@@ -1,13 +1,13 @@
 import { v4 as uuidv4 } from 'uuid';
 import nodeFs from 'fs';
 import path from 'path';
-import type { Backup } from '@thebcms/selfhosted-backend/backup/models/main';
-import { createQueue, QueueError } from '@thebcms/selfhosted-utils/queue';
-import { Logger } from '@thebcms/selfhosted-backend/_server';
-import { Repo } from '@thebcms/selfhosted-backend/repo';
-import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
-import { FS } from '@thebcms/selfhosted-utils/fs';
-import { ChildProcess } from '@thebcms/selfhosted-utils/child-process';
+import type { Backup } from '@bcms/selfhosted-backend/backup/models/main';
+import { createQueue, QueueError } from '@bcms/selfhosted-utils/queue';
+import { Logger } from '@bcms/selfhosted-backend/_server';
+import { Repo } from '@bcms/selfhosted-backend/repo';
+import { SocketManager } from '@bcms/selfhosted-backend/socket/manager';
+import { FS } from '@bcms/selfhosted-utils/fs';
+import { ChildProcess } from '@bcms/selfhosted-utils/child-process';
 
 export class BackupManager {
     private static fs = new FS(process.cwd());

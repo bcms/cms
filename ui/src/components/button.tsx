@@ -1,5 +1,5 @@
 import { defineComponent, type PropType, reactive, type Ref } from 'vue';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
 
 export const Button = defineComponent({
     props: {

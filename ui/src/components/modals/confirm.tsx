@@ -3,12 +3,12 @@ import type { JSX } from 'vue/jsx-runtime';
 import {
     getModalDefaultProps,
     ModalWrapper,
-} from '@thebcms/selfhosted-ui/components/modals/_wrapper';
+} from '@bcms/selfhosted-ui/components/modals/_wrapper';
 import {
     createRefValidator,
     createValidationItem,
-} from '@thebcms/selfhosted-ui/util/validation';
-import { TextInput } from '@thebcms/selfhosted-ui/components/inputs/text';
+} from '@bcms/selfhosted-ui/util/validation';
+import { TextInput } from '@bcms/selfhosted-ui/components/inputs/text';
 
 export interface ModalConfirmInput {
     title: string;

@@ -1,6 +1,6 @@
 import { defineComponent } from 'vue';
-import { BgAuth } from '@thebcms/selfhosted-ui/components/bg-auth';
-import { BCMSLogo } from '@thebcms/selfhosted-ui/components/logo';
+import { BgAuth } from '@bcms/selfhosted-ui/components/bg-auth';
+import { BCMSLogo } from '@bcms/selfhosted-ui/components/logo';
 
 export const AuthLayout = defineComponent({
     setup(_, ctx) {

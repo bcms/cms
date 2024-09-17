@@ -19,16 +19,16 @@ import type {
     SocketEventDataEntrySyncUserSelectRange,
     SocketEventDataEntrySyncYSyncReq,
     SocketEventDataEntrySyncYSyncRes,
-} from '@thebcms/selfhosted-backend/socket/events/entry-sync';
+} from '@bcms/selfhosted-backend/socket/events/entry-sync';
 import type { Sdk } from '@thebcms/selfhosted-sdk';
-import type { Entry } from '@thebcms/selfhosted-backend/entry/models/main';
-import type { Throwable } from '@thebcms/selfhosted-ui/util/throwable';
+import type { Entry } from '@bcms/selfhosted-backend/entry/models/main';
+import type { Throwable } from '@bcms/selfhosted-ui/util/throwable';
 import type { SocketEventHandler } from '@thebcms/selfhosted-sdk/handlers/socket';
-import type { PropValueDateData } from '@thebcms/selfhosted-backend/prop/models/date';
-import type { PropValueMediaData } from '@thebcms/selfhosted-backend/prop/models/media';
-import type { PropValueEntryPointer } from '@thebcms/selfhosted-backend/prop/models/entry-pointer';
-import type { UserProtected } from '@thebcms/selfhosted-backend/user/models/main';
-import { callAndClearUnsubscribeFns } from '@thebcms/selfhosted-ui/util/sub';
+import type { PropValueDateData } from '@bcms/selfhosted-backend/prop/models/date';
+import type { PropValueMediaData } from '@bcms/selfhosted-backend/prop/models/media';
+import type { PropValueEntryPointer } from '@bcms/selfhosted-backend/prop/models/entry-pointer';
+import type { UserProtected } from '@bcms/selfhosted-backend/user/models/main';
+import { callAndClearUnsubscribeFns } from '@bcms/selfhosted-ui/util/sub';
 
 export interface EntrySyncUserDataColor {
     main: string;

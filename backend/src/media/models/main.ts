@@ -1,8 +1,8 @@
 import {
     type MongoDBEntry,
     MongoDBEntrySchema,
-} from '@thebcms/selfhosted-backend/_server/modules/mongodb';
-import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-utility';
+} from '@bcms/selfhosted-backend/_server/modules/mongodb';
+import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
 
 // eslint-disable-next-line no-shadow
 export enum MediaType {

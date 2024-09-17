@@ -1,6 +1,6 @@
 import { computed, ref, type Ref } from 'vue';
-import type { Media } from '@thebcms/selfhosted-backend/media/models/main';
-import { search, type SearchSetItem } from '@thebcms/selfhosted-utils/search';
+import type { Media } from '@bcms/selfhosted-backend/media/models/main';
+import { search, type SearchSetItem } from '@bcms/selfhosted-utils/search';
 
 export interface UserMediaState {
     mediaData: Ref<{

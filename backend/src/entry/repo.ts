@@ -1,14 +1,14 @@
 import {
     type Entry,
     EntrySchema,
-} from '@thebcms/selfhosted-backend/entry/models/main';
-import { createMongoDBRepository } from '@thebcms/selfhosted-backend/_server/modules/mongodb';
+} from '@bcms/selfhosted-backend/entry/models/main';
+import { createMongoDBRepository } from '@bcms/selfhosted-backend/_server/modules/mongodb';
 import {
     createQueue,
     type Queue,
     QueueError,
-} from '@thebcms/selfhosted-backend/_utils/queue';
-import type { EntryContentNodeWidgetAttr } from '@thebcms/selfhosted-backend/entry/models/content';
+} from '@bcms/selfhosted-backend/_utils/queue';
+import type { EntryContentNodeWidgetAttr } from '@bcms/selfhosted-backend/entry/models/content';
 
 export interface EntryRepoMethods {
     findAllByTemplateId(templateId: string): Promise<Entry[]>;

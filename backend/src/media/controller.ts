@@ -3,27 +3,27 @@ import {
     createController,
     createControllerMethod,
     HttpStatus,
-} from '@thebcms/selfhosted-backend/_server';
+} from '@bcms/selfhosted-backend/_server';
 import {
     RP,
     type RPApiKeyJwtCheckResult,
     type RPJwtBodyCheckResult,
     type RPJwtCheckResult,
-} from '@thebcms/selfhosted-backend/security/route-protection/main';
+} from '@bcms/selfhosted-backend/security/route-protection/main';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,
-} from '@thebcms/selfhosted-backend/util/controller';
+} from '@bcms/selfhosted-backend/util/controller';
 import {
     type Media,
     MediaType,
-} from '@thebcms/selfhosted-backend/media/models/main';
+} from '@bcms/selfhosted-backend/media/models/main';
 import {
     controllerItemResponseDefinitionForRef,
     controllerItemsResponseDefinitionForRef,
     openApiGetModelRef,
-} from '@thebcms/selfhosted-backend/open-api/schema';
-import { Repo } from '@thebcms/selfhosted-backend/repo';
+} from '@bcms/selfhosted-backend/open-api/schema';
+import { Repo } from '@bcms/selfhosted-backend/repo';
 import {
     type MediaCreateDirBody,
     MediaCreateDirBodySchema,
@@ -34,17 +34,17 @@ import {
     type MediaRequestUploadTokenResult,
     type MediaUpdateBody,
     MediaUpdateBodySchema,
-} from '@thebcms/selfhosted-backend/media/models/controller';
+} from '@bcms/selfhosted-backend/media/models/controller';
 import {
     ObjectUtility,
     ObjectUtilityError,
-} from '@thebcms/selfhosted-backend/_utils/object-utility';
-import { MediaStorage } from '@thebcms/selfhosted-backend/media/storage';
-import { keyValueStore } from '@thebcms/selfhosted-backend/key-value-store';
-import { MediaFactory } from '@thebcms/selfhosted-backend/media/factory';
-import { mimetypeToMediaType } from '@thebcms/selfhosted-backend/media/mimetype';
-import { SocketManager } from '@thebcms/selfhosted-backend/socket/manager';
-import { EventManager } from '@thebcms/selfhosted-backend/event/manager';
+} from '@bcms/selfhosted-backend/_utils/object-utility';
+import { MediaStorage } from '@bcms/selfhosted-backend/media/storage';
+import { keyValueStore } from '@bcms/selfhosted-backend/key-value-store';
+import { MediaFactory } from '@bcms/selfhosted-backend/media/factory';
+import { mimetypeToMediaType } from '@bcms/selfhosted-backend/media/mimetype';
+import { SocketManager } from '@bcms/selfhosted-backend/socket/manager';
+import { EventManager } from '@bcms/selfhosted-backend/event/manager';
 
 export const MediaController = createController({
     name: 'Media',

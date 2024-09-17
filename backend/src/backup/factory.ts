@@ -1,4 +1,4 @@
-import type { Backup } from '@thebcms/selfhosted-backend/backup/models/main';
+import type { Backup } from '@bcms/selfhosted-backend/backup/models/main';
 import { ObjectId } from '@fastify/mongodb';
 
 export class BackupFactory {

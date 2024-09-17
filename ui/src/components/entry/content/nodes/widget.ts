@@ -1,8 +1,8 @@
 import { Node, mergeAttributes } from '@tiptap/core';
 import { VueNodeViewRenderer } from '@tiptap/vue-3';
 import { EntryContentNodeWidgetComponent } from './widget-component';
-import type { EntryContentNodeWidgetAttr } from '@thebcms/selfhosted-backend/entry/models/content';
-import type { Widget } from '@thebcms/selfhosted-backend/widget/models/main';
+import type { EntryContentNodeWidgetAttr } from '@bcms/selfhosted-backend/entry/models/content';
+import type { Widget } from '@bcms/selfhosted-backend/widget/models/main';
 
 declare module '@tiptap/core' {
     interface Commands<ReturnType> {

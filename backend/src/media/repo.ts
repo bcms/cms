@@ -1,9 +1,9 @@
 import {
     type Media,
     MediaSchema,
-} from '@thebcms/selfhosted-backend/media/models/main';
-import { createMongoDBRepository } from '@thebcms/selfhosted-backend/_server/modules/mongodb';
-import { Config } from '@thebcms/selfhosted-backend/config';
+} from '@bcms/selfhosted-backend/media/models/main';
+import { createMongoDBRepository } from '@bcms/selfhosted-backend/_server/modules/mongodb';
+import { Config } from '@bcms/selfhosted-backend/config';
 
 export interface MediaRepoMethods {
     findByParentIdAndName(

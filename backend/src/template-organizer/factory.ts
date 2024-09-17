@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import type { TemplateOrganizer } from '@thebcms/selfhosted-backend/template-organizer/models/main';
+import type { TemplateOrganizer } from '@bcms/selfhosted-backend/template-organizer/models/main';
 
 export class TemplateOrganizerFactory {
     static create(

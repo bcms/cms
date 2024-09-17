@@ -2,14 +2,14 @@ import { defineComponent, onMounted, type PropType } from 'vue';
 import type {
     Prop,
     PropValue,
-} from '@thebcms/selfhosted-backend/prop/models/main';
-import type { EntrySync } from '@thebcms/selfhosted-ui/services/entry-sync';
-import type { UnsubscribeFns } from '@thebcms/selfhosted-ui/util/sub';
+} from '@bcms/selfhosted-backend/prop/models/main';
+import type { EntrySync } from '@bcms/selfhosted-ui/services/entry-sync';
+import type { UnsubscribeFns } from '@bcms/selfhosted-ui/util/sub';
 import {
     PropInputWrapper,
     PropInputWrapperArrayItem,
-} from '@thebcms/selfhosted-ui/components/prop/_input-wrapper';
-import { Toggle } from '@thebcms/selfhosted-ui/components/inputs/toggle';
+} from '@bcms/selfhosted-ui/components/prop/_input-wrapper';
+import { Toggle } from '@bcms/selfhosted-ui/components/inputs/toggle';
 
 export const PropBooleanInput = defineComponent({
     props: {

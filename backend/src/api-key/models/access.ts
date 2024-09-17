@@ -1,8 +1,8 @@
 import {
     type UserPolicyCRUD,
     UserPolicyCRUDSchema,
-} from '@thebcms/selfhosted-backend/user/models/policy';
-import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-utility';
+} from '@bcms/selfhosted-backend/user/models/policy';
+import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
 
 export interface ApiKeyAccess {
     templates: Array<UserPolicyCRUD & { _id: string; name?: string }>;

@@ -17,11 +17,11 @@
         "noUnusedParameters": true,
         "moduleResolution": "Node",
         "paths": {
-            "@thebcms/selfhosted-cli": ["./src"],
-            "@thebcms/selfhosted-cli/*": ["./src/*"],
-            "@thebcms/selfhosted-backend": ["../backend/types"],
-            "@thebcms/selfhosted-backend/*": ["../backend/types/*"],
-            "@thebcms/selfhosted-utils/*": ["../backend/src/_utils/*"]
+            "@bcms/selfhosted-cli": ["./src"],
+            "@bcms/selfhosted-cli/*": ["./src/*"],
+            "@bcms/selfhosted-backend": ["../backend/types"],
+            "@bcms/selfhosted-backend/*": ["../backend/types/*"],
+            "@bcms/selfhosted-utils/*": ["../backend/src/_utils/*"]
         }
     },
     "include": ["src", "../backend/src/_utils"]

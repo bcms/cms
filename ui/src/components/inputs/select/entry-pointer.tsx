@@ -5,15 +5,15 @@ import {
     onMounted,
     type PropType,
 } from 'vue';
-import { InputProps } from '@thebcms/selfhosted-ui/components/inputs/_wrapper';
-import type { EntrySync } from '@thebcms/selfhosted-ui/services/entry-sync';
-import type { EntryLite } from '@thebcms/selfhosted-backend/entry/models/main';
+import { InputProps } from '@bcms/selfhosted-ui/components/inputs/_wrapper';
+import type { EntrySync } from '@bcms/selfhosted-ui/services/entry-sync';
+import type { EntryLite } from '@bcms/selfhosted-backend/entry/models/main';
 import {
     callAndClearUnsubscribeFns,
     type UnsubscribeFns,
-} from '@thebcms/selfhosted-ui/util/sub';
-import { Select } from '@thebcms/selfhosted-ui/components/inputs/select/main';
-import { MediaPreview } from '@thebcms/selfhosted-ui/components/media-preview';
+} from '@bcms/selfhosted-ui/util/sub';
+import { Select } from '@bcms/selfhosted-ui/components/inputs/select/main';
+import { MediaPreview } from '@bcms/selfhosted-ui/components/media-preview';
 
 export const SelectEntryPointer = defineComponent({
     props: {

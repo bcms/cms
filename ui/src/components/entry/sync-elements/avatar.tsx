@@ -1,6 +1,6 @@
 import { defineComponent } from 'vue';
-import { DefaultComponentProps } from '@thebcms/selfhosted-ui/components/default';
-import { UserAvatar } from '@thebcms/selfhosted-ui/components/user-avatar';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
+import { UserAvatar } from '@bcms/selfhosted-ui/components/user-avatar';
 
 export const EntrySyncElementsAvatar = defineComponent({
     props: {

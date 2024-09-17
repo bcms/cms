@@ -7,7 +7,7 @@ import { EditorState } from '@codemirror/state';
 import {
     InputProps,
     InputWrapper,
-} from '@thebcms/selfhosted-ui/components/inputs/_wrapper';
+} from '@bcms/selfhosted-ui/components/inputs/_wrapper';
 
 const langs = {
     javascript,

@@ -9,18 +9,18 @@ import {
 import type {
     Prop,
     PropValue,
-} from '@thebcms/selfhosted-backend/prop/models/main';
-import type { PropValidator } from '@thebcms/selfhosted-ui/util/prop-validation';
-import type { EntrySync } from '@thebcms/selfhosted-ui/services/entry-sync';
+} from '@bcms/selfhosted-backend/prop/models/main';
+import type { PropValidator } from '@bcms/selfhosted-ui/util/prop-validation';
+import type { EntrySync } from '@bcms/selfhosted-ui/services/entry-sync';
 import {
     callAndClearUnsubscribeFns,
     type UnsubscribeFns,
-} from '@thebcms/selfhosted-ui/util/sub';
+} from '@bcms/selfhosted-ui/util/sub';
 import {
     PropInputWrapper,
     PropInputWrapperArrayItem,
-} from '@thebcms/selfhosted-ui/components/prop/_input-wrapper';
-import { Select } from '@thebcms/selfhosted-ui/components/inputs/select/main';
+} from '@bcms/selfhosted-ui/components/prop/_input-wrapper';
+import { Select } from '@bcms/selfhosted-ui/components/inputs/select/main';
 
 export const PropEnumInput = defineComponent({
     props: {

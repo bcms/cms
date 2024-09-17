@@ -1,6 +1,6 @@
-import type { PropValueWidgetData } from '@thebcms/selfhosted-backend/prop/models/widget';
-import type { ObjectSchema } from '@thebcms/selfhosted-backend/_utils/object-utility';
-import type { PropParsed } from '@thebcms/selfhosted-backend/prop/models/main';
+import type { PropValueWidgetData } from '@bcms/selfhosted-backend/prop/models/widget';
+import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
+import type { PropParsed } from '@bcms/selfhosted-backend/prop/models/main';
 
 // eslint-disable-next-line no-shadow
 export enum EntryContentNodeMarkerType {

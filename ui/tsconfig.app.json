@@ -17,11 +17,11 @@
         "rootDir": "../",
         "types": ["vite-plugin-glsl/ext", "node"],
         "paths": {
-            "@thebcms/selfhosted-backend/*": ["../backend/types/*"],
-            "@thebcms/selfhosted-utils/*": ["../backend/src/_utils/*"],
+            "@bcms/selfhosted-backend/*": ["../backend/types/*"],
+            "@bcms/selfhosted-utils/*": ["../backend/src/_utils/*"],
             "@thebcms/selfhosted-sdk": ["./src/sdk"],
             "@thebcms/selfhosted-sdk/*": ["./src/sdk/*"],
-            "@thebcms/selfhosted-ui/*": ["./src/*"]
+            "@bcms/selfhosted-ui/*": ["./src/*"]
         }
     }
 }

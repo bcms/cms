@@ -1,20 +1,20 @@
 import {
     type MongoDBEntry,
     MongoDBEntrySchema,
-} from '@thebcms/selfhosted-backend/_server/modules/mongodb';
+} from '@bcms/selfhosted-backend/_server/modules/mongodb';
 import {
     type UserCustomPool,
     UserCustomPoolSchema,
-} from '@thebcms/selfhosted-backend/user/models/custom-pool';
-import type { JWT } from '@thebcms/selfhosted-backend/_server/modules/jwt';
+} from '@bcms/selfhosted-backend/user/models/custom-pool';
+import type { JWT } from '@bcms/selfhosted-backend/_server/modules/jwt';
 import {
     deleteFromSchema,
     type ObjectSchema,
-} from '@thebcms/selfhosted-backend/_utils/object-utility';
+} from '@bcms/selfhosted-backend/_utils/object-utility';
 import {
     type UserRole,
     UserRoleSchema,
-} from '@thebcms/selfhosted-backend/user/models/role';
+} from '@bcms/selfhosted-backend/user/models/role';
 
 export interface User extends MongoDBEntry {
     username: string;

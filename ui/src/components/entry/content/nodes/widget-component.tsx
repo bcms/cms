@@ -7,19 +7,19 @@ import {
     ref,
 } from 'vue';
 import { NodeViewWrapper, nodeViewProps } from '@tiptap/vue-3';
-import type { EntryContentNodeWidgetAttr } from '@thebcms/selfhosted-backend/entry/models/content';
-import type { Media } from '@thebcms/selfhosted-backend/media/models/main';
-import { Icon } from '@thebcms/selfhosted-ui/components/icon';
-import { EntryMetaEditor } from '@thebcms/selfhosted-ui/components/entry/meta';
-import type { PropValueWidgetData } from '@thebcms/selfhosted-backend/prop/models/widget';
+import type { EntryContentNodeWidgetAttr } from '@bcms/selfhosted-backend/entry/models/content';
+import type { Media } from '@bcms/selfhosted-backend/media/models/main';
+import { Icon } from '@bcms/selfhosted-ui/components/icon';
+import { EntryMetaEditor } from '@bcms/selfhosted-ui/components/entry/meta';
+import type { PropValueWidgetData } from '@bcms/selfhosted-backend/prop/models/widget';
 import {
     propApplyValueChangeFromPath,
     propPathToArray,
     propValueMoveArrayItem,
     propValueRemoveArrayItem,
-} from '@thebcms/selfhosted-ui/util/prop';
-import { entryEditorMetaOnAddPropValue } from '@thebcms/selfhosted-ui/components/entry/editor';
-import { MediaPreview } from '@thebcms/selfhosted-ui/components/media-preview';
+} from '@bcms/selfhosted-ui/util/prop';
+import { entryEditorMetaOnAddPropValue } from '@bcms/selfhosted-ui/components/entry/editor';
+import { MediaPreview } from '@bcms/selfhosted-ui/components/media-preview';
 
 const SLICE_PROP_PATH_INDEX = 8;
 
