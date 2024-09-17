@@ -22,6 +22,7 @@
       <excludeFolder url="file://$MODULE_DIR$/ui/dist" />
       <excludeFolder url="file://$MODULE_DIR$/ui/dist-components" />
       <excludeFolder url="file://$MODULE_DIR$/ui/src/dist-components" />
+      <excludeFolder url="file://$MODULE_DIR$/cli/dist" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

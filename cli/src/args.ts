@@ -1,6 +1,11 @@
+import type { TypeGeneratorLanguage } from '@bcms/selfhosted-backend/type-generator/generator/main';
+
 export interface Args {
+    cmsOrigin?: string;
     deploy?: 'debian' | 'ubuntu';
     projectName?: string;
+    pull?: 'types' | 'entries' | 'media';
+    language?: TypeGeneratorLanguage;
 }
 
 export interface ArgInfo {
@@ -12,6 +17,11 @@ export interface ArgInfo {
 export const argsMap: {
     [key: string]: ArgInfo;
 } = {
+    cmsOrigin: {
+        flags: ['--cms-origin', '--co'],
+        description:
+            'URL of the BCMS instance (ex. https://my-bcms-domain.com)',
+    },
     deploy: {
         flags: ['--deploy'],
         description: 'Deploy BCMS on the server',
@@ -20,6 +30,15 @@ export const argsMap: {
     projectName: {
         flags: ['--project-name'],
         description: 'Project name when deploying a BCMS',
+    },
+    pull: {
+        flags: ['--pull'],
+        description: 'Pull data from the BCMS',
+        values: ['types', 'entries', 'media'],
+    },
+    language: {
+        flags: ['--language', '--lng'],
+        description: 'Language to use for previous commands',
     },
 };
 

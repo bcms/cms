@@ -1,23 +1,9 @@
 import { ref } from 'vue';
+import type { ArrayStore } from '@bcms/selfhosted-sdk';
 
-export interface StoreQuery<ItemType> {
-    (item: ItemType): boolean | number | string | unknown;
-}
 
 export interface StoreMethods<ItemType, Methods = unknown> {
     (store: ArrayStore<ItemType>): Methods;
-}
-
-export interface ArrayStore<ItemType, Methods = unknown> {
-    items(): ItemType[];
-    find(query: StoreQuery<ItemType>): ItemType | null;
-    findById(id: string): ItemType | null;
-    findMany(query: StoreQuery<ItemType>): ItemType[];
-    findManyById(ids: string[]): ItemType[];
-    set(items: ItemType | ItemType[]): void;
-    remove(ids: string | string[]): void;
-    clear(): void;
-    methods: Methods;
 }
 
 export function createArrayStore<ItemType, Methods = unknown>(

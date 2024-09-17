@@ -6,6 +6,7 @@ export async function buildMjs(
     basePath: string,
     cmd: string,
     dist: string,
+    afterBuild?: () => Promise<void>,
 ) {
     await ChildProcess.advancedExec(`npm run ${cmd}`, {
         cwd: basePath,
@@ -13,6 +14,9 @@ export async function buildMjs(
             process[type].write(chunk);
         },
     }).awaiter;
+    if (afterBuild) {
+        await afterBuild();
+    }
     const files = await fs.fileTree([dist, 'mjs'], '');
     for (let i = 0; i < files.length; i++) {
         const fileInfo = files[i];
@@ -34,6 +38,7 @@ export async function buildCjs(
     basePath: string,
     cmd: string,
     dist: string,
+    afterBuild?: () => Promise<void>,
 ) {
     await ChildProcess.advancedExec(`npm run ${cmd}`, {
         cwd: basePath,
@@ -41,6 +46,9 @@ export async function buildCjs(
             process[type].write(chunk);
         },
     }).awaiter;
+    if (afterBuild) {
+        await afterBuild();
+    }
     const files = await fs.fileTree([dist, 'cjs'], '');
     for (let i = 0; i < files.length; i++) {
         const fileInfo = files[i];

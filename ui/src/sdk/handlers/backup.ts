@@ -5,10 +5,6 @@ import type {
     ControllerItemsResponse,
 } from '@bcms/selfhosted-backend/util/controller';
 import type { Backup } from '@bcms/selfhosted-backend/backup/models/main';
-import {
-    callAndClearUnsubscribeFns,
-    type UnsubscribeFns,
-} from '@bcms/selfhosted-ui/util/sub';
 import type { AxiosProgressEvent } from 'axios';
 import type { Media } from '@bcms/selfhosted-backend/media/models/main';
 import type { MediaRequestUploadTokenResult } from '@bcms/selfhosted-backend/media/models/controller';
@@ -18,7 +14,7 @@ export class BackupHandler extends Handler {
     private latches: {
         [id: string]: boolean;
     } = {};
-    private unsubs: UnsubscribeFns = [];
+    private unsubs: Array<() => void> = [];
 
     constructor(private sdk: Sdk) {
         super();
@@ -36,7 +32,12 @@ export class BackupHandler extends Handler {
     }
 
     clear() {
-        callAndClearUnsubscribeFns(this.unsubs);
+        while (this.unsubs.length > 0) {
+            const unsub = this.unsubs.pop();
+            if (unsub) {
+                unsub();
+            }
+        }
         this.latches = {};
     }
 

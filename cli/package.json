@@ -8,6 +8,13 @@
     "module": "./index.mjs",
     "types": "./index.d.ts",
     "type": "module",
+    "exports": {
+        ".": {
+            "require": "./index.cjs",
+            "import": "./index.mjs",
+            "types": "./index.d.ts"
+        }
+    },
     "scripts": {
         "dev": "vite-node --project tsconfig.json src/bin/main.ts",
         "build:ts:mjs": "tsc --project tsconfig.json",
@@ -33,15 +40,18 @@
         "typescript": "^5.4.5",
         "vite-node": "^1.6.0"
     },
+    "bin": {
+        "selfbcms": "bin/main.mjs"
+    },
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com"
+    },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/bcms/cms.git"
+        "url": "git+https://github.com/bcms/cms"
     },
     "bugs": {
         "url": "https://github.com/bcms/cms/issues"
-    },
-    "bin": {
-        "selfbcms": "bin/main.mjs"
     },
     "homepage": "https://github.com/bcms/cms#readme"
 }

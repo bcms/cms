@@ -15,8 +15,8 @@ export interface FSFileTreeItem {
 export type FSFileTreeList = FSFileTreeItem[];
 
 export class FS {
-    private isWin: boolean;
-    private slash: string;
+    isWin: boolean;
+    slash: string;
 
     constructor(public baseRoot: string) {
         this.isWin = os.platform() === 'win32';

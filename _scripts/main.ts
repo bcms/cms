@@ -8,6 +8,7 @@ import { buildSdk, packSdk } from './sdk';
 import { buildUi, buildUiComponents, packUiComponents } from './ui';
 import { publish } from './utils/publish';
 import { createMainDockerImage } from './docker';
+import { buildCli, packCli } from './cli';
 
 async function main() {
     const command = process.argv[2];
@@ -39,6 +40,18 @@ async function main() {
         }
         case '--publish-client': {
             await publish(['client', 'dist']);
+            return;
+        }
+        case '--build-cli': {
+            await buildCli();
+            return;
+        }
+        case '--pack-cli': {
+            await packCli();
+            return;
+        }
+        case '--publish-cli': {
+            await publish(['cli', 'dist']);
             return;
         }
         case '--build-utils': {

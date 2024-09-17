@@ -21,8 +21,17 @@
             "@bcms/selfhosted-cli/*": ["./src/*"],
             "@bcms/selfhosted-backend": ["../backend/types"],
             "@bcms/selfhosted-backend/*": ["../backend/types/*"],
-            "@bcms/selfhosted-utils/*": ["../backend/src/_utils/*"]
+            "@bcms/selfhosted-utils/*": ["../backend/src/_utils/*"],
+            "@bcms/selfhosted-sdk": ["../ui/src/sdk"],
+            "@bcms/selfhosted-sdk/*": ["../ui/src/sdk/*"],
+            "@bcms/selfhosted-client": ["../client/src"],
+            "@bcms/selfhosted-client/*": ["../client/src/*"]
         }
     },
-    "include": ["src", "../backend/src/_utils"]
+    "include": [
+        "src",
+        "../backend/src/_utils",
+        "../client/src",
+        "../ui/src/sdk"
+    ]
 }
