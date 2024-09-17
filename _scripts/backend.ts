@@ -48,6 +48,7 @@ export async function buildBackend() {
             process[type].write(chunk);
         },
     }).awaiter;
+    await localFs.deleteDir(['dist', '_utils']);
     // await replaceStringInFile({
     //     endsWith: ['.js', '.d.ts'],
     //     basePath: '/_utils',

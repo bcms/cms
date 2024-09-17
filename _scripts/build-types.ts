@@ -1,6 +1,7 @@
 import path from 'path';
 import { ChildProcess } from '@bcms/selfhosted-utils/child-process';
 import { FS } from '@bcms/selfhosted-utils/fs';
+import { buildBackend } from './backend';
 
 export async function buildTypes() {
     const rootFs = new FS(process.cwd());
@@ -10,12 +11,7 @@ export async function buildTypes() {
     if (await rootFs.exist(['backend', 'dist'])) {
         await rootFs.deleteDir(['backend', 'dist']);
     }
-    await ChildProcess.advancedExec('npm run build', {
-        cwd: path.join(process.cwd(), 'backend'),
-        onChunk(type, chunk) {
-            process[type].write(chunk);
-        },
-    }).awaiter;
+    await buildBackend();
     const fileTree = await rootFs.fileTree(['backend', 'dist'], '');
     for (let i = 0; i < fileTree.length; i++) {
         const fileInfo = fileTree[i];
