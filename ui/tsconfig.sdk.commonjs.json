@@ -17,12 +17,11 @@
         "noUnusedParameters": true,
         "moduleResolution": "Node",
         "paths": {
-            "@bcms/selfhosted-backend/*": ["../backend/types/*"],
-            "@bcms/selfhosted-utils/*": ["../backend/src/_server/util/*"],
-            "@bcms/selfhosted-sdk": ["./src/sdk"],
-            "@bcms/selfhosted-sdk/*": ["./src/sdk/*"],
-            "@bcms/selfhosted-ui/*": ["./src/*"]
+            "@bcms/selfhosted-backend/*": ["../../../backend/types/*"],
+            "@bcms/selfhosted-utils/*": ["../../../backend/src/_utils/*"],
+            "@bcms/selfhosted-sdk": ["./"],
+            "@bcms/selfhosted-sdk/*": ["./*"]
         }
     },
-    "include": ["src/sdk", "../backend/types"]
+    "include": ["src/sdk"]
 }

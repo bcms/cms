@@ -7,6 +7,13 @@
     "main": "./index.cjs",
     "module": "./index.mjs",
     "types": "./index.d.ts",
+    "exports": {
+        ".": {
+            "require": "./index.cjs",
+            "import": "./index.mjs",
+            "types": "./index.d.ts"
+        }
+    },
     "dependencies": {
         "axios": "^1.6.7",
         "buffer": "^6.0.3",
@@ -16,5 +23,16 @@
         "isomorphic-ws": "^5.0.0",
         "@bcms/selfhosted-backend": "^1.0.0",
         "ws": "^8.17.0"
-    }
+    },
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/bcms/cms"
+    },
+    "bugs": {
+        "url": "https://github.com/bcms/cms/issues"
+    },
+    "homepage": "https://github.com/bcms/cms#readme"
 }
