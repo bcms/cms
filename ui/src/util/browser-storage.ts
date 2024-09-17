@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from 'uuid';
 import type {
     SdkStorage,
     StorageSubscriptionHandler,
-} from '@thebcms/selfhosted-sdk';
+} from '@bcms/selfhosted-sdk';
 
 interface LocalStorageWrapper {
     all<T>(): T;

@@ -3,7 +3,7 @@ import tippy from 'tippy.js';
 import type { Instance, Props } from 'tippy.js';
 import { Suggestion, type SuggestionProps } from '@tiptap/suggestion';
 import { type CommandProps, type Range, VueRenderer } from '@tiptap/vue-3';
-import type { Sdk } from '@thebcms/selfhosted-sdk';
+import type { Sdk } from '@bcms/selfhosted-sdk';
 import type { Widget } from '@bcms/selfhosted-backend/widget/models/main';
 import {
     SlackCommandList,

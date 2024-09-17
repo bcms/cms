@@ -1,9 +1,9 @@
 import { Buffer } from 'buffer';
 import type { AxiosProgressEvent } from 'axios';
-import { Handler } from '@thebcms/selfhosted-sdk/handlers/_handler';
+import { Handler } from '@bcms/selfhosted-sdk/handlers/_handler';
 import { createQueue, QueueError } from '@bcms/selfhosted-utils/queue';
 import type { Media } from '@bcms/selfhosted-backend/media/models/main';
-import { Sdk } from '@thebcms/selfhosted-sdk';
+import { Sdk } from '@bcms/selfhosted-sdk';
 import type {
     ControllerItemResponse,
     ControllerItemsResponse,

@@ -1,7 +1,7 @@
-import { Handler } from '@thebcms/selfhosted-sdk/handlers/_handler';
+import { Handler } from '@bcms/selfhosted-sdk/handlers/_handler';
 import { createQueue, QueueError } from '@bcms/selfhosted-utils/queue';
 import type { Template } from '@bcms/selfhosted-backend/template/models/main';
-import { Sdk } from '@thebcms/selfhosted-sdk';
+import { Sdk } from '@bcms/selfhosted-sdk';
 import type {
     TemplateCreateBody,
     TemplateUpdateBody,

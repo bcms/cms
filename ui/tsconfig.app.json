@@ -19,8 +19,8 @@
         "paths": {
             "@bcms/selfhosted-backend/*": ["../backend/types/*"],
             "@bcms/selfhosted-utils/*": ["../backend/src/_utils/*"],
-            "@thebcms/selfhosted-sdk": ["./src/sdk"],
-            "@thebcms/selfhosted-sdk/*": ["./src/sdk/*"],
+            "@bcms/selfhosted-sdk": ["./src/sdk"],
+            "@bcms/selfhosted-sdk/*": ["./src/sdk/*"],
             "@bcms/selfhosted-ui/*": ["./src/*"]
         }
     }

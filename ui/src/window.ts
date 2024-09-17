@@ -1,4 +1,4 @@
-import { Sdk } from '@thebcms/selfhosted-sdk';
+import { Sdk } from '@bcms/selfhosted-sdk';
 import type { HeadMetaService } from '@bcms/selfhosted-ui/services/head-meta';
 import type { NotificationService } from '@bcms/selfhosted-ui/services/notification';
 import type { TooltipService } from '@bcms/selfhosted-ui/services/tooltip';

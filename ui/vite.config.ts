@@ -13,7 +13,7 @@ export default defineConfig({
             '@bcms/selfhosted-ui': fileURLToPath(
                 new URL('./src', import.meta.url),
             ),
-            '@thebcms/selfhosted-sdk': fileURLToPath(
+            '@bcms/selfhosted-sdk': fileURLToPath(
                 new URL('./src/sdk', import.meta.url),
             ),
             '@bcms/selfhosted-backend': fileURLToPath(

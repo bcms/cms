@@ -2,7 +2,7 @@ import './styles/_main.scss';
 import './window';
 import { createApp } from 'vue';
 import { useStore } from '@bcms/selfhosted-ui/store';
-import { createSdk } from '@thebcms/selfhosted-sdk';
+import { createSdk } from '@bcms/selfhosted-sdk';
 import { Storage } from '@bcms/selfhosted-ui/storage';
 import { createHeadMetaService } from '@bcms/selfhosted-ui/services/head-meta';
 import { createNotificationService } from '@bcms/selfhosted-ui/services/notification';

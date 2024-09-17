@@ -1,7 +1,7 @@
 import { ref } from 'vue';
 import type { UserProtected } from '@bcms/selfhosted-backend/user/models/main';
 import type { ApiKey } from '@bcms/selfhosted-backend/api-key/models/main';
-import type { SdkStore } from '@thebcms/selfhosted-sdk';
+import type { SdkStore } from '@bcms/selfhosted-sdk';
 import { createArrayStore } from '@bcms/selfhosted-ui/util/array-store';
 import type { Template } from '@bcms/selfhosted-backend/template/models/main';
 import type { Media } from '@bcms/selfhosted-backend/media/models/main';

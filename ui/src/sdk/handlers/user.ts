@@ -1,5 +1,5 @@
-import { Handler } from '@thebcms/selfhosted-sdk/handlers/_handler';
-import { Sdk } from '@thebcms/selfhosted-sdk';
+import { Handler } from '@bcms/selfhosted-sdk/handlers/_handler';
+import { Sdk } from '@bcms/selfhosted-sdk';
 import { createQueue, QueueError } from '@bcms/selfhosted-utils/queue';
 import type { UserProtected } from '@bcms/selfhosted-backend/user/models/main';
 import type {

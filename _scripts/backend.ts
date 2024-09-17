@@ -51,13 +51,13 @@ export async function buildBackend() {
         endsWith: ['.js', '.d.ts'],
         basePath: '/_utils',
         dirPath: ['backend', 'dist'],
-        regex: [/@thebcms\/selfhosted-utils/g],
+        regex: [/@bcms\/selfhosted-utils/g],
     });
     await replaceStringInFile({
         endsWith: ['.js', '.d.ts'],
         basePath: '',
         dirPath: ['backend', 'dist'],
-        regex: [/@thebcms\/selfhosted-backend/g],
+        regex: [/@bcms\/selfhosted-backend/g],
     });
     const packageJson = JSON.parse(await localFs.readString('package.json'));
     packageJson.devDependencies = undefined;

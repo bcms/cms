@@ -1,8 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import WebSocket from 'isomorphic-ws';
-import { Handler } from '@thebcms/selfhosted-sdk/handlers/_handler';
+import { Handler } from '@bcms/selfhosted-sdk/handlers/_handler';
 import { createQueue, QueueError } from '@bcms/selfhosted-utils/queue';
-import { Sdk } from '@thebcms/selfhosted-sdk';
+import { Sdk } from '@bcms/selfhosted-sdk';
 import type {
     SocketEventData,
     SocketEventDataConnection,
