@@ -1,5 +1,5 @@
 {
-    "name": "@thebcms/sdk",
+    "name": "@bcms/selfhosted-sdk",
     "version": "1.0.0",
     "description": "Abstraction module for consuming BCMS Backend REST API",
     "author": "BCMS",

@@ -6,8 +6,8 @@ const jestConfig: JestConfigWithTsJest = {
     testRegex: '/src/test/.*\\.(test|spec)?\\.(ts|tsx)$',
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
     moduleNameMapper: {
-        '^@thebcms/cli/(.*)$': '<rootDir>/src/$1',
-        '^@thebcms/client/(.*)$': '<rootDir>/../client/src/$1',
+        '^@bcms/cli/(.*)$': '<rootDir>/src/$1',
+        '^@bcms/client/(.*)$': '<rootDir>/../client/src/$1',
     },
 };
 
