@@ -10,7 +10,7 @@ import type { JWT } from '@bcms/selfhosted-backend/_server/modules/jwt';
 import {
     deleteFromSchema,
     type ObjectSchema,
-} from '@bcms/selfhosted-backend/_utils/object-utility';
+} from '@bcms/selfhosted-utils/object-utility';
 import {
     type UserRole,
     UserRoleSchema,

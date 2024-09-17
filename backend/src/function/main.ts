@@ -3,12 +3,12 @@ import {
     type BCMSFunction,
     BCMSFunctionSchema,
 } from '@bcms/selfhosted-backend/function/models/main';
-import { FS } from '@bcms/selfhosted-backend/_utils/fs';
+import { FS } from '@bcms/selfhosted-utils/fs';
 import {
     ObjectUtility,
     ObjectUtilityError,
-} from '@bcms/selfhosted-backend/_utils/object-utility';
-import { StringUtility } from '@bcms/selfhosted-backend/_utils/string-utility';
+} from '@bcms/selfhosted-utils/object-utility';
+import { StringUtility } from '@bcms/selfhosted-utils/string-utility';
 
 export class FunctionManager {
     private static fns: BCMSFunction[] = [];

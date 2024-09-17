@@ -4,6 +4,7 @@ import { FS } from '@bcms/selfhosted-utils/fs';
 import { packageJsonExport } from './utils/package-json';
 import { replaceStringInFile } from './utils/file';
 import { buildCjs, buildMjs } from './utils/build';
+import { getUtilsVersion } from './utils/versions';
 
 export async function buildUtils() {
     const basePath = path.join(process.cwd(), 'backend');
@@ -47,12 +48,12 @@ export async function buildBackend() {
             process[type].write(chunk);
         },
     }).awaiter;
-    await replaceStringInFile({
-        endsWith: ['.js', '.d.ts'],
-        basePath: '/_utils',
-        dirPath: ['backend', 'dist'],
-        regex: [/@bcms\/selfhosted-utils/g],
-    });
+    // await replaceStringInFile({
+    //     endsWith: ['.js', '.d.ts'],
+    //     basePath: '/_utils',
+    //     dirPath: ['backend', 'dist'],
+    //     regex: [/@bcms\/selfhosted-utils/g],
+    // });
     await replaceStringInFile({
         endsWith: ['.js', '.d.ts'],
         basePath: '',
@@ -60,6 +61,8 @@ export async function buildBackend() {
         regex: [/@bcms\/selfhosted-backend/g],
     });
     const packageJson = JSON.parse(await localFs.readString('package.json'));
+    const utilsVersion = await getUtilsVersion();
+    packageJson.dependencies[utilsVersion[0]] = '^' + utilsVersion[1];
     packageJson.devDependencies = undefined;
     packageJson.scripts = undefined;
     packageJson.nodemonConfig = undefined;

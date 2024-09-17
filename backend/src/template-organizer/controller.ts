@@ -26,7 +26,7 @@ import {
     TemplateOrganizerUpdateBodySchema,
 } from '@bcms/selfhosted-backend/template-organizer/models/controller';
 import { TemplateOrganizerFactory } from '@bcms/selfhosted-backend/template-organizer/factory';
-import { StringUtility } from '@bcms/selfhosted-backend/_utils/string-utility';
+import { StringUtility } from '@bcms/selfhosted-utils/string-utility';
 import { SocketManager } from '@bcms/selfhosted-backend/socket/manager';
 import { EventManager } from '@bcms/selfhosted-backend/event/manager';
 

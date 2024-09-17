@@ -2,7 +2,7 @@ import type {
     PropParsed,
     PropValue,
 } from '@bcms/selfhosted-backend/prop/models/main';
-import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
+import type { ObjectSchema } from '@bcms/selfhosted-utils/object-utility';
 
 export interface EntryMeta {
     lng: string;

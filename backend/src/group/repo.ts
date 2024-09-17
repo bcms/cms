@@ -9,7 +9,7 @@ import {
     createQueue,
     type Queue,
     QueueError,
-} from '@bcms/selfhosted-backend/_utils/queue';
+} from '@bcms/selfhosted-utils/queue';
 
 export interface GroupRepoMethods {
     findAllByPropGroupPointer(groupId: string): Promise<Group[]>;

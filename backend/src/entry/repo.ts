@@ -7,7 +7,7 @@ import {
     createQueue,
     type Queue,
     QueueError,
-} from '@bcms/selfhosted-backend/_utils/queue';
+} from '@bcms/selfhosted-utils/queue';
 import type { EntryContentNodeWidgetAttr } from '@bcms/selfhosted-backend/entry/models/content';
 
 export interface EntryRepoMethods {

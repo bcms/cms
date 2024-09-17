@@ -6,7 +6,7 @@ import {
     type Prop,
     PropSchema,
 } from '@bcms/selfhosted-backend/prop/models/main';
-import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
+import type { ObjectSchema } from '@bcms/selfhosted-utils/object-utility';
 
 export interface Template extends MongoDBEntry {
     name: string;

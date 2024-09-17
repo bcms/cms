@@ -6,7 +6,7 @@ import {
     type ApiKeyAccess,
     ApiKeyAccessSchema,
 } from '@bcms/selfhosted-backend/api-key/models/access';
-import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
+import type { ObjectSchema } from '@bcms/selfhosted-utils/object-utility';
 
 export interface ApiKey extends MongoDBEntry {
     userId: string;

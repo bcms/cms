@@ -50,7 +50,7 @@ async function main() {
             return;
         }
         case '--publish-utils': {
-            await publish(['backend', 'dist']);
+            await publish(['backend', 'dist-utils']);
             return;
         }
         case '--build-backend': {

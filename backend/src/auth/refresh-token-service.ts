@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { createQueue } from '@bcms/selfhosted-backend/_utils/queue';
+import { createQueue } from '@bcms/selfhosted-utils/queue';
 export interface RefreshToken {
     userId: string;
     value: string;

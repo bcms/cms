@@ -2,7 +2,7 @@ import {
     type SocketEventDataDefault,
     SocketEventDataDefaultSchema,
 } from './main';
-import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
+import type { ObjectSchema } from '@bcms/selfhosted-utils/object-utility';
 
 export interface SocketEventDataGroup extends SocketEventDataDefault {
     groupId: string;

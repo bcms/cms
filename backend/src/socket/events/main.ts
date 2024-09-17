@@ -7,7 +7,7 @@ import type { SocketEventNamesApiKey } from '@bcms/selfhosted-backend/socket/eve
 import type { SocketEventNamesLanguage } from '@bcms/selfhosted-backend/socket/events/language';
 import type { SocketEventNamesEntry } from '@bcms/selfhosted-backend/socket/events/entry';
 import type { SocketEventNamesEntryStatus } from '@bcms/selfhosted-backend/socket/events/entry-status';
-import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
+import type { ObjectSchema } from '@bcms/selfhosted-utils/object-utility';
 import type { SocketEventNamesEntrySync } from '@bcms/selfhosted-backend/socket/events/entry-sync';
 import type { SocketEventNamesTemplateOrganizer } from '@bcms/selfhosted-backend/socket/events/template-organizer';
 import type { SocketEventNamesBackup } from '@bcms/selfhosted-backend/socket/events/backup';

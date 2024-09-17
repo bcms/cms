@@ -38,7 +38,7 @@ import {
 import {
     ObjectUtility,
     ObjectUtilityError,
-} from '@bcms/selfhosted-backend/_utils/object-utility';
+} from '@bcms/selfhosted-utils/object-utility';
 import { MediaStorage } from '@bcms/selfhosted-backend/media/storage';
 import { keyValueStore } from '@bcms/selfhosted-backend/key-value-store';
 import { MediaFactory } from '@bcms/selfhosted-backend/media/factory';

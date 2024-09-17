@@ -8,7 +8,7 @@ import {
     createQueue,
     type Queue,
     QueueError,
-} from '@bcms/selfhosted-backend/_utils/queue';
+} from '@bcms/selfhosted-utils/queue';
 import { PropType } from '@bcms/selfhosted-backend/prop/models/main';
 
 export interface TemplateRepoMethods {

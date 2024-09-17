@@ -11,7 +11,7 @@ import {
     type EntryContentNode,
     EntryContentSchema,
 } from '@bcms/selfhosted-backend/entry/models/content';
-import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
+import type { ObjectSchema } from '@bcms/selfhosted-utils/object-utility';
 import type { PropValue } from '@bcms/selfhosted-backend/prop/models/main';
 
 export interface EntryCreateBody {

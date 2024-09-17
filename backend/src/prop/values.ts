@@ -10,7 +10,7 @@ import type { Media } from '@bcms/selfhosted-backend/media/models/main';
 import {
     ObjectUtility,
     ObjectUtilityError,
-} from '@bcms/selfhosted-backend/_utils/object-utility';
+} from '@bcms/selfhosted-utils/object-utility';
 import {
     type PropValueDateData,
     PropValueDateDataSchema,

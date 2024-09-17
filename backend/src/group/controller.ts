@@ -28,7 +28,7 @@ import type {
 } from '@bcms/selfhosted-backend/util/controller';
 import type { Group } from '@bcms/selfhosted-backend/group/models/main';
 import { GroupFactory } from '@bcms/selfhosted-backend/group/factory';
-import { StringUtility } from '@bcms/selfhosted-backend/_utils/string-utility';
+import { StringUtility } from '@bcms/selfhosted-utils/string-utility';
 import { SocketManager } from '@bcms/selfhosted-backend/socket/manager';
 import { propsApplyChanges } from '@bcms/selfhosted-backend/prop/changes';
 import { propsValidationTestInfiniteLoop } from '@bcms/selfhosted-backend/prop/validate';

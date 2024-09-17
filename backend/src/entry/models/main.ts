@@ -5,7 +5,7 @@ import {
 import {
     deleteFromSchema,
     type ObjectSchema,
-} from '@bcms/selfhosted-backend/_utils/object-utility';
+} from '@bcms/selfhosted-utils/object-utility';
 import {
     type EntryStatusValue,
     EntryStatusValueSchema,

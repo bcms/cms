@@ -50,5 +50,16 @@
             "src"
         ],
         "ext": "ts"
-    }
+    },
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/bcms/cms"
+    },
+    "bugs": {
+        "url": "https://github.com/bcms/cms/issues"
+    },
+    "homepage": "https://github.com/bcms/cms#readme"
 }

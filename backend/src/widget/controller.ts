@@ -28,7 +28,7 @@ import type {
 } from '@bcms/selfhosted-backend/util/controller';
 import type { Widget } from '@bcms/selfhosted-backend/widget/models/main';
 import { WidgetFactory } from '@bcms/selfhosted-backend/widget/factory';
-import { StringUtility } from '@bcms/selfhosted-backend/_utils/string-utility';
+import { StringUtility } from '@bcms/selfhosted-utils/string-utility';
 import { SocketManager } from '@bcms/selfhosted-backend/socket/manager';
 import { propsApplyChanges } from '@bcms/selfhosted-backend/prop/changes';
 import { EventManager } from '@bcms/selfhosted-backend/event/manager';

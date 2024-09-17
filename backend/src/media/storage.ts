@@ -6,7 +6,7 @@ import process from 'process';
 import type { ISizeCalculationResult } from 'image-size/dist/types/interface';
 import imageSize from 'image-size';
 import { Logger } from '@bcms/selfhosted-backend/_server';
-import { FS } from '@bcms/selfhosted-backend/_utils/fs';
+import { FS } from '@bcms/selfhosted-utils/fs';
 import { FunctionBuilder } from '@bcms/selfhosted-backend/util/function-builder';
 import {
     type Media,
@@ -16,7 +16,7 @@ import { Storage } from '@bcms/selfhosted-backend/storage/main';
 import { Config } from '@bcms/selfhosted-backend/config';
 import { FFmpeg } from '@bcms/selfhosted-backend/util/ffmpeg';
 import type { MediaGetBinBodyImage } from '@bcms/selfhosted-backend/media/models/controller';
-import { ChildProcess } from '@bcms/selfhosted-backend/_utils/child-process';
+import { ChildProcess } from '@bcms/selfhosted-utils/child-process';
 
 export interface MediaStorageOptions {
     thumbnail?: boolean;

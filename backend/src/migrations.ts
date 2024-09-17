@@ -1,5 +1,5 @@
 import { ObjectId } from 'mongodb';
-import type { ObjectSchema } from '@bcms/selfhosted-backend/_utils/object-utility';
+import type { ObjectSchema } from '@bcms/selfhosted-utils/object-utility';
 import {
     createMongoDBRepository,
     type MongoDBEntry,

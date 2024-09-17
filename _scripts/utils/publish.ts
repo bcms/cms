@@ -3,7 +3,7 @@ import path from 'path';
 
 export async function publish(basePath: string[]) {
     await ChildProcess.advancedExec(
-        'npm publish --access public --tag latest',
+        'npm publish',
         {
             cwd: path.join(process.cwd(), ...basePath),
             onChunk(type, chunk) {

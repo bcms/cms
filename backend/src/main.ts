@@ -20,7 +20,7 @@ import {
     createMigrations,
     MigrationRepo,
 } from '@bcms/selfhosted-backend/migrations';
-import { FS } from '@bcms/selfhosted-backend/_utils/fs';
+import { FS } from '@bcms/selfhosted-utils/fs';
 import { IPMiddleware } from '@bcms/selfhosted-backend/ip-middleware';
 import {
     AuthController,

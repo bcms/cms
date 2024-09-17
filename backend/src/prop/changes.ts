@@ -8,7 +8,7 @@ import type { Group } from '@bcms/selfhosted-backend/group/models/main';
 import type { Widget } from '@bcms/selfhosted-backend/widget/models/main';
 import type { Template } from '@bcms/selfhosted-backend/template/models/main';
 import { PropFactory } from '@bcms/selfhosted-backend/prop/factory';
-import { StringUtility } from '@bcms/selfhosted-backend/_utils/string-utility';
+import { StringUtility } from '@bcms/selfhosted-utils/string-utility';
 import type { PropDateData } from '@bcms/selfhosted-backend/prop/models/date';
 import type { PropEnumData } from '@bcms/selfhosted-backend/prop/models/enum';
 import type { PropMediaData } from '@bcms/selfhosted-backend/prop/models/media';
@@ -17,7 +17,7 @@ import type { PropWidgetData } from '@bcms/selfhosted-backend/prop/models/widget
 import {
     ObjectUtility,
     ObjectUtilityError,
-} from '@bcms/selfhosted-backend/_utils/object-utility';
+} from '@bcms/selfhosted-utils/object-utility';
 import { PropEntryPointerDataSchema } from '@bcms/selfhosted-backend/prop/models/entry-pointer';
 
 export function propsApplyChanges(

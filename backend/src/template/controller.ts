@@ -29,7 +29,7 @@ import type {
 import type { Template } from '@bcms/selfhosted-backend/template/models/main';
 import { TemplateFactory } from '@bcms/selfhosted-backend/template/factory';
 import { PropType } from '@bcms/selfhosted-backend/prop/models/main';
-import { StringUtility } from '@bcms/selfhosted-backend/_utils/string-utility';
+import { StringUtility } from '@bcms/selfhosted-utils/string-utility';
 import { SocketManager } from '@bcms/selfhosted-backend/socket/manager';
 import { propsApplyChanges } from '@bcms/selfhosted-backend/prop/changes';
 import { removeEntryPointerProps } from '@bcms/selfhosted-backend/prop/delete';

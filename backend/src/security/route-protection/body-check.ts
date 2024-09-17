@@ -2,7 +2,7 @@ import {
     type ObjectSchema,
     ObjectUtility,
     ObjectUtilityError,
-} from '@bcms/selfhosted-backend/_utils/object-utility';
+} from '@bcms/selfhosted-utils/object-utility';
 import {
     type HttpErrorHandler,
     HttpStatus,
