@@ -20,8 +20,7 @@ Table of contents:
 
 ## Deploy on Debian based server with CLI
 
-After you have a Debian based server, you can SSH into it and follow the steps
-bellow.
+After you have a Debian based server, you can SSH into it and follow the steps bellow.
 
 Install dependencies if you do not already have them on the server:
 
@@ -35,16 +34,30 @@ Update node to version 20:
 npm i -g n && n 20
 ```
 
-Install BCMS CLI:
+Since we are using GitHub Packages, you will need to add configuration to the `~/.npmrc` to be able to pull GitHub Packages. To do this, add next 2 lines to the `.npmrc`
+
+```npm
+//npm.pkg.github.com/:_authToken=<GITHUB_TOKEN>
+@bcms:registry=https://npm.pkg.github.com
+```
+
+To generate a `GITHUB_TOKEN` you can follow [this tutorial](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic). The only permission that you need to give to this token is `read:packages`.
+
+Now you will be able to install BCMS CLI:
 
 ```bash
 npm i -g @bcms/selfhosted-cli
 ```
 
+After this you can start a deployment process:
+
+```bash
+selfbcms --deploy debian
+```
+
 ## Deploy on Debian based server manually
 
-After you have a Debian based server, you can SSH into it and follow the steps
-bellow.
+After you have a Debian based server, you can SSH into it and follow the steps bellow.
 
 Install dependencies if you do not already have them on the server:
 
@@ -100,9 +113,7 @@ docker run -d --name my-bcms -v ~/bcms/uploads:/app/backend/uploads -v ~/bcms/ba
 
 If you followed the optional step to setup a MongoDB on the same server, _DB_URL_ will be `mongodb://<DB_ADMIN_USERNAME>:<DB_ADMIN_PASSWORD>@my-bcms-db:27017/admin`
 
-Last thing is to setup and Nginx reverse proxy for connections to the server.
-For this we will create a Docker container which will expose port 80 to the web
-and proxy requests to the BCMS at port 8080 inside of Docker network:
+Last thing is to setup and Nginx reverse proxy for connections to the server. For this we will create a Docker container which will expose port 80 to the web and proxy requests to the BCMS at port 8080 inside of Docker network:
 
 ```nginx configuration
 # File location: ~/bcms/nginx.conf
@@ -169,9 +180,7 @@ http {
 }
 ```
 
-Have in mind that this config is using default Nginx virtual host. If you
-would like to use custom domain name (instead of IP address) change the config
-to suite your needs.
+Have in mind that this config is using default Nginx virtual host. If you would like to use custom domain name (instead of IP address) change the config to suite your needs.
 
 Create a Dockerfile for building Nginx container:
 
@@ -194,7 +203,4 @@ Run the Nginx container:
 docker run -d -p 80:80 --name my-bcms-proxy --network bcms-net my-bcms-proxy
 ```
 
-That's it, BCMS should now be available via Nginx proxy. We recommend to setup
-CloudFlare or some other CDN in front of the server so that you do not expose
-server IP and this will also allow you to easily configure full SSL connection
-between a client and an origin server.
+That's it, BCMS should now be available via Nginx proxy. We recommend to setup CloudFlare or some other CDN in front of the server so that you do not expose server IP and this will also allow you to easily configure full SSL connection between a client and an origin server.
