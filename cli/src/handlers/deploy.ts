@@ -241,7 +241,7 @@ export class DeployHandler {
         await fs.save(['proxy.conf'], nginxConfig);
         await fs.copy(['cms', 'proxy.Dockerfile'], ['proxy.Dockerfile']);
         await ChildProcess.advancedExec(
-            `cd ~/${projectName} && docker build . -f proxy.Dockerfile ${projectName}-proxy`,
+            `cd ~/${projectName} && docker build . -f proxy.Dockerfile -t ${projectName}-proxy`,
             {
                 onChunk(type, chunk) {
                     process[type].write(chunk);

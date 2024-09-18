@@ -36,7 +36,7 @@ export async function packUtils() {
     }).awaiter;
 }
 
-export async function buildBackend() {
+export async function buildBackendPackage() {
     const basePath = path.join(process.cwd(), 'backend');
     const localFs = new FS(basePath);
     if (await localFs.exist(['dist'])) {
@@ -49,12 +49,42 @@ export async function buildBackend() {
         },
     }).awaiter;
     await localFs.deleteDir(['dist', '_utils']);
-    // await replaceStringInFile({
-    //     endsWith: ['.js', '.d.ts'],
-    //     basePath: '/_utils',
-    //     dirPath: ['backend', 'dist'],
-    //     regex: [/@bcms\/selfhosted-utils/g],
-    // });
+    await replaceStringInFile({
+        endsWith: ['.js', '.d.ts'],
+        basePath: '',
+        dirPath: ['backend', 'dist'],
+        regex: [/@bcms\/selfhosted-backend/g],
+    });
+    const packageJson = JSON.parse(await localFs.readString('package.json'));
+    const utilsVersion = await getUtilsVersion();
+    packageJson.dependencies[utilsVersion[0]] = '^' + utilsVersion[1];
+    packageJson.devDependencies = undefined;
+    packageJson.scripts = undefined;
+    packageJson.nodemonConfig = undefined;
+    await localFs.save(
+        ['dist', 'package.json'],
+        JSON.stringify(packageJson, null, 4),
+    );
+}
+
+export async function buildBackend() {
+    const basePath = path.join(process.cwd(), 'backend');
+    const localFs = new FS(basePath);
+    if (await localFs.exist(['dist'])) {
+        await localFs.deleteDir(['dist']);
+    }
+    await ChildProcess.advancedExec('npm run build', {
+        cwd: basePath,
+        onChunk(type, chunk) {
+            process[type].write(chunk);
+        },
+    }).awaiter;
+    await replaceStringInFile({
+        endsWith: ['.js', '.d.ts'],
+        basePath: '/_utils',
+        dirPath: ['backend', 'dist'],
+        regex: [/@bcms\/selfhosted-utils/g],
+    });
     await replaceStringInFile({
         endsWith: ['.js', '.d.ts'],
         basePath: '',

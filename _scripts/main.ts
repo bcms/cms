@@ -70,6 +70,10 @@ async function main() {
             await buildBackend();
             return;
         }
+        case '--build-backend-package': {
+            await buildBackend();
+            return;
+        }
         case '--pack-backend': {
             await packBackend();
             return;

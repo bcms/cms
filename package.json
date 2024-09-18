@@ -19,6 +19,7 @@
         "pack:utils": "ts-node -r tsconfig-paths/register _scripts/main.ts --pack-utils",
         "publish:utils": "ts-node -r tsconfig-paths/register _scripts/main.ts --publish-utils",
         "build:backend": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-backend",
+        "build:backend:package": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-backend-package",
         "pack:backend": "ts-node -r tsconfig-paths/register _scripts/main.ts --pack-backend",
         "publish:backend": "ts-node -r tsconfig-paths/register _scripts/main.ts --publish-backend",
         "build:ui": "ts-node -r tsconfig-paths/register _scripts/main.ts --build-ui",

@@ -8,7 +8,7 @@ COPY . /app
 RUN apt update && apt install ffmpeg zip unzip -y
 # Install dependencies
 RUN npm i
-RUN npm run build:backend && npm run build:ui
+RUN npm run build:ui
 RUN rm -rf _scripts node_modules cli client proxy ui/public ui/node_modules ui/src backend/plugins
 
 WORKDIR /app/backend
