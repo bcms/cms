@@ -92,8 +92,6 @@ export async function buildBackend() {
         regex: [/@bcms\/selfhosted-backend/g],
     });
     const packageJson = JSON.parse(await localFs.readString('package.json'));
-    const utilsVersion = await getUtilsVersion();
-    packageJson.dependencies[utilsVersion[0]] = '^' + utilsVersion[1];
     packageJson.devDependencies = undefined;
     packageJson.scripts = undefined;
     packageJson.nodemonConfig = undefined;
