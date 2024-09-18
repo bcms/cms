@@ -70,6 +70,9 @@ async function main() {
             await cli.pull.types();
             return;
         }
+    } else if (args.help) {
+        cli.help();
+        return;
     }
     console.warn('Unknown combination of arguments');
     cli.help();

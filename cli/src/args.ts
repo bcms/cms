@@ -10,6 +10,7 @@ export interface Args {
     email?: string;
     password?: string;
     output?: string;
+    help?: boolean;
 }
 
 export interface ArgInfo {
@@ -60,6 +61,10 @@ export const argsMap: {
     output: {
         flags: ['--output'],
         description: 'Destination to which command output fill be saved',
+    },
+    help: {
+        flags: ['--help'],
+        description: 'Show help',
     },
 };
 
