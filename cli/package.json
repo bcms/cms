@@ -1,6 +1,6 @@
 {
     "name": "@bcms/selfhosted-cli",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Command line tool for the BCMS",
     "author": "BCMS",
     "license": "MIT",
