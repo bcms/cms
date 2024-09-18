@@ -17,6 +17,10 @@ export interface StoreQuery<ItemType> {
     (item: ItemType): boolean | number | string | unknown;
 }
 
+export interface StoreMethods<ItemType, Methods = unknown> {
+    (store: ArrayStore<ItemType>): Methods;
+}
+
 export interface ArrayStore<ItemType, Methods = unknown> {
     items(): ItemType[];
     find(query: StoreQuery<ItemType>): ItemType | null;

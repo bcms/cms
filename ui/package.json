@@ -4,7 +4,6 @@
     "type": "module",
     "scripts": {
         "dev": "vite --host 0.0.0.0 --port 8080",
-        "dev:tests": "vite --host 0.0.0.0 --port 8080",
         "build:sdk:mjs": "tsc --project tsconfig.sdk.json",
         "build:sdk:cjs": "tsc --project tsconfig.sdk.commonjs.json",
         "build": "run-p type-check build-only",

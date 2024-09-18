@@ -6,6 +6,10 @@ export interface Args {
     projectName?: string;
     pull?: 'types' | 'entries' | 'media';
     language?: TypeGeneratorLanguage;
+    apiKey?: string;
+    email?: string;
+    password?: string;
+    output?: string;
 }
 
 export interface ArgInfo {
@@ -39,6 +43,23 @@ export const argsMap: {
     language: {
         flags: ['--language', '--lng'],
         description: 'Language to use for previous commands',
+    },
+    apiKey: {
+        flags: ['--api-key'],
+        description:
+            'API key which will be used to create instance of BCMS Client. Option example: --api-key {KEY_ID}.{KEY_SECRET}',
+    },
+    email: {
+        flags: ['--email'],
+        description: 'User email',
+    },
+    password: {
+        flags: ['--password'],
+        description: 'User password',
+    },
+    output: {
+        flags: ['--output'],
+        description: 'Destination to which command output fill be saved',
     },
 };
 

@@ -1,6 +1,6 @@
 {
     "compilerOptions": {
-        "module": "ES2020",
+        "module": "es2020",
         "declaration": true,
         "declarationMap": false,
         "sourceMap": false,
@@ -16,6 +16,7 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "moduleResolution": "Node",
+        "verbatimModuleSyntax": true,
         "paths": {
             "@bcms/selfhosted-cli": ["./src"],
             "@bcms/selfhosted-cli/*": ["./src/*"],

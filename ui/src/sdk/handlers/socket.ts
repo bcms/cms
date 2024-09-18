@@ -81,6 +81,15 @@ export class SocketHandler extends Handler {
         }
     }
 
+    private getUrl() {
+        const protocol = this.sdk.config.apiOrigin.startsWith('https')
+            ? 'wss'
+            : 'ws';
+        return `${protocol}://${
+            this.sdk.config.apiOrigin.split('://')[1]
+        }/api/v4/socket?token=${this.sdk.accessTokenRaw}`;
+    }
+
     /**
      * Connect to the socket server
      */
@@ -94,15 +103,16 @@ export class SocketHandler extends Handler {
                         this.sdk.refreshAccessToken().then((result) => {
                             if (result) {
                                 this.socket = new WebSocket(
-                                    `${
-                                        window.location.host.includes(':8080')
-                                            ? 'ws'
-                                            : 'wss'
-                                    }://${
-                                        window.location.host
-                                    }/api/v4/socket?token=${
-                                        this.sdk.accessTokenRaw
-                                    }`,
+                                    // `${
+                                    //     window.location.host.includes(':8080')
+                                    //         ? 'ws'
+                                    //         : 'wss'
+                                    // }://${
+                                    //     window.location.host
+                                    // }/api/v4/socket?token=${
+                                    //     this.sdk.accessTokenRaw
+                                    // }`,
+                                    this.getUrl(),
                                 );
                                 this.socket.addEventListener(
                                     'open',

@@ -32,7 +32,7 @@ export async function buildUiComponents() {
         'window.ts',
     ];
     for (let i = 0; i < toCopy.length; i++) {
-        await localFs.copy(['src', toCopy[i]], [dist, 'src', toCopy[i]]);
+        await localFs.copy(['src', toCopy[i]], [dist, toCopy[i]]);
     }
     await localFs.copy('tailwind.config.cjs', [dist, 'tailwind.config.cjs']);
     await localFs.copy('package.json', [dist, 'package.json']);

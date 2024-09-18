@@ -18,6 +18,7 @@ import { useTheme } from '@bcms/selfhosted-ui/hooks/theme';
 import { useScreenSize } from '@bcms/selfhosted-ui/hooks/screen';
 
 const sdk = createSdk(useStore(), Storage, {
+    apiOrigin: window.location.origin,
     debug: ['all'],
 });
 

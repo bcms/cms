@@ -7,7 +7,8 @@ Design your content structure without leaving the browser.
 Table of contents:
 
 -   [Run locally](#run-locally)
--   [Deploy on Debian based server](#deploy-on-debian-based-server)
+-   [Deploy on Debian based server with CLI](#deploy-on-debian-based-server-with-cli)
+-   [Deploy on Debian based server manually](#deploy-on-debian-based-server-manually)
 
 ## Run locally
 
@@ -17,15 +18,38 @@ Table of contents:
 -   Start local development server: `docker compose up`
 -   When everything is ready, you can open a browser and navigate to http://localhost:8080
 
-## Deploy on Debian based server
+## Deploy on Debian based server with CLI
 
 After you have a Debian based server, you can SSH into it and follow the steps
 bellow.
 
-Install dependencies:
+Install dependencies if you do not already have them on the server:
 
 ```bash
-apt update && apt install docker.io git
+sudo apt update && sudo apt install docker.io git nodejs npm
+```
+
+Update node to version 20:
+
+```bash
+npm i -g n && n 20
+```
+
+Install BCMS CLI:
+
+```bash
+npm i -g @bcms/selfhosted-cli
+```
+
+## Deploy on Debian based server manually
+
+After you have a Debian based server, you can SSH into it and follow the steps
+bellow.
+
+Install dependencies if you do not already have them on the server:
+
+```bash
+sudo apt update && sudo apt install docker.io git
 ```
 
 Create a directory in which you'll store BCMS data, we'll use home directory:

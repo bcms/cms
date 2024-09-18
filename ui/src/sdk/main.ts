@@ -20,9 +20,10 @@ import { ApiKeyHandler } from '@bcms/selfhosted-sdk/handlers/api-key';
 import { FunctionHandler } from '@bcms/selfhosted-sdk/handlers/functions';
 import { TemplateOrganizerHandler } from '@bcms/selfhosted-sdk/handlers/template-organizer';
 import { PluginHandler } from '@bcms/selfhosted-sdk/handlers/plugin';
+import { TypeGeneratorHandler } from '@bcms/selfhosted-sdk/handlers/type-generator';
 
 export interface SdkConfig {
-    apiOrigin?: string;
+    apiOrigin: string;
     ignoreSocket?: boolean;
     debug?: Array<'all' | 'socket'>;
 }
@@ -54,7 +55,7 @@ export class Sdk {
     language = new LanguageHandler(this);
     entry = new EntryHandler(this);
     entryStatus = new EntryStatusHandler(this);
-    // typeGenerator = new TypeGeneratorHandler(this);
+    typeGenerator = new TypeGeneratorHandler(this);
     fn = new FunctionHandler(this);
     backup = new BackupHandler(this);
     plugin = new PluginHandler(this);
@@ -126,7 +127,7 @@ export class Sdk {
         this.language.clear();
         this.entry.clear();
         this.entryStatus.clear();
-        // this.typeGenerator.clear();
+        this.typeGenerator.clear();
         this.backup.clear();
         this.fn.clear();
         this.plugin.clear();
@@ -182,6 +183,7 @@ export class Sdk {
                         headers: {
                             Authorization: `Bearer ${this.storage.get('rt')}`,
                         },
+                        data: {},
                     });
                     this.accessToken = this.unpackAccessToken(res.accessToken);
                     await this.storage.set('at', res.accessToken);

@@ -1,11 +1,11 @@
 import { MemCache } from '@bcms/selfhosted-utils/mem-cache';
-import { Template } from '@bcms/selfhosted-backend/template/models/main';
-import { Client } from '@bcms/selfhosted-client/main';
-import {
+import type { Template } from '@bcms/selfhosted-backend/template/models/main';
+import type { Client } from '@bcms/selfhosted-client/main';
+import type {
     TemplateUpdateBody,
     TemplateWhereIsItUsedResult,
 } from '@bcms/selfhosted-backend/template/models/controller';
-import {
+import type {
     ControllerItemResponse,
     ControllerItemsResponse,
 } from '@bcms/selfhosted-backend/util/controller';
