@@ -85,6 +85,14 @@ module.exports = {
       darkGrey: ({ opacityValue }) => {
         return `rgba(80, 79, 84, ${opacityValue})`;
       },
+      // rgba(151, 152, 171)
+      gray: ({ opacityValue }) => {
+        return `rgba(151, 152, 171, ${opacityValue})`;
+      },
+      // rgba(80, 79, 84)
+      darkGray: ({ opacityValue }) => {
+        return `rgba(80, 79, 84, ${opacityValue})`;
+      },
       // rgba(252, 252, 252)
       white: ({ opacityValue }) => {
         return `rgba(252, 252, 252, ${opacityValue})`;

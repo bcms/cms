@@ -1,13 +1,2 @@
-/dist
-/logs
 /node_modules
-/base-docker-image
-/uploads
-/functions
-/events
-/jobs
-/plugins
-/bcms.config.js
-
-/.env
-/Dockerfile
+.env

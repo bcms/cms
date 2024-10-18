@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "module": "CommonJS",
+        "declaration": true,
+        "declarationMap": false,
+        "sourceMap": false,
+        "removeComments": false,
+        "strict": true,
+        "target": "ES2022",
+        "outDir": "./dist",
+        "baseUrl": "./",
+        "incremental": false,
+        "skipLibCheck": true,
+        "noUnusedParameters": true,
+        "esModuleInterop": true,
+        "paths": {
+            "@bcms/selfhosted-utils/*": ["./backend/src/_utils/*"],
+            "@bcms/selfhosted-backend/_server": ["./backend/src/_server"],
+            "@bcms/selfhosted-backend/_server/*": ["./backend/src/_server/*"]
+        }
+    },
+    "include": ["_scripts", "backend/src/_utils/**/*.ts"]
+}

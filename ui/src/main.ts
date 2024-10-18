@@ -1,117 +1,45 @@
 import './styles/_main.scss';
+import './window';
 import { createApp } from 'vue';
-import { createBcmsSdk } from '@becomes/cms-sdk';
-import './types';
-import { bcmsStore } from './store';
-import { App } from './app';
-import router from './router';
-import { cy, clickOutside, tooltip } from './directives';
-import {
-  createBcmsHeadMetaService,
-  createBcmsMarkdownService,
-  createBcmsModalService,
-  createBcmsNotificationService,
-  createBcmsTooltipService,
-  useBcmsHeadMetaService,
-  useBcmsMarkdownService,
-  useBcmsModalService,
-  useBcmsNotificationService,
-  useBcmsTooltipService,
-  createBcmsConfirmService,
-  useBcmsConfirmService,
-  createBcmsEntryService,
-  useBcmsEntryService,
-  createBcmsMediaService,
-  useBcmsMediaService,
-  createBcmsPropService,
-  useBcmsPropService,
-  createBCMSGlobalSearchService,
-} from './services';
-import {
-  createBcmsColorUtility,
-  createBcmsObjectUtility,
-  initializeUserLocationsWatcher,
-  useBcmsObjectUtility,
-  useThrowable,
-} from './util';
-import { useRoute } from 'vue-router';
-import type { BCMSSdk, BCMSSocketMessageEvent } from '@becomes/cms-sdk/types';
-import { BCMSSocketEventName } from '@becomes/cms-sdk/types';
-import type { BCMSGlobalScopeCloud, BCMSGlobalScopeMain } from './types';
+import { useStore } from '@bcms/selfhosted-ui/store';
+import { createSdk } from '@bcms/selfhosted-sdk';
+import { Storage } from '@bcms/selfhosted-ui/storage';
+import { createHeadMetaService } from '@bcms/selfhosted-ui/services/head-meta';
+import { createNotificationService } from '@bcms/selfhosted-ui/services/notification';
+import { createTooltipService } from '@bcms/selfhosted-ui/services/tooltip';
+import { App } from '@bcms/selfhosted-ui/app';
+import { clickOutside, cy, tooltip } from '@bcms/selfhosted-ui/directives';
+import { router } from '@bcms/selfhosted-ui/router';
+import { throwable } from '@bcms/selfhosted-ui/util/throwable';
+import { modalService } from '@bcms/selfhosted-ui/services/modal';
+import { useLanguage } from '@bcms/selfhosted-ui/hooks/language';
+import { confirm } from '@bcms/selfhosted-ui/services/confirm';
+import { useTheme } from '@bcms/selfhosted-ui/hooks/theme';
+import { useScreenSize } from '@bcms/selfhosted-ui/hooks/screen';
 
-createBcmsObjectUtility();
-createBcmsConfirmService();
-createBcmsHeadMetaService();
-createBcmsMarkdownService();
-createBcmsNotificationService();
-createBcmsTooltipService();
-createBcmsModalService();
-createBcmsPropService();
-createBcmsEntryService();
-createBcmsMediaService();
-
-declare global {
-  const bcms: BCMSSdk;
-  interface Window {
-    // Is declared in components/content/node-nav.vue
-    editorNodeEnter(data: { element: HTMLElement }): void;
-    editorNodeLeave(data: { element: HTMLElement }): void;
-
-    bcms: BCMSGlobalScopeMain<unknown, unknown>;
-    bcmsCloud: BCMSGlobalScopeCloud;
-  }
-}
-
-if (!window.bcms) {
-  window.bcms = {
-    origin: '',
-    vue: {
-      router,
-      route: useRoute,
-      store: bcmsStore,
-    },
-    confirm: useBcmsConfirmService(),
-    meta: useBcmsHeadMetaService(),
-    markdown: useBcmsMarkdownService(),
-    notification: useBcmsNotificationService(),
-    tooltip: useBcmsTooltipService(),
-    modal: useBcmsModalService(),
-    prop: useBcmsPropService(),
-    entry: useBcmsEntryService(),
-    media: useBcmsMediaService(),
-    globalSearch: createBCMSGlobalSearchService(),
-    util: {
-      throwable: useThrowable(),
-      string: undefined as never,
-      date: undefined as never,
-      object: useBcmsObjectUtility(),
-      color: createBcmsColorUtility(),
-    },
-    sdk: undefined as never,
-    editorLinkMiddleware: {},
-  };
-}
-window.bcms.sdk = createBcmsSdk({
-  cache: {
-    fromVuex: bcmsStore,
-  },
+const sdk = createSdk(useStore(), Storage, {
+    apiOrigin: window.location.origin,
+    debug: ['all'],
 });
-window.bcms.util.date = window.bcms.sdk.util.date;
-window.bcms.util.string = window.bcms.sdk.util.string;
 
-window.bcms.sdk.socket.subscribe(BCMSSocketEventName.MESSAGE, async (event) => {
-  const ev = event as BCMSSocketMessageEvent;
-  if (ev.m === 'm1') {
-    window.bcms.notification.warning(
-      `A new version of this entry was created. To view or edit, refresh your browser or open the entry in a new tab.`,
-    );
-  }
-});
+window.bcms = {
+    sdk,
+    meta: createHeadMetaService(),
+    origin: window.location.href.split('/').slice(0, 3).join('/'),
+    notification: createNotificationService(),
+    tooltip: createTooltipService(),
+    useLanguage,
+    useTheme,
+    useScreenSize,
+    pageTransition: null as never,
+    modalService,
+    throwable,
+    confirm,
+    entryPropValidator: null as never,
+};
 
 const app = createApp(App);
-app.directive('cy', cy);
 app.directive('clickOutside', clickOutside);
 app.directive('tooltip', tooltip);
-app.use(bcmsStore).use(router).mount('#bcms-container');
-
-initializeUserLocationsWatcher();
+app.directive('cy', cy);
+app.use(router).mount('#bcms-app');

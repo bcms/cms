@@ -1,351 +1,206 @@
-<div align="center">
-  <img src="assets/readme/bcms-preview.webp" alt="Interface Animation"  width="800px" />  
-</div>
+# BCMS - Open-source Headless CMS
 
-<h2 align="center">
-  BCMS - Open-source Headless CMS
-</h1>
-<p align="center">
-  BCMS is an open-source, self-hostable Headless CMS. Built with Node.js, MongoDB, Vue 3, and Tailwind. <br>
-  Design your content structure without leaving the browser. <br> Consume content via APIs. Works nicely with Next.js, Nuxt.js & Gatsby.js.<br>
-</p>
-<p align="center">🌐 <a href="https://thebcms.com">Website</a> · 📚 <a href="https://docs.thebcms.com">Documentation</a> · 💻 <a href="https://cloud.thebcms.com/">Demo</a> · 💬 <a href="https://discord.gg/SYBY89ccaR">Discord</a> · 🤓 <a href="https://github.com/bcms/starters">Code starters</a><p>
-<br />
-<!--
-[![NPM Version][npm-image-ui]][npm-url-ui]
-[![NPM Version][npm-image-sdk]][npm-url-sdk]
-[![NPM Version][npm-image-backend]][npm-url-backend]
-[![NPM Version][npm-image-client]][npm-url-client]
-[![NPM Version][npm-image-cli]][npm-url-cli]
-[![NPM Version][npm-image-most]][npm-url-most]
-[![X](https://img.shields.io/twitter/follow/thebcms?style=social&logo=x)](https://twitter.com/thebcms)
-[![Website](https://img.shields.io/badge/Website-Visit-blue)](https://www.thebcms.com) -->
-<br>
+BCMS is an open-source, self-hostable Headless CMS. Built with Node.js, MongoDB, Vue 3, and Tailwind.
 
-## ⚙️ Quickstart
-To install BCMS on your computer run:
-```
-npm install @becomes/cms-cli -g
-```
-and then
-```
-bcms --cms create
+Design your content structure without leaving the browser.
+
+Table of contents:
+
+-   [Run locally](#run-locally)
+-   [Deploy on Debian based server with CLI](#deploy-on-debian-based-server-with-cli)
+-   [Deploy on Debian based server manually](#deploy-on-debian-based-server-manually)
+
+## Run locally
+
+-   Make sure that you have Node.js 20, Docker and Docker Compose installed on your system
+-   Clone the repository: `git clone https://github.com/bcms/cms`
+-   Open the repository in your favorite code editor and install dependencies: `npm i`
+-   Start local development server: `docker compose up`
+-   When everything is ready, you can open a browser and navigate to http://localhost:8080
+
+## Deploy on Debian based server with CLI
+
+After you have a Debian based server, you can SSH into it and follow the steps bellow.
+
+Install dependencies if you do not already have them on the server:
+
+```bash
+sudo apt update && sudo apt install docker.io git nodejs npm
 ```
 
-To self-host BCMS on DigitalOcean, please refer to the [Self-hosting](https://docs.thebcms.com/install/digitalocean).<br />
-To get started with BCMS Cloud, please refer to the [BCMS Cloud](https://cloud.thebcms.com/).
-<br><br><br><br>
-<h2 align="center">
-  Features only BCMS has  🦄
-</h2>
-<p align="center">
-  Advanced stuff, nicely put together for smooth use.
-</p>
+Update node to version 20:
 
-<table align="center">
-  <tbody>
-    <tr>
-      <td>
-        <strong>🏋️&zwj;♀️ Your custom Functions</strong> <br />
-        Deploy and host custom, native serverless-ish functions that you can
-        trigger from anywhere. <br />Great for handling form submissions, for
-        example.<br />
-        <a
-          href="https://docs.thebcms.com/customization/functions"
-          rel="nofollow"
-          >Functions docs</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <strong>⏱️ Cron jobs</strong><br />
-        Schedule tasks right in BCMS. <br />
-        <a href="https://docs.thebcms.com/customization/jobs" rel="nofollow"
-          >Cron jobs docs</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <strong>🧱 NGINX Configuration</strong><br />
-        You don't need to be a DevOps genius; BCMS has got your back.<br />
-        <a href="https://docs.thebcms.com/cloud/nginx" rel="nofollow"
-          >NGINX docs</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <strong>🔏 Granular permissions, by default</strong> <br />
-        Enterprise-level granular permissions - available for everyone.
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <strong>⭐️ Custom pages inside BCMS</strong> <br />
-        Develop custom pages that have access to all your data from BCMS.
-        <br />Great when you want to display carts, custom reporting, or extend
-        BCMS functionality in any way.<br />
-        <a href="https://docs.thebcms.com/customization/plugins" rel="nofollow"
-          >Plugins docs</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <strong>⌨️ A mind-blowing TypeScript support</strong> <br />
-        Everything in BCMS is typed. <br />Even the dynamic content you create,
-        BCMS automatically generates types for it. <br />
-        <a href="https://github.com/bcms/cms/tree/master/backend/src/types"
-          >TypeScript files</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <strong>🌷 Beautifuuul code starters</strong> <br />
-        Well-designed code starters for Next.js, Nuxt.js, and Gatsby.js<br />
-        <a href="https://github.com/bcms/starters/"
-          > BCMS starters</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <strong>🔑 API keys with fine-grained permissions</strong> <br />
-        API keys come with out-of-the-box, built-in, fine-grained access permissions.<br />
-        <a href="https://docs.thebcms.com/inside-bcms/key-manager"
-          > Key manager docs</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <strong>🏰 Each project is deployed in its own dedicated server</strong> <br />
-        When you are using BCMS Cloud, each BCMS instance is deployed on a dedicated server.<br />
-        <a href="https://docs.thebcms.com/cloud"
-          > Cloud docs</a
-        >
-      </td>
-    </tr>
-  </tbody>
-</table>
-<br>
-<h2 align="center">
-  A cut above: Features BCMS shares with just a few 🎩
-</h2>
-<p align="center">TBH, even when one of these features is available in another tool, sometimes it's a headache. <br>We make it smooth.</p>
+```bash
+npm i -g n && n 20
+```
 
+Since we are using GitHub Packages, you will need to add configuration to the `~/.npmrc` to be able to pull GitHub Packages. To do this, add next 2 lines to the `.npmrc`
 
-<table align="center">
-  <tbody>
-    <tr>
-      <td>
-        <strong>🏡 Self-hosted CMS</strong> <br />
-        Self-host BCMS. The freedom to host your content wherever you want. Your data, your rules. <br />
-        <a href="https://docs.thebcms.com/install/digitalocean" rel="nofollow"
-          >Self hosting docs</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <strong>🤞 Widgets in content</strong><br />
-        Ability to add structured content anywhere in the content. <br />In
-        between two paragraphs? No problem. Great for image galleries in a blog
-        post, embeds, etc. <br />
-        <a href="https://docs.thebcms.com/inside-bcms/widgets" rel="nofollow"
-          >Widgets docs</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <strong>📁 Foldersssss</strong><br />
-        Sounds funny, but not many CMSs out there support folders. Let
-        alone folders inside folders 🤯.<br />
-        <a href="https://docs.thebcms.com/inside-bcms/media" rel="nofollow"
-          >Media docs</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <strong>🛜 A truly browser-based CMS</strong> <br />
-        Design content structure without leaving the browser. No need to learn
-        complex syntax, and code<br /> interface on your own.<br />
-        <a href="https://docs.thebcms.com/inside-bcms/templates" rel="nofollow"
-          >Templates docs</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <strong>🫂 Collaborative</strong> <br />
-        Multiple team members can edit the same entry simultaneously<br />
-        <a href="https://docs.thebcms.com/inside-bcms/settings#invite-team-members" rel="nofollow"
-          >Team docs</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <strong>👩‍💻 Next.js CMS integration</strong> <br />
-        Out-of-the-box integration with Next.js<br />
-        <a href="https://docs.thebcms.com/integrations/next-js" rel="nofollow"
-          >Next.js docs</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <strong>👨‍💻 Gatsby.js CMS integration</strong> <br />
-        Out-of-the-box integration with Gatsby.js<br />
-        <a href="https://docs.thebcms.com/integrations/gatsby-js" rel="nofollow"
-          >Gatsby.js docs</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <strong>🧑‍💻 Nuxt.js CMS integration</strong> <br />
-        Out-of-the-box integration with Nuxt.js<br />
-        <a href="https://docs.thebcms.com/integrations/nuxt-js" rel="nofollow"
-          >Nuxt.js docs</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <strong>🏴‍☠️ Multilingual CMS</strong> <br />
-        Add content in any number of languages. No restrictions.<br />
-        <a href="https://docs.thebcms.com/inside-bcms/settings#adding-languages" rel="nofollow"
-          >Languages docs</a
-        >
-      </td>
-    </tr>
-  </tbody>
-</table>
+```npm
+//npm.pkg.github.com/:_authToken=<GITHUB_TOKEN>
+@bcms:registry=https://npm.pkg.github.com
+```
 
-<br><br>
+To generate a `GITHUB_TOKEN` you can follow [this tutorial](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens#creating-a-personal-access-token-classic). The only permission that you need to give to this token is `read:packages`.
 
-<h2 align="center">
-  The essentials: Features BCMS has in common with most CMSs  🛠️
-</h2>
-<p align="center">Don't worry, we didn't skip the basics. Here's what BCMS offers that you'd expect <br> from any self-respecting headless CMS</p>
+Now you will be able to install BCMS CLI:
 
-<table align="center">
-  <tbody>
-    <tr>
-      <td>
-        <strong>🏡 Input types</strong> <br />
-        10+ input types. Built-in. But you don't need to learn any specific syntax,<br>
-        just select them from the interface. <br /><a
-          href="https://docs.thebcms.com/inside-bcms/properties"
-          rel="nofollow"
-          >Properties docs</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <strong>🎬 Media manager</strong><br />
-        Upload any and all kinds of files. If it's digital, BCMS can handle it. <br>
-        <a href="https://docs.thebcms.com/inside-bcms/media" rel="nofollow"
-          >Media docs</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <strong>👫 Team collaboration</strong><br />
-        Invite other team members, give them permissions, and work simultaneously 
-        across the entire BCMS. <br />
-        <a
-          href="https://docs.thebcms.com/inside-bcms/settings#invite-team-members"
-          rel="nofollow"
-          >Team docs</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <strong>🚩 🏳️ Statuses for entries</strong> <br />
-        Drafts, production, and everything in between. Keep your content <br />
-        lifecycle as organized as whatever in the world is organized these days.<br />
-        <a
-          href="https://docs.thebcms.com/inside-bcms/entries#setting-the-entry-status"
-          rel="nofollow"
-          >Statuses docs</a
-        >
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <strong>😘 Friendly support</strong> <br />
-        We are a small team of strong believers in this kind of technology. <br />
-        Have a question? Don't hesitate to reach out. <br />
-        <a href="https://thebcms.com/contact" rel="nofollow">Contact us</a>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        <strong>🚿 Ever-growing docs and tutorials base</strong> <br />
-        We love writing about BCMS. <br /><a
-          href="https://docs.thebcms.com"
-          rel="nofollow"
-          >BCMS docs</a
-        >
-      </td>
-    </tr>
-  </tbody>
-</table>
-<br><br>
+```bash
+npm i -g @bcms/selfhosted-cli
+```
 
-<h2 align="center">Contributing</h2>
-<p align="center">
-  We ❤️ contributions big and small.
-</p>
-<p align="center">
-  Open a PR (see our instructions on <a href="https://docs.thebcms.com/install/locally">developing BCMS locally</a>)<br>
-  Submit a <a href="https://github.com/bcms/cms/issues/new?assignees=&labels=enhancement%2C+feature&template=feature_request.md">feature request</a> or <a href="https://github.com/bcms/cms/issues/new?assignees=&labels=bug&template=bug_report.md">bug report</a><br>
-</p>
-<br><br>
-<h2 align="center">Support ❤️</h2>
-<p align="center">
-  If you like the project, hit the ⭐ button
-</p>
-<br><br>
-<h2 align="center">Code starters 📦</h2>
-<p align="center">
-  Free, beautiful, customizable, responsive, high-performance starters integrated with BCMS. <br />
-  Built with Tailwind CSS and your favorite framework. Ready-to-use. <br /><br />
-  <a href="https://github.com/bcms/starters?tab=readme-ov-file#gatsby-starters"><img src="https://img.shields.io/badge/Gatsby-%23663399.svg?style=for-the-badge&logo=gatsby&logoColor=white" alt="BCMS Gatsby CMS" /></a>
-  <a href="https://github.com/bcms/starters?tab=readme-ov-file#nuxt-starters"><img src="https://img.shields.io/badge/Nuxt-002E3B?style=for-the-badge&logo=nuxtdotjs&logoColor=#00DC82" alt="BCMS Nuxt CMS" /></a>
-  <a href="https://github.com/bcms/starters?tab=readme-ov-file#nextjs-starters"><img src="https://img.shields.io/badge/Next-white?style=for-the-badge&logo=next.js&logoColor=black" alt="BCMS Next CMS" /></a>
-  <a href="https://github.com/bcms/starters?tab=readme-ov-file#sveltekit-starters"><img src="https://img.shields.io/badge/sveltekit-f1413d.svg?style=for-the-badge&logo=svelte&logoColor=white" alt="BCMS SvelteKit CMS" /></a>
-  <a href="https://github.com/bcms/starters?tab=readme-ov-file#astrojs-starters"><img src="https://img.shields.io/badge/astro-212227.svg?style=for-the-badge&logo=astro&logoColor=white" alt="BCMS Astro.js CMS" /></a>
-</p>
-<div align="center">
-  <a href="https://github.com/bcms/starters">
-    See all BCMS starters
-  </a>
-</div>
-<div align="center">
-  <a href="https://github.com/bcms/starters">
-    <img alt="BCMS code starters" width="480" align="center" src="https://github.com/bcms/cms/assets/15079459/0e110c1f-c2f1-4806-9218-6641d2ef76bb" />
-  </a>
-</div>
-<br><br>
-<h2 align="center">Stay in touch 🌐</h2>
-<p align="center">
-  <a href="https://twitter.com/thebcms">Follow on X (Twitter)</a><br>
-  <a href="https://www.linkedin.com/company/thebcms/">Follow on LinkedIn</a><br>
-  <a href="https://discord.gg/Rr4kTKpU">Join us on Discord</a><br>
-</p>
-<br>
-<h2 align="center">License 📄</h2>
-<p align="center">
-  <a href="https://github.com/bcms/cms/blob/master/LICENSE">MIT</a><br>
-</p>
+After this you can start a deployment process:
+
+```bash
+selfbcms --deploy debian
+```
+
+## Deploy on Debian based server manually
+
+After you have a Debian based server, you can SSH into it and follow the steps bellow.
+
+Install dependencies if you do not already have them on the server:
+
+```bash
+sudo apt update && sudo apt install docker.io git
+```
+
+Create a directory in which you'll store BCMS data, we'll use home directory:
+
+```bash
+mkdir ~/bcms
+```
+
+Create directories which will be used for BCMS container volumes:
+
+```bash
+mkdir ~/bcms/db ~/bcms/uploads ~/bcms/backups
+```
+
+Clone the repository:
+
+```bash
+git clone https://github.com/bcms/cms
+```
+
+Enter the repository and build a Docker image:
+
+```bash
+docker build . -t my-bcms
+```
+
+Create a docker network for Docker:
+
+```bash
+docker network create -d bridge --subnet 10.20.0.0/16 --ip-range 10.20.30.0/24 --gateway 10.20.30.1 bcms-net
+```
+
+Optional: If you don't have MongoDB database you can run it inside of Docker
+container on the same server:
+
+```bash
+docker run -d --name my-bcms-db -v ~/bcms/db:/data/db -e MONGO_INITDB_ROOT_USERNAME=<DB_ADMIN_USERNAME> -e MONGO_INITDB_ROOT_PASSWORD=<DB_ADMIN_PASSWORD> --network bcms-net mongo:7
+```
+
+With this done, MongoDB database will be stored in `~/bcms/db` and can only be
+accessible from `bcms-net` on port 27017.
+
+Create BCMS container:
+
+```bash
+docker run -d --name my-bcms -v ~/bcms/uploads:/app/backend/uploads -v ~/bcms/backups:/app/backend/backups -e "DB_URL=<MONGODB_CONNECTION_URL>" --network bcms-net my-bcms
+```
+
+If you followed the optional step to setup a MongoDB on the same server, _DB_URL_ will be `mongodb://<DB_ADMIN_USERNAME>:<DB_ADMIN_PASSWORD>@my-bcms-db:27017/admin`
+
+Last thing is to setup and Nginx reverse proxy for connections to the server. For this we will create a Docker container which will expose port 80 to the web and proxy requests to the BCMS at port 8080 inside of Docker network:
+
+```nginx configuration
+# File location: ~/bcms/nginx.conf
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
+include /etc/nginx/modules-enabled/*.conf;
+
+events {
+  worker_connections 768;
+}
+
+http {
+  sendfile on;
+  tcp_nopush on;
+  tcp_nodelay on;
+  keepalive_timeout 65;
+  types_hash_max_size 2048;
+  server_tokens off;
+
+  include /etc/nginx/mime.types;
+  default_type application/octet-stream;
+
+  ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3; # Dropping SSLv3, ref: POODLE
+  ssl_prefer_server_ciphers on;
+
+  access_log /var/log/nginx/access.log;
+  error_log /var/log/nginx/error.log;
+
+  include /etc/nginx/conf.d/*.conf;
+  include /etc/nginx/sites-enabled/*;
+
+  add_header Content-Security-Policy "default-src 'self' 'unsafe-inline' blob: data:";
+  add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+  add_header Referrer-Policy "no-referrer";
+
+  server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    server_name _;
+
+    client_max_body_size 105G;
+
+    location /api/v4/socket {
+      proxy_http_version 1.1;
+      proxy_set_header Upgrade $http_upgrade;
+      proxy_set_header Connection "upgrade";
+
+      proxy_pass http://my-bcms:8080/api/v4/socket;
+    }
+    location /__plugin {
+      proxy_read_timeout 60;
+      proxy_connect_timeout 60;
+      proxy_send_timeout 60;
+      proxy_pass http://my-bcms:8080/__plugin;
+    }
+    location / {
+      proxy_read_timeout 60;
+      proxy_connect_timeout 60;
+      proxy_send_timeout 60;
+      proxy_pass http://my-bcms:8080;
+    }
+  }
+}
+```
+
+Have in mind that this config is using default Nginx virtual host. If you would like to use custom domain name (instead of IP address) change the config to suite your needs.
+
+Create a Dockerfile for building Nginx container:
+
+```Dockerfile
+# File locatioin: ~/bcms/proxy.Dockerfile
+FROM nginx
+
+COPY nginx.conf /etc/nginx/nginx.conf
+```
+
+Create an Nginx Docker image:
+
+```bash
+docker build . -f proxy.Dockerfile -t my-bcms-proxy
+```
+
+Run the Nginx container:
+
+```bash
+docker run -d -p 80:80 --name my-bcms-proxy --network bcms-net my-bcms-proxy
+```
+
+That's it, BCMS should now be available via Nginx proxy. We recommend to setup CloudFlare or some other CDN in front of the server so that you do not expose server IP and this will also allow you to easily configure full SSL connection between a client and an origin server.

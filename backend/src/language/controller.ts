@@ -1,126 +1,271 @@
 import {
-  createController,
-  createControllerMethod,
-} from '@becomes/purple-cheetah';
+    createController,
+    createControllerMethod,
+    HttpStatus,
+} from '@bcms/selfhosted-backend/_server';
 import {
-  JWTPermissionName,
-  JWTPreRequestHandlerResult,
-  JWTRoleName,
-} from '@becomes/purple-cheetah-mod-jwt/types';
-import { BCMSRouteProtection } from '../util';
+    RP,
+    type RPApiKeyJwtCheckResult,
+    type RPJwtBodyCheckResult,
+    type RPJwtCheckResult,
+} from '@bcms/selfhosted-backend/security/route-protection/main';
+import type {
+    ControllerItemResponse,
+    ControllerItemsResponse,
+} from '@bcms/selfhosted-backend/util/controller';
+import type { Language } from '@bcms/selfhosted-backend/language/models/main';
 import {
-  BCMSRouteProtectionJwtAndBodyCheckResult,
-  BCMSLanguage,
-  BCMSLanguageAddData,
-  BCMSLanguageAddDataSchema,
-  BCMSUserCustomPool,
-} from '../types';
-import { BCMSLanguageRequestHandler } from './request-handler';
+    controllerItemResponseDefinitionForRef,
+    controllerItemsResponseDefinitionForRef,
+    openApiGetModelRef,
+} from '@bcms/selfhosted-backend/open-api/schema';
+import { Repo } from '@bcms/selfhosted-backend/repo';
+import {
+    type LanguageCreateBody,
+    LanguageCreateBodySchema,
+} from '@bcms/selfhosted-backend/language/models/controller';
+import { LanguageFactory } from '@bcms/selfhosted-backend/language/factory';
+import { SocketManager } from '@bcms/selfhosted-backend/socket/manager';
+import { EventManager } from '@bcms/selfhosted-backend/event/manager';
 
-export const BCMSLanguageController = createController({
-  path: '/api/language',
-  name: 'Language controller',
-  methods() {
-    return {
-      getAll: createControllerMethod<
-        JWTPreRequestHandlerResult<BCMSUserCustomPool>,
-        { items: BCMSLanguage[] }
-      >({
-        path: '/all',
-        type: 'get',
-        preRequestHandler: BCMSRouteProtection.createJwtPreRequestHandler(
-          [JWTRoleName.ADMIN, JWTRoleName.USER],
-          JWTPermissionName.READ,
-        ),
-        async handler() {
-          return {
-            items: await BCMSLanguageRequestHandler.getAll(),
-          };
-        },
-      }),
-
-      count: createControllerMethod<
-        JWTPreRequestHandlerResult<BCMSUserCustomPool>,
-        { count: number }
-      >({
-        path: '/count',
-        type: 'get',
-        preRequestHandler: BCMSRouteProtection.createJwtPreRequestHandler(
-          [JWTRoleName.ADMIN, JWTRoleName.USER],
-          JWTPermissionName.READ,
-        ),
-        async handler() {
-          return {
-            count: await BCMSLanguageRequestHandler.count(),
-          };
-        },
-      }),
-
-      getById: createControllerMethod<
-        JWTPreRequestHandlerResult<BCMSUserCustomPool>,
-        { item: BCMSLanguage }
-      >({
-        path: '/:id',
-        type: 'get',
-        preRequestHandler: BCMSRouteProtection.createJwtPreRequestHandler(
-          [JWTRoleName.ADMIN, JWTRoleName.USER],
-          JWTPermissionName.READ,
-        ),
-        async handler({ request, errorHandler }) {
-          return {
-            item: await BCMSLanguageRequestHandler.getById({
-              id: request.params.id,
-              errorHandler,
+export const LanguageController = createController({
+    name: 'Language',
+    path: '/api/v4/language',
+    methods({ controllerName }) {
+        return {
+            getAll: createControllerMethod<
+                RPApiKeyJwtCheckResult,
+                ControllerItemsResponse<Language>
+            >({
+                path: '/all',
+                type: 'get',
+                openApi: {
+                    tags: [controllerName],
+                    security: [
+                        {
+                            accessToken: [],
+                        },
+                    ],
+                    summary: 'Get all languages in the instance',
+                    responses: {
+                        200: {
+                            description: 'OK',
+                            content: {
+                                'application/json': {
+                                    schema: controllerItemsResponseDefinitionForRef(
+                                        'Language',
+                                    ),
+                                },
+                            },
+                        },
+                    },
+                },
+                preRequestHandler: RP.createApiKeyJwtCheck(),
+                async handler() {
+                    const languages = await Repo.language.findAll();
+                    return {
+                        items: languages,
+                        limit: languages.length,
+                        total: languages.length,
+                        offset: 0,
+                    };
+                },
             }),
-          };
-        },
-      }),
 
-      create: createControllerMethod<
-        BCMSRouteProtectionJwtAndBodyCheckResult<BCMSLanguageAddData>,
-        { item: BCMSLanguage }
-      >({
-        type: 'post',
-        preRequestHandler:
-          BCMSRouteProtection.createJwtAndBodyCheckPreRequestHandler({
-            roleNames: [JWTRoleName.ADMIN, JWTRoleName.USER],
-            permissionName: JWTPermissionName.WRITE,
-            bodySchema: BCMSLanguageAddDataSchema,
-          }),
-        async handler({ body, accessToken, errorHandler, request }) {
-          return {
-            item: await BCMSLanguageRequestHandler.create({
-              sid: request.headers['x-bcms-sid'] as string,
-              body,
-              accessToken,
-              errorHandler,
+            getById: createControllerMethod<
+                RPApiKeyJwtCheckResult,
+                ControllerItemResponse<Language>
+            >({
+                path: '/:languageId',
+                type: 'get',
+                openApi: {
+                    tags: [controllerName],
+                    security: [
+                        {
+                            accessToken: [],
+                        },
+                    ],
+                    summary: 'Get language by its ID',
+                    parameters: [
+                        {
+                            in: 'path',
+                            name: 'languageId',
+                            required: true,
+                            schema: {
+                                type: 'string',
+                            },
+                        },
+                    ],
+                    responses: {
+                        200: {
+                            description: 'OK',
+                            content: {
+                                'application/json': {
+                                    schema: controllerItemResponseDefinitionForRef(
+                                        'Language',
+                                    ),
+                                },
+                            },
+                        },
+                    },
+                },
+                preRequestHandler: RP.createApiKeyJwtCheck(),
+                async handler({ request, errorHandler }) {
+                    const params = request.params as {
+                        languageId: string;
+                    };
+                    const language = await Repo.language.findById(
+                        params.languageId,
+                    );
+                    if (!language) {
+                        throw errorHandler(
+                            HttpStatus.NotFound,
+                            `Language with ID "${params.languageId}" does not exist`,
+                        );
+                    }
+                    return {
+                        item: language,
+                    };
+                },
             }),
-          };
-        },
-      }),
 
-      deleteById: createControllerMethod<
-        JWTPreRequestHandlerResult<BCMSUserCustomPool>,
-        { message: 'Success.' }
-      >({
-        path: '/:id',
-        type: 'delete',
-        preRequestHandler: BCMSRouteProtection.createJwtPreRequestHandler(
-          [JWTRoleName.ADMIN, JWTRoleName.USER],
-          JWTPermissionName.DELETE,
-        ),
-        async handler({ request, errorHandler, accessToken }) {
-          await BCMSLanguageRequestHandler.delete({
-            sid: request.headers['x-bcms-sid'] as string,
-            id: request.params.id,
-            errorHandler,
-            accessToken,
-          });
-          return {
-            message: 'Success.',
-          };
-        },
-      }),
-    };
-  },
+            create: createControllerMethod<
+                RPJwtBodyCheckResult<LanguageCreateBody>,
+                ControllerItemResponse<Language>
+            >({
+                path: '/create',
+                type: 'post',
+                openApi: {
+                    tags: [controllerName],
+                    security: [
+                        {
+                            accessToken: [],
+                        },
+                    ],
+                    summary: 'Create new language',
+                    requestBody: {
+                        content: {
+                            'application/json': {
+                                schema: {
+                                    $ref: openApiGetModelRef(
+                                        'LanguageCreateBody',
+                                    ),
+                                },
+                            },
+                        },
+                    },
+                    responses: {
+                        200: {
+                            description: 'OK',
+                            content: {
+                                'application/json': {
+                                    schema: controllerItemResponseDefinitionForRef(
+                                        'Language',
+                                    ),
+                                },
+                            },
+                        },
+                    },
+                },
+                preRequestHandler: RP.createJwtBodyCheck(
+                    LanguageCreateBodySchema,
+                    ['ADMIN'],
+                ),
+                async handler({ body, token }) {
+                    const languageWithSameCode =
+                        await Repo.language.methods.findByCode(body.code);
+                    if (languageWithSameCode) {
+                        return { item: languageWithSameCode };
+                    }
+                    const language = await Repo.language.add(
+                        LanguageFactory.create({
+                            code: body.code,
+                            name: body.name,
+                            nativeName: body.nativeName,
+                            userId: token.payload.userId,
+                            default: false,
+                        }),
+                    );
+                    SocketManager.channelEmit(
+                        ['global'],
+                        'language',
+                        {
+                            type: 'update',
+                            languageId: language._id,
+                        },
+                        [token.payload.userId],
+                    );
+                    EventManager.trigger('add', 'language', language).catch(
+                        (err) => console.error(err),
+                    );
+                    return {
+                        item: language,
+                    };
+                },
+            }),
+
+            deleteById: createControllerMethod<
+                RPJwtCheckResult,
+                ControllerItemResponse<Language>
+            >({
+                path: '/:languageId',
+                type: 'delete',
+                openApi: {
+                    tags: [controllerName],
+                    security: [
+                        {
+                            accessToken: [],
+                        },
+                    ],
+                    summary: 'Delete language by its ID',
+                    parameters: [
+                        {
+                            in: 'path',
+                            name: 'languageId',
+                            required: true,
+                            schema: {
+                                type: 'string',
+                            },
+                        },
+                    ],
+                    responses: {
+                        200: {
+                            description: 'OK',
+                            content: {
+                                'application/json': {
+                                    schema: controllerItemResponseDefinitionForRef(
+                                        'Language',
+                                    ),
+                                },
+                            },
+                        },
+                    },
+                },
+                preRequestHandler: RP.createJwtCheck(['ADMIN']),
+                async handler({ request, errorHandler }) {
+                    const params = request.params as {
+                        orgId: string;
+                        instanceId: string;
+                        languageId: string;
+                    };
+                    const language = await Repo.language.findById(
+                        params.languageId,
+                    );
+                    if (!language) {
+                        throw errorHandler(
+                            HttpStatus.NotFound,
+                            `Language with ID "${params.languageId}" does not exist`,
+                        );
+                    }
+                    await Repo.language.deleteById(language._id);
+                    EventManager.trigger('delete', 'language', language).catch(
+                        (err) => console.error(err),
+                    );
+                    return {
+                        item: language,
+                    };
+                },
+            }),
+        };
+    },
 });

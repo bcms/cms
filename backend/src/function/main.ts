@@ -1,118 +1,69 @@
-import * as path from 'path';
-import { Module, ObjectUtilityError } from '@becomes/purple-cheetah/types';
+import path from 'path';
 import {
-  useFS,
-  useObjectUtility,
-  useStringUtility,
-} from '@becomes/purple-cheetah';
+    type BCMSFunction,
+    BCMSFunctionSchema,
+} from '@bcms/selfhosted-backend/function/models/main';
+import { FS } from '@bcms/selfhosted-utils/fs';
 import {
-  BCMSFunction,
-  BCMSFunctionManager,
-  BCMSFunctionSchema,
-} from '../types';
-import { BCMSRepo } from '@backend/repo';
+    ObjectUtility,
+    ObjectUtilityError,
+} from '@bcms/selfhosted-utils/object-utility';
+import { StringUtility } from '@bcms/selfhosted-utils/string-utility';
 
-let functionManager: BCMSFunctionManager;
+export class FunctionManager {
+    private static fns: BCMSFunction[] = [];
 
-async function init() {
-  let fns: BCMSFunction<unknown>[] = [];
-  const fs = useFS();
-  const objectUtil = useObjectUtility();
-  const stringUtil = useStringUtility();
-  const fnsPath = path.join(process.cwd(), 'functions');
-  if (await fs.exist(fnsPath)) {
-    const fnNames = await fs.readdir(fnsPath);
-    for (let i = 0; i < fnNames.length; i++) {
-      const fnName = fnNames[i];
-      if (
-        fnName.endsWith('.js') ||
-        (!fnName.endsWith('.d.ts') && fnName.endsWith('.ts'))
-      ) {
-        const fnImport: {
-          default: () => Promise<BCMSFunction<unknown>>;
-        } = await import(path.join(fnsPath, fnName));
-        const checkFn = objectUtil.compareWithSchema(
-          { fn: fnImport.default },
-          {
-            fn: {
-              __type: 'function',
-              __required: true,
-            },
-          },
-          fnName,
-        );
-        if (checkFn instanceof ObjectUtilityError) {
-          throw Error(checkFn.message);
-        }
-        const fn = await fnImport.default();
-        const checkObject = objectUtil.compareWithSchema(
-          fn,
-          BCMSFunctionSchema,
-          fnName,
-        );
-        if (checkObject instanceof ObjectUtilityError) {
-          throw Error(checkObject.message);
-        }
-        fn.config.name = stringUtil.toSlug(fn.config.name);
-        if (fns.find((e) => e.config.name === fn.config.name)) {
-          throw Error(
-            `Duplicate of "${fn.config.name}" function.` +
-              ' This is not allowed.',
-          );
-        }
-        fns.push(fn);
-      }
+    static clear(): void {
+        this.fns = [];
     }
-  }
-  functionManager = {
-    clear() {
-      fns = [];
-    },
-    get(name) {
-      return fns.find((e) => e.config.name === name);
-    },
-    getAll() {
-      return fns;
-    },
-  };
 
-  /**
-   * Fix API Keys
-   */
-  {
-    const apiKeys = await BCMSRepo.apiKey.findAll();
-    for (let i = 0; i < apiKeys.length; i++) {
-      const apiKey = apiKeys[i];
-      let changes = false;
-      let j = 0;
-      while (j < apiKey.access.functions.length) {
-        const fnName = apiKey.access.functions[j];
-        const fnAvailable = functionManager.get(fnName.name);
-        if (!fnAvailable || fnAvailable.config.public) {
-          changes = true;
-          apiKey.access.functions.splice(j, 1);
-        } else {
-          j++;
-        }
-      }
-      if (changes) {
-        await BCMSRepo.apiKey.update(apiKey);
-      }
+    static get(name: string): BCMSFunction | undefined {
+        return this.fns.find((e) => e.config.name === name);
     }
-  }
-}
 
-export function createBcmsFunctionModule(): Module {
-  return {
-    name: 'Function',
-    initialize({ next }) {
-      init()
-        .then(() => next())
-        .catch((err) => next(err));
-    },
-  };
-}
+    static getAll(): BCMSFunction[] {
+        return this.fns;
+    }
 
-export function useBcmsFunctionManger(): BCMSFunctionManager {
-  return functionManager;
+    static async init() {
+        const fs = new FS(path.join(process.cwd(), 'functions'));
+        if (!(await fs.exist(''))) {
+            return;
+        }
+        const fnNames = await fs.readdir('');
+        for (let i = 0; i < fnNames.length; i++) {
+            const fnName = fnNames[i];
+            if (
+                fnName.endsWith('.js') ||
+                (!fnName.endsWith('.d.ts') && fnName.endsWith('.ts'))
+            ) {
+                const fnImport: {
+                    default(): Promise<BCMSFunction>;
+                } = await import(path.join(fs.baseRoot, fnName));
+                if (typeof fnImport.default !== 'function') {
+                    throw Error(`There is no default function in: ${fnName}`);
+                }
+                const fn = await fnImport.default();
+                const checkFn = ObjectUtility.compareWithSchema(
+                    fn,
+                    BCMSFunctionSchema,
+                    fnName,
+                );
+                if (checkFn instanceof ObjectUtilityError) {
+                    throw Error(checkFn.message);
+                }
+                fn.config.name = StringUtility.toSlug(fn.config.name);
+                if (this.fns.find((e) => e.config.name === fn.config.name)) {
+                    throw Error(
+                        `Duplicate of "${fn.config.name}" function.` +
+                            ' This is not allowed.',
+                    );
+                }
+                console.log(
+                    `Function mounted: ${fn.config.name} -> POST: /api/v4/function/${fn.config.name}`,
+                );
+                this.fns.push(fn);
+            }
+        }
+    }
 }

@@ -1,75 +1,109 @@
-import { computed, defineComponent } from 'vue';
-import { Buffer } from 'buffer';
+import { defineComponent, onMounted, ref } from 'vue';
+import { TextInput } from '@bcms/selfhosted-ui/components/inputs/text';
+import {
+    createRefValidator,
+    createValidationItem,
+} from '@bcms/selfhosted-ui/util/validation';
+import { PasswordInput } from '@bcms/selfhosted-ui/components/inputs/password';
+import { Button } from '@bcms/selfhosted-ui/components/button';
+import { throwable } from '@bcms/selfhosted-ui/util/throwable';
 import { useRoute, useRouter } from 'vue-router';
-import { useTranslation } from '../translations';
 
-const component = defineComponent({
-  setup() {
-    const translations = computed(() => {
-      return useTranslation();
-    });
+export const LoginView = defineComponent({
+    setup() {
+        const router = useRouter();
+        const route = useRoute();
 
-    const throwable = window.bcms.util.throwable;
-    const router = useRouter();
-    const route = useRoute();
-    const headMeta = window.bcms.meta;
+        const inputs = ref({
+            email: createValidationItem({
+                value: '',
+                handler(value) {
+                    if (!value) {
+                        return 'Email is required';
+                    }
+                },
+            }),
+            password: createValidationItem({
+                value: '',
+                handler(value) {
+                    if (!value) {
+                        return 'Email is required';
+                    }
+                },
+            }),
+        });
+        const inputsValid = createRefValidator(inputs);
 
-    headMeta.set({
-      title: translations.value.page.login.meta.title,
-    });
-
-    async function init() {
-      const query = route.query as {
-        otp: string;
-        forward?: string;
-        user?: string;
-      };
-      await throwable(async () => {
-        const result = await window.bcms.sdk.isLoggedIn();
-        if (result) {
-          if (query.forward) {
-            await router.push({ path: query.forward, replace: true });
-          } else {
-            await router.push({ path: '/dashboard', replace: true });
-          }
-          return;
-        } else {
-          if (query.otp || window.location.host === 'localhost:8080') {
-            await throwable(
-              async () => {
-                return await window.bcms.sdk.shim.verify.otp(
-                  query.otp,
-                  !!query.user
-                );
-              },
-              async () => {
-                if (query.forward) {
-                  await router.push({ path: query.forward, replace: true });
-                } else {
-                  await router.push({ path: '/dashboard', replace: true });
+        onMounted(async () => {
+            await throwable(async () => {
+                if (await window.bcms.sdk.auth.shouldSignUp()) {
+                    await router.replace('/signup-admin');
+                } else if (await window.bcms.sdk.isLoggedIn()) {
+                    if (
+                        typeof route.query.forward === 'string' &&
+                        route.query.forward.startsWith('/')
+                    ) {
+                        await router.replace(route.query.forward);
+                    } else {
+                        await router.replace('/d');
+                    }
                 }
-              }
-            );
-            return;
-          }
-          window.location.href = `https://cloud.thebcms.com/login?type=cb&d=${Buffer.from(
-            JSON.stringify({
-              host: window.location.host,
-              iid: window.bcmsCloud?.iid,
-              forward: query.forward,
-            })
-          ).toString('hex')}`;
-        }
-      });
-      return;
-    }
-    window.bcms.util.throwable(async () => {
-      await init();
-    });
+            });
+        });
 
-    return () => {
-      return <div />;
-    };
-  },
+        async function login() {
+            if (!inputsValid()) {
+                return;
+            }
+            await throwable(
+                async () => {
+                    await window.bcms.sdk.auth.login({
+                        email: inputs.value.email.value,
+                        password: inputs.value.password.value,
+                    });
+                },
+                async () => {
+                    if (
+                        typeof route.query.forward === 'string' &&
+                        route.query.forward.startsWith('/')
+                    ) {
+                        await router.replace(route.query.forward);
+                    } else {
+                        await router.replace('/d');
+                    }
+                },
+            );
+        }
+
+        return () => (
+            <div class={`flex flex-col`}>
+                <h1 class={`font-normal text-4xl`}>Log in</h1>
+                <TextInput
+                    class={`mt-10`}
+                    label="Email"
+                    placeholder='Email'
+                    value={inputs.value.email.value}
+                    error={inputs.value.email.error}
+                    onInput={(value) => {
+                        inputs.value.email.value = value;
+                    }}
+                    onEnter={login}
+                />
+                <PasswordInput
+                    class={`mt-4`}
+                    label="Password"
+                    placeholder='Password'
+                    value={inputs.value.password.value}
+                    error={inputs.value.password.error}
+                    onInput={(value) => {
+                        inputs.value.password.value = value;
+                    }}
+                    onEnter={login}
+                />
+                <Button class={`mt-10 mr-auto`} onClick={login}>
+                    Log in
+                </Button>
+            </div>
+        );
+    },
 });
-export default component;

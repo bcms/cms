@@ -11,10 +11,11 @@ node_modules
 .DS_Store
 dist
 dist-ssr
-/lib
+dist-sdk
+dist-components
 coverage
 *.local
-/yarn.lock
+public/extension
 
 /cypress/videos/
 /cypress/screenshots/
@@ -28,5 +29,4 @@ coverage
 *.njsproj
 *.sln
 *.sw?
-
-/src/bcms-ui
+.env

@@ -1,0 +1,23 @@
+{
+    "name": "@bcms/selfhosted-utils",
+    "version": "1.0.0",
+    "license": "MIT",
+    "exports": {},
+    "dependencies": {
+        "@types/fs-extra": "^11.0.4",
+        "fs-extra": "^11.2.0",
+        "uuid": "^9.0.0",
+        "@types/uuid": "^9.0.2"
+    },
+    "publishConfig": {
+        "registry": "https://npm.pkg.github.com"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/bcms/cms"
+    },
+    "bugs": {
+        "url": "https://github.com/bcms/cms/issues"
+    },
+    "homepage": "https://github.com/bcms/cms#readme"
+}

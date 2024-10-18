@@ -1,3 +1,4 @@
-tailwind.config.cjs
-postcss.config.cjs
-sdk/src/backend-types
+/dist
+/node_modules
+/tailwind.config.cjs
+/server.js

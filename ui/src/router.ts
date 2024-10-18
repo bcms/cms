@@ -1,248 +1,256 @@
-import { BCMSJwtRoleName } from '@becomes/cms-sdk/types';
-import { computed } from 'vue';
-import type {
-  NavigationGuardNext,
-  RouteLocationNormalized,
-  RouteRecordRaw,
+import {
+    createRouter,
+    createWebHistory,
+    type NavigationGuardNext,
+    type RouteRecordRaw,
 } from 'vue-router';
-import { createRouter, createWebHistory } from 'vue-router';
-import { useTranslation } from './translations';
-import Login from './views/login';
+import type { ViewNames } from '@bcms/selfhosted-ui/views';
+import type { LayoutNames } from '@bcms/selfhosted-ui/layouts';
+import type { DefineComponent } from 'vue';
+import { LoginView } from '@bcms/selfhosted-ui/views/login';
 
-const translations = computed(() => {
-  return useTranslation();
-});
+interface RouteRecordRawExtended
+    extends Omit<RouteRecordRaw, 'name' | 'children' | 'meta'> {
+    name?: ViewNames;
+    children?: Array<RouteRecordRawExtended>;
+    meta?: {
+        title?: string;
+        layout?: LayoutNames;
+        class?: string;
+        boxClass?: string;
+        heading?: string;
+        headingBack?: boolean | string;
+        overrideComponent?: DefineComponent<
+            any,
+            any,
+            any,
+            any,
+            any,
+            any,
+            any,
+            any,
+            any,
+            any,
+            any,
+            any,
+            any
+        >;
+    };
+}
 
-const dashboardBaseUri = '/dashboard';
-const routes: Array<RouteRecordRaw> = [
-  {
-    path: '/',
-    name: 'Login',
-    meta: {
-      noLayout: true,
+const routes: Array<RouteRecordRawExtended> = [
+    {
+        path: '/',
+        name: 'LoginView',
+        meta: {
+            title: 'Login',
+            layout: 'AuthLayout',
+        },
+        component: LoginView,
     },
-    component: Login,
-  },
-  {
-    path: '/login',
-    name: 'Login2',
-    meta: {
-      noLayout: true,
+    {
+        path: '/signup-admin',
+        name: 'SignupAdminView',
+        meta: {
+            title: 'Admin sign up',
+            layout: 'AuthLayout',
+        },
+        component: () =>
+            import(/* webpackChunkName: "login" */ './views/signup-admin'),
     },
-    component: Login,
-  },
-  {
-    path: `${dashboardBaseUri}`,
-    name: 'Home',
-    component: () =>
-      import(/* webpackChunkName: "dashboard-home" */ './views/dashboard/home'),
-  },
-  {
-    path: `${dashboardBaseUri}/settings`,
-    name: 'Settings',
-    component: () =>
-      import(
-        /* webpackChunkName: "dashboard-settings" */ './views/dashboard/settings'
-      ),
-  },
-  {
-    path: `${dashboardBaseUri}/key-manager`,
-    name: 'Key Manager',
-    component: () =>
-      import(
-        /* webpackChunkName: "dashboard-key-manager" */ './views/dashboard/key-manager'
-      ),
-  },
-  {
-    path: `${dashboardBaseUri}/key-manager/:kid`,
-    name: 'Key Manager Id',
-    component: () =>
-      import(
-        /* webpackChunkName: "dashboard-key-manager" */ './views/dashboard/key-manager'
-      ),
-  },
-  {
-    path: `${dashboardBaseUri}/t`,
-    name: 'Template',
-    component: () =>
-      import(
-        /* webpackChunkName: "dashboard-template" */ './views/dashboard/t/id'
-      ),
-  },
-  {
-    path: `${dashboardBaseUri}/t/:tid`,
-    name: 'TemplateId',
-    component: () =>
-      import(
-        /* webpackChunkName: "dashboard-template" */ './views/dashboard/t/id'
-      ),
-  },
-  {
-    path: `${dashboardBaseUri}/t/:tid/e`,
-    name: 'EntryView',
-    component: () =>
-      import(
-        /* webpackChunkName: "dashboard-entry-view" */ './views/dashboard/t/id/e'
-      ),
-  },
-  {
-    path: `${dashboardBaseUri}/t/:tid/e/:eid`,
-    name: 'EntryEditor',
-    component: () =>
-      import(
-        /* webpackChunkName: "dashboard-entry-editor" */ './views/dashboard/t/id/e/id'
-      ),
-  },
-  {
-    path: `${dashboardBaseUri}/g`,
-    name: 'Group',
-    component: () =>
-      import(
-        /* webpackChunkName: "dashboard-group" */ './views/dashboard/g/id'
-      ),
-  },
-  {
-    path: `${dashboardBaseUri}/g/:gid`,
-    name: 'GroupId',
-    component: () =>
-      import(
-        /* webpackChunkName: "dashboard-group" */ './views/dashboard/g/id'
-      ),
-  },
-  {
-    path: `${dashboardBaseUri}/w`,
-    name: 'Widget',
-    component: () =>
-      import(
-        /* webpackChunkName: "dashboard-widget" */ './views/dashboard/w/id'
-      ),
-  },
-  {
-    path: `${dashboardBaseUri}/w/:wid`,
-    name: 'WidgetId',
-    component: () =>
-      import(
-        /* webpackChunkName: "dashboard-widget" */ './views/dashboard/w/id'
-      ),
-  },
-  {
-    path: `${dashboardBaseUri}/media`,
-    name: 'Media',
-    component: () =>
-      import(
-        /* webpackChunkName: "dashboard-media" */ './views/dashboard/media'
-      ),
-  },
-  {
-    path: `${dashboardBaseUri}/media/:id`,
-    name: 'MediaId',
-    component: () =>
-      import(
-        /* webpackChunkName: "dashboard-media" */ './views/dashboard/media'
-      ),
-  },
-  {
-    path: `${dashboardBaseUri}/plugin/:pluginName`,
-    name: 'Plugin',
-    component: () =>
-      import(
-        /* webpackChunkName: "dashboard-plugin" */ './views/dashboard/plugin'
-      ),
-  },
-  {
-    path: '/:pathMatch(.*)*',
-    name: 'P404',
-    meta: {
-      noLayout: true,
+    {
+        path: '/d',
+        name: 'HomeView',
+        meta: {
+            title: 'Home',
+            layout: 'DashboardLayout',
+        },
+        component: () =>
+            import(/* webpackChunkName: "home" */ './views/dashboard/home'),
     },
-    component: () =>
-      import(/* webpackChunkName: "dashboard-404" */ './views/404'),
-  },
+    {
+        path: '/d/template',
+        name: 'TemplatesView',
+        meta: {
+            title: 'Templates',
+            layout: 'DashboardLayout',
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "template" */ './views/dashboard/templates'
+            ),
+    },
+    {
+        path: '/d/template/:templateId',
+        name: 'TemplateView',
+        meta: {
+            title: 'Template',
+            layout: 'DashboardLayout',
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "template" */ './views/dashboard/template'
+            ),
+    },
+    {
+        path: '/d/group',
+        name: 'GroupsView',
+        meta: {
+            title: 'Groups',
+            layout: 'DashboardLayout',
+        },
+        component: () =>
+            import(/* webpackChunkName: "group" */ './views/dashboard/groups'),
+    },
+    {
+        path: '/d/group/:groupId',
+        name: 'GroupView',
+        meta: {
+            title: 'Group',
+            layout: 'DashboardLayout',
+        },
+        component: () =>
+            import(/* webpackChunkName: "group" */ './views/dashboard/group'),
+    },
+    {
+        path: '/d/widget',
+        name: 'WidgetsView',
+        meta: {
+            title: 'Widgets',
+            layout: 'DashboardLayout',
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "widget" */ './views/dashboard/widgets'
+            ),
+    },
+    {
+        path: '/d/widget/:widgetId',
+        name: 'WidgetView',
+        meta: {
+            title: 'Widget',
+            layout: 'DashboardLayout',
+        },
+        component: () =>
+            import(/* webpackChunkName: "widget" */ './views/dashboard/widget'),
+    },
+    {
+        path: '/d/media',
+        name: 'MediaView',
+        meta: {
+            title: 'Media manager',
+            layout: 'DashboardLayout',
+        },
+        component: () =>
+            import(/* webpackChunkName: "media" */ './views/dashboard/media'),
+    },
+    {
+        path: '/d/settings',
+        name: 'SettingsView',
+        meta: {
+            title: 'Settings',
+            layout: 'DashboardLayout',
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "settings" */ './views/dashboard/settings'
+            ),
+    },
+    {
+        path: '/d/api-key',
+        name: 'ApiKeysView',
+        meta: {
+            title: 'API Keys',
+            layout: 'DashboardLayout',
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "api-key" */ './views/dashboard/api-keys'
+            ),
+    },
+    {
+        path: '/d/api-key/:apiKeyId',
+        name: 'ApiKeyView',
+        meta: {
+            title: 'API Key',
+            layout: 'DashboardLayout',
+        },
+        component: () =>
+            import(
+                /* webpackChunkName: "api-key" */ './views/dashboard/api-key'
+            ),
+    },
+    {
+        path: '/d/template/:templateId/entry',
+        name: 'EntriesView',
+        meta: {
+            title: 'Entries',
+            layout: 'DashboardLayout',
+        },
+        component: () =>
+            import(/* webpackChunkName: "entry" */ './views/dashboard/entries'),
+    },
+    {
+        path: '/d/template/:templateId/entry/:entryId',
+        name: 'EntryView',
+        meta: {
+            title: 'Entry',
+            layout: 'DashboardLayout',
+        },
+        component: () =>
+            import(/* webpackChunkName: "entry" */ './views/dashboard/entry'),
+    },
+    {
+        path: '/d/plugin/:pluginId',
+        name: 'PluginView',
+        meta: {
+            title: 'Plugin',
+            layout: 'DashboardLayout',
+        },
+        component: () =>
+            import(/* webpackChunkName: "plugin" */ './views/dashboard/plugin'),
+    },
+    {
+        path: '/:pathMatch(.*)*',
+        name: 'P404View',
+        meta: {
+            title: 'Oops! Page not found',
+            layout: 'NoneLayout',
+        },
+        component: () => import(/* webpackChunkName: "p404" */ './views/404'),
+    },
 ];
 
-const router = createRouter({
-  history: createWebHistory(),
-  routes,
+export const router = createRouter({
+    history: createWebHistory(import.meta.env.VITE_BASE_URL),
+    routes: routes as any,
 });
-const noAuthPaths = ['/login', '/'];
+
+const publicRoutes = ['/', '/login', '/rest-docs/v3', '/signup-admin'];
+
 function toLogin(next: NavigationGuardNext) {
-  const query = window.location.href.split('?');
-  let url = window.location.pathname;
-  if (query[1]) {
-    url = url + '?' + query[1];
-  }
-  next({
-    path: '/',
-    query: {
-      forward: url,
-    },
-  });
-}
-function routeProtectionNotAllowed(next: NavigationGuardNext) {
-  window.bcms.notification.warning(
-    translations.value.layout.nav.routeNotAllowed,
-  );
-  return next({
-    path: '/dashboard',
-  });
-}
-async function reportRoute(path: string) {
-  if (!window.bcms.sdk.socket.id()) {
-    await new Promise<void>((resolve) => {
-      setTimeout(async () => {
-        reportRoute(path).catch((err) => {
-          console.error(err);
-        });
-        resolve();
-      }, 200);
+    const query = window.location.href.split('?');
+    let url = window.location.pathname;
+    if (query[1]) {
+        url = url + '?' + query[1];
+    }
+    next({
+        path: '/',
+        query: {
+            forward: url,
+        },
     });
-  } else {
-    await window.bcms.sdk.routeTracker.register(path);
-  }
-}
-async function routeProtection(
-  to: RouteLocationNormalized,
-  next: NavigationGuardNext,
-) {
-  try {
-    const user = await window.bcms.sdk.user.get();
-    if (user.roles[0].name !== BCMSJwtRoleName.ADMIN) {
-      if (to.path.startsWith('/dashboard/media')) {
-        if (!user.customPool.policy.media.get) {
-          return routeProtectionNotAllowed(next);
-        }
-      } else if (to.path.startsWith('/dashboard/t')) {
-        const template = await window.bcms.sdk.template.get(
-          to.params.tid as string,
-        );
-        if (
-          !user.customPool.policy.templates.find((e) => e._id === template._id)
-        ) {
-          return routeProtectionNotAllowed(next);
-        }
-      }
-    }
-    if (to.path.startsWith('/dashboard')) {
-      await reportRoute(to.path);
-    }
-    next();
-  } catch (error) {
-    console.warn(error);
-    toLogin(next);
-  }
 }
 
 router.beforeEach(async (to, _, next) => {
-  if (noAuthPaths.includes(to.path)) {
-    next();
-  } else {
-    if (!(await window.bcms.sdk.isLoggedIn())) {
-      toLogin(next);
-      // next('/');
+    const jwt = window.bcms.sdk.accessToken;
+    if (to.name === 'P404View') {
+        next();
+    } else if (publicRoutes.includes(to.path)) {
+        next();
+    } else if ((await window.bcms.sdk.isLoggedIn()) && jwt) {
+        next();
     } else {
-      await routeProtection(to, next);
+        toLogin(next);
     }
-  }
 });
-
-export default router;

@@ -2,3 +2,7 @@
 /uploads
 /db
 /logs
+/backups
+.idea
+*.env
+.npmrc

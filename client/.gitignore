@@ -1,17 +1,6 @@
 # compiled output
 /dist
 /node_modules
-public/bundle.*
-/doc
-/src/bcms-types
-/src/test.ts
-/src/backend-types
-
-# Sapper
-/src/frontend/node_modules/@sapper/
-/src/frontend-sapper/node_modules/@sapper/
-/cypress/screenshots/
-/__sapper__/
 
 # Logs
 logs
@@ -27,11 +16,9 @@ lerna-debug.log*
 # Tests
 /coverage
 /.nyc_output
+/_dump
 
 # IDEs and editors
-.env
-bundle.sh
-publish.sh
 /.idea
 .project
 .classpath
@@ -46,3 +33,5 @@ publish.sh
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+/src/types/_cloud

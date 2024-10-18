@@ -1,213 +1,452 @@
 import {
-  createController,
-  createControllerMethod,
-  useStringUtility,
-} from '@becomes/purple-cheetah';
+    createController,
+    createControllerMethod,
+    HttpStatus,
+} from '@bcms/selfhosted-backend/_server';
 import {
-  JWTPermissionName,
-  JWTPreRequestHandlerResult,
-  JWTRoleName,
-} from '@becomes/purple-cheetah-mod-jwt/types';
-import { HTTPStatus } from '@becomes/purple-cheetah/types';
-import { BCMSRouteProtection } from '../util';
+    RP,
+    type RPApiKeyJwtCheckResult,
+    type RPJwtBodyCheckResult,
+    type RPJwtCheckResult,
+} from '@bcms/selfhosted-backend/security/route-protection/main';
 import {
-  BCMSRouteProtectionJwtAndBodyCheckResult,
-  BCMSUserCustomPool,
-  BCMSWidget,
-  BCMSWidgetCreateData,
-  BCMSWidgetCreateDataSchema,
-  BCMSWidgetUpdateData,
-  BCMSWidgetUpdateDataSchema,
-} from '../types';
-import { BCMSRepo } from '@backend/repo';
-import { bcmsResCode } from '@backend/response-code';
-import { BCMSWidgetRequestHandler } from './request-handler';
+    type WidgetCreateBody,
+    WidgetCreateBodySchema,
+    type WidgetUpdateBody,
+    WidgetUpdateBodySchema,
+    type WidgetWhereIsItUsedResult,
+} from '@bcms/selfhosted-backend/widget/models/controller';
+import {
+    controllerItemResponseDefinitionForRef,
+    controllerItemsResponseDefinitionForRef,
+    openApiGetModelRef,
+} from '@bcms/selfhosted-backend/open-api/schema';
+import { Repo } from '@bcms/selfhosted-backend/repo';
+import type {
+    ControllerItemResponse,
+    ControllerItemsResponse,
+} from '@bcms/selfhosted-backend/util/controller';
+import type { Widget } from '@bcms/selfhosted-backend/widget/models/main';
+import { WidgetFactory } from '@bcms/selfhosted-backend/widget/factory';
+import { StringUtility } from '@bcms/selfhosted-utils/string-utility';
+import { SocketManager } from '@bcms/selfhosted-backend/socket/manager';
+import { propsApplyChanges } from '@bcms/selfhosted-backend/prop/changes';
+import { EventManager } from '@bcms/selfhosted-backend/event/manager';
 
-export const BCMSWidgetController = createController({
-  name: 'Widget controller',
-  path: '/api/widget',
-  setup() {
-    return {
-      stringUtil: useStringUtility(),
-    };
-  },
-  methods() {
-    return {
-      whereIsItUsed: createControllerMethod({
-        path: '/:id/where-is-it-used',
-        type: 'get',
-        preRequestHandler: BCMSRouteProtection.createJwtPreRequestHandler(
-          [JWTRoleName.ADMIN, JWTRoleName.USER],
-          JWTPermissionName.READ,
-        ),
-        async handler({ request, errorHandler }) {
-          const id = request.params.id;
-          let widget: BCMSWidget | null = null;
-          if (id.length === 24) {
-            widget = await BCMSRepo.widget.findById(id);
-          } else {
-            widget = await BCMSRepo.widget.methods.findByCid(id);
-          }
-          if (!widget) {
-            throw errorHandler.occurred(
-              HTTPStatus.NOT_FOUNT,
-              bcmsResCode('wid001', { id }),
-            );
-          }
-          const entries = await BCMSRepo.entry.methods.findAllByWidgetId(
-            widget._id,
-          );
-
-          return {
-            entryIds: entries.map((e) => {
-              return { _id: e._id, cid: e.cid, tid: e.templateId };
+export const WidgetController = createController({
+    name: 'Widget',
+    path: '/api/v4/widget',
+    methods({ controllerName }) {
+        return {
+            whereIsItUsed: createControllerMethod<
+                RPApiKeyJwtCheckResult,
+                WidgetWhereIsItUsedResult
+            >({
+                path: '/:widgetId/where-is-it-used',
+                type: 'get',
+                openApi: {
+                    tags: [controllerName],
+                    security: [
+                        {
+                            accessToken: [],
+                        },
+                    ],
+                    parameters: [
+                        {
+                            in: 'path',
+                            name: 'widgetId',
+                            required: true,
+                            schema: {
+                                type: 'string',
+                            },
+                        },
+                    ],
+                    summary:
+                        'Get information on where specified widget is used.',
+                    responses: {
+                        200: {
+                            description: 'OK',
+                            content: {
+                                'application/json': {
+                                    schema: {
+                                        $ref: openApiGetModelRef(
+                                            'WidgetWhereIsItUsedResult',
+                                        ),
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                preRequestHandler: RP.createApiKeyJwtCheck(),
+                async handler({ request }) {
+                    const params = request.params as {
+                        widgetId: string;
+                        instanceId: string;
+                        orgId: string;
+                    };
+                    return {
+                        entryIds: (
+                            await Repo.entry.methods.findAllByWidgetId(
+                                params.widgetId,
+                            )
+                        ).map((e) => e._id),
+                    };
+                },
             }),
-          };
-        },
-      }),
 
-      getAll: createControllerMethod<
-        JWTPreRequestHandlerResult<BCMSUserCustomPool>,
-        { items: BCMSWidget[] }
-      >({
-        path: '/all',
-        type: 'get',
-        preRequestHandler: BCMSRouteProtection.createJwtPreRequestHandler(
-          [JWTRoleName.ADMIN, JWTRoleName.USER],
-          JWTPermissionName.READ,
-        ),
-        async handler() {
-          return {
-            items: await BCMSWidgetRequestHandler.getAll(),
-          };
-        },
-      }),
-
-      getMany: createControllerMethod<
-        JWTPreRequestHandlerResult<BCMSUserCustomPool>,
-        { items: BCMSWidget[] }
-      >({
-        path: '/many',
-        type: 'get',
-        preRequestHandler: BCMSRouteProtection.createJwtPreRequestHandler(
-          [JWTRoleName.ADMIN, JWTRoleName.USER],
-          JWTPermissionName.READ,
-        ),
-        async handler({ request }) {
-          const ids = (request.headers['x-bcms-ids'] as string).split('-');
-          return {
-            items: await BCMSWidgetRequestHandler.getMany(ids),
-          };
-        },
-      }),
-
-      count: createControllerMethod<
-        JWTPreRequestHandlerResult<BCMSUserCustomPool>,
-        { count: number }
-      >({
-        path: '/count',
-        type: 'get',
-        preRequestHandler: BCMSRouteProtection.createJwtPreRequestHandler(
-          [JWTRoleName.ADMIN, JWTRoleName.USER],
-          JWTPermissionName.READ,
-        ),
-        async handler() {
-          return {
-            count: await BCMSWidgetRequestHandler.count(),
-          };
-        },
-      }),
-
-      getById: createControllerMethod<
-        JWTPreRequestHandlerResult<BCMSUserCustomPool>,
-        { item: BCMSWidget }
-      >({
-        path: '/:id',
-        type: 'get',
-        preRequestHandler: BCMSRouteProtection.createJwtPreRequestHandler(
-          [JWTRoleName.ADMIN, JWTRoleName.USER],
-          JWTPermissionName.READ,
-        ),
-        async handler({ request, errorHandler }) {
-          return {
-            item: await BCMSWidgetRequestHandler.getById({
-              id: request.params.id,
-              errorHandler,
+            getAll: createControllerMethod<
+                RPApiKeyJwtCheckResult,
+                ControllerItemsResponse<Widget>
+            >({
+                path: '/all',
+                type: 'get',
+                openApi: {
+                    tags: [controllerName],
+                    security: [
+                        {
+                            accessToken: [],
+                        },
+                    ],
+                    summary: 'Get all widgets for specified instance',
+                    responses: {
+                        200: {
+                            description: 'OK',
+                            content: {
+                                'application/json': {
+                                    schema: controllerItemsResponseDefinitionForRef(
+                                        'Widget',
+                                    ),
+                                },
+                            },
+                        },
+                    },
+                },
+                preRequestHandler: RP.createApiKeyJwtCheck(),
+                async handler() {
+                    const items = await Repo.widget.findAll();
+                    return {
+                        items,
+                        total: items.length,
+                        limit: items.length,
+                        offset: 0,
+                    };
+                },
             }),
-          };
-        },
-      }),
 
-      create: createControllerMethod<
-        BCMSRouteProtectionJwtAndBodyCheckResult<BCMSWidgetCreateData>,
-        { item: BCMSWidget }
-      >({
-        type: 'post',
-        preRequestHandler:
-          BCMSRouteProtection.createJwtAndBodyCheckPreRequestHandler({
-            roleNames: [JWTRoleName.ADMIN],
-            permissionName: JWTPermissionName.WRITE,
-            bodySchema: BCMSWidgetCreateDataSchema,
-          }),
-        async handler({ body, errorHandler, accessToken, request }) {
-          return {
-            item: await BCMSWidgetRequestHandler.create({
-              sid: request.headers['x-bcms-sid'] as string,
-              body,
-              errorHandler,
-              accessToken,
+            getById: createControllerMethod<
+                RPApiKeyJwtCheckResult,
+                ControllerItemResponse<Widget>
+            >({
+                path: '/:widgetId',
+                type: 'get',
+                openApi: {
+                    tags: [controllerName],
+                    security: [
+                        {
+                            accessToken: [],
+                        },
+                    ],
+                    parameters: [
+                        {
+                            in: 'path',
+                            name: 'widgetId',
+                            required: true,
+                            schema: {
+                                type: 'string',
+                            },
+                        },
+                    ],
+                    summary: 'Get specified widget by its ID',
+                    responses: {
+                        200: {
+                            description: 'OK',
+                            content: {
+                                'application/json': {
+                                    schema: controllerItemResponseDefinitionForRef(
+                                        'Widget',
+                                    ),
+                                },
+                            },
+                        },
+                    },
+                },
+                preRequestHandler: RP.createApiKeyJwtCheck(),
+                async handler({ request, errorHandler }) {
+                    const params = request.params as {
+                        widgetId: string;
+                    };
+                    const widget = await Repo.widget.findById(params.widgetId);
+                    if (!widget) {
+                        throw errorHandler(
+                            HttpStatus.NotFound,
+                            `Widget with ID "${params.widgetId}" does not exist`,
+                        );
+                    }
+                    return {
+                        item: widget,
+                    };
+                },
             }),
-          };
-        },
-      }),
 
-      update: createControllerMethod<
-        BCMSRouteProtectionJwtAndBodyCheckResult<BCMSWidgetUpdateData>,
-        { item: BCMSWidget }
-      >({
-        type: 'put',
-        preRequestHandler:
-          BCMSRouteProtection.createJwtAndBodyCheckPreRequestHandler({
-            roleNames: [JWTRoleName.ADMIN],
-            permissionName: JWTPermissionName.WRITE,
-            bodySchema: BCMSWidgetUpdateDataSchema,
-          }),
-        async handler({ body, errorHandler, accessToken, request }) {
-          return {
-            item: await BCMSWidgetRequestHandler.update({
-              sid: request.headers['x-bcms-sid'] as string,
-              body,
-              errorHandler,
-              accessToken,
+            create: createControllerMethod<
+                RPJwtBodyCheckResult<WidgetCreateBody>,
+                ControllerItemResponse<Widget>
+            >({
+                path: '/create',
+                type: 'post',
+                openApi: {
+                    tags: [controllerName],
+                    security: [
+                        {
+                            accessToken: [],
+                        },
+                    ],
+                    summary: 'Create new widget in specified instance',
+                    requestBody: {
+                        content: {
+                            'application/json': {
+                                schema: {
+                                    $ref: openApiGetModelRef(
+                                        'WidgetCreateBody',
+                                    ),
+                                },
+                            },
+                        },
+                    },
+                    responses: {
+                        200: {
+                            description: 'OK',
+                            content: {
+                                'application/json': {
+                                    schema: controllerItemResponseDefinitionForRef(
+                                        'Widget',
+                                    ),
+                                },
+                            },
+                        },
+                    },
+                },
+                preRequestHandler: RP.createJwtBodyCheck(
+                    WidgetCreateBodySchema,
+                    ['ADMIN'],
+                ),
+                async handler({ body, errorHandler, token }) {
+                    let widget = WidgetFactory.create({
+                        previewImage: '',
+                        label: body.label,
+                        desc: body.desc,
+                        props: [],
+                        name: StringUtility.toSlug(body.label),
+                        userId: token.payload.userId,
+                    });
+                    if (await Repo.widget.methods.findByName(widget.name)) {
+                        throw errorHandler(
+                            HttpStatus.BadRequest,
+                            `Widget with name "${widget.name}" already exist. Widget name must be unique.`,
+                        );
+                    }
+                    widget = await Repo.widget.add(widget);
+                    SocketManager.channelEmit(
+                        ['global'],
+                        'widget',
+                        {
+                            type: 'update',
+                            widgetId: widget._id,
+                        },
+                        [token.payload.userId],
+                    );
+                    EventManager.trigger('add', 'widgets', widget).catch(
+                        (err) => console.error(err),
+                    );
+                    return {
+                        item: widget,
+                    };
+                },
             }),
-          };
-        },
-      }),
 
-      deleteById: createControllerMethod<
-        JWTPreRequestHandlerResult<BCMSUserCustomPool>,
-        { message: 'Success.' }
-      >({
-        path: '/:id',
-        type: 'delete',
-        preRequestHandler: BCMSRouteProtection.createJwtPreRequestHandler(
-          [JWTRoleName.ADMIN],
-          JWTPermissionName.DELETE,
-        ),
-        async handler({ request, errorHandler, accessToken, logger, name }) {
-          await BCMSWidgetRequestHandler.delete({
-            sid: request.headers['x-bcms-sid'] as string,
-            id: request.params.id,
-            errorHandler,
-            accessToken,
-            logger,
-            name,
-          });
-          return {
-            message: 'Success.',
-          };
-        },
-      }),
-    };
-  },
+            update: createControllerMethod<
+                RPJwtBodyCheckResult<WidgetUpdateBody>,
+                ControllerItemResponse<Widget>
+            >({
+                path: '/update',
+                type: 'put',
+                openApi: {
+                    tags: [controllerName],
+                    security: [
+                        {
+                            accessToken: [],
+                        },
+                    ],
+                    summary: 'Update existing widget information',
+                    requestBody: {
+                        content: {
+                            'application/json': {
+                                schema: {
+                                    $ref: openApiGetModelRef(
+                                        'WidgetUpdateBody',
+                                    ),
+                                },
+                            },
+                        },
+                    },
+                    responses: {
+                        200: {
+                            description: 'OK',
+                            content: {
+                                'application/json': {
+                                    schema: controllerItemResponseDefinitionForRef(
+                                        'Widget',
+                                    ),
+                                },
+                            },
+                        },
+                    },
+                },
+                preRequestHandler: RP.createJwtBodyCheck(
+                    WidgetUpdateBodySchema,
+                    ['ADMIN'],
+                ),
+                async handler({ body, errorHandler, token }) {
+                    let widget = await Repo.widget.findById(body._id);
+                    if (!widget) {
+                        throw errorHandler(
+                            HttpStatus.NotFound,
+                            `Widget with ID "${body._id}" does not exist`,
+                        );
+                    }
+                    let shouldUpdate = false;
+                    if (body.label && body.label !== widget.label) {
+                        const newName = StringUtility.toSlug(body.label);
+                        if (await Repo.widget.methods.findByName(newName)) {
+                            throw errorHandler(
+                                HttpStatus.BadRequest,
+                                `Widget with name "${widget.name}" already exist. Widget name must be unique.`,
+                            );
+                        }
+                        shouldUpdate = true;
+                        widget.label = body.label;
+                        widget.name = newName;
+                    }
+                    if (
+                        typeof body.desc === 'string' &&
+                        body.desc !== widget.desc
+                    ) {
+                        shouldUpdate = true;
+                        widget.desc = body.desc;
+                    }
+                    if (body.propChanges && body.propChanges.length > 0) {
+                        const updatedProps = propsApplyChanges(
+                            widget.props,
+                            body.propChanges,
+                            `(widget: ${widget.name}).props`,
+                            false,
+                            await Repo.media.findAll(),
+                            await Repo.group.findAll(),
+                            await Repo.widget.findAll(),
+                            await Repo.template.findAll(),
+                        );
+                        if (updatedProps instanceof Error) {
+                            throw errorHandler(
+                                HttpStatus.BadRequest,
+                                updatedProps.message,
+                            );
+                        }
+                        shouldUpdate = true;
+                        widget.props = updatedProps;
+                    }
+                    if (shouldUpdate) {
+                        widget = await Repo.widget.update(widget);
+                        SocketManager.channelEmit(
+                            ['global'],
+                            'widget',
+                            {
+                                type: 'update',
+                                widgetId: widget._id,
+                            },
+                            [token.payload.userId],
+                        );
+                        EventManager.trigger('update', 'widgets', widget).catch(
+                            (err) => console.error(err),
+                        );
+                    }
+                    return {
+                        item: widget,
+                    };
+                },
+            }),
+
+            deleteById: createControllerMethod<
+                RPJwtCheckResult,
+                ControllerItemResponse<Widget>
+            >({
+                path: '/:widgetId',
+                type: 'delete',
+                openApi: {
+                    tags: [controllerName],
+                    security: [
+                        {
+                            accessToken: [],
+                        },
+                    ],
+                    parameters: [
+                        {
+                            in: 'path',
+                            name: 'widgetId',
+                            required: true,
+                            schema: {
+                                type: 'string',
+                            },
+                        },
+                    ],
+                    summary: 'Delete group by its ID',
+                    description:
+                        'It is important to know that this method has side' +
+                        ' effects, all widget pointers to the deleted widget will be' +
+                        ' removed as well.',
+                    responses: {
+                        200: {
+                            description: 'OK',
+                            content: {
+                                'application/json': {
+                                    schema: controllerItemResponseDefinitionForRef(
+                                        'Widget',
+                                    ),
+                                },
+                            },
+                        },
+                    },
+                },
+                preRequestHandler: RP.createJwtCheck(['ADMIN']),
+                async handler({ request, errorHandler, token }) {
+                    const params = request.params as {
+                        widgetId: string;
+                    };
+                    const widget = await Repo.widget.findById(params.widgetId);
+                    if (!widget) {
+                        throw errorHandler(
+                            HttpStatus.NotFound,
+                            `Widget with ID "${params.widgetId}" does not exist`,
+                        );
+                    }
+                    await Repo.widget.deleteById(widget._id);
+                    SocketManager.channelEmit(
+                        ['global'],
+                        'widget',
+                        {
+                            type: 'delete',
+                            widgetId: widget._id,
+                        },
+                        [token.payload.userId],
+                    );
+                    EventManager.trigger('delete', 'widgets', widget).catch(
+                        (err) => console.error(err),
+                    );
+                    return {
+                        item: widget,
+                    };
+                },
+            }),
+        };
+    },
 });

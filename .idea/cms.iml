@@ -8,6 +8,22 @@
       <excludeFolder url="file://$MODULE_DIR$/backend/uploads" />
       <excludeFolder url="file://$MODULE_DIR$/temp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
+      <excludeFolder url="file://$MODULE_DIR$/db" />
+      <excludeFolder url="file://$MODULE_DIR$/uploads" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/backups" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/additional" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/events" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/functions" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/jobs" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/plugins" />
+      <excludeFolder url="file://$MODULE_DIR$/backend/dist-utils" />
+      <excludeFolder url="file://$MODULE_DIR$/client/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/ui/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/ui/dist-components" />
+      <excludeFolder url="file://$MODULE_DIR$/ui/src/dist-components" />
+      <excludeFolder url="file://$MODULE_DIR$/cli/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/ui/dist-sdk" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

@@ -1,85 +1,68 @@
-import * as path from 'path';
-import { Module, ObjectUtilityError } from '@becomes/purple-cheetah/types';
-import { useFS, useLogger, useObjectUtility } from '@becomes/purple-cheetah';
+import type { Module } from '@bcms/selfhosted-backend/_server';
+import { FS } from '@bcms/selfhosted-utils/fs';
+import path from 'path';
+import {
+    ObjectUtility,
+    ObjectUtilityError,
+} from '@bcms/selfhosted-utils/object-utility';
+import {
+    type BCMSJob,
+    BCMSJobSchema,
+} from '@bcms/selfhosted-backend/job/models/main';
 import { CronJob } from 'cron';
-import { BCMSJob, BCMSJobSchema } from '../types';
 
-export function createBcmsJobModule(): Module {
-  return {
-    name: 'Job',
-    initialize(moduleConfig) {
-      const jobsPath = path.join(process.cwd(), 'jobs');
-      const objectUtil = useObjectUtility();
-      const fs = useFS();
-      const logger = useLogger({ name: 'Job' });
-
-      fs.exist(jobsPath)
-        .then(async (result) => {
-          if (result) {
-            const files = await fs.readdir(jobsPath);
-            for (let i = 0; i < files.length; i++) {
-              const fileName = files[i];
-              if (
+export function createBcmsJobs(): Module {
+    async function init() {
+        const fs = new FS(path.join(process.cwd(), 'jobs'));
+        if (!(await fs.exist(''))) {
+            return;
+        }
+        const fileNames = await fs.readdir('');
+        for (let i = 0; i < fileNames.length; i++) {
+            const fileName = fileNames[i];
+            if (
                 fileName.endsWith('.js') ||
                 (!fileName.endsWith('.d.ts') && fileName.endsWith('.ts'))
-              ) {
-                const jobFn: { default: () => Promise<BCMSJob> } = await import(
-                  path.join(jobsPath, fileName)
-                );
-                const checkFn = objectUtil.compareWithSchema(
-                  { fn: jobFn.default },
-                  {
-                    fn: {
-                      __type: 'function',
-                      __required: true,
-                    },
-                  },
-                  fileName,
+            ) {
+                const jobImport: {
+                    default(): Promise<BCMSJob>;
+                } = await import(path.join(fs.baseRoot, fileName));
+                if (typeof jobImport.default !== 'function') {
+                    throw Error(
+                        `There is no default function export in: ${fileName}`,
+                    );
+                }
+                const job = await jobImport.default();
+                const checkFn = ObjectUtility.compareWithSchema(
+                    job,
+                    BCMSJobSchema,
+                    fileName,
                 );
                 if (checkFn instanceof ObjectUtilityError) {
-                  moduleConfig.next(Error(checkFn.message));
-                  return;
+                    throw Error(checkFn.message);
                 }
-                const job = await jobFn.default();
-                const checkObject = objectUtil.compareWithSchema(
-                  job,
-                  BCMSJobSchema,
-                  fileName,
+                new CronJob(
+                    job.cronTime,
+                    async () => {
+                        try {
+                            await job.handler();
+                        } catch (err) {
+                            console.error(err);
+                        }
+                    },
+                    null,
+                    true,
                 );
-                if (checkObject instanceof ObjectUtilityError) {
-                  moduleConfig.next(Error(checkObject.message));
-                  return;
-                }
-                const cronJob = new CronJob(
-                  [
-                    job.cron.minute,
-                    job.cron.hour,
-                    job.cron.dayOfMonth,
-                    job.cron.month,
-                    job.cron.dayOfWeek,
-                  ].join(' '),
-                  async () => {
-                    try {
-                      await job.handler();
-                    } catch (error) {
-                      logger.error(
-                        '',
-                        'Job was killed due to unhandled error.',
-                      );
-                      logger.error(path.join(jobsPath, fileName), error);
-                      cronJob.stop();
-                    }
-                  },
-                );
-                cronJob.start();
-              }
             }
-          }
-          moduleConfig.next();
-        })
-        .catch((error) => {
-          moduleConfig.next(error);
-        });
-    },
-  };
+        }
+    }
+
+    return {
+        name: 'Job mount',
+        initialize({ next }) {
+            init()
+                .then(() => next())
+                .catch((err) => next(err));
+        },
+    };
 }

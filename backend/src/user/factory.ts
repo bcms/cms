@@ -1,129 +1,28 @@
-import * as crypto from 'crypto';
-import { Types } from 'mongoose';
-import type { BCMSUser, BCMSUserFactory } from '../types';
-import {
-  JWTPermissionName,
-  JWTRoleName,
-} from '@becomes/purple-cheetah-mod-jwt/types';
+import type {
+    User,
+    UserProtected,
+} from '@bcms/selfhosted-backend/user/models/main';
+import { ObjectId } from '@fastify/mongodb';
 
-export function createBcmsUserFactory(): BCMSUserFactory {
-  return {
-    create(data) {
-      const user: BCMSUser = {
-        _id: `${new Types.ObjectId()}`,
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-        email: data.email || '',
-        username: data.username || '',
-        password: data.password || '',
-        roles: data.roles || [
-          {
-            name: JWTRoleName.USER,
-            permissions: [
-              {
-                name: JWTPermissionName.READ,
-              },
-              {
-                name: JWTPermissionName.WRITE,
-              },
-              {
-                name: JWTPermissionName.DELETE,
-              },
-              {
-                name: JWTPermissionName.EXECUTE,
-              },
-            ],
-          },
-        ],
-        customPool: data.customPool || {
-          personal: {
-            firstName: '',
-            lastName: '',
-            avatarUri: '',
-          },
-          address: {},
-          policy: {
-            media: {
-              get: false,
-              post: false,
-              put: false,
-              delete: false,
-            },
-            templates: [],
-            plugins: [],
-          },
-        },
-      };
+export class UserFactory {
+    static create(data: Omit<User, '_id' | 'createdAt' | 'updatedAt'>): User {
+        return {
+            _id: new ObjectId().toString(),
+            createdAt: Date.now(),
+            updatedAt: Date.now(),
+            ...data,
+        };
+    }
 
-      return user;
-    },
-    toProtected(user) {
-      return JSON.parse(
-        JSON.stringify({
-          _id: user._id,
-          email: user.email,
-          roles: user.roles,
-          username: user.username,
-          createdAt: user.createdAt,
-          updatedAt: user.updatedAt,
-          customPool: user.customPool,
-        }),
-      );
-    },
-    cloudUserToUser(cloudUser, policy) {
-      return {
-        _id: cloudUser._id,
-        createdAt: cloudUser.createdAt,
-        updatedAt: cloudUser.updatedAt,
-        email: cloudUser.email,
-        username: cloudUser.username,
-        password: crypto.randomBytes(64).toString('base64'),
-        customPool: {
-          address: {
-            city: '',
-            country: '',
-            state: '',
-            street: {
-              name: '',
-              number: '',
-            },
-            zip: '',
-          },
-          personal: cloudUser.personal,
-          policy: policy || {
-            media: {
-              delete: false,
-              get: false,
-              post: false,
-              put: false,
-            },
-            templates: [],
-            plugins: [],
-          },
-        },
-        roles: [
-          {
-            name:
-              cloudUser.roles[0].name === JWTRoleName.ADMIN
-                ? JWTRoleName.ADMIN
-                : JWTRoleName.USER,
-            permissions: [
-              {
-                name: JWTPermissionName.READ,
-              },
-              {
-                name: JWTPermissionName.WRITE,
-              },
-              {
-                name: JWTPermissionName.DELETE,
-              },
-              {
-                name: JWTPermissionName.EXECUTE,
-              },
-            ],
-          },
-        ],
-      };
-    },
-  };
+    static toProtected(user: User): UserProtected {
+        return {
+            _id: user._id,
+            createdAt: user.createdAt,
+            updatedAt: user.updatedAt,
+            roles: user.roles,
+            customPool: user.customPool,
+            email: user.email,
+            username: user.username,
+        };
+    }
 }

@@ -1,75 +1,93 @@
-import {
-  BCMSClientCacheManager,
-  BCMSClientSocketHandler,
-  BCMSClientTemplateHandler,
-  BCMSSocketEventName,
-  BCMSSocketEventType,
-  BCMSSocketTemplateEvent,
-  BCMSTemplate,
-  SendFunction,
-} from '../types';
+import { MemCache } from '@bcms/selfhosted-utils/mem-cache';
+import type { Template } from '@bcms/selfhosted-backend/template/models/main';
+import type { Client } from '@bcms/selfhosted-client/main';
+import type {
+    TemplateUpdateBody,
+    TemplateWhereIsItUsedResult,
+} from '@bcms/selfhosted-backend/template/models/controller';
+import type {
+    ControllerItemResponse,
+    ControllerItemsResponse,
+} from '@bcms/selfhosted-backend/util/controller';
 
-export function createBcmsClientTemplateHandler({
-  send,
-  enableCache,
-  socket,
-  cacheManager,
-}: {
-  send: SendFunction;
-  enableCache?: boolean;
-  socket: BCMSClientSocketHandler;
-  cacheManager: BCMSClientCacheManager;
-}): BCMSClientTemplateHandler {
-  const basePath = '/template';
+export class TemplateHandler {
+    private baseUri = '/api/v4/template';
+    private latch: {
+        [name: string]: boolean;
+    } = {};
+    private cache = new MemCache<Template>('_id');
 
-  if (enableCache) {
-    socket.subscribe(BCMSSocketEventName.TEMPLATE, async (event) => {
-      const data = event.data as BCMSSocketTemplateEvent;
-      if (data.t === BCMSSocketEventType.UPDATE) {
-        if (cacheManager.template.findOne((e) => e._id === data.tm)) {
-          await self.get({ template: data.tm });
+    constructor(private client: Client) {
+        if (this.client.enableSocket) {
+            this.client.socket.register('template', async (data) => {
+                if (data.type === 'update') {
+                    const cacheHit = this.cache.findById(data.templateId);
+                    if (cacheHit) {
+                        await this.getById(data.templateId, true);
+                    }
+                } else {
+                    this.cache.remove(data.templateId);
+                }
+            });
         }
-      } else {
-        cacheManager.template.remove(data.tm);
-      }
-    });
-  }
+    }
 
-  const self: BCMSClientTemplateHandler = {
-    async getAll(data) {
-      const skipCache = data && data.skipCache;
-      if (!skipCache && enableCache && cacheManager.template.all) {
-        return cacheManager.template.items();
-      }
-      const result = await send<{ items: BCMSTemplate[] }>({
-        url: `${basePath}/all`,
-        method: 'GET',
-      });
-      if (enableCache) {
-        cacheManager.template.all = true;
-        cacheManager.template.set(result.items);
-      }
-      return result.items;
-    },
-    async get(data) {
-      if (!data.skipCache && enableCache) {
-        const cacheHit = cacheManager.template.findOne(
-          (e) => e._id === data.template || e.name === data.template,
-        );
-        if (cacheHit) {
-          return cacheHit;
+    async whereIsItUsed(templateId: string) {
+        return await this.client.send<TemplateWhereIsItUsedResult>({
+            url: `${this.baseUri}/${templateId}`,
+        });
+    }
+
+    async getAll(skipCache?: boolean) {
+        if (!skipCache && this.client.useMemCache && this.latch.all) {
+            return this.cache.items;
         }
-      }
-      const result = await send<{ item: BCMSTemplate }>({
-        url: `${basePath}/${data.template}`,
-        method: 'GET',
-      });
-      if (enableCache) {
-        cacheManager.template.set(result.item);
-      }
-      return result.item;
-    },
-  };
+        const res = await this.client.send<ControllerItemsResponse<Template>>({
+            url: `${this.baseUri}/all`,
+        });
+        if (this.client.useMemCache) {
+            this.cache.items = res.items;
+            this.latch.all = true;
+        }
+        return res.items;
+    }
 
-  return self;
+    async getById(templateId: string, skipCache?: boolean) {
+        if (!skipCache && this.client.useMemCache) {
+            const cacheHit = this.cache.findById(templateId);
+            if (cacheHit) {
+                return cacheHit;
+            }
+        }
+        const res = await this.client.send<ControllerItemResponse<Template>>({
+            url: `${this.baseUri}/${templateId}`,
+        });
+        if (this.client.useMemCache) {
+            this.cache.set(res.item);
+        }
+        return res.item;
+    }
+
+    async update(templateId: string, data: TemplateUpdateBody) {
+        const res = await this.client.send<ControllerItemResponse<Template>>({
+            url: `${this.baseUri}/${templateId}/update`,
+            method: 'PUT',
+            data,
+        });
+        if (this.client.useMemCache) {
+            this.cache.set(res.item);
+        }
+        return res.item;
+    }
+
+    async deleteById(templateId: string) {
+        const res = await this.client.send<ControllerItemResponse<Template>>({
+            url: `${this.baseUri}/${templateId}`,
+            method: 'DELETE',
+        });
+        if (this.client.useMemCache) {
+            this.cache.remove(templateId);
+        }
+        return res.item;
+    }
 }

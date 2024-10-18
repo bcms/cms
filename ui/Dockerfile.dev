@@ -1,9 +1,9 @@
-FROM node:16-slim
+FROM node:20-slim
 
 WORKDIR /app
 
 COPY . /app
 
-RUN npm i && cd sdk && npm i
+RUN mkdir /backend && npm i
 
 ENTRYPOINT ["npm", "run", "dev"]

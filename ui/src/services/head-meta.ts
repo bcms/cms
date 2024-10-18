@@ -1,17 +1,20 @@
-import type { BCMSHeadMetaService } from '../types';
-
-let service: BCMSHeadMetaService;
-
-export function createBcmsHeadMetaService(): void {
-  service = {
-    set(options) {
-      if (options.title) {
-        document.title = `${options.title} | BCMS`;
-      }
-    },
-  };
+export interface HeadMetaService {
+    set(options: { title?: string }): void;
 }
 
-export function useBcmsHeadMetaService(): BCMSHeadMetaService {
-  return service;
+let service: HeadMetaService;
+
+export function createHeadMetaService() {
+    service = {
+        set(options) {
+            if (options.title) {
+                document.title = `${options.title} | BCMS`;
+            }
+        },
+    };
+    return service;
+}
+
+export function useHeadMetaService(): HeadMetaService {
+    return service;
 }

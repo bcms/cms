@@ -1,0 +1,10 @@
+FROM node:20-slim
+
+COPY . /app
+
+WORKDIR /app/backend
+
+RUN apt update && apt install ffmpeg zip unzip -y
+RUN npm i
+
+ENTRYPOINT ["npm", "run", "dev"]

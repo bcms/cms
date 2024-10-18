@@ -1,0 +1,22 @@
+{
+    "compilerOptions": {
+        "module": "ES2020",
+        "declaration": true,
+        "declarationMap": false,
+        "sourceMap": false,
+        "removeComments": false,
+        "strict": true,
+        "target": "ES2022",
+        "outDir": "./dist-utils/mjs",
+        "baseUrl": "./src/_utils",
+        "incremental": false,
+        "skipLibCheck": true,
+        "noUnusedParameters": true,
+        "esModuleInterop": true,
+        "moduleResolution": "Node",
+        "paths": {
+            "@bcms/selfhosted-utils/*": ["./*"]
+        }
+    },
+    "include": ["src/_utils"]
+}

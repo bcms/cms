@@ -1,664 +1,821 @@
-import * as path from 'path';
+import crypto from 'crypto';
 import {
-  createController,
-  createControllerMethod,
-  createQueue,
-  useFS,
-} from '@becomes/purple-cheetah';
-import { useJwt } from '@becomes/purple-cheetah-mod-jwt';
+    createController,
+    createControllerMethod,
+    HttpStatus,
+} from '@bcms/selfhosted-backend/_server';
 import {
-  JWTError,
-  JWTManager,
-  JWTPermissionName,
-  JWTPreRequestHandlerResult,
-  JWTRoleName,
-} from '@becomes/purple-cheetah-mod-jwt/types';
-import { FS, HTTPError, HTTPStatus } from '@becomes/purple-cheetah/types';
+    RP,
+    type RPApiKeyJwtCheckResult,
+    type RPJwtBodyCheckResult,
+    type RPJwtCheckResult,
+} from '@bcms/selfhosted-backend/security/route-protection/main';
+import type {
+    ControllerItemResponse,
+    ControllerItemsResponse,
+} from '@bcms/selfhosted-backend/util/controller';
 import {
-  BCMSRouteProtectionJwtAndBodyCheckResult,
-  BCMSMedia,
-  BCMSMediaAddDirData,
-  BCMSMediaAddDirDataSchema,
-  BCMSMediaAggregate,
-  BCMSMediaDuplicateData,
-  BCMSMediaDuplicateDataSchema,
-  BCMSMediaMoveData,
-  BCMSMediaMoveDataSchema,
-  BCMSMediaType,
-  BCMSMediaUpdateData,
-  BCMSMediaUpdateDataSchema,
-  BCMSUserCustomPool,
-} from '../types';
-import { BCMSRouteProtection } from '../util';
-import { BCMSRepo } from '@backend/repo';
-import { bcmsResCode } from '@backend/response-code';
-import { BCMSMediaService } from './service';
-import { BCMSMediaRequestHandler } from './request-handler';
-import { BCMSImageProcessor } from './image-processor';
-import type { Request } from 'express';
+    type Media,
+    MediaType,
+} from '@bcms/selfhosted-backend/media/models/main';
+import {
+    controllerItemResponseDefinitionForRef,
+    controllerItemsResponseDefinitionForRef,
+    openApiGetModelRef,
+} from '@bcms/selfhosted-backend/open-api/schema';
+import { Repo } from '@bcms/selfhosted-backend/repo';
+import {
+    type MediaCreateDirBody,
+    MediaCreateDirBodySchema,
+    type MediaDeleteBody,
+    MediaDeleteBodySchema,
+    type MediaGetBinBody,
+    MediaGetBinBodySchema,
+    type MediaRequestUploadTokenResult,
+    type MediaUpdateBody,
+    MediaUpdateBodySchema,
+} from '@bcms/selfhosted-backend/media/models/controller';
+import {
+    ObjectUtility,
+    ObjectUtilityError,
+} from '@bcms/selfhosted-utils/object-utility';
+import { MediaStorage } from '@bcms/selfhosted-backend/media/storage';
+import { keyValueStore } from '@bcms/selfhosted-backend/key-value-store';
+import { MediaFactory } from '@bcms/selfhosted-backend/media/factory';
+import { mimetypeToMediaType } from '@bcms/selfhosted-backend/media/mimetype';
+import { SocketManager } from '@bcms/selfhosted-backend/socket/manager';
+import { EventManager } from '@bcms/selfhosted-backend/event/manager';
 
-interface Setup {
-  jwt: JWTManager;
-  fs: FS;
-}
-export const BCMSMediaController = createController<Setup>({
-  name: 'Media controller',
-  path: '/api/media',
-  setup() {
-    return {
-      jwt: useJwt(),
-      fs: useFS({
-        base: process.cwd(),
-      }),
-    };
-  },
-  methods({ jwt, fs }) {
-    const imageProcessQueue = createQueue();
-    async function getBinFile(
-      request: Request,
-      errorHandler: HTTPError,
-    ): Promise<{
-      __file: string;
-    }> {
-      const apiKey = await BCMSRepo.apiKey.findById(request.params.keyId);
-      if (!apiKey) {
-        throw errorHandler.occurred(
-          HTTPStatus.NOT_FOUNT,
-          bcmsResCode('mda001', { id: request.params.id }),
-        );
-      }
-      const media = await BCMSRepo.media.findById(request.params.id);
-      if (!media) {
-        throw errorHandler.occurred(
-          HTTPStatus.NOT_FOUNT,
-          bcmsResCode('mda001', { id: request.params.id }),
-        );
-      }
-      if (media.type === BCMSMediaType.DIR) {
-        throw errorHandler.occurred(
-          HTTPStatus.FORBIDDEN,
-          bcmsResCode('mda007', { id: request.params.id }),
-        );
-      }
-      const queryParts = Buffer.from(request.params.fileOptions, 'hex')
-        .toString()
-        .split('&');
-      const query: {
-        [name: string]: string;
-      } = {};
-      for (let i = 0; i < queryParts.length; i++) {
-        const part = queryParts[i];
-        const keyValue = part.split('=');
-        if (keyValue.length === 2) {
-          query[keyValue[0]] = keyValue[1];
-        }
-      }
-
-      if (
-        query.ops &&
-        (media.mimetype === 'image/jpeg' ||
-          media.mimetype === 'image/jpg' ||
-          media.mimetype === 'image/png')
-      ) {
-        let idx = parseInt(query.idx as string, 10);
-        if (isNaN(idx) || idx < 0) {
-          idx = 0;
-        }
-        const filePath = path.join(
-          process.cwd(),
-          'uploads',
-          media._id,
-          query.ops,
-          media.name,
-        );
-        const filePathParts = filePath.split('.');
-        const firstPart = filePathParts
-          .slice(0, filePathParts.length - 1)
-          .join('.');
-        const lastPart = filePathParts[filePathParts.length - 1];
-        const outputFilePath = `${firstPart}_${idx}.${
-          query.webp ? 'webp' : lastPart
-        }`;
-        if (!(await fs.exist(outputFilePath, true))) {
-          const options = BCMSImageProcessor.stringToOptions(query.ops + '');
-          const mediaPath = path.join(
-            process.cwd(),
-            'uploads',
-            await BCMSMediaService.getPath(media),
-          );
-          await imageProcessQueue({
-            name: request.originalUrl,
-            handler: async () => {
-              await BCMSImageProcessor.process({
-                media,
-                pathToSrc: mediaPath,
-                options,
-              });
-            },
-          }).wait;
-        }
+export const MediaController = createController({
+    name: 'Media',
+    path: '/api/v4/media',
+    methods({ controllerName }) {
         return {
-          __file: outputFilePath,
+            getAll: createControllerMethod<
+                RPApiKeyJwtCheckResult,
+                ControllerItemsResponse<Media>
+            >({
+                path: '/all',
+                type: 'get',
+                openApi: {
+                    tags: [controllerName],
+                    security: [
+                        {
+                            accessToken: [],
+                        },
+                    ],
+                    summary: 'Get all media files metadata',
+                    responses: {
+                        200: {
+                            description: 'OK',
+                            content: {
+                                'application/json': {
+                                    schema: controllerItemsResponseDefinitionForRef(
+                                        'Media',
+                                    ),
+                                },
+                            },
+                        },
+                    },
+                },
+                preRequestHandler: RP.createApiKeyJwtCheck(),
+                async handler() {
+                    const items = await Repo.media.findAll();
+                    return {
+                        items,
+                        limit: items.length,
+                        total: items.length,
+                        offset: 0,
+                    };
+                },
+            }),
+
+            getById: createControllerMethod<
+                RPApiKeyJwtCheckResult,
+                ControllerItemResponse<Media>
+            >({
+                path: '/:mediaId',
+                type: 'get',
+                openApi: {
+                    tags: [controllerName],
+                    security: [
+                        {
+                            accessToken: [],
+                        },
+                    ],
+                    parameters: [
+                        {
+                            in: 'path',
+                            name: 'mediaId',
+                            required: true,
+                            schema: {
+                                type: 'string',
+                            },
+                        },
+                    ],
+                    summary: 'Get media file metadata by its ID',
+                    responses: {
+                        200: {
+                            description: 'OK',
+                            content: {
+                                'application/json': {
+                                    schema: controllerItemResponseDefinitionForRef(
+                                        'Media',
+                                    ),
+                                },
+                            },
+                        },
+                    },
+                },
+                preRequestHandler: RP.createApiKeyJwtCheck(),
+                async handler({ request, errorHandler }) {
+                    const params = request.params as {
+                        mediaId: string;
+                    };
+                    const media = await Repo.media.findById(params.mediaId);
+                    if (!media) {
+                        throw errorHandler(
+                            HttpStatus.NotFound,
+                            `Media with ID "${params.mediaId}" does not exist`,
+                        );
+                    }
+                    return {
+                        item: media,
+                    };
+                },
+            }),
+
+            bin: createControllerMethod<RPApiKeyJwtCheckResult, void>({
+                path: '/:mediaId/bin/:filename',
+                type: 'get',
+                openApi: {
+                    tags: [controllerName],
+                    security: [
+                        {
+                            accessToken: [],
+                        },
+                    ],
+                    parameters: [
+                        {
+                            in: 'path',
+                            name: 'mediaId',
+                            required: true,
+                            schema: {
+                                type: 'string',
+                            },
+                        },
+                        {
+                            in: 'path',
+                            name: 'filename',
+                            required: true,
+                            schema: {
+                                type: 'string',
+                            },
+                        },
+                        {
+                            in: 'query',
+                            name: 'data',
+                            required: true,
+                            schema: {
+                                type: 'string',
+                            },
+                        },
+                    ],
+                    summary: 'Get binary data for specified media',
+                    responses: {
+                        200: {
+                            description: 'OK',
+                            content: {
+                                'multipart/form-data': {
+                                    schema: {
+                                        type: 'string',
+                                        format: 'binary',
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                preRequestHandler: RP.createApiKeyJwtCheck(),
+                async handler({ errorHandler, reply, request }) {
+                    const params = request.params as {
+                        mediaId: string;
+                        filename: string;
+                    };
+                    const query = request.query as {
+                        data?: string;
+                    };
+                    let data: MediaGetBinBody = {
+                        thumbnail: false,
+                    };
+                    if (query.data) {
+                        try {
+                            data = JSON.parse(
+                                Buffer.from(query.data, 'hex').toString(),
+                            );
+                        } catch (err) {
+                            throw errorHandler(
+                                HttpStatus.BadRequest,
+                                'Invalid data query format',
+                            );
+                        }
+                    }
+                    const dataCheck = ObjectUtility.compareWithSchema(
+                        data,
+                        MediaGetBinBodySchema,
+                        'query.data',
+                    );
+                    if (dataCheck instanceof ObjectUtilityError) {
+                        throw errorHandler(
+                            HttpStatus.BadRequest,
+                            dataCheck.message,
+                        );
+                    }
+                    const media = await Repo.media.findById(params.mediaId);
+                    if (!media) {
+                        throw errorHandler(
+                            HttpStatus.NotFound,
+                            `Media with ID "${params.mediaId}" does not exist`,
+                        );
+                    }
+                    if (media.type === MediaType.DIR) {
+                        throw errorHandler(
+                            HttpStatus.BadRequest,
+                            'Directories do not have binary information',
+                        );
+                    }
+                    if (data.image) {
+                        const res = await MediaStorage.imageProcessOrGet(
+                            media,
+                            data.image,
+                        );
+                        reply.header('Content-Type', res.mimetype);
+                        reply.header('Cache-Control', 'max-age=86400');
+                        // reply.header('Content-Length', res.buffer.length);
+                        // reply.header(
+                        //     'Content-Disposition',
+                        //     `${
+                        //         data.view ? 'inline' : 'attachment'
+                        //     }; filename="${encodeURIComponent(media.name)}"`,
+                        // );
+                        return reply.send(res.buffer);
+                    } else {
+                        const stream = await MediaStorage.readStream(media, {
+                            thumbnail: data.thumbnail,
+                        });
+                        if (!stream) {
+                            throw errorHandler(
+                                HttpStatus.InternalServerError,
+                                `Failed to find binary data for this media`,
+                            );
+                        }
+                        reply.header('Content-Type', media.mimetype);
+                        reply.header('Cache-Control', 'max-age=86400');
+                        // reply.header('Content-Length', media.size);
+                        // reply.header(
+                        //     'Content-Disposition',
+                        //     `${
+                        //         data.view ? 'inline' : 'attachment'
+                        //     }; filename="${encodeURIComponent(media.name)}"`,
+                        // );
+                        // reply.header(
+                        //     'Content-Disposition',
+                        //     `${
+                        //         data.view ? 'inline' : 'attachment'
+                        //     }; filename="${media.name}"`,
+                        // );
+                        return reply.send(stream);
+                    }
+                },
+            }),
+
+            requestUploadToken: createControllerMethod<
+                RPJwtCheckResult,
+                MediaRequestUploadTokenResult
+            >({
+                path: '/request/upload-token',
+                type: 'get',
+                openApi: {
+                    tags: [controllerName],
+                    security: [
+                        {
+                            accessToken: [],
+                        },
+                    ],
+                    summary: 'Get media upload token',
+                    description:
+                        'This token is required to successfully upload binary file.',
+                    responses: {
+                        200: {
+                            description: 'OK',
+                            content: {
+                                'application/json': {
+                                    schema: {
+                                        $ref: openApiGetModelRef(
+                                            'MediaRequestUploadTokenResult',
+                                        ),
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                preRequestHandler: RP.createJwtCheck(),
+                async handler({ token }) {
+                    const uploadToken =
+                        crypto
+                            .createHash('sha256')
+                            .update(
+                                Date.now() + crypto.randomBytes(16).toString(),
+                            )
+                            .digest('hex') + `.`;
+                    keyValueStore.set(
+                        `media_upload_token.${token.payload.userId}`,
+                        `${token.payload.userId}.${uploadToken}.`,
+                        {
+                            expIn: 900,
+                        },
+                    );
+                    return {
+                        token: `${token.payload.userId}.${uploadToken}.`,
+                    };
+                },
+            }),
+
+            createDir: createControllerMethod<
+                RPJwtBodyCheckResult<MediaCreateDirBody>,
+                ControllerItemResponse<Media>
+            >({
+                path: '/create/dir',
+                type: 'post',
+                openApi: {
+                    tags: [controllerName],
+                    security: [
+                        {
+                            accessToken: [],
+                        },
+                    ],
+                    summary: 'Create media of type DIR',
+                    requestBody: {
+                        content: {
+                            'application/json': {
+                                schema: {
+                                    $ref: openApiGetModelRef(
+                                        'MediaCreateDirBody',
+                                    ),
+                                },
+                            },
+                        },
+                    },
+                    responses: {
+                        200: {
+                            description: 'OK',
+                            content: {
+                                'application/json': {
+                                    schema: controllerItemResponseDefinitionForRef(
+                                        'Media',
+                                    ),
+                                },
+                            },
+                        },
+                    },
+                },
+                preRequestHandler: RP.createJwtBodyCheck(
+                    MediaCreateDirBodySchema,
+                ),
+                async handler({ token, body, errorHandler }) {
+                    if (body.parentId) {
+                        if (
+                            await Repo.media.methods.findByParentIdAndName(
+                                body.parentId,
+                                body.name,
+                            )
+                        ) {
+                            throw errorHandler(
+                                HttpStatus.BadRequest,
+                                `Media with name "${body.name}" already exist`,
+                            );
+                        }
+                        if (!(await Repo.media.findById(body.parentId))) {
+                            throw errorHandler(
+                                HttpStatus.NotFound,
+                                `Parent media with ID "${body.parentId}" does not exist`,
+                            );
+                        }
+                    } else {
+                        if (
+                            await Repo.media.methods.findInRootByName(body.name)
+                        ) {
+                            throw errorHandler(
+                                HttpStatus.BadRequest,
+                                `Media with name "${body.name}" already exist`,
+                            );
+                        }
+                    }
+                    const media = await Repo.media.add(
+                        MediaFactory.create({
+                            type: MediaType.DIR,
+                            isInRoot: !body.parentId,
+                            parentId: body.parentId || '',
+                            name: body.name,
+                            altText: '',
+                            caption: '',
+                            hasChildren: true,
+                            height: -1,
+                            width: -1,
+                            mimetype: 'dir',
+                            size: 4096,
+                            userId: token.payload.userId,
+                        }),
+                    );
+                    EventManager.trigger('add', 'media', media).catch((err) =>
+                        console.error(err),
+                    );
+                    return {
+                        item: media,
+                    };
+                },
+            }),
+
+            createFile: createControllerMethod<
+                void,
+                ControllerItemResponse<Media>
+            >({
+                path: '/create/file',
+                type: 'post',
+                openApi: {
+                    tags: [controllerName],
+                    security: [
+                        {
+                            accessToken: [],
+                        },
+                    ],
+                    summary: 'Upload media file',
+                    parameters: [
+                        {
+                            in: 'query',
+                            name: 'parentId',
+                            required: false,
+                            schema: {
+                                type: 'string',
+                            },
+                        },
+                        {
+                            in: 'query',
+                            name: 'token',
+                            description: 'Media upload token',
+                            required: true,
+                            schema: {
+                                type: 'string',
+                            },
+                        },
+                    ],
+                    requestBody: {
+                        content: {
+                            'multipart/form-data': {
+                                schema: {
+                                    type: 'object',
+                                    required: ['file'],
+                                    properties: {
+                                        file: {
+                                            type: 'string',
+                                            format: 'binary',
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                    responses: {
+                        200: {
+                            description: 'OK',
+                            content: {
+                                'application/json': {
+                                    schema: controllerItemResponseDefinitionForRef(
+                                        'Media',
+                                    ),
+                                },
+                            },
+                        },
+                    },
+                },
+                async handler({ request, errorHandler }) {
+                    const query = request.query as {
+                        parentId?: string;
+                        token?: string;
+                    };
+                    if (typeof query.token !== 'string') {
+                        throw errorHandler(
+                            HttpStatus.Unauthorized,
+                            'Missing upload token',
+                        );
+                    }
+                    const tokenParts = query.token.split('.');
+                    const userId = tokenParts[0];
+                    if (
+                        query.token !==
+                        keyValueStore.getDel(`media_upload_token.${userId}`)
+                    ) {
+                        throw errorHandler(
+                            HttpStatus.Unauthorized,
+                            'Invalid upload token',
+                        );
+                    }
+                    const file = await request.file({
+                        limits: {
+                            // Limit file size to 100MB
+                            fileSize: 104857600,
+                        },
+                    });
+                    if (!file) {
+                        throw errorHandler(
+                            HttpStatus.NotFound,
+                            'Missing upload file',
+                        );
+                    }
+                    const fileBuffer = await file.toBuffer();
+                    let media = MediaFactory.create({
+                        width: -1,
+                        height: -1,
+                        size: fileBuffer.length,
+                        userId,
+                        caption: '',
+                        altText: '',
+                        mimetype: file.mimetype,
+                        hasChildren: false,
+                        name: file.filename,
+                        parentId: query.parentId ? query.parentId : '',
+                        isInRoot: !query.parentId,
+                        type: mimetypeToMediaType(file.mimetype),
+                    });
+                    if (
+                        await Repo.media.methods.findByParentIdAndName(
+                            media.parentId,
+                            media.name,
+                        )
+                    ) {
+                        const nameParts = media.name.split('.');
+                        const hash = crypto.randomBytes(8).toString('hex');
+                        if (nameParts.length > 1) {
+                            media.name =
+                                nameParts[0] +
+                                '-' +
+                                hash +
+                                '.' +
+                                nameParts.slice(1, nameParts.length).join('.');
+                        } else {
+                            media.name = media.name + '-' + hash;
+                        }
+                    }
+                    await MediaStorage.save(media, fileBuffer);
+                    media = await Repo.media.add(media);
+                    SocketManager.channelEmit(
+                        ['global'],
+                        'media',
+                        {
+                            type: 'update',
+                            mediaId: media._id,
+                        },
+                        [userId],
+                    );
+                    EventManager.trigger('add', 'media', media).catch((err) =>
+                        console.error(err),
+                    );
+                    return {
+                        item: media,
+                    };
+                },
+            }),
+
+            update: createControllerMethod<
+                RPJwtBodyCheckResult<MediaUpdateBody>,
+                ControllerItemResponse<Media>
+            >({
+                path: '/update',
+                type: 'put',
+                openApi: {
+                    tags: [controllerName],
+                    security: [
+                        {
+                            accessToken: [],
+                        },
+                    ],
+                    summary: 'Update existing media metadata',
+                    requestBody: {
+                        content: {
+                            'application/json': {
+                                schema: {
+                                    $ref: openApiGetModelRef('MediaUpdateBody'),
+                                },
+                            },
+                        },
+                    },
+                    responses: {
+                        200: {
+                            description: 'OK',
+                            content: {
+                                'application/json': {
+                                    schema: controllerItemResponseDefinitionForRef(
+                                        'Media',
+                                    ),
+                                },
+                            },
+                        },
+                    },
+                },
+                preRequestHandler: RP.createJwtBodyCheck(MediaUpdateBodySchema),
+                async handler({ errorHandler, body, token }) {
+                    let media = await Repo.media.findById(body._id);
+                    if (!media) {
+                        throw errorHandler(
+                            HttpStatus.NotFound,
+                            `Media with ID "${body._id}" does not exist`,
+                        );
+                    }
+                    let shouldUpdate = false;
+                    let checkNameChange = false;
+                    if (body.name && body.name !== media.name) {
+                        shouldUpdate = true;
+                        checkNameChange = true;
+                        media.name = body.name;
+                    }
+                    if (
+                        typeof body.parentId === 'string' &&
+                        body.parentId !== media.parentId
+                    ) {
+                        shouldUpdate = true;
+                        checkNameChange = true;
+                        media.parentId = body.parentId;
+                        media.isInRoot = !media.parentId;
+                    }
+                    if (
+                        typeof body.altText === 'string' &&
+                        body.altText !== media.altText
+                    ) {
+                        shouldUpdate = true;
+                        media.altText = body.altText;
+                    }
+                    if (
+                        typeof body.caption === 'string' &&
+                        body.caption !== media.caption
+                    ) {
+                        shouldUpdate = true;
+                        media.caption = body.caption;
+                    }
+                    if (checkNameChange) {
+                        if (
+                            await Repo.media.methods.findByParentIdAndName(
+                                media.parentId,
+                                media.name,
+                            )
+                        ) {
+                            throw errorHandler(
+                                HttpStatus.BadRequest,
+                                `Media with name "${media.name}" already exist`,
+                            );
+                        }
+                    }
+                    if (shouldUpdate) {
+                        media = await Repo.media.update(media);
+                        SocketManager.channelEmit(
+                            ['global'],
+                            'media',
+                            {
+                                type: 'update',
+                                mediaId: media._id,
+                            },
+                            [token.payload.userId],
+                        );
+                        EventManager.trigger('update', 'media', media).catch(
+                            (err) => console.error(err),
+                        );
+                    }
+                    return {
+                        item: media,
+                    };
+                },
+            }),
+
+            deleteByIds: createControllerMethod<
+                RPJwtBodyCheckResult<MediaDeleteBody>,
+                { ok: boolean }
+            >({
+                path: '/delete',
+                type: 'delete',
+                openApi: {
+                    tags: [controllerName],
+                    security: [
+                        {
+                            accessToken: [],
+                        },
+                    ],
+                    summary: 'Delete 1 or more media files by there IDs',
+                    requestBody: {
+                        content: {
+                            'application/json': {
+                                schema: {
+                                    $ref: openApiGetModelRef('MediaDeleteBody'),
+                                },
+                            },
+                        },
+                    },
+                    responses: {
+                        200: {
+                            description: 'OK',
+                            content: {
+                                'application/json': {
+                                    schema: {
+                                        type: 'object',
+                                        required: ['ok'],
+                                        properties: {
+                                            ok: {
+                                                type: 'boolean',
+                                            },
+                                        },
+                                    },
+                                },
+                            },
+                        },
+                    },
+                },
+                preRequestHandler: RP.createJwtBodyCheck(MediaDeleteBodySchema),
+                async handler({ body }) {
+                    const allMedia = await Repo.media.findAll();
+                    const mediaToDelete: {
+                        [mediaId: string]: Media;
+                    } = {};
+                    for (let i = 0; i < body.mediaIds.length; i++) {
+                        const media = allMedia.find(
+                            (e) => e._id === body.mediaIds[i],
+                        );
+                        if (media) {
+                            mediaToDelete[media._id] = media;
+                            if (media.type === MediaType.DIR) {
+                                let children = allMedia.filter(
+                                    (e) => e.parentId === media._id,
+                                );
+                                while (children.length > 0) {
+                                    const child = children.pop() as Media;
+                                    mediaToDelete[child._id] = child;
+                                    if (child.type === MediaType.DIR) {
+                                        children = [
+                                            ...children,
+                                            ...allMedia.filter(
+                                                (e) => e.parentId === child._id,
+                                            ),
+                                        ];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    const deletePaths: string[] = [];
+                    const medias: Media[] = [];
+                    for (const mediaId in mediaToDelete) {
+                        medias.push(mediaToDelete[mediaId]);
+                        if (
+                            [
+                                MediaType.GIF,
+                                MediaType.IMG,
+                                MediaType.VID,
+                            ].includes(mediaToDelete[mediaId].type)
+                        ) {
+                            deletePaths.push(
+                                MediaStorage.resolveCloudPath(
+                                    mediaToDelete[mediaId],
+                                    {
+                                        thumbnail: true,
+                                    },
+                                ),
+                            );
+                        }
+                        console.log({ mediaId, mediaToDelete });
+                        deletePaths.push(
+                            MediaStorage.resolveCloudPath(
+                                mediaToDelete[mediaId],
+                            ),
+                        );
+                    }
+                    await Repo.media.methods.deleteManyById(
+                        medias.map((e) => e._id),
+                    );
+                    SocketManager.channelEmit(['global'], 'media', {
+                        type: 'delete',
+                        mediaId: 'many',
+                    });
+                    await MediaStorage.removeMany(deletePaths);
+                    for (let i = 0; i < medias.length; i++) {
+                        EventManager.trigger(
+                            'delete',
+                            'media',
+                            medias[i],
+                        ).catch((err) => console.error(err));
+                    }
+                    return {
+                        ok: true,
+                    };
+                },
+            }),
         };
-      }
-      if (!(await BCMSMediaService.storage.exist(media))) {
-        throw errorHandler.occurred(
-          HTTPStatus.INTERNAL_SERVER_ERROR,
-          bcmsResCode('mda008', { id: request.params.id }),
-        );
-      }
-      return {
-        __file: await BCMSMediaService.storage.getPath({ media }),
-      };
-    }
-
-    return {
-      getAll: createControllerMethod<unknown, { items: BCMSMedia[] }>({
-        path: '/all',
-        type: 'get',
-        preRequestHandler: BCMSRouteProtection.createJwtApiPreRequestHandler({
-          roleNames: [JWTRoleName.ADMIN, JWTRoleName.USER],
-          permissionName: JWTPermissionName.READ,
-        }),
-        async handler() {
-          return {
-            items: await BCMSMediaRequestHandler.getAll(),
-          };
-        },
-      }),
-
-      getAllAggregated: createControllerMethod<
-        JWTPreRequestHandlerResult<BCMSUserCustomPool>,
-        { items: BCMSMediaAggregate[] }
-      >({
-        path: '/all/aggregate',
-        type: 'get',
-        preRequestHandler: BCMSRouteProtection.createJwtPreRequestHandler(
-          [JWTRoleName.ADMIN, JWTRoleName.USER],
-          JWTPermissionName.READ,
-        ),
-        async handler() {
-          return {
-            items: await BCMSMediaRequestHandler.getAllAggregated(),
-          };
-        },
-      }),
-
-      getAllByParentId: createControllerMethod<
-        JWTPreRequestHandlerResult<BCMSUserCustomPool>,
-        { items: BCMSMedia[] }
-      >({
-        path: '/all/parent/:id',
-        type: 'get',
-        preRequestHandler: BCMSRouteProtection.createJwtPreRequestHandler(
-          [JWTRoleName.ADMIN, JWTRoleName.USER],
-          JWTPermissionName.READ,
-        ),
-        async handler({ request, errorHandler }) {
-          return {
-            items: await BCMSMediaRequestHandler.getAllByParentId({
-              id: request.params.id,
-              errorHandler,
-            }),
-          };
-        },
-      }),
-
-      getMany: createControllerMethod<
-        JWTPreRequestHandlerResult<BCMSUserCustomPool>,
-        { items: BCMSMedia[] }
-      >({
-        path: '/many',
-        type: 'get',
-        preRequestHandler: BCMSRouteProtection.createJwtPreRequestHandler(
-          [JWTRoleName.ADMIN, JWTRoleName.USER],
-          JWTPermissionName.READ,
-        ),
-        async handler({ request }) {
-          const ids = (request.headers['x-bcms-ids'] as string).split('-');
-          return {
-            items: await BCMSMediaRequestHandler.getMany(ids),
-          };
-        },
-      }),
-
-      count: createControllerMethod<
-        JWTPreRequestHandlerResult<BCMSUserCustomPool>,
-        { count: number }
-      >({
-        path: '/count',
-        type: 'get',
-        preRequestHandler: BCMSRouteProtection.createJwtPreRequestHandler(
-          [JWTRoleName.ADMIN, JWTRoleName.USER],
-          JWTPermissionName.READ,
-        ),
-        async handler() {
-          return {
-            count: await BCMSMediaRequestHandler.count(),
-          };
-        },
-      }),
-
-      getById: createControllerMethod<unknown, { item: BCMSMedia }>({
-        path: '/:id',
-        type: 'get',
-        preRequestHandler: BCMSRouteProtection.createJwtApiPreRequestHandler({
-          roleNames: [JWTRoleName.ADMIN, JWTRoleName.USER],
-          permissionName: JWTPermissionName.READ,
-        }),
-        async handler({ request, errorHandler }) {
-          return {
-            item: await BCMSMediaRequestHandler.getById({
-              id: request.params.id,
-              errorHandler,
-            }),
-          };
-        },
-      }),
-
-      getByIdAggregated: createControllerMethod({
-        path: '/:id/aggregate',
-        type: 'get',
-        preRequestHandler: BCMSRouteProtection.createJwtPreRequestHandler(
-          [JWTRoleName.ADMIN, JWTRoleName.USER],
-          JWTPermissionName.READ,
-        ),
-        async handler({ request, errorHandler }) {
-          return {
-            item: await BCMSMediaRequestHandler.getByIdAggregated({
-              id: request.params.id,
-              errorHandler,
-            }),
-          };
-        },
-      }),
-
-      getBinary: createControllerMethod<unknown, { __file: string }>({
-        path: '/:id/bin',
-        type: 'get',
-        preRequestHandler: BCMSRouteProtection.createJwtApiPreRequestHandler({
-          roleNames: [JWTRoleName.ADMIN, JWTRoleName.USER],
-          permissionName: JWTPermissionName.READ,
-        }),
-        async handler({ request, errorHandler }) {
-          const media = await BCMSRepo.media.findById(request.params.id);
-          if (!media) {
-            throw errorHandler.occurred(
-              HTTPStatus.NOT_FOUNT,
-              bcmsResCode('mda001', { id: request.params.id }),
-            );
-          }
-          if (media.type === BCMSMediaType.DIR) {
-            throw errorHandler.occurred(
-              HTTPStatus.FORBIDDEN,
-              bcmsResCode('mda007', { id: request.params.id }),
-            );
-          }
-          if (!(await BCMSMediaService.storage.exist(media))) {
-            throw errorHandler.occurred(
-              HTTPStatus.INTERNAL_SERVER_ERROR,
-              bcmsResCode('mda008', { id: request.params.id }),
-            );
-          }
-          return {
-            __file: await BCMSMediaService.storage.getPath({ media }),
-          };
-        },
-      }),
-
-      getBinaryByAccessToken: createControllerMethod<
-        unknown,
-        { __file: string }
-      >({
-        path: '/:id/bin/act',
-        type: 'get',
-        async handler({ request, errorHandler }) {
-          const atCookie = request.headers.cookie
-            ? request.headers.cookie
-                .split('; ')
-                .find((e) => e.startsWith('bcmsat')) + ''
-            : '';
-          const accessToken = jwt.get({
-            jwtString: atCookie.split('=')[1] || '',
-            roleNames: [JWTRoleName.ADMIN, JWTRoleName.USER],
-            permissionName: JWTPermissionName.READ,
-          });
-          if (accessToken instanceof JWTError) {
-            throw errorHandler.occurred(
-              HTTPStatus.UNAUTHORIZED,
-              bcmsResCode('mda012'),
-            );
-          }
-          const media = await BCMSRepo.media.findById(request.params.id);
-          if (!media) {
-            throw errorHandler.occurred(
-              HTTPStatus.NOT_FOUNT,
-              bcmsResCode('mda001', { id: request.params.id }),
-            );
-          }
-          if (media.type === BCMSMediaType.DIR) {
-            throw errorHandler.occurred(
-              HTTPStatus.FORBIDDEN,
-              bcmsResCode('mda007', { id: request.params.id }),
-            );
-          }
-          if (!(await BCMSMediaService.storage.exist(media))) {
-            throw errorHandler.occurred(
-              HTTPStatus.INTERNAL_SERVER_ERROR,
-              bcmsResCode('mda008', { id: request.params.id }),
-            );
-          }
-          return {
-            __file: await BCMSMediaService.storage.getPath({ media }),
-          };
-        },
-      }),
-
-      getBinaryApiKeyV2: createControllerMethod<unknown, { __file: string }>({
-        path: '/pip/:id/bin/:keyId/:fileOptions/:fileName',
-        type: 'get',
-        async handler({ request, errorHandler }) {
-          return await getBinFile(request, errorHandler);
-        },
-      }),
-
-      getBinaryApiKey: createControllerMethod<unknown, { __file: string }>({
-        path: '/pip/:id/bin/:keyId/:fileOptions',
-        type: 'get',
-        async handler({ request, errorHandler }) {
-          return getBinFile(request, errorHandler);
-        },
-      }),
-
-      getBinaryForSize: createControllerMethod<
-        JWTPreRequestHandlerResult<BCMSUserCustomPool>,
-        { __file: string }
-      >({
-        path: '/:id/bin/:size',
-        type: 'get',
-        preRequestHandler: BCMSRouteProtection.createJwtPreRequestHandler(
-          [JWTRoleName.ADMIN, JWTRoleName.USER],
-          JWTPermissionName.READ,
-        ),
-        async handler({ request, errorHandler }) {
-          const media = await BCMSRepo.media.findById(request.params.id);
-          if (!media) {
-            throw errorHandler.occurred(
-              HTTPStatus.NOT_FOUNT,
-              bcmsResCode('mda001', { id: request.params.id }),
-            );
-          }
-          if (media.type === BCMSMediaType.DIR) {
-            throw errorHandler.occurred(
-              HTTPStatus.FORBIDDEN,
-              bcmsResCode('mda007', { id: request.params.id }),
-            );
-          }
-          if (!(await BCMSMediaService.storage.exist(media))) {
-            throw errorHandler.occurred(
-              HTTPStatus.INTERNAL_SERVER_ERROR,
-              bcmsResCode('mda008', { id: request.params.id }),
-            );
-          }
-          return {
-            __file: await BCMSMediaService.storage.getPath({
-              media,
-              size: request.params.size === 'small' ? 'small' : undefined,
-            }),
-          };
-        },
-      }),
-
-      getBinaryForSizeByAccessToken: createControllerMethod<
-        unknown,
-        { __file: string }
-      >({
-        path: '/:id/bin/:size/act',
-        type: 'get',
-        async handler({ request, errorHandler }) {
-          const accessToken = jwt.get({
-            jwtString: request.query.act + '',
-            roleNames: [JWTRoleName.ADMIN, JWTRoleName.USER],
-            permissionName: JWTPermissionName.READ,
-          });
-          if (accessToken instanceof JWTError) {
-            throw errorHandler.occurred(
-              HTTPStatus.UNAUTHORIZED,
-              bcmsResCode('mda012'),
-            );
-          }
-          const media = await BCMSRepo.media.findById(request.params.id);
-          if (!media) {
-            throw errorHandler.occurred(
-              HTTPStatus.NOT_FOUNT,
-              bcmsResCode('mda001', { id: request.params.id }),
-            );
-          }
-          if (media.type === BCMSMediaType.DIR) {
-            throw errorHandler.occurred(
-              HTTPStatus.FORBIDDEN,
-              bcmsResCode('mda007', { id: request.params.id }),
-            );
-          }
-          if (!(await BCMSMediaService.storage.exist(media))) {
-            throw errorHandler.occurred(
-              HTTPStatus.INTERNAL_SERVER_ERROR,
-              bcmsResCode('mda008', { id: request.params.id }),
-            );
-          }
-          return {
-            __file: await BCMSMediaService.storage.getPath({
-              media,
-              size: request.params.size === 'small' ? 'small' : undefined,
-            }),
-          };
-        },
-      }),
-
-      getVideoThumbnail: createControllerMethod<unknown, { __file: string }>({
-        path: '/:id/vid/bin/thumbnail',
-        type: 'get',
-        async handler({ request, errorHandler }) {
-          const accessToken = jwt.get({
-            jwtString: request.query.act + '',
-            roleNames: [JWTRoleName.ADMIN, JWTRoleName.USER],
-            permissionName: JWTPermissionName.READ,
-          });
-          if (accessToken instanceof JWTError) {
-            throw errorHandler.occurred(
-              HTTPStatus.UNAUTHORIZED,
-              bcmsResCode('mda012'),
-            );
-          }
-          const media = await BCMSRepo.media.findById(request.params.id);
-          if (!media) {
-            throw errorHandler.occurred(
-              HTTPStatus.NOT_FOUNT,
-              bcmsResCode('mda001', { id: request.params.id }),
-            );
-          }
-          if (media.type === BCMSMediaType.DIR) {
-            throw errorHandler.occurred(
-              HTTPStatus.FORBIDDEN,
-              bcmsResCode('mda007', { id: request.params.id }),
-            );
-          }
-          if (!(await BCMSMediaService.storage.exist(media))) {
-            throw errorHandler.occurred(
-              HTTPStatus.INTERNAL_SERVER_ERROR,
-              bcmsResCode('mda008', { id: request.params.id }),
-            );
-          }
-          return {
-            __file: await BCMSMediaService.storage.getPath({
-              media,
-              thumbnail: true,
-            }),
-          };
-        },
-      }),
-
-      requestUploadToken: createControllerMethod<
-        JWTPreRequestHandlerResult<BCMSUserCustomPool>,
-        { token: string }
-      >({
-        path: '/request-upload-token',
-        type: 'post',
-        preRequestHandler: BCMSRouteProtection.createJwtPreRequestHandler(
-          [JWTRoleName.ADMIN, JWTRoleName.USER],
-          JWTPermissionName.WRITE,
-        ),
-        async handler({ accessToken }) {
-          return BCMSMediaRequestHandler.requestUploadToken({ accessToken });
-        },
-      }),
-
-      createFile: createControllerMethod<
-        // JWTPreRequestHandlerResult<BCMSUserCustomPool>,
-        void,
-        { item: BCMSMedia }
-      >({
-        path: '/file',
-        type: 'post',
-        // preRequestHandler: BCMSRouteProtection.createJwtPreRequestHandler(
-        //   [JWTRoleName.ADMIN, JWTRoleName.USER],
-        //   JWTPermissionName.WRITE,
-        // ),
-        async handler({ request, errorHandler, logger, name }) {
-          return {
-            item: await BCMSMediaRequestHandler.createFile({
-              sid: request.headers['x-bcms-sid'] as string,
-              uploadToken: request.headers['x-bcms-upload-token'] as string,
-              errorHandler,
-              logger,
-              name,
-              file: request.file,
-              parentId: request.query.parentId as string,
-            }),
-          };
-        },
-      }),
-
-      createDir: createControllerMethod<
-        BCMSRouteProtectionJwtAndBodyCheckResult<BCMSMediaAddDirData>,
-        { item: BCMSMedia }
-      >({
-        path: '/dir',
-        type: 'post',
-        preRequestHandler:
-          BCMSRouteProtection.createJwtAndBodyCheckPreRequestHandler({
-            roleNames: [JWTRoleName.ADMIN, JWTRoleName.USER],
-            permissionName: JWTPermissionName.WRITE,
-            bodySchema: BCMSMediaAddDirDataSchema,
-          }),
-        async handler({ body, errorHandler, accessToken, request }) {
-          return {
-            item: await BCMSMediaRequestHandler.createDir({
-              sid: request.headers['x-bcms-sid'] as string,
-              accessToken,
-              errorHandler,
-              body,
-            }),
-          };
-        },
-      }),
-
-      updateFile: createControllerMethod<
-        BCMSRouteProtectionJwtAndBodyCheckResult<BCMSMediaUpdateData>,
-        { item: BCMSMedia }
-      >({
-        path: '/file',
-        type: 'put',
-        preRequestHandler:
-          BCMSRouteProtection.createJwtAndBodyCheckPreRequestHandler({
-            roleNames: [JWTRoleName.ADMIN, JWTRoleName.USER],
-            permissionName: JWTPermissionName.WRITE,
-            bodySchema: BCMSMediaUpdateDataSchema,
-          }),
-        async handler({ errorHandler, body, accessToken, request }) {
-          return {
-            item: await BCMSMediaRequestHandler.update({
-              sid: request.headers['x-bcms-sid'] as string,
-              body,
-              accessToken,
-              errorHandler,
-            }),
-          };
-        },
-      }),
-
-      duplicateFile: createControllerMethod<
-        BCMSRouteProtectionJwtAndBodyCheckResult<BCMSMediaDuplicateData>,
-        { item: BCMSMedia }
-      >({
-        path: '/duplicate',
-        type: 'post',
-        preRequestHandler:
-          BCMSRouteProtection.createJwtAndBodyCheckPreRequestHandler({
-            roleNames: [JWTRoleName.ADMIN, JWTRoleName.USER],
-            permissionName: JWTPermissionName.WRITE,
-            bodySchema: BCMSMediaDuplicateDataSchema,
-          }),
-        async handler({ body, errorHandler, accessToken, request }) {
-          return {
-            item: await BCMSMediaRequestHandler.duplicateFile({
-              sid: request.headers['x-bcms-sid'] as string,
-              body,
-              errorHandler,
-              accessToken,
-            }),
-          };
-        },
-      }),
-
-      moveFile: createControllerMethod<
-        BCMSRouteProtectionJwtAndBodyCheckResult<BCMSMediaMoveData>,
-        { item: BCMSMedia }
-      >({
-        path: '/move',
-        type: 'put',
-        preRequestHandler:
-          BCMSRouteProtection.createJwtAndBodyCheckPreRequestHandler({
-            roleNames: [JWTRoleName.ADMIN, JWTRoleName.USER],
-            permissionName: JWTPermissionName.WRITE,
-            bodySchema: BCMSMediaMoveDataSchema,
-          }),
-        async handler({ body, errorHandler, accessToken, request }) {
-          return {
-            item: await BCMSMediaRequestHandler.moveFile({
-              sid: request.headers['x-bcms-sid'] as string,
-              body,
-              errorHandler,
-              accessToken,
-            }),
-          };
-        },
-      }),
-
-      deleteById: createControllerMethod<
-        JWTPreRequestHandlerResult<BCMSUserCustomPool>,
-        { message: 'Success.' }
-      >({
-        path: '/:id',
-        type: 'delete',
-        preRequestHandler: BCMSRouteProtection.createJwtPreRequestHandler(
-          [JWTRoleName.ADMIN, JWTRoleName.USER],
-          JWTPermissionName.DELETE,
-        ),
-        async handler({ request, errorHandler, accessToken, logger, name }) {
-          await BCMSMediaRequestHandler.delete({
-            sid: request.headers['x-bcms-sid'] as string,
-            id: request.params.id,
-            errorHandler,
-            accessToken,
-            logger,
-            name,
-          });
-          return {
-            message: 'Success.',
-          };
-        },
-      }),
-    };
-  },
+    },
 });

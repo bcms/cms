@@ -1,40 +1,44 @@
-import type { BCMSUser } from '@becomes/cms-sdk/types';
-import { defineComponent, type PropType } from 'vue';
-import { DefaultComponentProps } from './_default';
+import { defineComponent } from 'vue';
+import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
 
-export const BCMSUserAvatar = defineComponent({
-  props: {
-    ...DefaultComponentProps,
-    user: {
-      type: Object as PropType<BCMSUser>,
-      required: true,
+export const UserAvatar = defineComponent({
+    props: {
+        ...DefaultComponentProps,
+        image: String,
+        fullName: String,
     },
-  },
-  setup(props) {
-    return () => (
-      <div
-        id={props.id}
-        style={props.style}
-        class={`relative flex ${props.class || ''}`}
-      >
-        {props.user.customPool.personal.avatarUri ? (
-          <img
-            src={props.user.customPool.personal.avatarUri}
-            alt={props.user.username}
-            class="w-10 h-10 rounded-full object-cover mr-2.5"
-          />
-        ) : (
-          <div class="w-10 h-10 rounded-full bg-grey bg-opacity-70 border-2 border-green mr-2.5 flex justify-center items-center select-none dark:border-yellow">
-            <span class="text-white font-semibold relative top-0.5">
-              {props.user.username
-                .split(' ')
-                .map((word) => word[0])
-                .slice(0, 2)
-                .join('')}
-            </span>
-          </div>
-        )}
-      </div>
-    );
-  },
+    setup(props) {
+        return () => (
+            <div
+                id={props.id}
+                style={props.style}
+                class={`bg-gray box-content border-2 border-green dark:border-yellow rounded-xl overflow-hidden ${
+                    props.class || 'w-[32px] h-[32px]'
+                }`}
+            >
+                {props.image ? (
+                    <img
+                        class={`w-full h-full object-cover`}
+                        src={props.image}
+                        alt={props.fullName || 'User avatar'}
+                    />
+                ) : (
+                    <div
+                        class={`flex items-center justify-center w-full h-full`}
+                    >
+                        {props.fullName ? (
+                            <div class={`text-dark font-bold pt-0.5`}>
+                                {props.fullName
+                                    .split(' ')
+                                    .map((e) => e.substring(0, 1).toUpperCase())
+                                    .join('')}
+                            </div>
+                        ) : (
+                            ''
+                        )}
+                    </div>
+                )}
+            </div>
+        );
+    },
 });
