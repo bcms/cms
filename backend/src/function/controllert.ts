@@ -92,10 +92,10 @@ export const FunctionController = createController({
                             name: 'fnName',
                             description: 'Normalized function name',
                             schema: {
-                                type: 'string'
+                                type: 'string',
                             },
                             required: true,
-                        }
+                        },
                     ],
                     responses: {
                         200: {
@@ -131,17 +131,15 @@ export const FunctionController = createController({
                             `Function with name "${params.fnName}" does not exist`,
                         );
                     }
-                    if (!fn.config.public) {
-                        if (
-                            !apiKey.access.functions.find(
-                                (e) => e.name === fn.config.name,
-                            )
-                        ) {
-                            throw errorHandler(
-                                HttpStatus.Forbidden,
-                                `API Key does not what access to this function`,
-                            );
-                        }
+                    if (
+                        !apiKey.access.functions.find(
+                            (e) => e.name === fn.config.name,
+                        )
+                    ) {
+                        throw errorHandler(
+                            HttpStatus.Forbidden,
+                            `API Key does not what access to this function`,
+                        );
                     }
                     const fnLogger = new Logger(fn.config.name);
                     try {

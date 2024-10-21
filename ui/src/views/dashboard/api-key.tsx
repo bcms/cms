@@ -275,31 +275,27 @@ export const ApiKeyView = defineComponent({
                     class={`flex flex-col rounded-2.5 overflow-hidden border border-gray dark:border-gray bg-light dark:bg-darkGray mb-auto p-2 shadow-xl`}
                 >
                     <h3 class={`mb-2`}>Function {fn.name}</h3>
-                    {fn.public ? (
-                        <p>This function is public</p>
-                    ) : (
-                        <CheckBox
-                            text={`Can call function`}
-                            value={!!data.value.fns.find((e) => e === fn.name)}
-                            onInput={async (value) => {
-                                if (value) {
-                                    data.value.fns.push(fn.name);
-                                } else {
-                                    for (
-                                        let i = 0;
-                                        i < data.value.fns.length;
-                                        i++
-                                    ) {
-                                        if (data.value.fns[i] === fn.name) {
-                                            data.value.fns.splice(i, 1);
-                                            break;
-                                        }
+                    <CheckBox
+                        text={`Can call function`}
+                        value={!!data.value.fns.find((e) => e === fn.name)}
+                        onInput={async (value) => {
+                            if (value) {
+                                data.value.fns.push(fn.name);
+                            } else {
+                                for (
+                                    let i = 0;
+                                    i < data.value.fns.length;
+                                    i++
+                                ) {
+                                    if (data.value.fns[i] === fn.name) {
+                                        data.value.fns.splice(i, 1);
+                                        break;
                                     }
                                 }
-                                await updateAccess();
-                            }}
-                        />
-                    )}
+                            }
+                            await updateAccess();
+                        }}
+                    />
                 </div>
             );
         }

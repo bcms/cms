@@ -20,10 +20,7 @@ export class ApiKeyFactory {
         const fns = FunctionManager.getAll();
         for (let i = 0; i < fns.length; i++) {
             const fn = fns[i];
-            if (
-                fn.config.public &&
-                !k.access.functions.find((e) => e.name === fn.config.name)
-            ) {
+            if (!k.access.functions.find((e) => e.name === fn.config.name)) {
                 modified = true;
                 k.access.functions.push({ name: fn.config.name });
             }

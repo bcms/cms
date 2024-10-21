@@ -13,20 +13,11 @@ export interface BCMSFunctionConfig {
      * replaced with "-".
      */
     name: string;
-    /**
-     * If set to "true", anyone can call this
-     * function. Defaults to "false".
-     */
-    public?: boolean;
 }
 export const BCMSFunctionConfigSchema: ObjectSchema = {
     name: {
         __type: 'string',
         __required: true,
-    },
-    public: {
-        __type: 'boolean',
-        __required: false,
     },
 };
 
