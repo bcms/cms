@@ -91,7 +91,6 @@ async function main() {
                         ['docs', 'swagger.json'],
                         JSON.stringify(config.openApi, null, '  '),
                     );
-                    console.log('here');
                 }
             }
             init().catch((err) => console.error(err));

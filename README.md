@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/bcms/cms/v3/assets/readme/bcms-preview.webp" alt="Interface Animation"  width="800px" />  
+<img src="https://raw.githubusercontent.com/bcms/cms/v3/assets/readme/bcms-preview.webp" alt="Interface Animation"  width="800px" />
 
 # BCMS - Open-source Headless CMS
 
@@ -6,18 +6,23 @@ This repository holds open-source version of BCMS, a modern headless CMS that al
 
 ## Table of Contents
 
-- [Run Locally](#run-locally)
-- [Deploy on Debian-based Server with CLI](#deploy-on-debian-based-server-with-cli)
-- [Deploy on Debian-based Server Manually](#deploy-on-debian-based-server-manually)
-- [Contributing](#contributing)
-- [Cloud vs Open-source](#bcms-cloud-vs-open-source-bcms)
-- [Support](#support)
+-   [Run Locally](#run-locally)
+-   [Deploy on Debian-based Server with CLI](#deploy-on-debian-based-server-with-cli)
+-   [Deploy on Debian-based Server Manually](#deploy-on-debian-based-server-manually)
+-   [Contributing](#contributing)
+-   [Cloud vs Open-source](#bcms-cloud-vs-open-source-bcms)
+-   [Support](#support)
+-   [Extending BCMS](#extending-bcms)
+    -   [BCMS Events](#bcms-events)
+    -   [BCMS Functions](#bcms-functions)
+    -   [BCMS Jobs](#bcms-jobs)
+    -   [BCMS Plugins](#bcms-plugins)
 
 ## Prerequisites
 
-- Node.js 20
-- Docker and Docker Compose
-- Git
+-   Node.js 20
+-   Docker and Docker Compose
+-   Git
 
 ## Run Locally
 
@@ -154,7 +159,7 @@ http {
   include /etc/nginx/mime.types;
   default_type application/octet-stream;
 
-  ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3; 
+  ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
   ssl_prefer_server_ciphers on;
 
   access_log /var/log/nginx/access.log;
@@ -225,6 +230,7 @@ docker run -d -p 80:80 --name my-bcms-proxy --network bcms-net my-bcms-proxy
 We welcome contributions!
 
 ## BCMS Cloud vs. Open-source BCMS
+
 In September 2024, we made a big shift: BCMS Cloud went closed-source (as [BCMS Pro](https://thebcms.com)), and the open-source version became completely standalone.
 
 Why did we do this?
@@ -248,6 +254,305 @@ Happy coding!
 If you have any questions or need help, feel free to open an issue or reach out to us @ [Discord](https://discord.gg/Rr4kTKpU).
 
 ## Stay in touch 🌐
+
 <a href="https://twitter.com/thebcms">Follow on X (Twitter)</a><br>
 <a href="https://www.linkedin.com/company/thebcms/">Follow on LinkedIn</a><br>
 <a href="https://discord.gg/Rr4kTKpU">Join us on Discord</a><br>
+
+## Extending BCMS
+
+There are 4 main ways in which you can extend your BCMS and those are Events, Functions, Jobs and Plugins. First 3 are only for extending backend functionality and performing custom backend tasks while Plugins are apps which have their own backend and UI on top of BCMS core.
+
+### BCMS Events
+
+BCMS Events are custom JavaScript files (JS function) which are executed when internal BCMS event is triggered, for example when Entry is created, updated or deleted or when Widget is created, update or deleted. [List of all Event types](https://github.com/bcms/cms/blob/master/backend/src/event/models/main.ts)
+
+Creating an Event handler is as simple adding a file root `/backend/events` directory. This directory is located inside the BCMS container. You can mount it as a volume when running the container and this would look something like this: `-v <path_to_my_events_dir>:/app/backend/events`.
+
+If you are running BCMS locally from this repository you can add an Event file to `/backend/events/<my_event>.{js|ts}`.
+
+Here is a simple example Event:
+
+```js
+// Is used locally in /backend/events/test.js
+
+const { createEvent } = require('@bcms/selfhosted-backend/event');
+
+module.exports = createEvent(async () => {
+    return {
+        config: {
+            // Trigger Event handler only for
+            // Entry changes
+            scope: 'entry',
+            // Listen for all Event types:
+            // (create, update, delete)
+            type: 'all',
+        },
+        // This method will be executed when
+        // Event is triggered
+        async handler(type, scope, data) {
+            // Do something with the event
+            console.log({ type, scope, data });
+        },
+    };
+});
+```
+
+This file will be loaded by the BCMS backend and executed which means that it runs in the same scope and you can use internal utilities like `Repo.*` to access database. Execution of this file is unrestricted, all permissions that BCMS backend have, your Event will also have. Isn't this dangerous? Yes and no, with great power comes great responsibility. This means that you should never run untrusted code inside the Event.
+
+Now, what if you want to import some custom module, for example [@paralleldrive/cuid2](https://www.npmjs.com/package/@paralleldrive/cuid2)? You can do this by adding it to `/backend/custom-package.json` which should have structure like this:
+
+```json
+{
+    "dependencies": {
+        // Your custom packages
+        "@paralleldrive/cuid2": "^2.2.2"
+    }
+}
+```
+
+Custom packages will be initialized when BCMS backend starts.
+
+There is 1 more thing, what if you have some shared logic between your Events, Jobs and Functions? We are calling those additional files, but you can look at them as your custom utilities. Inside the `/backend/additional` you can add any JS file and import it in the Event.
+
+### BCMS Functions
+
+Similar to BCMS Events, BCMS Functions are JavaScript files (JS function) which are executed when function endpoint is called: `POST: /api/v4/function/<my_function_name>`. You can look at them like your custom code which will run on the BCMS backend when HTTP request is made to function execution endpoint.
+
+Creating a Function is as simple as adding a file to the `/backend/functions`. This directory is located inside the BCMS container. You can mount it as a volume when running the container and this would look something like this: `-v <path_to_my_functions_dir>:/app/backend/functions`.
+
+If you are running BCMS locally from this repository you can add an Function file to `/backend/functions/<my_function>.{js|ts}`.
+
+Here is a simple example Function which will echo a request:
+
+```js
+const { createFunction } = require('@bcms/selfhosted-backend/function');
+
+module.exports = createFunction(async () => {
+    return {
+        config: {
+            name: 'echo',
+        },
+        async handler({ request }) {
+            return {
+                message: 'Function echo',
+                data: request.body,
+            };
+        },
+    };
+});
+```
+
+To successfully call this Function you will need to create an Api Key (_Administration/Key manager_) and allow it to call the Function. After this you can create a HTTP request to it:
+
+```http request
+POST http://localhost:8080/api/v4/function/echo
+Content-Type: application/json
+Authorization: ApiKey <key_id>.<key_secret>
+
+{
+  "fromClient": "Hey from client"
+}
+
+// Response
+// {
+//   "success": true,
+//   "result": {
+//     "message": "Function echo",
+//     "data": {
+//       "fromClient": "Hey from client"
+//     }
+//   }
+// }
+```
+
+This file will be loaded by the BCMS backend and executed which means that it runs in the same scope and you can use internal utilities like `Repo.*` to access database. Execution of this file is unrestricted, all permissions that BCMS backend have, your Function will also have. Isn't this dangerous? Yes and no, with great power comes great responsibility. This means that you should never run untrusted code inside the Function.
+
+Now, what if you want to import some custom module, for example [@paralleldrive/cuid2](https://www.npmjs.com/package/@paralleldrive/cuid2)? You can do this by adding it to `/backend/custom-package.json` which should have structure like this:
+
+```json
+{
+    "dependencies": {
+        // Your custom packages
+        "@paralleldrive/cuid2": "^2.2.2"
+    }
+}
+```
+
+Custom packages will be initialized when BCMS backend starts.
+
+There is 1 more thing, what if you have some shared logic between your Events, Jobs and Functions? We are calling those additional files, but you can look at them as your custom utilities. Inside the `/backend/additional` you can add any JS file and import it in the Function.
+
+### BCMS Jobs
+
+Similar to BCMS Events and Function, BCMS Jobs are JavaScript files (JS function) which are executed in specified CRON interval. You can look at them like your custom code which will run on the BCMS backend in specified interval.
+
+Creating a Job is as simple as adding a file to the `/backend/jobs`. This directory is located inside the BCMS container. You can mount it as a volume when running the container and this would look something like this: `-v <path_to_my_jobs_dir>:/app/backend/jobs`.
+
+If you are running BCMS locally from this repository you can add a Job file to `/backend/jobs/<my_job>.{js|ts}`.
+
+Here is a simple example Function which will console log current time every minute:
+
+```js
+const { createJob } = require('@bcms/selfhosted-backend/job');
+
+module.exports = createJob(async () => {
+    return {
+        cronTime: '* * * * *', // You can use: https://crontab.guru/
+        async handler() {
+            console.log(new Date().toISOString());
+        },
+    };
+});
+```
+
+This file will be loaded by the BCMS backend and executed which means that it runs in the same scope and you can use internal utilities like `Repo.*` to access database. Execution of this file is unrestricted, all permissions that BCMS backend have, your Job will also have. Isn't this dangerous? Yes and no, with great power comes great responsibility. This means that you should never run untrusted code inside the Job.
+
+Now, what if you want to import some custom module, for example [@paralleldrive/cuid2](https://www.npmjs.com/package/@paralleldrive/cuid2)? You can do this by adding it to `/backend/custom-package.json` which should have structure like this:
+
+```json
+{
+    "dependencies": {
+        // Your custom packages
+        "@paralleldrive/cuid2": "^2.2.2"
+    }
+}
+```
+
+Custom packages will be initialized when BCMS backend starts.
+
+There is 1 more thing, what if you have some shared logic between your Events, Jobs and Functions? We are calling those additional files, but you can look at them as your custom utilities. Inside the `/backend/additional` you can add any JS file and import it in the Job.
+
+## BCMS Plugins
+
+You can look at the BCMS Plugin as an application with its own backend and frontend which is served by the BCMS backend and have access to all backend and frontend features. For the Plugin backend you need to follow some patterns but for the Plugin UI you can build any SPA application (you can use React or VanillaJS, but we recommend VueJS because you will be able to use BCMS UI Components).
+
+Best way to explain this is to give you a simple example. This will be the structure of the Plugin:
+
+```text
+/backend/plugins
+    - /hello-world
+        - /_ui
+            - index.html
+        - config.json
+        - controller.js
+        - main.js
+```
+
+To make this example as simple as possible entire frontend code will be contained in `_ui/index.html` while the backend will contain 1 controller which will greet a user.
+
+> config.json
+```json
+{
+  "version": "1",
+  "dependencies": {}
+}
+```
+
+> controller.js
+
+```js
+const { createPluginController } = require('@bcms/selfhosted-backend/plugin');
+const { createControllerMethod } = require('@bcms/selfhosted-backend/_server');
+const {
+    RP,
+} = require('@bcms/selfhosted-backend/security/route-protection/main');
+
+exports.HelloWorldController = createPluginController({
+    name: 'NameGreet',
+    path: '/greet',
+    methods() {
+        return {
+            greet: createControllerMethod({
+                path: '/:name',
+                type: 'get',
+                preRequestHandler: RP.createJwtCheck(),
+                async handler({ request }) {
+                    const params = request.params;
+                    return {
+                        greet: `Hello ${params.name}!`,
+                    };
+                },
+            }),
+        };
+    },
+});
+```
+
+> main.js
+
+```js
+const { createPlugin } = require('@bcms/selfhosted-backend/plugin');
+const { HelloWorldController } = require('./controller');
+
+module.exports = createPlugin(async () => {
+  return {
+    id: 'hello-world',
+    name: 'Hello World',
+    controllers: [HelloWorldController],
+    middleware: [],
+    async policy() {
+      return [
+        {
+          name: 'Full access',
+        },
+      ];
+    },
+  };
+});
+```
+
+> _ui/index.html
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hello world</title>
+  <style>
+    body {
+      color: white;
+    }
+  </style>
+</head>
+<body>
+<h1>Hello world</h1>
+<div>
+  <input id="greet-input" placeholder="Greet" type="text" />
+  <button onclick="greet(this)">Send</button>
+  <div id="greet-result"></div>
+</div>
+<h2>List of templates</h2>
+<div id="templates"></div>
+<script>
+  async function onLoad() {
+    const templates =
+      await window.parent.bcms.sdk.template.getAll();
+    const el = document.getElementById('templates');
+    if (el) {
+      el.innerHTML = `<pre>${JSON.stringify(
+        templates,
+        null,
+        4,
+      )}</pre>`;
+    }
+    window.removeEventListener('load', onLoad);
+  }
+  window.addEventListener('load', onLoad);
+
+  async function greet() {
+    const inputEl = document.getElementById('greet-input');
+    const value = inputEl.value;
+    const result = await window.parent.bcms.sdk.send({
+      url: `/api/v4/plugin/hello-world/greet/${value}`,
+    });
+    const el = document.getElementById('greet-result');
+    el.innerHTML = `<pre>${JSON.stringify(result, null, 4)}</pre>`;
+  }
+</script>
+</body>
+</html>
+```
+
+TODO: Explain plugins in more details and create example plugins
