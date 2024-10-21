@@ -400,8 +400,8 @@ export const OpenApiModels = {
             },
         ],
     }),
-    PropDateData: openApiCreateSchema(PropDateDataSchema),
-    PropValueDateData: openApiCreateSchema(PropValueDateDataSchema),
+    PropDateData: objectSchemaToOpenApi3Schema(PropDateDataSchema),
+    PropValueDateData: objectSchemaToOpenApi3Schema(PropValueDateDataSchema),
     PropValueEntryPointer: openApiCreateSchema({
         type: 'object',
         required: ['eid', 'tid'],
@@ -866,7 +866,6 @@ export function openApiGetSchema(): Omit<OpenAPIV3.Document, 'paths'> {
         },
         servers: [
             { url: 'http://localhost:8081', description: 'Development' },
-            { url: 'https://cloud.thebcms.com', description: 'Production' },
         ],
         components: {
             schemas: OpenApiModels as any,

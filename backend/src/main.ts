@@ -52,6 +52,7 @@ import { EventManager } from '@bcms/selfhosted-backend/event/manager';
 import { createBcmsJobs } from '@bcms/selfhosted-backend/job/main';
 import { createBcmsPlugins } from '@bcms/selfhosted-backend/plugin/main';
 import { PluginController } from '@bcms/selfhosted-backend/plugin/controller';
+import { openApiGetSchema } from '@bcms/selfhosted-backend/open-api/main';
 
 async function main() {
     await createServer({
@@ -66,8 +67,9 @@ async function main() {
                 interval: 5000,
             },
         },
+        openApi: openApiGetSchema(),
 
-        onReady() {
+        onReady({ config }) {
             async function init() {
                 const users = await Repo.user.findAll();
                 if (
@@ -81,6 +83,14 @@ async function main() {
                     console.log(Array(message.length).fill('-').join(''));
                     console.log(message);
                     console.log(Array(message.length).fill('-').join(''));
+                }
+                if (config.openApi) {
+                    const fs = new FS(process.cwd());
+                    await fs.save(
+                        ['docs', 'swagger.json'],
+                        JSON.stringify(config.openApi, null, '  '),
+                    );
+                    console.log('here');
                 }
             }
             init().catch((err) => console.error(err));
@@ -108,15 +118,15 @@ async function main() {
                 methods() {
                     const fs = new FS(process.cwd());
                     return {
-                        swagger: createControllerMethod({
+                        swagger: createControllerMethod<void, string>({
                             path: '/swagger.json',
                             type: 'get',
-                            async handler({ replay }) {
+                            async handler({ reply }) {
                                 const data = await fs.readString([
                                     'docs',
                                     'swagger.json',
                                 ]);
-                                replay.header(
+                                reply.header(
                                     'Content-Type',
                                     'application/json',
                                 );

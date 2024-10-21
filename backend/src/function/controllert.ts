@@ -86,6 +86,17 @@ export const FunctionController = createController({
                         },
                     ],
                     summary: 'Execute a specified function',
+                    parameters: [
+                        {
+                            in: 'path',
+                            name: 'fnName',
+                            description: 'Normalized function name',
+                            schema: {
+                                type: 'string'
+                            },
+                            required: true,
+                        }
+                    ],
                     responses: {
                         200: {
                             description: 'OK',
@@ -99,7 +110,7 @@ export const FunctionController = createController({
                                                 type: 'boolean',
                                             },
                                             result: {
-                                                type: 'any' as never,
+                                                type: 'object',
                                             },
                                         },
                                     },

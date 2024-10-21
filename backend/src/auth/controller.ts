@@ -52,15 +52,6 @@ export const AuthController = createController({
                     summary:
                         'Check if user should be redirected to admin' +
                         ' sign up',
-                    requestBody: {
-                        content: {
-                            'application/json': {
-                                schema: openApiGetObjectRefSchema(
-                                    'AuthLoginBody',
-                                ),
-                            },
-                        },
-                    },
                     responses: {
                         200: {
                             description: 'OK',
