@@ -22,6 +22,7 @@ export async function setup() {
     }
     const files = [
         ['backend', '.env'],
+        ['backend', 'custom-package.json'],
         ['ui', '.env'],
     ];
     for (let i = 0; i < files.length; i++) {

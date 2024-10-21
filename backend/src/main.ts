@@ -53,6 +53,7 @@ import { createBcmsJobs } from '@bcms/selfhosted-backend/job/main';
 import { createBcmsPlugins } from '@bcms/selfhosted-backend/plugin/main';
 import { PluginController } from '@bcms/selfhosted-backend/plugin/controller';
 import { openApiGetSchema } from '@bcms/selfhosted-backend/open-api/main';
+import { createCustomDependenciesInit } from '@bcms/selfhosted-backend/custom-dependencies-init';
 
 async function main() {
     await createServer({
@@ -319,6 +320,7 @@ async function main() {
             createEntrySyncChannelHandler(),
             createMigrations(),
 
+            createCustomDependenciesInit(),
             {
                 name: 'FunctionManager',
                 initialize({ next }) {

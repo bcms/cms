@@ -13,6 +13,7 @@
 /additional
 /plugins
 /dist-utils
+/custom-package.json
 
 # Environment
 .env

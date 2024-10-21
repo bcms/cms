@@ -40,6 +40,9 @@ services:
               source: ./backend/docs
               target: /app/backend/docs
             - type: bind
+              source: ./backend/custom-package.json
+              target: /app/backend/custom-package.json
+            - type: bind
               source: ./backend/additional
               target: /app/backend/additional
             - type: bind
