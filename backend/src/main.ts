@@ -78,7 +78,7 @@ import { BCMSBackupController, BCMSBackupMediaFileMiddleware } from './backup';
 import { RouteTrackerController } from './route-tracker';
 import type { SocketConnection } from '@becomes/purple-cheetah-mod-socket/types';
 import { BCMSRouteTracker } from './route-tracker/service';
-import { BCMSRepo } from '@backend/repo';
+import { BCMSRepo } from './repo';
 
 const backend: BCMSBackend = {
   app: undefined as never,
