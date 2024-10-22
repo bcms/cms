@@ -33,7 +33,6 @@ export const sdk = createBcmsSdk({
 });
 
 export async function login(): Promise<void> {
-  await sdk.shim.verify.otp('');
   const isLoggedIn = await sdk.isLoggedIn();
   expect(isLoggedIn).to.be.a('boolean').to.equal(true);
 }

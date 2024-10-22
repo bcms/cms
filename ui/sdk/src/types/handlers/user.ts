@@ -6,6 +6,8 @@ import type {
   BCMSUserPolicyCRUD,
   BCMSUserPolicyTemplate,
   BCMSUserPolicyPlugin,
+  BCMSUserCreateBody,
+  BCMSJwtRoleName,
 } from '../models';
 
 export interface BCMSUserHandlerConfig {
@@ -17,6 +19,11 @@ export interface BCMSUserHandlerConfig {
 
 export interface BCMSUserUpdateData {
   _id: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  password?: string;
+  role?: BCMSJwtRoleName;
   customPool?: {
     policy?: {
       media?: BCMSUserPolicyCRUD;
@@ -29,6 +36,8 @@ export interface BCMSUserUpdateData {
 export interface BCMSUserHandler {
   get(id?: string, skipCache?: boolean): Promise<BCMSUser>;
   getAll(): Promise<BCMSUser[]>;
+  create(data: BCMSUserCreateBody): Promise<BCMSUser>;
   update(data: BCMSUserUpdateData): Promise<BCMSUser>;
   logout(): Promise<void>;
+  deleteById(id: string): Promise<BCMSUser>;
 }

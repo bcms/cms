@@ -26,7 +26,6 @@ import {
   BCMSUserPolicyPlugin,
 } from '../types';
 import { bcmsGetDirFileTree } from '@backend/util';
-import { BCMSShimService } from '@backend/shim';
 import { ChildProcess } from '@banez/child_process';
 import { BCMSRepo } from '@backend/repo';
 import type { BCMSConfig } from '@backend/config';
@@ -167,36 +166,6 @@ export function createBcmsPluginModule(bcmsConfig: typeof BCMSConfig): Module {
       dirPath: pluginDirPath,
       policy: plugin.default.policy,
     });
-    try {
-      const verifyResult: { ok: boolean } = await BCMSShimService.send({
-        uri: `/instance/plugin/verify/${plugin.default.name}`,
-        payload: {},
-      });
-
-      if (!verifyResult.ok) {
-        data.logger.error(
-          '',
-          `Plugin "${plugin.default.name}" is denied by the BCMS Cloud.`,
-        );
-        return {
-          controllers: data.controllers,
-          middleware: data.middleware,
-        };
-      }
-    } catch (error) {
-      const err = error as Error;
-      data.logger.error('', {
-        message: `Plugin "${plugin.default.name}".`,
-        error: {
-          message: err.message,
-          stack: err.stack ? err.stack.split('\n') : '',
-        },
-      });
-      return {
-        controllers: data.controllers,
-        middleware: data.middleware,
-      };
-    }
 
     if (plugin.default.controllers) {
       for (let j = 0; j < plugin.default.controllers.length; j++) {

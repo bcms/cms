@@ -7,7 +7,6 @@ import {
   createBcmsGroupHandler,
   createBcmsLanguageHandler,
   createBcmsMediaHandler,
-  createBcmsShimHandler,
   createBcmsStatusHandler,
   createBcmsUserHandler,
   createBcmsWidgetHandler,
@@ -36,6 +35,7 @@ import {
   createBcmsStringUtility,
   createBcmsThrowable,
 } from './util';
+import { createBcmsAuthHandler } from '@becomes/cms-sdk/handlers/auth';
 
 export function createBcmsSdk(config: BCMSSdkConfig): BCMSSdk {
   const useSocket =
@@ -242,7 +242,6 @@ export function createBcmsSdk(config: BCMSSdkConfig): BCMSSdk {
       await storage.set('at', result.accessToken);
       return true;
     } catch (error) {
-      // TODO: Handle refresh token error.
       await storage.clear();
       return false;
     }
@@ -263,10 +262,6 @@ export function createBcmsSdk(config: BCMSSdkConfig): BCMSSdk {
     }
   });
 
-  const shimHandler = createBcmsShimHandler({
-    send,
-    storage,
-  });
   const userHandler = createBcmsUserHandler({
     send,
     getAccessToken,
@@ -286,7 +281,7 @@ export function createBcmsSdk(config: BCMSSdkConfig): BCMSSdk {
           },
         });
       }
-      storage.clear();
+      await storage.clear();
       for (let i = 0; i < BCMSSdkCacheDataNames.length; i++) {
         const cacheName = BCMSSdkCacheDataNames[i];
         cache.mutations.set({
@@ -355,6 +350,10 @@ export function createBcmsSdk(config: BCMSSdkConfig): BCMSSdk {
     send,
     userHandler,
   });
+  const authHandler = createBcmsAuthHandler({
+    send,
+    storage,
+  });
   const socketHandler = createBcmsSocketHandler({
     send,
     origin,
@@ -389,7 +388,7 @@ export function createBcmsSdk(config: BCMSSdkConfig): BCMSSdk {
     cache,
 
     // Handlers
-    shim: shimHandler,
+    auth: authHandler,
     user: userHandler,
     apiKey: apiKeyHandler,
     function: functionHandler,

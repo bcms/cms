@@ -520,7 +520,7 @@ module.exports = createConfig({
             await bfs.copy('Dockerfile', ['dist', 'Dockerfile']);
             await ChildProcess.spawn(
               'docker',
-              ['build', '.', '-t', 'becomes/cms-backend'],
+              ['build', '.', '-t', 'bcms-v3'],
               {
                 cwd: path.join(process.cwd(), 'backend', 'dist'),
                 stdio: 'inherit',

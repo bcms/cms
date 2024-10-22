@@ -24,7 +24,7 @@ import type { BCMSColorUtility, BCMSObjectUtility } from './util';
 
 export interface BCMSGlobalScopeMain<
   CustomModals = unknown,
-  CustomSocketEventsData = unknown
+  CustomSocketEventsData = unknown,
 > {
   origin: string;
   vue: {

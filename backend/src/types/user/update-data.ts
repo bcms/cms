@@ -7,9 +7,15 @@ import {
   BCMSUserPolicyTemplateFSDBSchema,
   BCMSUserPolicyPluginFSDBSchema,
 } from './models';
+import type { JWTRoleName } from '@becomes/purple-cheetah-mod-jwt/types';
 
 export interface BCMSUserUpdateData {
   _id: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  password?: string;
+  role?: JWTRoleName;
   customPool?: {
     policy?: {
       media?: BCMSUserPolicyCRUD;
@@ -23,6 +29,26 @@ export const BCMSUserUpdateDataSchema: ObjectSchema = {
   _id: {
     __type: 'string',
     __required: true,
+  },
+  firstName: {
+    __type: 'string',
+    __required: false,
+  },
+  lastName: {
+    __type: 'string',
+    __required: false,
+  },
+  email: {
+    __type: 'string',
+    __required: false,
+  },
+  password: {
+    __type: 'string',
+    __required: false,
+  },
+  role: {
+    __type: 'string',
+    __required: false,
   },
   customPool: {
     __type: 'object',

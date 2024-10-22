@@ -12,4 +12,4 @@ RUN curl -fsSLO https://download.docker.com/linux/static/stable/x86_64/docker-26
   && rm -r docker docker-26.0.0.tgz
 RUN npm i
 
-ENTRYPOINT ["npm", "start"]
+ENTRYPOINT ["npm", "run", "dev"]

@@ -27,6 +27,10 @@ const component = defineComponent({
       });
     });
 
+    async function addUser() {
+      window.bcms.modal.settings.addEditUser.show({});
+    }
+
     return () => (
       <div>
         <h2
@@ -59,22 +63,12 @@ const component = defineComponent({
                 {
                   // TODO: Update invite href
                 }
-                <BCMSButton href="https://cloud.thebcms.com/dashboard" newTab>
-                  {translations.value.page.settings.team.inviteCta({
-                    pl: 'a new',
-                  })}
-                </BCMSButton>
+                <BCMSButton onClick={addUser}>Add user</BCMSButton>
               </div>
             )}
           </div>
         ) : (
-          isAdmin.value && (
-            <BCMSButton href="https://cloud.thebcms.com/dashboard" newTab>
-              {translations.value.page.settings.team.inviteCta({
-                pl: 'the first',
-              })}
-            </BCMSButton>
-          )
+          isAdmin.value && <BCMSButton onClick={addUser}>Add user</BCMSButton>
         )}
       </div>
     );

@@ -1,21 +1,23 @@
-version: '3.9'
-networks:
-  default:
-    external: true
-    name: bcms
 services:
-  shim:
-    hostname: 'bcms-shim'
-    image: 'becomes/cms-shim-local:1.0.5'
+  db:
+    hostname: bcms-db
+    image: mongo:6
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=test
+      - MONGO_INITDB_ROOT_PASSWORD=test1234
+    volumes:
+      - type: bind
+        source: ./backend/db/mongo
+        target: /data/db
     logging:
       driver: none
   backend:
     hostname: 'bcms-backend'
     depends_on:
-      - shim
+      - db
     build:
       context: './backend'
-      dockerfile: Dockerfile.dev
+      dockerfile: dev.Dockerfile
     env_file:
       - ./backend/.env
     volumes:
@@ -31,23 +33,11 @@ services:
       - type: bind
         source: ./backend/uploads
         target: /app/uploads
-  db:
-    hostname: bcms-db
-    image: mongo:6
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=test
-      - MONGO_INITDB_ROOT_PASSWORD=test1234
-    volumes:
-      - type: bind
-        source: ./backend/db/mongo
-        target: /data/db
-    logging:
-      driver: none
   ui:
     hostname: 'bcms-ui'
     build:
       context: './ui'
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     volumes:
       - type: bind
         source: ./ui/public
@@ -70,8 +60,8 @@ services:
   proxy:
     hostname: 'bcms-proxy'
     depends_on:
-      - shim
       - backend
+      - ui
       - db
     build:
       context: ./proxy

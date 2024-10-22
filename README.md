@@ -349,3 +349,24 @@ To get started with BCMS Cloud, please refer to the [BCMS Cloud](https://cloud.t
 <p align="center">
   <a href="https://github.com/bcms/cms/blob/master/LICENSE">MIT</a><br>
 </p>
+
+## Deploy from source
+
+- Navigate to some place on the server and create: `mkdir functions events jobs uploads logs shared db && touch bcms.env && chmod 600 bcms.env db.env`
+- Create a docker network: `docker network create -d bridge --subnet 20.30.0.0/16 --ip-range 20.30.40.0/24 --gateway 20.30.40.1 bcms-net`
+- Add database variables:
+
+```dotenv
+MONGO_INITDB_ROOT_USERNAME=<ROOT_USER_NAME>
+MONGO_INITDB_ROOT_PASSWORD=<ROOT_USER_PASSWORD>
+```
+
+- Run database container: `docker run -d --name bcms-db -v db:/data/db --env-file db.env --network bcms-net --hostname bcms-db mongo:7`
+- Clone the repository: `git clone git@github.com:/bcms/cms`
+- Enter the repository: `cd cms`
+- Install dependencies: `npm i`
+- Build UI project: `npm run bundle:ui`
+- Build backend project: `npm run bundle:backend`
+- Create docker image: `npm run create:docker:backend:image`
+- Navigate outside the repository: `cd ..`
+- Run BCMS container: `docker run -d --name bcms -v functions:/app/functions -v events:/app/events -v jobs:/app/jobs -v uploads:/app/uploads -v logs:/app/logs -v shared:/app/bcms-share --network bcms-net --hostname bcms bcms`

@@ -637,7 +637,7 @@ const component = defineComponent({
           await window.bcms.sdk.user.logout();
         },
         async () => {
-          window.location.href = 'https://cloud.thebcms.com/dashboard';
+          window.location.href = '/';
         },
       );
     }

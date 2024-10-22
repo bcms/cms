@@ -1,10 +1,3 @@
-import * as path from 'path';
-import { useObjectUtility } from '@becomes/purple-cheetah';
-import {
-  ObjectSchema,
-  ObjectUtilityError,
-} from '@becomes/purple-cheetah/types';
-
 export class BCMSConfig {
   /**
    * Port on which application will be started.
@@ -13,11 +6,6 @@ export class BCMSConfig {
     ? parseInt(process.env.PORT, 10)
     : 8080;
   /**
-   * Flag which indicates is backend should run in
-   * local development mode.
-   */
-  static local?: boolean;
-  /**
    * JSON Web Token configuration.
    */
   static jwt: {
@@ -25,9 +13,11 @@ export class BCMSConfig {
     secret: string;
     expireIn: number;
   } = {
-    expireIn: 300000000,
-    secret: 'secret',
-    scope: 'localhost',
+    expireIn: process.env.JWT_EXP_IN
+      ? parseInt(process.env.JWT_EXP_IN, 10)
+      : 300000000,
+    secret: process.env.JWT_SECRET || 'secret',
+    scope: process.env.JWT_SCOPE || 'localhost',
   };
   /**
    * Database configuration.
@@ -64,185 +54,89 @@ export class BCMSConfig {
       };
     };
   } = {
-    prefix: 'bcms',
-    fs: true,
+    prefix: process.env.DB_PREFIX || 'bcms',
+    fs: !process.env.DB_NAME,
+    mongodb: process.env.DB_NAME
+      ? {
+          atlas: process.env.DB_CLUSTER
+            ? {
+                name: process.env.DB_NAME || '',
+                user: process.env.DB_USER || '',
+                cluster: process.env.DB_CLUSTER || '',
+                password: process.env.DB_PASS || '',
+              }
+            : undefined,
+          selfHosted: process.env.DB_CLUSTER
+            ? undefined
+            : {
+                host: process.env.DB_HOST || 'bcms-db',
+                port: process.env.DB_PORT
+                  ? parseInt(process.env.DB_PORT, 10)
+                  : 27017,
+                user: process.env.DB_USER || 'test',
+                name: process.env.DB_NAME || 'admin',
+                password: process.env.DB_PASS || 'test1234',
+              },
+        }
+      : undefined,
   };
   /**
    * Set maximum size of a request body. Defaults to 1MB
    */
-  static bodySizeLimit?: number;
+  static bodySizeLimit?: number = process.env.BODY_SIZE_LIMIT
+    ? parseInt(process.env.BODY_SIZE_LIMIT, 10)
+    : undefined;
   /**
    * Plugin paths.
    * For example, if there is a Plugin called `test.js` in a
    * `src/plugins` directory, jobs array will
    * contain: ['src/plugins/test.js']
    */
-  static plugins?: string[] = [];
+  static plugins?: string[] = process.env.PLUGINS
+    ? process.env.PLUGINS.split(',')
+    : undefined;
   /**
    * Function paths.
    * For example, if there is a Function called `test.js` in a
    * `src/functions` directory, jobs array will
    * contain: ['src/functions/test.js']
    */
-  static functions?: string[];
+  static functions?: string[] = process.env.FUNCTIONS
+    ? process.env.FUNCTIONS.split(',')
+    : undefined;
   /**
    * Event paths.
    * For example, if there is an Event called `test.js` in a
    * `src/events` directory, jobs array will contain: ['src/events/test.js']
    */
-  static events?: string[];
+  static events?: string[] = process.env.EVENTS
+    ? process.env.EVENTS.split(',')
+    : undefined;
   /**
    * Job paths.
    * For example, if there is a Job called `test.js` in a
    * `src/jobs` directory, jobs array will contain: ['src/jobs/test.js']
    */
-  static jobs?: string[];
+  static jobs?: string[] = process.env.JOBS
+    ? process.env.JOBS.split(',')
+    : undefined;
 }
 
-export const BCMSConfigSchema: ObjectSchema = {
-  port: {
-    __type: 'number',
-    __required: true,
-  },
-  jwt: {
-    __type: 'object',
-    __required: true,
-    __child: {
-      scope: {
-        __type: 'string',
-        __required: true,
-      },
-      secret: {
-        __type: 'string',
-        __required: true,
-      },
-      expireIn: {
-        __type: 'number',
-        __required: true,
-      },
-    },
-  },
-  database: {
-    __type: 'object',
-    __required: true,
-    __child: {
-      prefix: {
-        __type: 'string',
-        __required: true,
-      },
-      fs: {
-        __type: 'boolean',
-        __required: false,
-      },
-      mongodb: {
-        __type: 'object',
-        __required: false,
-        __child: {
-          selfHosted: {
-            __type: 'object',
-            __required: false,
-            __child: {
-              host: {
-                __type: 'string',
-                __required: true,
-              },
-              port: {
-                __type: 'number',
-                __required: true,
-              },
-              name: {
-                __type: 'string',
-                __required: true,
-              },
-              user: {
-                __type: 'string',
-                __required: true,
-              },
-              password: {
-                __type: 'string',
-                __required: true,
-              },
-            },
-          },
-          atlas: {
-            __type: 'object',
-            __required: false,
-            __child: {
-              name: {
-                __type: 'string',
-                __required: true,
-              },
-              user: {
-                __type: 'string',
-                __required: true,
-              },
-              password: {
-                __type: 'string',
-                __required: true,
-              },
-              cluster: {
-                __type: 'string',
-                __required: true,
-              },
-            },
-          },
-        },
-      },
-    },
-  },
-  bodySizeLimit: {
-    __type: 'number',
-    __required: false,
-  },
-  plugins: {
-    __type: 'array',
-    __required: false,
-    __child: {
-      __type: 'string',
-    },
-  },
-  functions: {
-    __type: 'array',
-    __required: false,
-    __child: {
-      __type: 'string',
-    },
-  },
-  events: {
-    __type: 'array',
-    __required: false,
-    __child: {
-      __type: 'string',
-    },
-  },
-  jobs: {
-    __type: 'array',
-    __required: false,
-    __child: {
-      __type: 'string',
-    },
-  },
-};
-
-export function createBcmsConfig(config: typeof BCMSConfig): BCMSConfig {
-  return config;
-}
-
-export async function loadBcmsConfig(): Promise<void> {
-  const configFile = await import(path.join(process.cwd(), 'bcms.config.js'));
-  const objectUtil = useObjectUtility();
-  const checkSchema = objectUtil.compareWithSchema(
-    configFile,
-    BCMSConfigSchema,
-    'configFile',
-  );
-  if (checkSchema instanceof ObjectUtilityError) {
-    throw Error(checkSchema.errorCode + ' ---> ' + checkSchema.message);
-  }
-  BCMSConfig.local = configFile.local;
-  BCMSConfig.port = configFile.port;
-  BCMSConfig.jwt = configFile.jwt;
-  BCMSConfig.database = configFile.database;
-  BCMSConfig.bodySizeLimit = configFile.bodySizeLimit;
-  BCMSConfig.plugins = configFile.plugins;
-}
+// export async function loadBcmsConfig(): Promise<void> {
+//   const configFile = await import(path.join(process.cwd(), 'bcms.config.js'));
+//   const objectUtil = useObjectUtility();
+//   const checkSchema = objectUtil.compareWithSchema(
+//     configFile,
+//     BCMSConfigSchema,
+//     'configFile',
+//   );
+//   if (checkSchema instanceof ObjectUtilityError) {
+//     throw Error(checkSchema.errorCode + ' ---> ' + checkSchema.message);
+//   }
+//   BCMSConfig.local = configFile.local;
+//   BCMSConfig.port = configFile.port;
+//   BCMSConfig.jwt = configFile.jwt;
+//   BCMSConfig.database = configFile.database;
+//   BCMSConfig.bodySizeLimit = configFile.bodySizeLimit;
+//   BCMSConfig.plugins = configFile.plugins;
+// }

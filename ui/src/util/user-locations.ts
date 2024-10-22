@@ -5,6 +5,9 @@ export const userLocations = ref<Array<{ path: string; user: BCMSUser }>>([]);
 
 export function initializeUserLocationsWatcher() {
   setInterval(() => {
+    if (!window.bcms.sdk.getAccessToken()) {
+      return;
+    }
     window.bcms.util.throwable(
       async () => {
         return {
@@ -22,5 +25,5 @@ export function initializeUserLocationsWatcher() {
         });
       },
     );
-  }, 1000);
+  }, 5000);
 }

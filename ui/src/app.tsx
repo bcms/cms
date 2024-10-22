@@ -28,9 +28,9 @@ import {
   BCMSMultiSelectModal,
   BCMSBackupModal,
   BCMSViewEntryPointerModal,
+  BCMSAddEditUserModal,
 } from './components';
 import { useBcmsStore } from './store';
-import { bcmsFeatureLoader } from './util';
 
 export const App = defineComponent({
   setup() {
@@ -67,10 +67,8 @@ export const App = defineComponent({
           document.documentElement.classList.remove('dark');
         }
       }
-      await window.bcms.util.throwable(async () => {
-        await bcmsFeatureLoader();
-      });
     });
+
     return () => (
       <>
         <div class={`bcmsLayout grid `}>
@@ -107,6 +105,7 @@ export const App = defineComponent({
           <BCMSUploadMediaModal />
           <BCMSViewEntryPointerModal />
           <BCMSConfirmModal />
+          <BCMSAddEditUserModal />
           <BCMSShowDescriptionExampleModal />
           <BCMSWhereIsItUsedModal />
           <BCMSContentEditorAddWidgetModal />

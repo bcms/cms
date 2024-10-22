@@ -12,6 +12,7 @@ export function createBcmsUserHandler({
 }: BCMSUserHandlerConfig): BCMSUserHandler {
   const baseUri = '/user';
   const getAllLatch = false;
+
   return {
     async getAll() {
       if (getAllLatch) {
@@ -30,6 +31,7 @@ export function createBcmsUserHandler({
       });
       return result.items;
     },
+
     async get(id, skipCache) {
       if (!skipCache) {
         const accessToken = getAccessToken();
@@ -57,6 +59,23 @@ export function createBcmsUserHandler({
       cache.mutations.set({ payload: result.item, name: 'user' });
       return result.item;
     },
+
+    async create(data) {
+      const result = await send<{ item: BCMSUser }>({
+        url: `${baseUri}/create`,
+        method: 'POST',
+        headers: {
+          Authorization: '',
+        },
+        data,
+      });
+      cache.mutations.set({
+        name: 'user',
+        payload: result.item,
+      });
+      return result.item;
+    },
+
     async update(data) {
       const result = await send<{ item: BCMSUser }>({
         url: `${baseUri}`,
@@ -72,6 +91,22 @@ export function createBcmsUserHandler({
       });
       return result.item;
     },
+
+    async deleteById(id) {
+      const result = await send<{ item: BCMSUser }>({
+        url: `${baseUri}/${id}`,
+        method: 'DELETE',
+        headers: {
+          Authorization: '',
+        },
+      });
+      cache.mutations.remove({
+        name: 'user',
+        payload: result.item,
+      });
+      return result.item;
+    },
+
     logout,
   };
 }

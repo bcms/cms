@@ -41,6 +41,8 @@ import type {
   BCMSBackupModalInputData,
   BCMSViewEntryPointerModalInputData,
   BCMSViewEntryPointerModalOutputData,
+  BCMSAddEditUserModalOutputData,
+  BCMSAddEditUserModalInputData,
 } from '../components';
 
 export interface BCMSModalInputDefaults<OutputData> {
@@ -51,7 +53,7 @@ export interface BCMSModalInputDefaults<OutputData> {
 
 export interface BCMSModalServiceItem<
   OutputData,
-  InputData extends BCMSModalInputDefaults<OutputData>
+  InputData extends BCMSModalInputDefaults<OutputData>,
 > {
   show(data: InputData): void;
   hide(): void;
@@ -159,6 +161,10 @@ export interface BCMSModalService {
     view: BCMSModalServiceItem<
       BCMSViewUserModalOutputData,
       BCMSViewUserModalInputData
+    >;
+    addEditUser: BCMSModalServiceItem<
+      BCMSAddEditUserModalOutputData,
+      BCMSAddEditUserModalInputData
     >;
   };
   multiSelect: BCMSModalServiceItem<

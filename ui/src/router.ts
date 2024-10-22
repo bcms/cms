@@ -32,6 +32,15 @@ const routes: Array<RouteRecordRaw> = [
     component: Login,
   },
   {
+    path: `/sign-up`,
+    name: 'Sign up',
+    meta: {
+      noLayout: true,
+    },
+    component: () =>
+      import(/* webpackChunkName: "dashboard-home" */ './views/sign-up'),
+  },
+  {
     path: `${dashboardBaseUri}`,
     name: 'Home',
     component: () =>
@@ -164,7 +173,8 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
-const noAuthPaths = ['/login', '/'];
+const noAuthPaths = ['/login', '/', '/sign-up'];
+
 function toLogin(next: NavigationGuardNext) {
   const query = window.location.href.split('?');
   let url = window.location.pathname;
@@ -178,6 +188,7 @@ function toLogin(next: NavigationGuardNext) {
     },
   });
 }
+
 function routeProtectionNotAllowed(next: NavigationGuardNext) {
   window.bcms.notification.warning(
     translations.value.layout.nav.routeNotAllowed,
@@ -186,6 +197,7 @@ function routeProtectionNotAllowed(next: NavigationGuardNext) {
     path: '/dashboard',
   });
 }
+
 async function reportRoute(path: string) {
   if (!window.bcms.sdk.socket.id()) {
     await new Promise<void>((resolve) => {
@@ -200,6 +212,7 @@ async function reportRoute(path: string) {
     await window.bcms.sdk.routeTracker.register(path);
   }
 }
+
 async function routeProtection(
   to: RouteLocationNormalized,
   next: NavigationGuardNext,
@@ -233,10 +246,12 @@ async function routeProtection(
 }
 
 router.beforeEach(async (to, _, next) => {
+  console.log(to.path);
   if (noAuthPaths.includes(to.path)) {
     next();
   } else {
     if (!(await window.bcms.sdk.isLoggedIn())) {
+      console.log('asdf');
       toLogin(next);
       // next('/');
     } else {

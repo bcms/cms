@@ -20,7 +20,8 @@ export const homeTranslationsEn = {
       dropdown: {
         title: 'Select a template',
         seeAll: 'See all',
-        noTemplates: 'To create an entry, you need to have at least one template.',
+        noTemplates:
+          'To create an entry, you need to have at least one template.',
         createATemplate: 'Create a template.',
       },
     },
@@ -56,9 +57,8 @@ export const homeTranslationsEn = {
       title: 'Options',
       options: {
         admin: {
-          title: 'Make an admin',
-          description: `Admin users are able to access all entires,
-          create new templates, groups and widgets, as well as invite other users and make them admins`,
+          title: 'Edit',
+          description: `Edit user information like email, password, role...`,
         },
         permissions: {
           title: 'Detailed permissions',

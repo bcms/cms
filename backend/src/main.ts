@@ -2,7 +2,6 @@ import {
   createBodyParserMiddleware,
   createCorsMiddleware,
   createPurpleCheetah,
-  createRequestLoggerMiddleware,
 } from '@becomes/purple-cheetah';
 import type {
   Controller,
@@ -21,16 +20,7 @@ import { createFSDB } from '@becomes/purple-cheetah-mod-fsdb';
 import { createMongoDB } from '@becomes/purple-cheetah-mod-mongodb';
 
 import type { BCMSBackend, BCMSUserCustomPool } from './types';
-import { BCMSConfig, loadBcmsConfig } from './config';
-import { BCMSCypressController } from './cypress';
-import {
-  BCMSShimCallsController,
-  BCMSShimUserController,
-  createBcmsShimService,
-  ShimConfig,
-  BCMSShimConnectionAccess,
-  BCMSShimSecurityMiddleware,
-} from './shim';
+import { BCMSConfig } from './config';
 import { BCMSUserController, createBcmsUserRepository } from './user';
 import { BCMSApiKeySecurity, createBcmsApiKeySecurity } from './security';
 import { BCMSApiKeyController, createBcmsApiKeyRepository } from './api';
@@ -76,7 +66,7 @@ import {
 import { BCMSUiAssetMiddleware } from './ui-middleware';
 import { createBcmsIdCounterRepository } from './id-counter';
 import { createBcmsFactories } from './factory';
-import { BCMSAuthController } from './auth';
+import { BCMSAuthController, setAuthCreateAdminServerToken } from './auth';
 import { bcmsPostSetup, bcmsSetup } from './setup';
 import { BCMSColorController, createBcmsColorRepository } from './color';
 import { BCMSTagController, createBcmsTagRepository } from './tag';
@@ -88,15 +78,14 @@ import { BCMSBackupController, BCMSBackupMediaFileMiddleware } from './backup';
 import { RouteTrackerController } from './route-tracker';
 import type { SocketConnection } from '@becomes/purple-cheetah-mod-socket/types';
 import { BCMSRouteTracker } from './route-tracker/service';
+import { BCMSRepo } from '@backend/repo';
 
 const backend: BCMSBackend = {
   app: undefined as never,
 };
 
 async function initialize() {
-  await loadBcmsConfig();
   await loadBcmsResponseCodes();
-  await createBcmsShimService();
 
   const modules: Module[] = [
     bcmsSetup(),
@@ -214,8 +203,6 @@ async function initialize() {
     createBodyParserMiddleware({
       limit: BCMSConfig.bodySizeLimit ? BCMSConfig.bodySizeLimit : 1024000000,
     }),
-    BCMSShimSecurityMiddleware,
-    BCMSShimConnectionAccess,
     BCMSMediaMiddleware,
     BCMSUiAssetMiddleware,
     BCMSBackupMediaFileMiddleware,
@@ -223,8 +210,6 @@ async function initialize() {
   const controllers: Controller[] = [
     BCMSAuthController,
     BCMSUserController,
-    BCMSShimCallsController,
-    BCMSShimUserController,
     BCMSApiKeyController,
     BCMSPluginController,
     BCMSLanguageController,
@@ -294,10 +279,6 @@ async function initialize() {
   } else {
     throw Error('No database configuration detected.');
   }
-  if (ShimConfig.local) {
-    middleware.push(createRequestLoggerMiddleware());
-    controllers.push(BCMSCypressController);
-  }
   modules.push(createBcmsApiKeySecurity());
   modules.push(createBcmsPropHandler());
   modules.push(createBcmsEntryParser());
@@ -344,6 +325,21 @@ async function initialize() {
     onReady(pc) {
       const ex = pc.getExpress();
       ex.disable('x-powered-by');
+      async function init() {
+        const users = await BCMSRepo.user.findAll();
+        if (
+          users.length === 0 ||
+          !users.find((user) =>
+            user.roles.find((role) => role.name === 'ADMIN'),
+          )
+        ) {
+          const message = 'Server token: ' + setAuthCreateAdminServerToken();
+          console.log(Array(message.length).fill('-').join(''));
+          console.log(message);
+          console.log(Array(message.length).fill('-').join(''));
+        }
+      }
+      init().catch((err) => console.error(err));
     },
   });
 }

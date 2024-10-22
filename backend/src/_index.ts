@@ -18,7 +18,6 @@ export * from './response-code';
 export * from './route-tracker';
 export * from './search';
 export * from './security';
-export * from './shim';
 export * from './socket';
 export * from './status';
 export * from './tag';

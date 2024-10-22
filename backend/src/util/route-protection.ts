@@ -19,6 +19,7 @@ import {
 import type {
   BCMSApiKey,
   BCMSRouteProtectionApiConfig,
+  BCMSRouteProtectionBodyCheckResult,
   BCMSRouteProtectionGQLRequest,
   BCMSRouteProtectionJWTAndBodyCheckConfig,
   BCMSRouteProtectionJwtAndBodyCheckResult,
@@ -242,6 +243,24 @@ export class BCMSRouteProtection {
           params: request.params,
         },
       });
+    };
+  }
+
+  static createBodyCheckPreRequestHandler<Body>(config: {
+    bodySchema: ObjectSchema;
+  }): ControllerMethodPreRequestHandler<
+    BCMSRouteProtectionBodyCheckResult<Body>
+  > {
+    return async ({ request, errorHandler }) => {
+      const checkBody = ObjectUtility.compareWithSchema(
+        request.body,
+        config.bodySchema,
+        'body',
+      );
+      if (checkBody instanceof ObjectUtilityError) {
+        throw errorHandler.occurred(HTTPStatus.BAD_REQUEST, checkBody.message);
+      }
+      return { body: request.body };
     };
   }
 }

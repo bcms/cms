@@ -7,7 +7,6 @@ import type {
   BCMSGroupHandler,
   BCMSLanguageHandler,
   BCMSMediaHandler,
-  BCMSShimHandler,
   BCMSSocketHandler,
   BCMSStatusHandler,
   BCMSTagHandler,
@@ -22,6 +21,7 @@ import type {
   BCMSPluginHandler,
   BCMSBackupHandler,
   BCMSRouteTrackerHandler,
+  BCMSAuthHandler,
 } from './handlers';
 import type { BCMSJwt } from './models';
 import type { BCMSStorage } from './storage';
@@ -50,7 +50,7 @@ export interface BCMSSdk<CustomSocketEventsData = unknown> {
   getAccessToken(): BCMSJwt | null;
 
   // Handlers
-  shim: BCMSShimHandler;
+  auth: BCMSAuthHandler;
   user: BCMSUserHandler;
   apiKey: BCMSApiKeyHandler;
   function: BCMSFunctionHandler;

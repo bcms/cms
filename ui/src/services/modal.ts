@@ -43,7 +43,7 @@ function modalNotImplemented(): {
 }
 
 export function useBcmsModalService<
-  CustomModals = undefined
+  CustomModals = undefined,
 >(): BCMSModalServiceExtended<CustomModals> {
   return service as BCMSModalServiceExtended<CustomModals>;
 }
@@ -116,6 +116,7 @@ export function createBcmsModalService(): void {
     },
     settings: {
       view: modalNotImplemented(),
+      addEditUser: modalNotImplemented(),
     },
     multiSelect: modalNotImplemented(),
     backup: modalNotImplemented(),

@@ -1,9 +1,9 @@
-FROM becomes/cms-backend-base-image:2.0.0
+FROM node:20-slim
 
 WORKDIR /app
 
 COPY . /app
 
-RUN npm i
+RUN npm i && cd sdk && npm i
 
 ENTRYPOINT ["npm", "run", "dev"]

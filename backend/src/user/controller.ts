@@ -9,14 +9,16 @@ import {
   ObjectUtilityError,
 } from '@becomes/purple-cheetah/types';
 import {
-  BCMSProtectedUser,
-  BCMSUserCustomPool,
-  BCMSUserUpdateDataSchema,
-  BCMSUserUpdateData,
-  BCMSUser,
-  BCMSSocketEventType,
-  BCMSEventConfigScope,
   BCMSEventConfigMethod,
+  BCMSEventConfigScope,
+  BCMSProtectedUser,
+  type BCMSRouteProtectionJwtAndBodyCheckResult,
+  type BCMSRouteProtectionJwtResult,
+  BCMSSocketEventType,
+  BCMSUser,
+  BCMSUserCustomPool,
+  BCMSUserUpdateData,
+  BCMSUserUpdateDataSchema,
 } from '../types';
 import {
   JWT,
@@ -29,6 +31,11 @@ import { bcmsResCode } from '@backend/response-code';
 import { BCMSSocketManager } from '@backend/socket';
 import { BCMSRouteProtection } from '@backend/util';
 import { BCMSEventManager } from '@backend/event';
+import {
+  type BCMSUserCreateBody,
+  BCMSUserCreateBodySchema,
+} from '@backend/types/user/controller';
+import * as bcrypt from 'bcryptjs';
 
 interface Setup {
   objectUtil: ObjectUtility;
@@ -57,6 +64,7 @@ export const BCMSUserController = createController<Setup>({
           };
         },
       }),
+
       getAll: createControllerMethod<unknown, { items: BCMSProtectedUser[] }>({
         path: '/all',
         type: 'get',
@@ -72,6 +80,7 @@ export const BCMSUserController = createController<Setup>({
           };
         },
       }),
+
       get: createControllerMethod<
         { accessToken: JWT<BCMSUserCustomPool> },
         { item: BCMSProtectedUser }
@@ -95,6 +104,7 @@ export const BCMSUserController = createController<Setup>({
           };
         },
       }),
+
       getById: createControllerMethod<unknown, { item: BCMSProtectedUser }>({
         path: '/:id',
         type: 'get',
@@ -115,6 +125,80 @@ export const BCMSUserController = createController<Setup>({
           };
         },
       }),
+
+      create: createControllerMethod<
+        BCMSRouteProtectionJwtAndBodyCheckResult<BCMSUserCreateBody>,
+        { item: BCMSProtectedUser }
+      >({
+        path: '/create',
+        type: 'post',
+        preRequestHandler:
+          BCMSRouteProtection.createJwtAndBodyCheckPreRequestHandler({
+            bodySchema: BCMSUserCreateBodySchema,
+            roleNames: [JWTRoleName.ADMIN],
+            permissionName: JWTPermissionName.WRITE,
+          }),
+        async handler({ body, errorHandler }) {
+          let user = BCMSFactory.user.create({
+            email: body.email,
+            username: body.firstName + ' ' + body.lastName,
+            roles: [
+              {
+                name: body.role,
+                permissions: [
+                  {
+                    name: JWTPermissionName.EXECUTE,
+                  },
+                  {
+                    name: JWTPermissionName.DELETE,
+                  },
+                  {
+                    name: JWTPermissionName.WRITE,
+                  },
+                  {
+                    name: JWTPermissionName.READ,
+                  },
+                ],
+              },
+            ],
+            password: await bcrypt.hash(body.password, 10),
+            customPool: {
+              personal: {
+                lastName: body.lastName,
+                firstName: body.firstName,
+                avatarUri: '',
+              },
+              address: {},
+              policy: {
+                media: {
+                  delete: false,
+                  get: false,
+                  post: false,
+                  put: false,
+                },
+                plugins: [],
+                templates: [],
+              },
+            },
+          });
+          if (await BCMSRepo.user.methods.findByEmail(body.email)) {
+            throw errorHandler.occurred(
+              HTTPStatus.FORBIDDEN,
+              `User with email "${body.email}" already exists`,
+            );
+          }
+          user = await BCMSRepo.user.add(user);
+          await BCMSSocketManager.emit.user({
+            userId: user._id,
+            type: BCMSSocketEventType.UPDATE,
+            userIds: 'all',
+          });
+          return {
+            item: user,
+          };
+        },
+      }),
+
       update: createControllerMethod<
         { accessToken: JWT<BCMSUserCustomPool> },
         { item: BCMSProtectedUser }
@@ -161,6 +245,50 @@ export const BCMSUserController = createController<Setup>({
             );
           }
           let change = false;
+          if (
+            typeof data.firstName === 'string' &&
+            user.customPool.personal.firstName !== data.firstName
+          ) {
+            user.customPool.personal.firstName = data.firstName;
+            change = true;
+          }
+          if (
+            typeof data.lastName === 'string' &&
+            user.customPool.personal.lastName !== data.lastName
+          ) {
+            user.customPool.personal.lastName = data.lastName;
+            change = true;
+          }
+          if (typeof data.email === 'string' && user.email !== data.email) {
+            user.email = data.email;
+            change = true;
+          }
+          if (data.password) {
+            user.password = await bcrypt.hash(data.password, 10);
+            change = true;
+          }
+          if (data.role && JWTRoleName[data.role]) {
+            user.roles = [
+              {
+                name: data.role,
+                permissions: [
+                  {
+                    name: JWTPermissionName.READ,
+                  },
+                  {
+                    name: JWTPermissionName.EXECUTE,
+                  },
+                  {
+                    name: JWTPermissionName.WRITE,
+                  },
+                  {
+                    name: JWTPermissionName.DELETE,
+                  },
+                ],
+              },
+            ];
+            change = true;
+          }
           if (typeof data.customPool !== 'undefined') {
             if (typeof data.customPool.policy !== 'undefined') {
               if (
@@ -213,6 +341,43 @@ export const BCMSUserController = createController<Setup>({
           return {
             item: BCMSFactory.user.toProtected(updatedUser),
           };
+        },
+      }),
+
+      deleteById: createControllerMethod<
+        BCMSRouteProtectionJwtResult,
+        { item: BCMSProtectedUser }
+      >({
+        path: '/:userId',
+        type: 'delete',
+        preRequestHandler: BCMSRouteProtection.createJwtPreRequestHandler(
+          [JWTRoleName.ADMIN],
+          JWTPermissionName.DELETE,
+        ),
+        async handler({ request, accessToken, errorHandler }) {
+          const params = request.params as {
+            userId: string;
+          };
+          if (accessToken.payload.userId === params.userId) {
+            throw errorHandler.occurred(
+              HTTPStatus.FORBIDDEN,
+              'You are not allowed to delete yourself',
+            );
+          }
+          const user = await BCMSRepo.user.findById(params.userId);
+          if (!user) {
+            throw errorHandler.occurred(
+              HTTPStatus.NOT_FOUNT,
+              `User with ID "${params.userId}" does not exist`,
+            );
+          }
+          await BCMSRepo.user.deleteById(user._id);
+          await BCMSSocketManager.emit.user({
+            userId: user._id,
+            type: BCMSSocketEventType.REMOVE,
+            userIds: 'all',
+          });
+          return { item: user };
         },
       }),
     };

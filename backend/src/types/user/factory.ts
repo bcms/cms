@@ -16,8 +16,5 @@ export interface BCMSUserFactory {
     customPool?: BCMSUserCustomPool;
   }): BCMSUser;
   toProtected(user: BCMSUser): BCMSProtectedUser;
-  cloudUserToUser(
-    cloudUser: BCMSCloudUser,
-    policy?: BCMSUserPolicy,
-  ): BCMSUser;
+  cloudUserToUser(cloudUser: BCMSCloudUser, policy?: BCMSUserPolicy): BCMSUser;
 }

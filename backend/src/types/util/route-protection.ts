@@ -36,6 +36,10 @@ export interface BCMSRouteProtectionJwtResult {
   accessToken: JWT<BCMSUserCustomPool>;
 }
 
+export interface BCMSRouteProtectionBodyCheckResult<Body> {
+  body: Body;
+}
+
 export interface BCMSRouteProtectionJwtAndBodyCheckResult<Body> {
   accessToken: JWT<BCMSUserCustomPool>;
   body: Body;

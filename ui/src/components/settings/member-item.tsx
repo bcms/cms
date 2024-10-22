@@ -30,7 +30,7 @@ const component = defineComponent({
     const throwable = window.bcms.util.throwable;
 
     const overflowMenuItems = computed(() => {
-      return [
+      const items = [
         {
           cyTag: 'make-admin',
           title:
@@ -42,10 +42,14 @@ const component = defineComponent({
           icon: 'administration/users',
           theme: 'default',
           onClick() {
-            window.open('https://cloud.thebcms.com/', '_blank');
+            window.bcms.modal.settings.addEditUser.show({
+              userId: props.item._id,
+            });
           },
         },
-        {
+      ];
+      if (props.item.roles[0].name !== 'ADMIN') {
+        items.push({
           cyTag: 'edit-permissions',
           title:
             translations.value.page.home.members.overflowMenu.options
@@ -58,22 +62,33 @@ const component = defineComponent({
           onClick() {
             handleViewClick();
           },
+        });
+      }
+      items.push({
+        cyTag: 'remove-user',
+        title:
+          translations.value.page.home.members.overflowMenu.options.remove
+            .title,
+        description:
+          translations.value.page.home.members.overflowMenu.options.remove
+            .description,
+        icon: 'user-remove',
+        theme: 'danger',
+        async onClick() {
+          if (
+            !(await window.bcms.confirm(
+              'Delete user',
+              `Are you sure that you want to delete this user?`,
+            ))
+          ) {
+            return;
+          }
+          await window.bcms.util.throwable(async () => {
+            await window.bcms.sdk.user.deleteById(props.item._id);
+          });
         },
-        {
-          cyTag: 'remove-user',
-          title:
-            translations.value.page.home.members.overflowMenu.options.remove
-              .title,
-          description:
-            translations.value.page.home.members.overflowMenu.options.remove
-              .description,
-          icon: 'user-remove',
-          theme: 'danger',
-          onClick() {
-            window.open('https://cloud.thebcms.com/', '_blank');
-          },
-        },
-      ];
+      });
+      return items;
     });
 
     function handleViewClick() {
@@ -157,7 +172,6 @@ const component = defineComponent({
               {translations.value.page.settings.team.pendingCta}
             </span>
           ) : (
-            props.item.roles[0].name !== BCMSJwtRoleName.ADMIN &&
             props.isAdmin && (
               <BCMSOverflowMenu optionsWidth={296}>
                 {overflowMenuItems.value.map((item, index) => {
