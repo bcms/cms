@@ -34,7 +34,7 @@ const component = defineComponent({
       }
       await window.bcms.util.throwable(async () => {
         if (await window.bcms.sdk.auth.shouldSignUp()) {
-          await router.replace('/signup-admin');
+          await router.replace('/sign-up');
         }
       });
     });
