@@ -17,6 +17,9 @@ import type {
 } from '@bcms/selfhosted-backend/entry/models/controller';
 import type { Media } from '@bcms/selfhosted-backend/media/models/main';
 
+/**
+ * EntryHandler class to manage entries in a specified template.
+ */
 export class EntryHandler {
     private templates: Template[] | null = null;
     private baseUri(templateId: string) {
@@ -79,7 +82,19 @@ export class EntryHandler {
         return template;
     }
 
-    async getAllLite(templateIdOrName: string, skipCache?: boolean) {
+    /**
+     * Retrieves all lightweight (lite) entries for a given template.
+     * If caching is enabled and `skipCache` is not set to true, the method will attempt
+     * to retrieve data from the cache before making a network request.
+     *
+     * @param {string} templateIdOrName - The ID or name of the template.
+     * @param {boolean} [skipCache] - Optional. If true, bypasses the cache and fetches fresh data.
+     * @return {Promise<Array<EntryLite>>} A promise that resolves to an array of lightweight entries.
+     */
+    async getAllLite(
+        templateIdOrName: string,
+        skipCache?: boolean,
+    ): Promise<EntryLite[]> {
         const cacheKey = `all_lite_${templateIdOrName}`;
         const template = await this.findTemplateByName(templateIdOrName);
         if (!skipCache && this.client.useMemCache && this.latch[cacheKey]) {
@@ -95,7 +110,19 @@ export class EntryHandler {
         return res.items;
     }
 
-    async getAll(templateIdOrName: string, skipCache?: boolean) {
+    /**
+     * Retrieves all parsed entries for a given template.
+     * If caching is enabled and `skipCache` is not set to true, the method will attempt
+     * to retrieve data from the cache before making a network request.
+     *
+     * @param {string} templateIdOrName - The ID or name of the template to retrieve entries for.
+     * @param {boolean} [skipCache] - Optional. If true, bypasses the cache and fetches fresh data.
+     * @return {Promise<EntryParsed[]>} - A promise that resolves to an array of parsed entries.
+     */
+    async getAll(
+        templateIdOrName: string,
+        skipCache?: boolean,
+    ): Promise<EntryParsed[]> {
         const cacheKey = `all_parsed_${templateIdOrName}`;
         const template = await this.findTemplateByName(templateIdOrName);
         if (!skipCache && this.client.useMemCache && this.latch[cacheKey]) {
@@ -118,7 +145,19 @@ export class EntryHandler {
         return res.items;
     }
 
-    async getAllRaw(templateIdOrName: string, skipCache?: boolean) {
+    /**
+     * Fetches all raw entries associated with a given template identifier or name.
+     * If caching is enabled and `skipCache` is not set to true, the method will attempt
+     * to retrieve data from the cache before making a network request.
+     *
+     * @param {string} templateIdOrName - The template identifier or name to retrieve the entries for.
+     * @param {boolean} [skipCache] - Optional. If true, bypasses the cache and fetches directly from the source.
+     * @return {Promise<Entry[]>} - A promise that resolves to an array of `Entry` objects.
+     */
+    async getAllRaw(
+        templateIdOrName: string,
+        skipCache?: boolean,
+    ): Promise<Entry[]> {
         const cacheKey = `all_raw_${templateIdOrName}`;
         const template = await this.findTemplateByName(templateIdOrName);
         if (!skipCache && this.client.useMemCache && this.latch[cacheKey]) {
@@ -136,11 +175,21 @@ export class EntryHandler {
         return res.items;
     }
 
+    /**
+     * Retrieves a lite version of an entry by its ID and template name or ID.
+     * If caching is enabled and `skipCache` is not set to true, the method will attempt
+     * to retrieve data from the cache before making a network request.
+     *
+     * @param {string} entryId - The ID of the entry to retrieve.
+     * @param {string} templateIdOrName - The ID or name of the template associated with the entry.
+     * @param {boolean} [skipCache] - Optional. If true, bypasses the cache and fetches directly from the source.
+     * @return {Promise<EntryLite>} A promise that resolves to the lite version of the entry.
+     */
     async getByIdLite(
         entryId: string,
         templateIdOrName: string,
         skipCache?: boolean,
-    ) {
+    ): Promise<EntryLite> {
         const template = await this.findTemplateByName(templateIdOrName);
         if (!skipCache && this.client.useMemCache) {
             const cacheHit = this.cacheLite.find(
@@ -159,11 +208,21 @@ export class EntryHandler {
         return res.item;
     }
 
+    /**
+     * Retrieves an entry by its ID and template name or ID.
+     * If caching is enabled and `skipCache` is not set to true, the method will attempt
+     * to retrieve data from the cache before making a network request.
+     *
+     * @param {string} entryId - The ID of the entry to be retrieved.
+     * @param {string} templateIdOrName - The template ID or name associated with the entry.
+     * @param {boolean} [skipCache] - Optional. If true, bypasses the cache and fetches directly from the source.
+     * @return {Promise<EntryParsed>} - A promise that resolves to the retrieved entry.
+     */
     async getById(
         entryId: string,
         templateIdOrName: string,
         skipCache?: boolean,
-    ) {
+    ): Promise<EntryParsed> {
         const template = await this.findTemplateByName(templateIdOrName);
         if (!skipCache && this.client.useMemCache) {
             const cacheHit = this.cacheParse.find(
@@ -187,11 +246,21 @@ export class EntryHandler {
         return res.item;
     }
 
+    /**
+     * Retrieves a raw entry by its ID and template name or ID.
+     * If caching is enabled and `skipCache` is not set to true, the method will attempt
+     * to retrieve data from the cache before making a network request.
+     *
+     * @param {string} entryId - The ID of the entry to be retrieved.
+     * @param {string} templateIdOrName - The template ID or name associated with the entry.
+     * @param {boolean} [skipCache] - Optional. If true, bypasses the cache and fetches directly from the source.
+     * @return {Promise<Entry>} - A promise that resolves to the retrieved entry.
+     */
     async getByIdRaw(
         entryId: string,
         templateIdOrName: string,
         skipCache?: boolean,
-    ) {
+    ): Promise<Entry> {
         const template = await this.findTemplateByName(templateIdOrName);
         if (!skipCache && this.client.useMemCache) {
             const cacheHit = this.cacheRaw.find(
@@ -201,18 +270,26 @@ export class EntryHandler {
                 return cacheHit;
             }
         }
-        const res = await this.client.send<ControllerItemResponse<EntryParsed>>(
-            {
-                url: `${this.baseUri(template._id)}/${entryId}`,
-            },
-        );
+        const res = await this.client.send<ControllerItemResponse<Entry>>({
+            url: `${this.baseUri(template._id)}/${entryId}`,
+        });
         if (this.client.useMemCache) {
-            this.cacheParse.set(res.item);
+            this.cacheRaw.set(res.item);
         }
         return res.item;
     }
 
-    async create(templateIdOrName: string, data: EntryCreateBody) {
+    /**
+     * Creates a new entry based on the given template and data.
+     *
+     * @param {string} templateIdOrName - The ID or name of the template to use for the entry creation.
+     * @param {EntryCreateBody} data - The data to create the new entry.
+     * @return {Promise<Entry>} The newly created entry.
+     */
+    async create(
+        templateIdOrName: string,
+        data: EntryCreateBody,
+    ): Promise<Entry> {
         const template = await this.findTemplateByName(templateIdOrName);
         const res = await this.client.send<ControllerItemResponse<Entry>>({
             url: `${this.baseUri(template._id)}/create`,
@@ -228,7 +305,17 @@ export class EntryHandler {
         return res.item;
     }
 
-    async update(templateIdOrName: string, data: EntryUpdateBody) {
+    /**
+     * Updates an entry using the provided template identifier or name and data.
+     *
+     * @param {string} templateIdOrName - The identifier or name of the template to use for the update.
+     * @param {EntryUpdateBody} data - The data to update the entry with.
+     * @return {Promise<Entry>} The updated entry.
+     */
+    async update(
+        templateIdOrName: string,
+        data: EntryUpdateBody,
+    ): Promise<Entry> {
         const template = await this.findTemplateByName(templateIdOrName);
         const res = await this.client.send<ControllerItemResponse<Entry>>({
             url: `${this.baseUri(template._id)}/update`,
@@ -244,7 +331,17 @@ export class EntryHandler {
         return res.item;
     }
 
-    async deleteById(entryId: string, templateIdOrName: string) {
+    /**
+     * Deletes an entry by its ID based on the specified template.
+     *
+     * @param {string} entryId - The unique identifier of the entry to be deleted.
+     * @param {string} templateIdOrName - The ID or name of the template associated with the entry.
+     * @return {Promise<Entry>} A promise that resolves to the deleted entry.
+     */
+    async deleteById(
+        entryId: string,
+        templateIdOrName: string,
+    ): Promise<Entry> {
         const template = await this.findTemplateByName(templateIdOrName);
         const res = await this.client.send<ControllerItemResponse<Entry>>({
             url: `${this.baseUri(template._id)}/${entryId}`,
@@ -258,6 +355,12 @@ export class EntryHandler {
         return res.item;
     }
 
+    /**
+     * Injects SVG content into media objects within the provided entries.
+     *
+     * @param {EntryParsed[]} entries - An array of parsed entry objects.
+     * @return {Promise<void>} - A promise that resolves when SVG content has been injected into all applicable media objects.
+     */
     private async injectMediaSvg(entries: EntryParsed[]): Promise<void> {
         const svgCache: {
             [mediaId: string]: string;
