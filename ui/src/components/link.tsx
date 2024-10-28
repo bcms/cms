@@ -46,15 +46,15 @@ const component = defineComponent({
         class={props.class}
         href={props.href}
         target={props.newTab ? '_blank' : undefined}
-        onClick={(e) => {
-          ctx.emit('click', e);
+        onClick={async (event) => {
+          ctx.emit('click', event);
           if (!props.clickOverride) {
             if (props.disabled) {
-              e.preventDefault();
+              event.preventDefault();
               return;
             }
             if (!props.newTab && !props.href.startsWith('http')) {
-              e.preventDefault();
+              event.preventDefault();
               if (
                 (event as MouseEventInit).metaKey ||
                 (event as MouseEventInit).ctrlKey
@@ -62,7 +62,7 @@ const component = defineComponent({
                 const routeData = router.resolve({ path: props.href });
                 window.open(routeData.href, '_blank');
               } else {
-                router.push(props.href);
+                await router.push(props.href);
               }
             }
           }

@@ -23,7 +23,7 @@ const component = defineComponent({
                 {translations.value.page.home.members.title}
               </h2>
               {members.value.length > 0 && (
-                <BCMSButton href="https://cloud.thebcms.com/dashboard" newTab>
+                <BCMSButton href="/dashboard/settings">
                   {translations.value.page.home.members.invite}
                 </BCMSButton>
               )}
@@ -55,7 +55,7 @@ const component = defineComponent({
               <div class="leading-tight tracking-[-0.01em] mb-8 dark:text-light">
                 {translations.value.page.home.members.noUsers}
               </div>
-              <BCMSButton href="https://cloud.thebcms.com/dashboard" newTab>
+              <BCMSButton href="/dashboard/settings" newTab>
                 {translations.value.page.home.members.invite}
               </BCMSButton>
             </div>

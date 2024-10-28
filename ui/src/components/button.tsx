@@ -1,4 +1,5 @@
 import { defineComponent, type PropType, reactive } from 'vue';
+import BCMSLink from './link';
 
 const component = defineComponent({
   props: {
@@ -24,7 +25,7 @@ const component = defineComponent({
   setup(props, ctx) {
     props = reactive(props);
 
-    const Tag = props.href ? 'a' : 'button';
+    const Tag = props.href ? BCMSLink as any : 'button' as any;
 
     return () => {
       return (
@@ -55,7 +56,7 @@ const component = defineComponent({
           v-cy={props.cyTag}
           style={props.style}
           disabled={props.disabled}
-          onClick={(event) => {
+          onClick={(event: MouseEvent) => {
             ctx.emit('click', event);
           }}
           href={props.href ? props.href : undefined}

@@ -43,16 +43,21 @@ export const getters: GetterTree<BCMSStoreState, BCMSStoreState> &
       return defaultGetters.findOne(state.feature, query);
     };
   },
-  [BCMSStoreGetterTypes.feature_available](state) {
+  [BCMSStoreGetterTypes.feature_available](_state) {
     return (name) => {
-      const feat = state.feature.find((e) => e.name === name);
-      if (!feat) {
-        return false;
-      }
-      if (feat.available === true) {
+      if (name === 'dashboard') {
         return true;
       }
       return false;
+
+      // const feat = state.feature.find((e) => e.name === name);
+      // if (!feat) {
+      //   return false;
+      // }
+      // if (feat.available === true) {
+      //   return true;
+      // }
+      // return false;
     };
   },
 };
