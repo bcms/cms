@@ -6,6 +6,9 @@ import type {
     ControllerItemsResponse,
 } from '@bcms/selfhosted-backend/util/controller';
 
+/**
+ * A handler class for interfacing with the language-related API endpoints.
+ */
 export class LanguageHandler {
     private baseUri = `/api/v4/language`;
     private cache = new MemCache<Language>('_id');
@@ -28,7 +31,13 @@ export class LanguageHandler {
         }
     }
 
-    async getAll(skipCache?: boolean) {
+    /**
+     * Retrieves all languages
+     *
+     * @param {boolean} [skipCache] - Indicates whether to skip the cache and fetch data directly.
+     * @return {Promise<Language>} A promise that resolves to an array of items.
+     */
+    async getAll(skipCache?: boolean): Promise<Language[]> {
         if (!skipCache && this.client.useMemCache && this.latch.all) {
             return this.cache.items;
         }
@@ -41,7 +50,14 @@ export class LanguageHandler {
         return res.items;
     }
 
-    async getById(id: string, skipCache?: boolean) {
+    /**
+     * Retrieves a Language object by its ID.
+     *
+     * @param {string} id - The unique identifier of the Language object to retrieve.
+     * @param {boolean} [skipCache=false] - Whether to bypass the cache and fetch data directly (default is false).
+     * @return {Promise<Language>} A promise that resolves to the requested Language object.
+     */
+    async getById(id: string, skipCache?: boolean): Promise<Language> {
         if (!skipCache && this.client.useMemCache) {
             const cacheHit = this.cache.findById(id);
             if (cacheHit) {

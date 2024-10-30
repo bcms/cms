@@ -24,6 +24,10 @@ export interface SocketInternalEventSub {
     handler(): Promise<void>;
 }
 
+/**
+ * The `SocketHandler` class manages a WebSocket connection, including
+ * connection, reconnection, and event subscription mechanisms.
+ */
 export class SocketHandler {
     id: string | null = null;
     socket: WebSocket = null as never;
@@ -66,7 +70,13 @@ export class SocketHandler {
         }
     }
 
-    async connect() {
+    /**
+     * Establishes a WebSocket connection to the specified server and handles various connection events such as open, close, error, and message.
+     * This method also manages automatic reconnections with backoff in case of disconnections.
+     *
+     * @return {Promise<void>} Resolves when the connection is successfully established or rejects with an error if the connection fails.
+     */
+    async connect(): Promise<void> {
         const queue = await this.connectionQueue({
             name: 'Connection',
             handler: async () => {
@@ -180,6 +190,13 @@ export class SocketHandler {
         }
     }
 
+    /**
+     * Registers an event handler for a specified socket event name.
+     *
+     * @param {Name} eventName - The name of the socket event to register the handler for.
+     * @param {SocketEventHandler<Name>} handler - The handler function to be executed when the event is triggered.
+     * @return {() => void} - A function to unregister the event handler.
+     */
     register<Name extends SocketEventName>(
         eventName: Name,
         handler: SocketEventHandler<Name>,
@@ -214,6 +231,11 @@ export class SocketHandler {
         };
     }
 
+    /**
+     * Registers an internal event handler for either 'open' or 'close' events.
+     *
+     * @return A function that can be called to unregister the handler.
+     */
     internalEventRegister(
         type: 'open' | 'close',
         handler: () => Promise<void>,
@@ -236,10 +258,17 @@ export class SocketHandler {
         };
     }
 
+    /**
+     * Emits an event through the socket connection with the specified event name and data.
+     *
+     * @param {Name} eventName - The name of the event to be emitted.
+     * @param {SocketEventNamesAndTypes[Name]} data - The data associated with the event.
+     * @return {void}
+     */
     emit<Name extends SocketEventName>(
         eventName: Name,
         data: SocketEventNamesAndTypes[Name],
-    ) {
+    ): void {
         if (this.socket && this.connected) {
             if (this.shouldDebug()) {
                 this.debug('emit', eventName, data);
@@ -269,14 +298,18 @@ export class SocketHandler {
         return this.client.debug;
     }
 
-    disconnect() {
+    /**
+     * Disconnects an active socket connection if it exists.
+     *
+     * This method will close and terminate the current socket connection.
+     *
+     * @return {void}
+     */
+    disconnect(): void {
         if (this.socket) {
             this.disconnected = true;
             this.socket.close();
             this.socket.terminate();
-            setTimeout(() => {
-                this.disconnected = false;
-            }, 1000);
         }
     }
 }

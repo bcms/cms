@@ -10,6 +10,11 @@ import type {
     ControllerItemsResponse,
 } from '@bcms/selfhosted-backend/util/controller';
 
+/**
+ * The TemplateHandler class is responsible for managing template operations such as fetching,
+ * updating, and deleting templates. It interacts with a cache system and a client to perform
+ * these operations.
+ */
 export class TemplateHandler {
     private baseUri = '/api/v4/template';
     private latch: {

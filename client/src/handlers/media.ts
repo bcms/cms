@@ -11,12 +11,34 @@ import type {
     ControllerItemsResponse,
 } from '@bcms/selfhosted-backend/util/controller';
 
+/**
+ * MediaExtended interface that extends the Media interface with additional properties and methods.
+ */
 export interface MediaExtended extends Media {
+    /**
+     * Optional string variable representing the SVG content.
+     */
     svg?: string;
+
+    /**
+     * Retrieves a binary representation of media based on provided options.
+     *
+     * @param {MediaGetBinBodyImage} [options] - An optional configuration object to specify the details for media retrieval.
+     * @return {Promise<Buffer>} A promise that resolves to a Buffer containing the binary data of the media.
+     */
     bin(options?: MediaGetBinBodyImage): Promise<Buffer>;
-    thumbnail(options?: MediaGetBinBodyImage): Promise<Buffer>;
+
+    /**
+     * Retrieves a thumbnail for a given media item.
+     *
+     * @return {Promise<Buffer>} A promise that resolves with the generated thumbnail as a Buffer.
+     */
+    thumbnail(): Promise<Buffer>;
 }
 
+/**
+ * Handles media-related operations such as fetching media items, resolving media paths, and managing cache.
+ */
 export class MediaHandler {
     private cache = new MemCache<MediaExtended>('_id');
     private latch: {
@@ -40,6 +62,13 @@ export class MediaHandler {
         }
     }
 
+    /**
+     * Resolves the full path of a media item by traversing its parent hierarchy.
+     *
+     * @param {Media} media - The media item for which to resolve the path.
+     * @param {Media[]} allMedia - An array of all media items, used to locate parent items.
+     * @return {string} The resolved full path of the media item.
+     */
     resolvePath(media: Media, allMedia: Media[]): string {
         if (media.parentId) {
             const parent = allMedia.find((e) => e._id === media.parentId);
@@ -50,6 +79,12 @@ export class MediaHandler {
         return '/' + media.name;
     }
 
+    /**
+     * Retrieves all media items, optionally bypassing the cache.
+     *
+     * @param {boolean} [skipCache] - If true, bypasses the in-memory cache and fetches fresh data.
+     * @return {Promise<MediaExtended[]>} A promise that resolves to an array of extended media items.
+     */
     async getAll(skipCache?: boolean): Promise<MediaExtended[]> {
         if (!skipCache && this.client.useMemCache && this.latch.all) {
             return this.cache.items;
@@ -74,6 +109,13 @@ export class MediaHandler {
         return items;
     }
 
+    /**
+     * Retrieves a media item by its ID. Optionally skips the cache.
+     *
+     * @param {string} id - The unique identifier of the media item to retrieve.
+     * @param {boolean} [skipCache] - Whether to bypass the cache and fetch directly from the source.
+     * @return {Promise<MediaExtended>} A promise that resolves to the retrieved media item.
+     */
     async getById(id: string, skipCache?: boolean): Promise<MediaExtended> {
         if (!skipCache && this.client.useMemCache) {
             const cacheHit = this.cache.findById(id);
@@ -96,6 +138,14 @@ export class MediaHandler {
         return item;
     }
 
+    /**
+     * Fetches a media file (binary) for specified media ID.
+     *
+     * @param {string} id - Identifier of the media.
+     * @param {string} filename - Name of the file to fetch from the media bin.
+     * @param {MediaGetBinBody} [data] - Optional additional parameters for the request.
+     * @return {Promise<Buffer>} A promise that resolves to the binary data (Buffer) of the requested media file.
+     */
     async getMediaBin(
         id: string,
         filename: string,
@@ -108,7 +158,15 @@ export class MediaHandler {
         });
     }
 
-    toUri(id: string, filename: string, data?: MediaGetBinBody) {
+    /**
+     * Constructs a URI for accessing a media binary with optional data.
+     *
+     * @param {string} id - The identifier for the media resource.
+     * @param {string} filename - The name of the file to be accessed.
+     * @param {MediaGetBinBody} [data] - Optional data to be included in the query string.
+     * @return {string} The constructed URI.
+     */
+    toUri(id: string, filename: string, data?: MediaGetBinBody): string {
         const query: string[] = [];
         if (data) {
             query.push(
@@ -126,6 +184,12 @@ export class MediaHandler {
         return uri;
     }
 
+    /**
+     * Extends a Media object with additional functionality.
+     *
+     * @param {Media} media - The original Media object to extend.
+     * @return {MediaExtended} An extended Media object with additional methods for bin and thumbnail retrieval.
+     */
     private toMediaExtended(media: Media): MediaExtended {
         return {
             ...media,
@@ -135,10 +199,9 @@ export class MediaHandler {
                     image: options,
                 });
             },
-            thumbnail: async (options) => {
+            thumbnail: async () => {
                 return this.getMediaBin(media._id, media.name, {
                     thumbnail: true,
-                    image: options,
                 });
             },
         };
