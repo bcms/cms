@@ -108,6 +108,9 @@ export const EntryController = createController({
                         {
                             accessToken: [],
                         },
+                        {
+                            apiKey: [],
+                        },
                     ],
                     summary:
                         'Get lite model of all entries for specified template',

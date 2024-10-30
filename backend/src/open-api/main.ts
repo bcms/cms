@@ -855,18 +855,16 @@ export function openApiGetSchema(): Omit<OpenAPIV3.Document, 'paths'> {
     return {
         openapi: '3.0.3',
         info: {
-            title: ' REST API v3',
-            description: ' REST API v3',
-            version: '3.0.0',
+            title: 'BCMS REST API v4',
+            description: '',
+            version: '4.0.0',
             contact: {
                 name: 'Website',
                 url: 'https://thebcms.com',
                 email: 'support@thebcms.com',
             },
         },
-        servers: [
-            { url: 'http://localhost:8081', description: 'Development' },
-        ],
+        servers: [{ url: 'http://localhost:8080', description: 'Development' }],
         components: {
             schemas: OpenApiModels as any,
             securitySchemes: {

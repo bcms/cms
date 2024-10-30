@@ -264,15 +264,9 @@ export const AuthController = createController({
                 openApi: {
                     tags: [controllerName],
                     summary: 'Invalidate Access and Refresh token pair',
-                    parameters: [
+                    security: [
                         {
-                            in: 'header',
-                            name: 'Authorization',
-                            required: true,
-                            schema: {
-                                type: 'string',
-                                format: 'Bearer <REFRESH_TOKEN>',
-                            },
+                            refreshToken: [],
                         },
                     ],
                     responses: {
@@ -313,18 +307,12 @@ export const AuthController = createController({
                 type: 'post',
                 openApi: {
                     tags: [controllerName],
-                    summary: 'Get a new valid Access token',
-                    parameters: [
+                    security: [
                         {
-                            in: 'header',
-                            name: 'Authorization',
-                            required: true,
-                            schema: {
-                                type: 'string',
-                                format: 'Bearer <REFRESH_TOKEN>',
-                            },
+                            refreshToken: [],
                         },
                     ],
+                    summary: 'Get a new valid Access token',
                     responses: {
                         200: {
                             description: 'OK',

@@ -63,6 +63,9 @@ export const MediaController = createController({
                         {
                             accessToken: [],
                         },
+                        {
+                            apiKey: [],
+                        },
                     ],
                     summary: 'Get all media files metadata',
                     responses: {
@@ -101,6 +104,9 @@ export const MediaController = createController({
                     security: [
                         {
                             accessToken: [],
+                        },
+                        {
+                            apiKey: [],
                         },
                     ],
                     parameters: [
@@ -154,6 +160,9 @@ export const MediaController = createController({
                         {
                             accessToken: [],
                         },
+                        {
+                            apiKey: [],
+                        },
                     ],
                     parameters: [
                         {
@@ -175,7 +184,7 @@ export const MediaController = createController({
                         {
                             in: 'query',
                             name: 'data',
-                            required: true,
+                            required: false,
                             schema: {
                                 type: 'string',
                             },
@@ -186,7 +195,7 @@ export const MediaController = createController({
                         200: {
                             description: 'OK',
                             content: {
-                                'multipart/form-data': {
+                                'file:*/*': {
                                     schema: {
                                         type: 'string',
                                         format: 'binary',
@@ -196,7 +205,7 @@ export const MediaController = createController({
                         },
                     },
                 },
-                preRequestHandler: RP.createApiKeyJwtCheck(),
+                // preRequestHandler: RP.createApiKeyJwtCheck(),
                 async handler({ errorHandler, reply, request }) {
                     const params = request.params as {
                         mediaId: string;
