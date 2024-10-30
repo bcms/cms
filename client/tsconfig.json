@@ -24,5 +24,21 @@
             "@bcms/selfhosted-utils/*": ["../backend/src/_utils/*"]
         }
     },
-    "include": ["src", "../backend/src/_utils"]
+    "include": ["src", "../backend/src/_utils"],
+    "typedocOptions": {
+        "entryPoints": [
+            "src/index.ts",
+            "src/handlers/entry.ts",
+            "src/handlers/entry-status.ts",
+            "src/handlers/group.ts",
+            "src/handlers/language.ts",
+            "src/handlers/media.ts",
+            "src/handlers/socket.ts",
+            "src/handlers/template.ts",
+            "src/handlers/type-generator.ts",
+            "src/handlers/widget.ts"
+        ],
+        "out": "../docs/client",
+        "readme": "README.md"
+    }
 }

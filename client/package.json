@@ -19,6 +19,7 @@
         "build:ts:cjs": "tsc --project tsconfig.commonjs.json",
         "build:noEmit": "tsc --project tsconfig.json --noEmit",
         "test": "jest",
+        "typedoc": "typedoc",
         "_test": "ts-node --project ./tsconfig.commonjs.json -r tsconfig-paths/register src/_test.ts"
     },
     "dependencies": {
@@ -41,6 +42,7 @@
         "ts-jest": "^29.1.3",
         "ts-node": "^10.9.2",
         "tsconfig-paths": "^4.2.0",
+        "typedoc": "^0.26.10",
         "typescript": "^5.4.5"
     },
     "publishConfig": {
