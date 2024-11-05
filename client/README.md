@@ -6,7 +6,7 @@ requests to your BCMS Instance.
 
 ## Getting started
 
-Install the client:
+Install the client (we are using [GitHub packages](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-npm-registry#installing-a-package) so you will need to setup your project for them):
 
 ```bash
 npm i --save @bcms/selfhosted-client
@@ -20,6 +20,7 @@ import { Client } from '@bcms/selfhosted-client';
 const bcms = new Client(
     'BCMS_ORIGIN', // ex. https://my-bcms-domain.com
     {
+        // API Key is generated in BCMS Dashboard
         id: 'API_KEY_ID',
         secret: 'API_KEY_SECRET'
     },
@@ -29,7 +30,10 @@ const bcms = new Client(
         useMemCache: true, // Cache BCMS responses
     }
 );
-
-const templates = await bcms.template.getAll();
-console.log(templates);
 ```
+
+Have in mind that API Keys are scoped and you can set permissions in the BCMS Dashboard.
+
+### [API Reference](https://bcms.github.io/cms/client/)
+
+In progress ...
