@@ -1,3 +1,13 @@
+> [!IMPORTANT]
+> **This repository is no longer maintained.**
+>
+> As of October 2024, BCMS core development has moved to a private codebase. This repository will receive no further updates, fixes, or releases.
+>
+> It remains public and free to use, fork, and build on under the [LICENSE](LICENSE), as is and without support or warranty.
+>
+> The current version of BCMS is available at [thebcms.com](https://thebcms.com).
+
+
 <img src="https://raw.githubusercontent.com/bcms/cms/v3/assets/readme/bcms-preview.webp" alt="Interface Animation"  width="800px" />
 
 # BCMS - Open-source Headless CMS
