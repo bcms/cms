@@ -20,12 +20,14 @@ import {
 } from '@bcms/selfhosted-ui/util/prop';
 import { entryEditorMetaOnAddPropValue } from '@bcms/selfhosted-ui/components/entry/editor';
 import { MediaPreview } from '@bcms/selfhosted-ui/components/media-preview';
+import { useI18n } from 'vue-i18n';
 
 const SLICE_PROP_PATH_INDEX = 8;
 
 export const EntryContentNodeWidgetComponent = defineComponent({
     props: nodeViewProps,
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const [language] = window.bcms.useLanguage();
 
@@ -100,7 +102,9 @@ export const EntryContentNodeWidgetComponent = defineComponent({
                         <div
                             class={`appearance-none relative mr-2 text-green dark:text-yellow whitespace-nowrap text-xs uppercase`}
                         >
-                            Widget | {widget.value?.label}
+                            {t('editor.widgetLabel', {
+                                label: widget.value?.label,
+                            })}
                         </div>
                         <div
                             class={`h-[1px] bg-green dark:bg-yellow w-full mr-2`}

@@ -5,9 +5,11 @@ import { Icon } from '@bcms/selfhosted-ui/components/icon';
 import { EntityList } from '@bcms/selfhosted-ui/components/entity-list';
 import { EmptyState } from '@bcms/selfhosted-ui/components/empty-state';
 import { Tag } from '@bcms/selfhosted-ui/components/tag';
+import { useI18n } from 'vue-i18n';
 
 export const ApiKeysView = defineComponent({
     setup() {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const modal = window.bcms.modalService;
@@ -29,11 +31,15 @@ export const ApiKeysView = defineComponent({
                 {apiKeys.value.length > 0 ? (
                     <>
                         <div class={`flex gap-2`}>
-                            <h1 class={`font-medium text-xl`}>API Keys</h1>
+                            <h1 class={`font-medium text-xl`}>
+                                {t('routes.apiKeys')}
+                            </h1>
                             <div class={`ml-auto`}>
                                 <Button onClick={createNew}>
                                     <div class={`flex gap-2 items-center`}>
-                                        <div>Create new API Key</div>
+                                        <div>
+                                            {t('modals.apiKey.createTitle')}
+                                        </div>
                                         <div>
                                             <Icon
                                                 class={`w-4 h-4 text-white fill-current`}
@@ -56,7 +62,11 @@ export const ApiKeysView = defineComponent({
                                         <div class={`flex gap-2 items-center`}>
                                             <div>{apiKey.name}</div>
                                             {apiKey.blocked ? (
-                                                <Tag danger>Blocked</Tag>
+                                                <Tag danger>
+                                                    {t(
+                                                        'views.apiKeys.blocked',
+                                                    )}
+                                                </Tag>
                                             ) : (
                                                 ''
                                             )}
@@ -72,10 +82,10 @@ export const ApiKeysView = defineComponent({
                         maxWidth="335px"
                         maxHeight="320px"
                         class="mt-20 md:absolute md:bottom-32 md:right-32"
-                        title={'API Keys'}
-                        subtitle={'There are no API Keys.'}
+                        title={t('routes.apiKeys')}
+                        subtitle={t('views.apiKeys.empty')}
                         clickHandler={createNew}
-                        ctaText={'Create new API Key'}
+                        ctaText={t('modals.apiKey.createTitle')}
                     />
                 )}
             </div>

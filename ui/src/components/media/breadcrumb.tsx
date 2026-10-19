@@ -2,12 +2,14 @@ import { computed, defineComponent } from 'vue';
 import { useMedia } from '@bcms/selfhosted-ui/hooks/media';
 import { Icon } from '@bcms/selfhosted-ui/components/icon';
 import type { Media } from '@bcms/selfhosted-backend/media/models/main';
+import { useI18n } from 'vue-i18n';
 
 export const Breadcrumb = defineComponent({
     emits: {
         click: (_mediaId?: Media) => true,
     },
     setup(_, ctx) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const { mediaActiveParent } = useMedia();
         const mediaTree = computed(() => {
@@ -30,7 +32,7 @@ export const Breadcrumb = defineComponent({
                             }}
                             class="uppercase text-xs tracking-0.06 leading-normal flex no-underline text-dark transition-colors duration-200 hover:text-opacity-60 focus-visible:text-opacity-60 dark:text-light"
                         >
-                            <span>Media manager</span>
+                            <span>{t('routes.media')}</span>
                         </button>
                     </li>
                     {mediaTree.value.map((item) => {

@@ -4,9 +4,11 @@ import { Link } from '@bcms/selfhosted-ui/components/link';
 import { BgAuth } from '@bcms/selfhosted-ui/components/bg-auth';
 import { BCMSLogo } from '@bcms/selfhosted-ui/components/logo';
 import { delay } from '@bcms/selfhosted-ui/util/delay';
+import { useI18n } from 'vue-i18n';
 
 export const P404View = defineComponent({
     setup() {
+        const { t } = useI18n();
         const headMeta = window.bcms.meta;
         const pageTransition = window.bcms.pageTransition();
 
@@ -14,7 +16,7 @@ export const P404View = defineComponent({
         const [t2State] = pageTransition.register(() => delay(300));
 
         headMeta.set({
-            title: 'Oops! Page not found',
+            titleKey: 'routes.notFound',
         });
 
         return () => {
@@ -43,16 +45,16 @@ export const P404View = defineComponent({
                             <div class="flex flex-col justify-center mx-auto">
                                 <div class="flex flex-col items-center text-center dark:text-light">
                                     <h1 class="text-9.5 mb-5 -tracking-0.03 leading-none">
-                                        Oops! Page not found
+                                        {t('notFound.title')}
                                     </h1>
                                     <p class="leading-tight -tracking-0.01 mb-6">
-                                        You can return to the homepage.
+                                        {t('notFound.description')}
                                     </p>
                                     <Link
                                         href="/"
                                         class="rounded-3.5 transition-all duration-300 inline-block font-medium text-base leading-normal -tracking-0.01 whitespace-normal no-underline py-1.5 px-5 mb-16 border border-solid select-none bg-dark border-dark text-white hover:shadow-btnPrimary hover:text-white focus:shadow-btnPrimary focus:text-white active:shadow-btnPrimary active:text-white disabled:bg-grey disabled:opacity-50 disabled:border-grey disabled:border-opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none focus:outline-none dark:text-yellow"
                                     >
-                                        Go home
+                                        {t('notFound.goHome')}
                                     </Link>
                                     <EmptyState
                                         src="/404.png"

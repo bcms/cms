@@ -5,11 +5,13 @@ import {
     type PropType,
     ref,
     Teleport,
+    watch,
 } from 'vue';
 import { type Editor, posToDOMRect } from '@tiptap/vue-3';
 import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
 import { findParent } from '@bcms/selfhosted-ui/util/dom';
 import { Icon } from '@bcms/selfhosted-ui/components/icon';
+import { useI18n } from 'vue-i18n';
 
 export interface EntryContentEditorToolbarItem {
     id: string;
@@ -33,10 +35,14 @@ export const EntryContentEditorToolbar = defineComponent({
         allowedWidgets: Array as PropType<string[]>,
     },
     setup(props) {
+        const { t, locale } = useI18n();
         const modal = window.bcms.modalService;
 
         const toolbarPosition = ref<{ top: number; left: number }>();
         const navItems = ref(getNavItems());
+        watch(locale, () => {
+            navItems.value = getNavItems();
+        });
         const container = ref<HTMLDivElement>();
         let selectDebounce: NodeJS.Timeout | undefined = undefined;
 
@@ -44,7 +50,7 @@ export const EntryContentEditorToolbar = defineComponent({
             const items: EntryContentEditorToolbarItem[] = [
                 {
                     id: 'paragraph_type',
-                    text: 'Paragraph type',
+                    text: t('editor.paragraphType'),
                     icon: '/editor/text',
                     visible: () =>
                         !(
@@ -55,12 +61,12 @@ export const EntryContentEditorToolbar = defineComponent({
                     // visible: () => true,
                     active: () => props.editor.isActive('heading'),
                     children: {
-                        title: 'Convert to',
+                        title: t('editor.convertTo'),
                         show: false,
                         items: [
                             {
                                 id: 'heading_1',
-                                text: 'Heading 1',
+                                text: t('editor.heading', { level: 1 }),
                                 visible: () =>
                                     !props.editor.isActive('heading', {
                                         level: 1,
@@ -78,7 +84,7 @@ export const EntryContentEditorToolbar = defineComponent({
                             },
                             {
                                 id: 'heading_2',
-                                text: 'Heading 2',
+                                text: t('editor.heading', { level: 2 }),
                                 visible: () =>
                                     !props.editor.isActive('heading', {
                                         level: 2,
@@ -96,7 +102,7 @@ export const EntryContentEditorToolbar = defineComponent({
                             },
                             {
                                 id: 'heading_3',
-                                text: 'Heading 3',
+                                text: t('editor.heading', { level: 3 }),
                                 visible: () =>
                                     !props.editor.isActive('heading', {
                                         level: 3,
@@ -114,7 +120,7 @@ export const EntryContentEditorToolbar = defineComponent({
                             },
                             {
                                 id: 'heading_4',
-                                text: 'Heading 4',
+                                text: t('editor.heading', { level: 4 }),
                                 visible: () =>
                                     !props.editor.isActive('heading', {
                                         level: 4,
@@ -132,7 +138,7 @@ export const EntryContentEditorToolbar = defineComponent({
                             },
                             {
                                 id: 'heading_5',
-                                text: 'Heading 5',
+                                text: t('editor.heading', { level: 5 }),
                                 visible: () =>
                                     !props.editor.isActive('heading', {
                                         level: 5,
@@ -150,7 +156,7 @@ export const EntryContentEditorToolbar = defineComponent({
                             },
                             {
                                 id: 'heading_6',
-                                text: 'Heading 6',
+                                text: t('editor.heading', { level: 6 }),
                                 visible: () =>
                                     !props.editor.isActive('heading', {
                                         level: 6,
@@ -168,7 +174,7 @@ export const EntryContentEditorToolbar = defineComponent({
                             },
                             {
                                 id: 'paragraph',
-                                text: 'Paragraph',
+                                text: t('editor.paragraph'),
                                 visible: () =>
                                     !props.editor.isActive('paragraph'),
                                 icon: '/editor/text',
@@ -185,7 +191,7 @@ export const EntryContentEditorToolbar = defineComponent({
                 },
                 {
                     id: 'bold',
-                    text: 'Bold',
+                    text: t('editor.bold'),
                     icon: '/editor/bold',
                     visible: () => !props.editor.isActive('codeBlock'),
                     active: () => props.editor.isActive('bold'),
@@ -195,7 +201,7 @@ export const EntryContentEditorToolbar = defineComponent({
                 },
                 {
                     id: 'italic',
-                    text: 'Italic',
+                    text: t('editor.italic'),
                     icon: '/editor/italic',
                     visible: () => !props.editor.isActive('codeBlock'),
                     active: () => props.editor.isActive('italic'),
@@ -205,7 +211,7 @@ export const EntryContentEditorToolbar = defineComponent({
                 },
                 {
                     id: 'underline',
-                    text: 'Underline',
+                    text: t('editor.underline'),
                     icon: '/editor/underline',
                     visible: () => !props.editor.isActive('codeBlock'),
                     active: () => props.editor.isActive('underline'),
@@ -215,7 +221,7 @@ export const EntryContentEditorToolbar = defineComponent({
                 },
                 {
                     id: 'strike',
-                    text: 'Strike',
+                    text: t('editor.strike'),
                     icon: '/editor/strike',
                     visible: () => !props.editor.isActive('codeBlock'),
                     active: () => props.editor.isActive('strike'),
@@ -225,7 +231,7 @@ export const EntryContentEditorToolbar = defineComponent({
                 },
                 {
                     id: 'link',
-                    text: 'Link',
+                    text: t('editor.link'),
                     icon: '/editor/link',
                     visible: () => !props.editor.isActive('codeBlock'),
                     active: () => props.editor.isActive('link'),
@@ -260,7 +266,7 @@ export const EntryContentEditorToolbar = defineComponent({
                 },
                 {
                     id: 'inline-code',
-                    text: 'Inline code',
+                    text: t('editor.inlineCode'),
                     icon: '/editor/terminal',
                     visible: () => !props.editor.isActive('codeBlock'),
                     active: () => props.editor.isActive('inlineCode'),
@@ -270,7 +276,7 @@ export const EntryContentEditorToolbar = defineComponent({
                 },
                 {
                     id: 'bullet_list',
-                    text: 'Unordered list',
+                    text: t('editor.unorderedList'),
                     icon: '/editor/list-ul',
                     visible: () => !props.editor.isActive('codeBlock'),
                     active: () => props.editor.isActive('bulletList'),
@@ -280,7 +286,7 @@ export const EntryContentEditorToolbar = defineComponent({
                 },
                 {
                     id: 'ordered_list',
-                    text: 'Ordered list',
+                    text: t('editor.orderedList'),
                     icon: '/editor/list-ol',
                     visible: () => !props.editor.isActive('codeBlock'),
                     active: () => props.editor.isActive('orderedList'),
@@ -290,7 +296,7 @@ export const EntryContentEditorToolbar = defineComponent({
                 },
                 {
                     id: 'code-block',
-                    text: 'Code block',
+                    text: t('editor.codeBlock'),
                     icon: '/editor/code',
                     visible: () => true,
                     active: () => props.editor.isActive('codeBlock'),

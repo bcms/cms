@@ -8,16 +8,18 @@ import {
 } from '@bcms/selfhosted-ui/util/validation';
 import { Button } from '@bcms/selfhosted-ui/components/button';
 import { throwable } from '@bcms/selfhosted-ui/util/throwable';
+import { useI18n } from 'vue-i18n';
 
 export const SignupAdminView = defineComponent({
     setup() {
+        const { t } = useI18n();
         const router = useRouter();
         const inputs = ref({
             firstName: createValidationItem({
                 value: '',
                 handler(value) {
                     if (!value) {
-                        return 'First name is required';
+                        return t('auth.firstNameRequired');
                     }
                 },
             }),
@@ -25,7 +27,7 @@ export const SignupAdminView = defineComponent({
                 value: '',
                 handler(value) {
                     if (!value) {
-                        return 'Last name is required';
+                        return t('auth.lastNameRequired');
                     }
                 },
             }),
@@ -33,7 +35,7 @@ export const SignupAdminView = defineComponent({
                 value: '',
                 handler(value) {
                     if (!value) {
-                        return 'Email is required';
+                        return t('auth.emailRequired');
                     }
                 },
             }),
@@ -41,9 +43,9 @@ export const SignupAdminView = defineComponent({
                 value: '',
                 handler(value) {
                     if (!value) {
-                        return 'Password is required';
+                        return t('auth.passwordRequired');
                     } else if (value.length < 8) {
-                        return 'Password must be at least 8 characters long';
+                        return t('auth.passwordMinLength');
                     }
                 },
             }),
@@ -51,7 +53,7 @@ export const SignupAdminView = defineComponent({
                 value: '',
                 handler(value) {
                     if (!value) {
-                        return 'Server token is required';
+                        return t('auth.serverTokenRequired');
                     }
                 },
             }),
@@ -88,10 +90,12 @@ export const SignupAdminView = defineComponent({
 
         return () => (
             <div class={`flex-col`}>
-                <h1 class={`font-normal text-4xl`}>Create admin user</h1>
+                <h1 class={`font-normal text-4xl`}>
+                    {t('auth.createAdminUser')}
+                </h1>
                 <TextInput
                     class={`mt-10`}
-                    label="First name"
+                    label={t('auth.firstName')}
                     value={inputs.value.firstName.value}
                     error={inputs.value.firstName.error}
                     onInput={(value) => {
@@ -100,7 +104,7 @@ export const SignupAdminView = defineComponent({
                 />
                 <TextInput
                     class={`mt-4`}
-                    label="Last name"
+                    label={t('auth.lastName')}
                     value={inputs.value.lastName.value}
                     error={inputs.value.lastName.error}
                     onInput={(value) => {
@@ -109,7 +113,7 @@ export const SignupAdminView = defineComponent({
                 />
                 <TextInput
                     class={`mt-4`}
-                    label="Email"
+                    label={t('auth.email')}
                     value={inputs.value.email.value}
                     error={inputs.value.email.error}
                     onInput={(value) => {
@@ -118,7 +122,7 @@ export const SignupAdminView = defineComponent({
                 />
                 <PasswordInput
                     class={`mt-4`}
-                    label="Password"
+                    label={t('auth.password')}
                     value={inputs.value.password.value}
                     error={inputs.value.password.error}
                     onInput={(value) => {
@@ -127,8 +131,8 @@ export const SignupAdminView = defineComponent({
                 />
                 <PasswordInput
                     class={`mt-4`}
-                    label="Server token"
-                    description={`Can be found in server logs when starting the BCMS for the first time`}
+                    label={t('auth.serverToken')}
+                    description={t('auth.serverTokenDescription')}
                     value={inputs.value.serverToken.value}
                     error={inputs.value.serverToken.error}
                     onInput={(value) => {
@@ -136,7 +140,7 @@ export const SignupAdminView = defineComponent({
                     }}
                 />
                 <Button class={`mt-10 mr-auto`} onClick={signup}>
-                    Sign up
+                    {t('auth.signUp')}
                 </Button>
             </div>
         );

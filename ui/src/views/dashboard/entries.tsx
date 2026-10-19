@@ -21,9 +21,11 @@ import type {
     EntryLite,
     EntryLiteInfo,
 } from '@bcms/selfhosted-backend/entry/models/main';
+import { useI18n } from 'vue-i18n';
 
 export const EntriesView = defineComponent({
     setup() {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const modal = window.bcms.modalService;
         const throwable = window.bcms.throwable;
@@ -63,35 +65,35 @@ export const EntriesView = defineComponent({
             } = {
                 header: [
                     {
-                        text: 'No.',
+                        text: t('views.entries.no'),
                         width: 60,
                     },
                     {
-                        text: 'Image',
+                        text: t('views.entries.image'),
                         width: 96,
                     },
                     {
-                        text: 'Created at',
+                        text: t('views.entries.createdAt'),
                         sortable: tableDefaultNumberSort(),
                         width: 150,
                     },
                     {
-                        text: 'Updated at',
+                        text: t('views.entries.updatedAt'),
                         sortable: tableDefaultNumberSort(),
                         width: 150,
                     },
                     {
-                        text: 'Title',
+                        text: t('views.entries.title'),
                         sortable: tableDefaultSort(),
                         width: 250,
                     },
                     {
-                        text: 'Description',
+                        text: t('views.entries.description'),
                         sortable: tableDefaultSort(),
                         width: dynamicRowWidth < 300 ? 300 : dynamicRowWidth,
                     },
                     {
-                        text: 'Actions',
+                        text: t('views.entries.actions'),
                         width: 150,
                     },
                 ],
@@ -103,14 +105,14 @@ export const EntriesView = defineComponent({
         function tableRowActions(entryLite: EntryLite, info?: EntryLiteInfo) {
             const output: DropdownItem[] = [
                 {
-                    text: 'Duplicate',
+                    text: t('views.entries.duplicate'),
                     icon: '/copy',
                     onClick(event) {
                         console.log(event);
                     },
                 },
                 {
-                    text: 'View model',
+                    text: t('views.entries.viewModel'),
                     icon: '/code',
                     onClick(event) {
                         console.log(event);
@@ -123,7 +125,7 @@ export const EntriesView = defineComponent({
                     },
                 },
                 {
-                    text: 'Where is it used',
+                    text: t('views.entries.whereIsItUsed'),
                     icon: '/link',
                     border: true,
                     onClick(event) {
@@ -131,19 +133,16 @@ export const EntriesView = defineComponent({
                     },
                 },
                 {
-                    text: 'Delete',
+                    text: t('common.delete'),
                     icon: '/trash',
                     danger: true,
                     async onClick() {
                         if (
                             await confirm(
-                                'Delete entry',
-                                <>
-                                    <span>
-                                        Are you sure you want to delete entry{' '}
-                                        <strong>{info?.title || '-'}</strong>?
-                                    </span>
-                                </>,
+                                t('views.entries.deleteTitle'),
+                                t('views.entries.deleteConfirm', {
+                                    title: info?.title || '-',
+                                }),
                             )
                         ) {
                             await throwable(
@@ -155,7 +154,7 @@ export const EntriesView = defineComponent({
                                 },
                                 async () => {
                                     notification.success(
-                                        'Entry successfully deleted',
+                                        t('views.entries.deleted'),
                                     );
                                 },
                             );
@@ -314,7 +313,7 @@ export const EntriesView = defineComponent({
                                         );
                                     }}
                                 >
-                                    Create new entry
+                                    {t('views.entries.createNew')}
                                 </Button>
                             </div>
                         </div>
@@ -329,8 +328,8 @@ export const EntriesView = defineComponent({
                                     maxHeight="320px"
                                     class="mt-20 md:absolute md:bottom-32 md:right-32"
                                     title={''}
-                                    subtitle={'There are no entries.'}
-                                    ctaText={'Create new entry'}
+                                    subtitle={t('views.entries.empty')}
+                                    ctaText={t('views.entries.createNew')}
                                 />
                             ) : (
                                 <div class={`mt-10`}>

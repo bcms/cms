@@ -10,9 +10,11 @@ import { Button } from '@bcms/selfhosted-ui/components/button';
 import { millisToDateString } from '@bcms/selfhosted-ui/util/date';
 import { PropList } from '@bcms/selfhosted-ui/components/prop-list';
 import type { Group } from '@bcms/selfhosted-backend/group/models/main';
+import { useI18n } from 'vue-i18n';
 
 export const GroupView = defineComponent({
     setup() {
+        const { t } = useI18n();
         const meta = window.bcms.meta;
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
@@ -26,12 +28,12 @@ export const GroupView = defineComponent({
             sdk.store.group.find((e) => e._id === route.params.groupId),
         );
 
-        meta.set({ title: 'Group' });
+        meta.set({ titleKey: 'routes.group' });
 
         const loading = ref(true);
-        const dropdownItems: DropdownItem[] = [
+        const dropdownItems = computed<DropdownItem[]>(() => [
             {
-                text: 'Edit group',
+                text: t('views.detail.editGroup'),
                 onClick() {
                     modal.handlers.groupCreateEdit.open({
                         data: {
@@ -41,7 +43,7 @@ export const GroupView = defineComponent({
                 },
             },
             {
-                text: 'Where is it used',
+                text: t('views.detail.whereIsItUsed'),
                 border: true,
                 async onClick() {
                     await throwable(
@@ -59,14 +61,13 @@ export const GroupView = defineComponent({
                 },
             },
             {
-                text: 'Delete',
+                text: t('common.delete'),
                 danger: true,
                 async onClick() {
                     if (
                         await confirm(
-                            'Delete group',
-                            'Are you sure you' +
-                                ' want to delete this group? All entries with',
+                            t('views.detail.deleteGroup'),
+                            t('views.detail.deleteGroupConfirm'),
                             group.value?.name,
                         )
                     ) {
@@ -78,7 +79,7 @@ export const GroupView = defineComponent({
                             },
                             async () => {
                                 notification.success(
-                                    'Group successfully deleted',
+                                    t('views.detail.groupDeleted'),
                                 );
                                 await router.replace('/d/group');
                             },
@@ -86,7 +87,7 @@ export const GroupView = defineComponent({
                     }
                 },
             },
-        ];
+        ]);
 
         function infoItem(label: string, value: string) {
             return (
@@ -116,7 +117,9 @@ export const GroupView = defineComponent({
                             });
                         },
                         async () => {
-                            notification.success('Property added successfully');
+                            notification.success(
+                                t('views.detail.propertyAdded'),
+                            );
                         },
                     );
                 },
@@ -147,12 +150,12 @@ export const GroupView = defineComponent({
                             <Breadcrumb
                                 items={[
                                     {
-                                        text: 'Home',
+                                        text: t('views.detail.home'),
                                         icon: '/home',
                                         href: '/d',
                                     },
                                     {
-                                        text: 'Groups',
+                                        text: t('routes.groups'),
                                         href: '/d/group',
                                     },
                                     {
@@ -161,9 +164,9 @@ export const GroupView = defineComponent({
                                 ]}
                             />
                             <div class={`flex gap-2 ml-auto`}>
-                                <Dropdown items={dropdownItems} />
+                                <Dropdown items={dropdownItems.value} />
                                 <Button onClick={createProperty}>
-                                    Add property
+                                    {t('views.detail.addProperty')}
                                 </Button>
                             </div>
                         </div>
@@ -175,27 +178,38 @@ export const GroupView = defineComponent({
                                     {group.value.label}
                                 </div>
                                 <div class={`text-darkGray dark:text-gray`}>
-                                    {group.value.props.length} properties in
-                                    this group
+                                    {t(
+                                        'views.detail.propertiesInGroup',
+                                        {
+                                            count: group.value.props.length,
+                                        },
+                                        group.value.props.length,
+                                    )}
                                 </div>
                             </div>
                             <div class={`mt-6 desktop:mt-0 desktop:ml-auto`}>
-                                {infoItem('ID', group.value._id)}
                                 {infoItem(
-                                    'Created',
+                                    t('views.detail.id'),
+                                    group.value._id,
+                                )}
+                                {infoItem(
+                                    t('views.detail.created'),
                                     millisToDateString(
                                         group.value.createdAt,
                                         true,
                                     ),
                                 )}
                                 {infoItem(
-                                    'Updated',
+                                    t('views.detail.updated'),
                                     millisToDateString(
                                         group.value?.updatedAt,
                                         true,
                                     ),
                                 )}
-                                {infoItem('Name', group.value.name)}
+                                {infoItem(
+                                    t('views.detail.name'),
+                                    group.value.name,
+                                )}
                             </div>
                         </div>
                         <PropList
@@ -215,7 +229,7 @@ export const GroupView = defineComponent({
                                     },
                                     async () => {
                                         notification.success(
-                                            'Property deleted successfully',
+                                            t('views.detail.propertyDeleted'),
                                         );
                                     },
                                 );
@@ -239,7 +253,7 @@ export const GroupView = defineComponent({
                                     },
                                     async () => {
                                         notification.success(
-                                            'Property moved successfully',
+                                            t('views.detail.propertyMoved'),
                                         );
                                     },
                                 );
@@ -265,7 +279,9 @@ export const GroupView = defineComponent({
                                             },
                                             async () => {
                                                 notification.success(
-                                                    'Property updated successfully',
+                                                    t(
+                                                        'views.detail.propertyUpdated',
+                                                    ),
                                                 );
                                             },
                                         );

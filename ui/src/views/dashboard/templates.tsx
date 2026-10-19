@@ -4,9 +4,11 @@ import { Button } from '@bcms/selfhosted-ui/components/button';
 import { Icon } from '@bcms/selfhosted-ui/components/icon';
 import { EntityList } from '@bcms/selfhosted-ui/components/entity-list';
 import { EmptyState } from '@bcms/selfhosted-ui/components/empty-state';
+import { useI18n } from 'vue-i18n';
 
 export const TemplatesView = defineComponent({
     setup() {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const modal = window.bcms.modalService;
@@ -28,11 +30,17 @@ export const TemplatesView = defineComponent({
                 {templates.value.length > 0 ? (
                     <>
                         <div class={`flex gap-2`}>
-                            <h1 class={`font-medium text-xl`}>Templates</h1>
+                            <h1 class={`font-medium text-xl`}>
+                                {t('routes.templates')}
+                            </h1>
                             <div class={`ml-auto`}>
                                 <Button onClick={createNew}>
                                     <div class={`flex gap-2 items-center`}>
-                                        <div>Create new template</div>
+                                        <div>
+                                            {t(
+                                                'modals.template.createTitle',
+                                            )}
+                                        </div>
                                         <div>
                                             <Icon
                                                 class={`w-4 h-4 text-white fill-current`}
@@ -61,10 +69,10 @@ export const TemplatesView = defineComponent({
                         maxWidth="335px"
                         maxHeight="320px"
                         class="mt-20 md:absolute md:bottom-32 md:right-32"
-                        title={'Template'}
-                        subtitle={'There are no templates.'}
+                        title={t('routes.template')}
+                        subtitle={t('views.templates.empty')}
                         clickHandler={createNew}
-                        ctaText={'Create new template'}
+                        ctaText={t('modals.template.createTitle')}
                     />
                 )}
             </div>

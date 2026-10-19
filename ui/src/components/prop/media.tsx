@@ -22,6 +22,7 @@ import {
     PropInputWrapperArrayItem,
 } from '@bcms/selfhosted-ui/components/prop/_input-wrapper';
 import { MediaSelect } from '@bcms/selfhosted-ui/components/inputs/select/media';
+import { useI18n } from 'vue-i18n';
 
 export const PropMediaInput = defineComponent({
     props: {
@@ -58,6 +59,7 @@ export const PropMediaInput = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const errorUnsubs: UnsubscribeFns = [];
         const entrySyncUnsubs: UnsubscribeFns = [];
         const errors = ref<string[]>([]);
@@ -75,7 +77,7 @@ export const PropMediaInput = defineComponent({
                                     .data as PropValueMediaData[];
                                 if (!valueData[i]?._id) {
                                     errors.value[i] =
-                                        'Property is required, please select a media file';
+                                        t('props.requiredMedia');
                                     return false;
                                 }
                                 errors.value[i] = '';
@@ -91,7 +93,7 @@ export const PropMediaInput = defineComponent({
                                 .data as PropValueMediaData[];
                             if (!valueData[0]?._id) {
                                 errors.value[0] =
-                                    'Property is required, please select a media file';
+                                    t('props.requiredMedia');
                                 return false;
                             }
                             errors.value[0] = '';

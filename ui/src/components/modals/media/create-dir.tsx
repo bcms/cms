@@ -10,10 +10,12 @@ import {
 import { TextInput } from '@bcms/selfhosted-ui/components/inputs/text';
 import { useMedia } from '@bcms/selfhosted-ui/hooks/media';
 import type { ModalHandlerOptions } from '@bcms/selfhosted-ui/services/modal';
+import { useI18n } from 'vue-i18n';
 
 export const ModalMediaCreateDir = defineComponent({
     props: getModalDefaultProps<void, void>(),
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const notification = window.bcms.notification;
@@ -40,10 +42,12 @@ export const ModalMediaCreateDir = defineComponent({
                 value: '',
                 handler(value) {
                     if (!value) {
-                        return 'Name is required';
+                        return t('modals.mediaDir.nameRequired');
                     }
                     if (sameLevelMedia.value.find((e) => e.name === value)) {
-                        return `Folder with name "${value}" already exists`;
+                        return t('modals.mediaDir.nameExists', {
+                            name: value,
+                        });
                     }
                 },
             }),
@@ -57,7 +61,7 @@ export const ModalMediaCreateDir = defineComponent({
                     data.value = event.data;
                 } else {
                     data.value = {
-                        title: 'Create new folder',
+                        title: t('modals.mediaDir.createTitle'),
                     };
                 }
                 inputs.value.name.value = '';
@@ -74,13 +78,13 @@ export const ModalMediaCreateDir = defineComponent({
                         });
                     },
                     async () => {
-                        notification.success('Folder successfully created');
+                        notification.success(t('modals.mediaDir.created'));
                         return true;
                     },
                     async (err) => {
                         console.error(err);
                         notification.error(
-                            'There was an error creating folder',
+                            t('modals.mediaDir.createFailed'),
                         );
                         return false;
                     },
@@ -96,14 +100,14 @@ export const ModalMediaCreateDir = defineComponent({
             <ModalWrapper
                 title={data.value.title}
                 handler={props.handler}
-                doneText={'Create'}
+                doneText={t('modals.common.create')}
             >
                 <div>
                     <TextInput
-                        label={'Folder name'}
+                        label={t('modals.mediaDir.folderName')}
                         value={inputs.value.name.value}
                         error={inputs.value.name.error}
-                        placeholder={'Name'}
+                        placeholder={t('modals.mediaDir.namePlaceholder')}
                         onInput={(value) => {
                             inputs.value.name.value = value;
                         }}

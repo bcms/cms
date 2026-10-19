@@ -14,6 +14,7 @@ import {
 } from '@bcms/selfhosted-ui/util/sub';
 import { Select } from '@bcms/selfhosted-ui/components/inputs/select/main';
 import { MediaPreview } from '@bcms/selfhosted-ui/components/media-preview';
+import { useI18n } from 'vue-i18n';
 
 export const SelectEntryPointer = defineComponent({
     props: {
@@ -38,6 +39,7 @@ export const SelectEntryPointer = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const [language] = window.bcms.useLanguage();
@@ -92,7 +94,7 @@ export const SelectEntryPointer = defineComponent({
                 error={props.error}
                 description={props.description}
                 required={props.required}
-                placeholder={props.placeholder || 'Select an entry'}
+                placeholder={props.placeholder || t('components.select.entry')}
                 disabled={props.disabled}
                 selected={props.selected}
                 options={entries.value.map((entry) => {

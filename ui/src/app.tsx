@@ -23,6 +23,8 @@ export const App = defineComponent({
                 route.meta as {
                     layout?: LayoutNames;
                     title?: string;
+                    titleKey?: string;
+                    titleParams?: Record<string, unknown>;
                     class?: string;
                 },
         );
@@ -31,8 +33,17 @@ export const App = defineComponent({
         );
 
         router.beforeEach((to) => {
-            if (to.meta.title) {
-                window.bcms.meta.set({ title: to.meta.title as string });
+            const toMeta = to.meta as {
+                title?: string;
+                titleKey?: string;
+                titleParams?: Record<string, unknown>;
+            };
+            if (toMeta.titleKey || toMeta.title) {
+                window.bcms.meta.set({
+                    title: toMeta.title,
+                    titleKey: toMeta.titleKey,
+                    titleParams: toMeta.titleParams,
+                });
             }
         });
 

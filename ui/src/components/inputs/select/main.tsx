@@ -19,6 +19,7 @@ import {
     type UnsubscribeFns,
 } from '@bcms/selfhosted-ui/util/sub';
 import { Icon } from '@bcms/selfhosted-ui/components/icon';
+import { useI18n } from 'vue-i18n';
 
 export interface SelectOption {
     label: string;
@@ -50,6 +51,7 @@ export const Select = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const opened = ref(false);
         const searchTerm = ref('');
         const selectedOption = computed(() =>
@@ -304,7 +306,9 @@ export const Select = defineComponent({
                                             listOption(option, optionIdx),
                                     )
                                 ) : (
-                                    <div class={`px-8 py-6`}>No options</div>
+                                    <div class={`px-8 py-6`}>
+                                        {t('components.select.noOptions')}
+                                    </div>
                                 )}
                             </ul>
                         </Teleport>

@@ -22,9 +22,11 @@ import { Button } from '@bcms/selfhosted-ui/components/button';
 import { EntryEditor } from '@bcms/selfhosted-ui/components/entry/editor';
 import { StringUtility } from '@bcms/selfhosted-utils/string-utility';
 import { Loader } from '@bcms/selfhosted-ui/components/loader';
+import { useI18n } from 'vue-i18n';
 
 export const EntryView = defineComponent({
     setup() {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const meta = window.bcms.meta;
@@ -82,7 +84,7 @@ export const EntryView = defineComponent({
             () => lngIdx.value,
         );
 
-        meta.set({ title: 'Entry' });
+        meta.set({ titleKey: 'routes.entry' });
 
         function getEntryStateHash(language: Language) {
             return (
@@ -110,7 +112,7 @@ export const EntryView = defineComponent({
                 async () => {
                     await sdk.template.getAll();
                     if (!template.value) {
-                        throw Error('Template for this does not exist');
+                        throw Error(t('views.entry.templateMissing'));
                     }
                     await sdk.widget.getAll();
                     await sdk.group.getAll();
@@ -171,9 +173,7 @@ export const EntryView = defineComponent({
         async function update() {
             if (!propValidator.validate()) {
                 if (!propValidator.validate()) {
-                    notification.warning(
-                        'There are errors in your entry. Please fix them and try again',
-                    );
+                    notification.warning(t('views.entry.errors'));
                     return;
                 }
                 return;
@@ -216,7 +216,9 @@ export const EntryView = defineComponent({
                     },
                     async () => {
                         notification.success(
-                            `Entry updated successfully for language "${lngCode.value}"`,
+                            t('views.entry.updated', {
+                                language: lngCode.value,
+                            }),
                         );
                     },
                 );
@@ -287,8 +289,8 @@ export const EntryView = defineComponent({
                                     }}
                                 >
                                     {route.params.entryId === 'create'
-                                        ? 'Create'
-                                        : 'Update'}
+                                        ? t('common.create')
+                                        : t('common.update')}
                                 </Button>
                             </div>
                         </div>

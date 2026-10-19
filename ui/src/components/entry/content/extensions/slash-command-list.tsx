@@ -3,6 +3,7 @@ import type { Media } from '@bcms/selfhosted-backend/media/models/main';
 import type { SlashCommandData } from '@bcms/selfhosted-ui/components/entry/content/extensions/slash-command';
 import { Icon } from '@bcms/selfhosted-ui/components/icon';
 import { MediaPreview } from '@bcms/selfhosted-ui/components/media-preview';
+import { t as translate } from '@bcms/selfhosted-ui/i18n';
 
 export interface SlashCommandListItem {
     id: string;
@@ -185,7 +186,7 @@ export const SlackCommandList = defineComponent({
                                 'dark:text-white',
                             ]}
                         >
-                            Primary
+                            {translate('editor.primary')}
                         </div>
                         {this.primaryItems.map((item, index) => {
                             return (
@@ -270,7 +271,7 @@ export const SlackCommandList = defineComponent({
                                 'dark:text-white',
                             ]}
                         >
-                            Widgets
+                            {translate('editor.widgets')}
                         </div>
                         {this.widgetItems.map((item, index) => {
                             return (

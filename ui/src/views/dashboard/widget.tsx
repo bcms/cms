@@ -10,9 +10,11 @@ import { Button } from '@bcms/selfhosted-ui/components/button';
 import { millisToDateString } from '@bcms/selfhosted-ui/util/date';
 import { PropList } from '@bcms/selfhosted-ui/components/prop-list';
 import type { Widget } from '@bcms/selfhosted-backend/widget/models/main';
+import { useI18n } from 'vue-i18n';
 
 export const WidgetView = defineComponent({
     setup() {
+        const { t } = useI18n();
         const meta = window.bcms.meta;
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
@@ -26,12 +28,12 @@ export const WidgetView = defineComponent({
             sdk.store.widget.find((e) => e._id === route.params.widgetId),
         );
 
-        meta.set({ title: 'Widget' });
+        meta.set({ titleKey: 'routes.widget' });
 
         const loading = ref(true);
-        const dropdownItems: DropdownItem[] = [
+        const dropdownItems = computed<DropdownItem[]>(() => [
             {
-                text: 'Edit widget',
+                text: t('views.detail.editWidget'),
                 onClick() {
                     modal.handlers.widgetCreateEdit.open({
                         data: {
@@ -41,7 +43,7 @@ export const WidgetView = defineComponent({
                 },
             },
             {
-                text: 'Where is it used',
+                text: t('views.detail.whereIsItUsed'),
                 border: true,
                 async onClick() {
                     await throwable(
@@ -59,13 +61,13 @@ export const WidgetView = defineComponent({
                 },
             },
             {
-                text: 'Delete',
+                text: t('common.delete'),
                 danger: true,
                 async onClick() {
                     if (
                         await confirm(
-                            'Delete widget',
-                            'Are you sure you' + ' want to delete this widget?',
+                            t('views.detail.deleteWidget'),
+                            t('views.detail.deleteWidgetConfirm'),
                         )
                     ) {
                         await throwable(
@@ -76,15 +78,15 @@ export const WidgetView = defineComponent({
                             },
                             async () => {
                                 notification.success(
-                                    'Group successfully deleted',
+                                    t('views.detail.widgetDeleted'),
                                 );
-                                await router.replace('/d/group');
+                                await router.replace('/d/widget');
                             },
                         );
                     }
                 },
             },
-        ];
+        ]);
 
         function infoItem(label: string, value: string) {
             return (
@@ -114,7 +116,9 @@ export const WidgetView = defineComponent({
                             });
                         },
                         async () => {
-                            notification.success('Property added successfully');
+                            notification.success(
+                                t('views.detail.propertyAdded'),
+                            );
                         },
                     );
                 },
@@ -146,12 +150,12 @@ export const WidgetView = defineComponent({
                             <Breadcrumb
                                 items={[
                                     {
-                                        text: 'Home',
+                                        text: t('views.detail.home'),
                                         icon: '/home',
                                         href: '/d',
                                     },
                                     {
-                                        text: 'Widgets',
+                                        text: t('routes.widgets'),
                                         href: '/d/widget',
                                     },
                                     {
@@ -160,9 +164,9 @@ export const WidgetView = defineComponent({
                                 ]}
                             />
                             <div class={`flex gap-2 ml-auto`}>
-                                <Dropdown items={dropdownItems} />
+                                <Dropdown items={dropdownItems.value} />
                                 <Button onClick={createProperty}>
-                                    Add property
+                                    {t('views.detail.addProperty')}
                                 </Button>
                             </div>
                         </div>
@@ -174,27 +178,38 @@ export const WidgetView = defineComponent({
                                     {widget.value.label}
                                 </div>
                                 <div class={`text-darkGray dark:text-gray`}>
-                                    {widget.value.props.length} properties in
-                                    this widget
+                                    {t(
+                                        'views.detail.propertiesInWidget',
+                                        {
+                                            count: widget.value.props.length,
+                                        },
+                                        widget.value.props.length,
+                                    )}
                                 </div>
                             </div>
                             <div class={`mt-6 desktop:mt-0 desktop:ml-auto`}>
-                                {infoItem('ID', widget.value._id)}
                                 {infoItem(
-                                    'Created',
+                                    t('views.detail.id'),
+                                    widget.value._id,
+                                )}
+                                {infoItem(
+                                    t('views.detail.created'),
                                     millisToDateString(
                                         widget.value.createdAt,
                                         true,
                                     ),
                                 )}
                                 {infoItem(
-                                    'Updated',
+                                    t('views.detail.updated'),
                                     millisToDateString(
                                         widget.value?.updatedAt,
                                         true,
                                     ),
                                 )}
-                                {infoItem('Name', widget.value.name)}
+                                {infoItem(
+                                    t('views.detail.name'),
+                                    widget.value.name,
+                                )}
                             </div>
                         </div>
                         <PropList
@@ -214,7 +229,7 @@ export const WidgetView = defineComponent({
                                     },
                                     async () => {
                                         notification.success(
-                                            'Property deleted successfully',
+                                            t('views.detail.propertyDeleted'),
                                         );
                                     },
                                 );
@@ -238,7 +253,7 @@ export const WidgetView = defineComponent({
                                     },
                                     async () => {
                                         notification.success(
-                                            'Property moved successfully',
+                                            t('views.detail.propertyMoved'),
                                         );
                                     },
                                 );
@@ -265,7 +280,9 @@ export const WidgetView = defineComponent({
                                             },
                                             async () => {
                                                 notification.success(
-                                                    'Property updated successfully',
+                                                    t(
+                                                        'views.detail.propertyUpdated',
+                                                    ),
                                                 );
                                             },
                                         );

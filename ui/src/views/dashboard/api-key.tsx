@@ -12,6 +12,7 @@ import { Icon } from '@bcms/selfhosted-ui/components/icon';
 import type { UserPolicyCRUD } from '@bcms/selfhosted-backend/user/models/policy';
 import { CheckBox } from '@bcms/selfhosted-ui/components/inputs/check-box';
 import type { BCMSFunctionConfig } from '@bcms/selfhosted-backend/function/models/main';
+import { useI18n } from 'vue-i18n';
 
 export interface TemplateConfig {
     id: string;
@@ -22,6 +23,7 @@ export interface TemplateConfig {
 
 export const ApiKeyView = defineComponent({
     setup() {
+        const { t } = useI18n();
         const meta = window.bcms.meta;
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
@@ -44,12 +46,12 @@ export const ApiKeyView = defineComponent({
             fns: [],
         });
 
-        meta.set({ title: `API Key` });
+        meta.set({ titleKey: 'routes.apiKey' });
 
         const loading = ref(true);
-        const dropdownItems: DropdownItem[] = [
+        const dropdownItems = computed<DropdownItem[]>(() => [
             {
-                text: 'Edit API Key',
+                text: t('views.detail.editApiKey'),
                 onClick() {
                     modal.handlers.apiKeyCreateEdit.open({
                         data: {
@@ -59,14 +61,13 @@ export const ApiKeyView = defineComponent({
                 },
             },
             {
-                text: 'Delete',
+                text: t('common.delete'),
                 danger: true,
                 async onClick() {
                     if (
                         !(await confirm(
-                            'Delete API Key',
-                            'Are you sure you' +
-                                ' want to delete this API Key?',
+                            t('views.apiKey.deleteTitle'),
+                            t('views.apiKey.deleteConfirm'),
                         ))
                     ) {
                         return;
@@ -79,14 +80,14 @@ export const ApiKeyView = defineComponent({
                         },
                         async () => {
                             notification.success(
-                                'API Key deleted successfully',
+                                t('views.apiKey.deleted'),
                             );
                             await router.replace('/d/api-key');
                         },
                     );
                 },
             },
-        ];
+        ]);
 
         function infoItem(label: string, value: string) {
             return (
@@ -152,9 +153,9 @@ export const ApiKeyView = defineComponent({
                 },
                 async () => {
                     notification.success(
-                        `API Key successfully ${
-                            apiKey.value?.blocked ? 'blocked' : 'unblocked'
-                        }`,
+                        apiKey.value?.blocked
+                            ? t('views.apiKey.blocked')
+                            : t('views.apiKey.unblocked'),
                     );
                 },
             );
@@ -193,7 +194,11 @@ export const ApiKeyView = defineComponent({
                 <div
                     class={`flex flex-col rounded-2.5 overflow-hidden border border-gray dark:border-gray bg-light dark:bg-darkGray mb-auto p-2 shadow-xl`}
                 >
-                    <h3 class={`mb-2`}>Template {templateConfig.label}</h3>
+                    <h3 class={`mb-2`}>
+                        {t('views.apiKey.templateCard', {
+                            label: templateConfig.label,
+                        })}
+                    </h3>
                     <Button
                         class={`text-left mb-2`}
                         kind={`ghost`}
@@ -217,10 +222,10 @@ export const ApiKeyView = defineComponent({
                             await updateAccess();
                         }}
                     >
-                        Check all
+                        {t('modals.policy.checkAll')}
                     </Button>
                     <CheckBox
-                        text={`Can get`}
+                        text={t('views.apiKey.canGet')}
                         value={templateConfig.access.get}
                         onInput={async (value) => {
                             templateConfig.access.get = value;
@@ -233,7 +238,7 @@ export const ApiKeyView = defineComponent({
                         }}
                     />
                     <CheckBox
-                        text={`Can create`}
+                        text={t('views.apiKey.canCreate')}
                         value={templateConfig.access.post}
                         onInput={async (value) => {
                             templateConfig.access.post = value;
@@ -244,7 +249,7 @@ export const ApiKeyView = defineComponent({
                         }}
                     />
                     <CheckBox
-                        text={`Can update`}
+                        text={t('views.apiKey.canUpdate')}
                         value={templateConfig.access.put}
                         onInput={async (value) => {
                             templateConfig.access.put = value;
@@ -255,7 +260,7 @@ export const ApiKeyView = defineComponent({
                         }}
                     />
                     <CheckBox
-                        text={`Can delete`}
+                        text={t('views.apiKey.canDelete')}
                         value={templateConfig.access.delete}
                         onInput={async (value) => {
                             templateConfig.access.delete = value;
@@ -274,9 +279,11 @@ export const ApiKeyView = defineComponent({
                 <div
                     class={`flex flex-col rounded-2.5 overflow-hidden border border-gray dark:border-gray bg-light dark:bg-darkGray mb-auto p-2 shadow-xl`}
                 >
-                    <h3 class={`mb-2`}>Function {fn.name}</h3>
+                    <h3 class={`mb-2`}>
+                        {t('views.apiKey.functionCard', { name: fn.name })}
+                    </h3>
                     <CheckBox
-                        text={`Can call function`}
+                        text={t('views.apiKey.canCallFunction')}
                         value={!!data.value.fns.find((e) => e === fn.name)}
                         onInput={async (value) => {
                             if (value) {
@@ -316,12 +323,12 @@ export const ApiKeyView = defineComponent({
                             <Breadcrumb
                                 items={[
                                     {
-                                        text: 'Home',
+                                        text: t('views.detail.home'),
                                         icon: '/home',
                                         href: '/d',
                                     },
                                     {
-                                        text: 'Key manager',
+                                        text: t('nav.keyManager'),
                                         href: '/d/api-key',
                                     },
                                     {
@@ -330,11 +337,11 @@ export const ApiKeyView = defineComponent({
                                 ]}
                             />
                             <div class={`flex gap-2 ml-auto`}>
-                                <Dropdown items={dropdownItems} />
+                                <Dropdown items={dropdownItems.value} />
                                 <Button kind="danger" onClick={toggleKeyBlock}>
                                     {apiKey.value?.blocked
-                                        ? 'Unblock the key'
-                                        : 'Block the key'}
+                                        ? t('views.apiKey.unblocked')
+                                        : t('views.apiKey.blocked')}
                                 </Button>
                             </div>
                         </div>
@@ -347,16 +354,19 @@ export const ApiKeyView = defineComponent({
                                 </div>
                             </div>
                             <div class={`mt-6 desktop:mt-0 desktop:ml-auto`}>
-                                {infoItem('ID', apiKey.value._id)}
                                 {infoItem(
-                                    'Created',
+                                    t('views.detail.id'),
+                                    apiKey.value._id,
+                                )}
+                                {infoItem(
+                                    t('views.detail.created'),
                                     millisToDateString(
                                         apiKey.value.createdAt,
                                         true,
                                     ),
                                 )}
                                 {infoItem(
-                                    'Updated',
+                                    t('views.detail.updated'),
                                     millisToDateString(
                                         apiKey.value?.updatedAt,
                                         true,
@@ -365,7 +375,9 @@ export const ApiKeyView = defineComponent({
                                 <div
                                     class={`flex gap-2 justify-between items-center`}
                                 >
-                                    <div class={`text-gray`}>Secret</div>
+                                    <div class={`text-gray`}>
+                                        {t('views.apiKey.secret')}
+                                    </div>
                                     <button
                                         class={`flex gap-2 items-center text-dark dark:text-white hover:text-green dark:hover:text-yellow`}
                                         onClick={async () => {
@@ -374,12 +386,16 @@ export const ApiKeyView = defineComponent({
                                                     apiKey.value?.secret,
                                                 );
                                                 notification.success(
-                                                    'API key secret copied to the clipboard',
+                                                    t(
+                                                        'views.apiKey.secretCopied',
+                                                    ),
                                                 );
                                             }
                                         }}
                                     >
-                                        <div>Click to copy secret</div>
+                                        <div>
+                                            {t('views.apiKey.copySecret')}
+                                        </div>
                                         <div>
                                             <Icon
                                                 class={`w-3 h-3 fill-current`}

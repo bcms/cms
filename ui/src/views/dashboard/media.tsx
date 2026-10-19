@@ -7,9 +7,11 @@ import { Button } from '@bcms/selfhosted-ui/components/button';
 import { MediaList } from '@bcms/selfhosted-ui/components/media/list';
 import { useRoute, useRouter } from 'vue-router';
 import type { Media } from '@bcms/selfhosted-backend/media/models/main';
+import { useI18n } from 'vue-i18n';
 
 export const MediaView = defineComponent({
     setup() {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const modal = window.bcms.modalService;
         const route = useRoute();
@@ -49,7 +51,7 @@ export const MediaView = defineComponent({
                     class="flex items-center transition-colors duration-300 group text-dark hover:text-opacity-60 focus-visible:text-opacity-60 dark:text-light"
                 >
                     <span class="text-xs leading-normal uppercase mr-1.5">
-                        Name
+                        {t('views.media.sortName')}
                     </span>
                     <div
                         class={
@@ -76,7 +78,7 @@ export const MediaView = defineComponent({
                         <input
                             class="w-full py-2.5 pl-[35px] text-base outline-none bg-transparent dark:text-light"
                             type="text"
-                            placeholder="Search"
+                            placeholder={t('common.search')}
                             onInput={(event) => {
                                 const el = event.target as HTMLInputElement;
                                 if (el) {
@@ -91,7 +93,7 @@ export const MediaView = defineComponent({
                                 modal.handlers.mediaCreateFile.open();
                             }}
                         >
-                            Upload file
+                            {t('views.media.uploadFile')}
                         </Button>
                         <Button
                             kind={'secondary'}
@@ -100,14 +102,14 @@ export const MediaView = defineComponent({
                                 modal.handlers.mediaCreateDir.open();
                             }}
                         >
-                            Create new folder
+                            {t('views.media.createFolder')}
                         </Button>
                     </div>
                 </header>
                 {isEmpty.value ? (
                     <>
                         <div class={`mt-20 text-2xl text-center`}>
-                            There are no files yet. Upload the first one.
+                            {t('views.media.empty')}
                         </div>
                         <EmptyState
                             src="/media.png"
@@ -128,7 +130,7 @@ export const MediaView = defineComponent({
                             ) : (
                                 <div class="flex flex-col space-y-5">
                                     <h1 class="text-9.5 -tracking-0.03 leading-none dark:text-light">
-                                        Media manager
+                                        {t('routes.media')}
                                     </h1>
                                 </div>
                             )}

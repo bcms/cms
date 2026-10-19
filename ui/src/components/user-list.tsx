@@ -11,6 +11,7 @@ import {
 import { confirm } from '@bcms/selfhosted-ui/services/confirm';
 import { Button } from '@bcms/selfhosted-ui/components/button';
 import type { UserProtected } from '@bcms/selfhosted-backend/user/models/main';
+import { useI18n } from 'vue-i18n';
 
 export const UserListItem = defineComponent({
     props: {
@@ -24,6 +25,7 @@ export const UserListItem = defineComponent({
         },
     },
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const notification = window.bcms.notification;
         const modal = window.bcms.modalService;
@@ -44,11 +46,11 @@ export const UserListItem = defineComponent({
             );
         }
 
-        const dropdownOptions: DropdownItem[] = [
+        const dropdownOptions = computed<DropdownItem[]>(() => [
             {
                 text: dropdownItem(
-                    'Edit profile',
-                    `Change users email, password, name or role`,
+                    t('users.editProfile'),
+                    t('users.editProfileDesc'),
                 ),
                 icon: '/user-03',
                 onClick() {
@@ -61,8 +63,8 @@ export const UserListItem = defineComponent({
             },
             {
                 text: dropdownItem(
-                    'Detailed permissions',
-                    'Click here to separately choose create, read, update delete permissions for each template.',
+                    t('users.detailedPermissions'),
+                    t('users.detailedPermissionsDesc'),
                 ),
                 icon: '/edit-03',
                 onClick() {
@@ -75,8 +77,8 @@ export const UserListItem = defineComponent({
             },
             {
                 text: dropdownItem(
-                    'Remove user from the instance',
-                    'When removed, they won’t have access to any content in the instance and won’t be able to log in into it.',
+                    t('users.removeFromInstance'),
+                    t('users.removeFromInstanceDesc'),
                     undefined,
                     'text-darkGray',
                 ),
@@ -85,8 +87,8 @@ export const UserListItem = defineComponent({
                 async onClick() {
                     if (
                         await confirm(
-                            'Remove user',
-                            'Are you sure that you want to remove this user from the instance?',
+                            t('users.removeUser'),
+                            t('users.removeConfirm'),
                         )
                     ) {
                         await throwable(
@@ -94,15 +96,13 @@ export const UserListItem = defineComponent({
                                 await sdk.user.deleteById(props.user._id);
                             },
                             async () => {
-                                notification.success(
-                                    'User successfully removed',
-                                );
+                                notification.success(t('users.removed'));
                             },
                         );
                     }
                 },
             },
-        ];
+        ]);
 
         return () => (
             <li
@@ -116,16 +116,22 @@ export const UserListItem = defineComponent({
                 <div class={`text-xs`}>{props.user.email}</div>
                 <div class={`flex gap-2 items-center xs:ml-auto`}>
                     <Tag>
-                        {props.user.roles[0].name
-                            .split('_')
-                            .map(
-                                (e) => e.slice(0, 1) + e.slice(1).toLowerCase(),
-                            )}
+                        {(() => {
+                            const roleName =
+                                props.user.roles[0].name.toUpperCase();
+                            if (roleName === 'ADMIN') {
+                                return t('users.roleAdmin');
+                            }
+                            if (roleName === 'USER') {
+                                return t('users.roleUser');
+                            }
+                            return props.user.roles[0].name;
+                        })()}
                     </Tag>
                 </div>
                 {props.me._id !== props.user._id &&
                     userHasRole(['ADMIN'], props.me) && (
-                        <Dropdown items={dropdownOptions} />
+                        <Dropdown items={dropdownOptions.value} />
                     )}
             </li>
         );
@@ -137,6 +143,7 @@ export const UserList = defineComponent({
         ...DefaultComponentProps,
     },
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const modal = window.bcms.modalService;
 
@@ -166,14 +173,14 @@ export const UserList = defineComponent({
         return () => (
             <div id={props.id} style={props.style} class={props.class}>
                 <div class={`flex gap-4 items-center`}>
-                    <div class={`text-3xl`}>Team</div>
+                    <div class={`text-3xl`}>{t('users.team')}</div>
                     <Button
                         class={`ml-auto`}
                         onClick={() => {
                             modal.handlers.userAddEdit.open();
                         }}
                     >
-                        Add user
+                        {t('users.addUser')}
                     </Button>
                 </div>
                 {list()}

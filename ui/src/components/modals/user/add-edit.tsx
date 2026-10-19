@@ -14,6 +14,7 @@ import { Select } from '@bcms/selfhosted-ui/components/inputs/select/main';
 import type { UserProtected } from '@bcms/selfhosted-backend/user/models/main';
 import { FileInput } from '@bcms/selfhosted-ui/components/inputs/file';
 import { fileToB64 } from '@bcms/selfhosted-ui/util/file';
+import { useI18n } from 'vue-i18n';
 
 export interface ModalUserAddEditInput {
     userId?: string;
@@ -22,6 +23,7 @@ export interface ModalUserAddEditInput {
 export const ModalUserAddEdit = defineComponent({
     props: getModalDefaultProps<ModalUserAddEditInput, void>(),
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const notification = window.bcms.notification;
@@ -47,7 +49,7 @@ export const ModalUserAddEdit = defineComponent({
                     value: user?.customPool.personal.firstName || '',
                     handler(value) {
                         if (!value) {
-                            return 'First name is required';
+                            return t('modals.user.firstNameRequired');
                         }
                     },
                 }),
@@ -55,7 +57,7 @@ export const ModalUserAddEdit = defineComponent({
                     value: user?.customPool.personal.lastName || '',
                     handler(value) {
                         if (!value) {
-                            return 'Last name is required';
+                            return t('modals.user.lastNameRequired');
                         }
                     },
                 }),
@@ -63,7 +65,7 @@ export const ModalUserAddEdit = defineComponent({
                     value: user?.roles[0].name || 'USER',
                     handler(value) {
                         if (!value) {
-                            return 'Role is required';
+                            return t('modals.user.roleRequired');
                         }
                     },
                 }),
@@ -71,14 +73,16 @@ export const ModalUserAddEdit = defineComponent({
                     value: user?.email || '',
                     handler(value) {
                         if (!value) {
-                            return 'Email is required';
+                            return t('modals.user.emailRequired');
                         }
                         if (
                             value !== userToUpdate.value?.email &&
                             sdk.store.user.find((e) => e.email === value)
                         ) {
                             console.log(sdk.store.user.items());
-                            return `User with email "${value}" already exists`;
+                            return t('modals.user.emailExists', {
+                                email: value,
+                            });
                         }
                     },
                 }),
@@ -88,15 +92,17 @@ export const ModalUserAddEdit = defineComponent({
                         if (userToUpdate.value) {
                             if (value) {
                                 if (value.length < 8) {
-                                    return 'Password must be at least 8 characters long';
+                                    return t(
+                                        'modals.user.passwordMinLength',
+                                    );
                                 }
                             }
                         } else {
                             if (!value) {
-                                return 'Password is required';
+                                return t('modals.user.passwordRequired');
                             }
                             if (value.length < 8) {
-                                return 'Password must be at least 8 characters long';
+                                return t('modals.user.passwordMinLength');
                             }
                         }
                     },
@@ -165,9 +171,9 @@ export const ModalUserAddEdit = defineComponent({
                     },
                     async () => {
                         if (userToUpdate.value) {
-                            notification.success('User updated successfully');
+                            notification.success(t('modals.user.updated'));
                         } else {
-                            notification.success('User added successfully');
+                            notification.success(t('modals.user.added'));
                         }
                     },
                 );
@@ -180,13 +186,21 @@ export const ModalUserAddEdit = defineComponent({
 
         return () => (
             <ModalWrapper
-                title={userToUpdate.value ? 'Edit user' : 'Add user'}
+                title={
+                    userToUpdate.value
+                        ? t('modals.user.editTitle')
+                        : t('modals.user.addTitle')
+                }
                 handler={props.handler}
-                doneText={userToUpdate.value ? 'Update' : 'Add'}
+                doneText={
+                    userToUpdate.value
+                        ? t('modals.common.update')
+                        : t('modals.common.add')
+                }
             >
                 <div class={`flex flex-col gap-4`}>
                     <FileInput
-                        label="Avatar"
+                        label={t('modals.user.avatar')}
                         accept="image/*"
                         src={inputs.value.avatar.value.fileB64}
                         onInput={async (files) => {
@@ -197,19 +211,19 @@ export const ModalUserAddEdit = defineComponent({
                         }}
                     />
                     <TextInput
-                        label={'First name'}
+                        label={t('modals.user.firstName')}
                         value={inputs.value.firstName.value}
                         error={inputs.value.firstName.error}
-                        placeholder={'John'}
+                        placeholder={t('modals.user.firstNamePlaceholder')}
                         onInput={(value) => {
                             inputs.value.firstName.value = value;
                         }}
                     />
                     <TextInput
-                        label={'Last name'}
+                        label={t('modals.user.lastName')}
                         value={inputs.value.lastName.value}
                         error={inputs.value.lastName.error}
-                        placeholder={'Smith'}
+                        placeholder={t('modals.user.lastNamePlaceholder')}
                         onInput={(value) => {
                             inputs.value.lastName.value = value;
                         }}
@@ -217,17 +231,17 @@ export const ModalUserAddEdit = defineComponent({
                     {userToUpdate.value &&
                         me.value?._id !== userToUpdate.value?._id && (
                             <Select
-                                label={'Role'}
+                                label={t('modals.user.role')}
                                 selected={inputs.value.role.value}
                                 error={inputs.value.role.error}
                                 options={[
                                     {
                                         value: 'USER',
-                                        label: 'User',
+                                        label: t('modals.user.roleUser'),
                                     },
                                     {
                                         value: 'ADMIN',
-                                        label: 'Admin',
+                                        label: t('modals.user.roleAdmin'),
                                     },
                                 ]}
                                 onChange={(option) => {
@@ -239,24 +253,28 @@ export const ModalUserAddEdit = defineComponent({
                             />
                         )}
                     <TextInput
-                        label={'Email'}
+                        label={t('modals.user.email')}
                         value={inputs.value.email.value}
                         error={inputs.value.email.error}
-                        placeholder={'john.smith@example.com'}
+                        placeholder={t('modals.user.emailPlaceholder')}
                         onInput={(value) => {
                             inputs.value.email.value = value;
                         }}
                     />
                     <PasswordInput
-                        label={userToUpdate.value ? 'New password' : 'Password'}
+                        label={
+                            userToUpdate.value
+                                ? t('modals.user.newPassword')
+                                : t('modals.user.password')
+                        }
                         value={inputs.value.password.value}
                         error={inputs.value.password.error}
                         description={
                             userToUpdate.value
-                                ? `Leave empty if you don't want to change their password`
+                                ? t('modals.user.passwordLeaveEmpty')
                                 : ''
                         }
-                        placeholder={'Password'}
+                        placeholder={t('modals.user.password')}
                         onInput={(value) => {
                             inputs.value.password.value = value;
                         }}

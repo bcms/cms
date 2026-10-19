@@ -16,6 +16,7 @@ import {
     type UnsubscribeFns,
 } from '@bcms/selfhosted-ui/util/sub';
 import { Icon } from '@bcms/selfhosted-ui/components/icon';
+import { useI18n } from 'vue-i18n';
 
 export const DateInput = defineComponent({
     props: {
@@ -40,6 +41,7 @@ export const DateInput = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const inputRef = ref<HTMLInputElement | null>(null);
         const dateAsString = computed(() => {
             return props.value && props.value !== -1 ? toDate(props.value) : '';
@@ -131,8 +133,8 @@ export const DateInput = defineComponent({
                         }}
                     />
                     <button
-                        aria-label="Reset date"
-                        title="Reset date"
+                        aria-label={t('components.date.reset')}
+                        title={t('components.date.reset')}
                         class="relative group flex z-10 ml-auto"
                         disabled={props.disabled}
                         onClick={(event) => {

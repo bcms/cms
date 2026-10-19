@@ -10,9 +10,11 @@ import { Button } from '@bcms/selfhosted-ui/components/button';
 import { millisToDateString } from '@bcms/selfhosted-ui/util/date';
 import { PropList } from '@bcms/selfhosted-ui/components/prop-list';
 import type { Template } from '@bcms/selfhosted-backend/template/models/main';
+import { useI18n } from 'vue-i18n';
 
 export const TemplateView = defineComponent({
     setup() {
+        const { t } = useI18n();
         const meta = window.bcms.meta;
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
@@ -26,12 +28,12 @@ export const TemplateView = defineComponent({
             sdk.store.template.find((e) => e._id === route.params.templateId),
         );
 
-        meta.set({ title: 'Template' });
+        meta.set({ titleKey: 'routes.template' });
 
         const loading = ref(true);
-        const dropdownItems: DropdownItem[] = [
+        const dropdownItems = computed<DropdownItem[]>(() => [
             {
-                text: 'Edit template',
+                text: t('views.detail.editTemplate'),
                 onClick() {
                     modal.handlers.templateCreateEdit.open({
                         data: {
@@ -41,7 +43,7 @@ export const TemplateView = defineComponent({
                 },
             },
             {
-                text: 'Where is it used',
+                text: t('views.detail.whereIsItUsed'),
                 border: true,
                 async onClick() {
                     await throwable(
@@ -59,15 +61,13 @@ export const TemplateView = defineComponent({
                 },
             },
             {
-                text: 'Delete',
+                text: t('common.delete'),
                 danger: true,
                 async onClick() {
                     if (
                         !(await confirm(
-                            'Delete template',
-                            'Are you sure you' +
-                                ' want to delete this template? All entries with' +
-                                ' this template will also be deleted.',
+                            t('views.detail.deleteTemplate'),
+                            t('views.detail.deleteTemplateConfirm'),
                             template.value?.name,
                         ))
                     ) {
@@ -81,14 +81,14 @@ export const TemplateView = defineComponent({
                         },
                         async () => {
                             notification.success(
-                                'Template deleted successfully',
+                                t('views.detail.templateDeleted'),
                             );
                             await router.replace('/d/template');
                         },
                     );
                 },
             },
-        ];
+        ]);
 
         function infoItem(label: string, value: string) {
             return (
@@ -119,7 +119,9 @@ export const TemplateView = defineComponent({
                             });
                         },
                         async () => {
-                            notification.success('Property added successfully');
+                            notification.success(
+                                t('views.detail.propertyAdded'),
+                            );
                         },
                     );
                 },
@@ -150,12 +152,12 @@ export const TemplateView = defineComponent({
                             <Breadcrumb
                                 items={[
                                     {
-                                        text: 'Home',
+                                        text: t('views.detail.home'),
                                         icon: '/home',
                                         href: '/d',
                                     },
                                     {
-                                        text: 'Templates',
+                                        text: t('routes.templates'),
                                         href: '/d/template',
                                     },
                                     {
@@ -164,9 +166,9 @@ export const TemplateView = defineComponent({
                                 ]}
                             />
                             <div class={`flex gap-2 ml-auto`}>
-                                <Dropdown items={dropdownItems} />
+                                <Dropdown items={dropdownItems.value} />
                                 <Button onClick={createProperty}>
-                                    Add property
+                                    {t('views.detail.addProperty')}
                                 </Button>
                             </div>
                         </div>
@@ -178,27 +180,38 @@ export const TemplateView = defineComponent({
                                     {template.value.label}
                                 </div>
                                 <div class={`text-darkGray dark:text-gray`}>
-                                    {template.value.props.length} properties in
-                                    this template
+                                    {t(
+                                        'views.detail.propertiesInTemplate',
+                                        {
+                                            count: template.value.props.length,
+                                        },
+                                        template.value.props.length,
+                                    )}
                                 </div>
                             </div>
                             <div class={`mt-6 desktop:mt-0 desktop:ml-auto`}>
-                                {infoItem('ID', template.value._id)}
                                 {infoItem(
-                                    'Created',
+                                    t('views.detail.id'),
+                                    template.value._id,
+                                )}
+                                {infoItem(
+                                    t('views.detail.created'),
                                     millisToDateString(
                                         template.value.createdAt,
                                         true,
                                     ),
                                 )}
                                 {infoItem(
-                                    'Updated',
+                                    t('views.detail.updated'),
                                     millisToDateString(
                                         template.value?.updatedAt,
                                         true,
                                     ),
                                 )}
-                                {infoItem('Name', template.value.name)}
+                                {infoItem(
+                                    t('views.detail.name'),
+                                    template.value.name,
+                                )}
                             </div>
                         </div>
                         <PropList
@@ -223,7 +236,7 @@ export const TemplateView = defineComponent({
                                     },
                                     async () => {
                                         notification.success(
-                                            'Property deleted successfully',
+                                            t('views.detail.propertyDeleted'),
                                         );
                                     },
                                 );
@@ -247,7 +260,7 @@ export const TemplateView = defineComponent({
                                     },
                                     async () => {
                                         notification.success(
-                                            'Property moved successfully',
+                                            t('views.detail.propertyMoved'),
                                         );
                                     },
                                 );
@@ -275,7 +288,9 @@ export const TemplateView = defineComponent({
                                             },
                                             async () => {
                                                 notification.success(
-                                                    'Property updated successfully',
+                                                    t(
+                                                        'views.detail.propertyUpdated',
+                                                    ),
                                                 );
                                             },
                                         );

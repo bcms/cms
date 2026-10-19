@@ -10,6 +10,7 @@ import {
 import { TextInput } from '@bcms/selfhosted-ui/components/inputs/text';
 import { TextAreaInput } from '@bcms/selfhosted-ui/components/inputs/text-area';
 import type { Group } from '@bcms/selfhosted-backend/group/models/main';
+import { useI18n } from 'vue-i18n';
 
 export interface ModalGroupCreateEditInput {
     groupId?: string;
@@ -18,6 +19,7 @@ export interface ModalGroupCreateEditInput {
 export const ModalGroupCreateEdit = defineComponent({
     props: getModalDefaultProps<ModalGroupCreateEditInput, void>(),
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const notification = window.bcms.notification;
@@ -32,7 +34,7 @@ export const ModalGroupCreateEdit = defineComponent({
                     value: group?.label || '',
                     handler(value) {
                         if (!value) {
-                            return 'Label is required';
+                            return t('modals.common.labelRequired');
                         }
                         if (
                             sdk.store.group
@@ -42,7 +44,9 @@ export const ModalGroupCreateEdit = defineComponent({
                                 )
                                 .find((e) => e.label === value)
                         ) {
-                            return `Group with name "${value}" already exists`;
+                            return t('modals.group.nameExists', {
+                                name: value,
+                            });
                         }
                     },
                 }),
@@ -93,12 +97,12 @@ export const ModalGroupCreateEdit = defineComponent({
                         }
                     },
                     async () => {
-                        notification.success('Group created successfully');
+                        notification.success(t('modals.group.created'));
                         return true;
                     },
                     async (err) => {
                         console.error(err);
-                        notification.error('Failed to create group');
+                        notification.error(t('modals.group.createFailed'));
                         return false;
                     },
                 );
@@ -112,26 +116,32 @@ export const ModalGroupCreateEdit = defineComponent({
         return () => (
             <ModalWrapper
                 title={
-                    groupToUpdate.value ? 'Update group' : `Create new group`
+                    groupToUpdate.value
+                        ? t('modals.group.updateTitle')
+                        : t('modals.group.createTitle')
                 }
                 handler={props.handler}
-                doneText={groupToUpdate.value ? 'Update' : 'Create'}
+                doneText={
+                    groupToUpdate.value
+                        ? t('modals.common.update')
+                        : t('modals.common.create')
+                }
             >
                 <div class={`flex flex-col gap-8`}>
                     <TextInput
-                        label={'Label'}
+                        label={t('modals.common.label')}
                         value={inputs.value.label.value}
                         error={inputs.value.label.error}
-                        placeholder={'My new group'}
+                        placeholder={t('modals.group.labelPlaceholder')}
                         onInput={(value) => {
                             inputs.value.label.value = value;
                         }}
                     />
                     <TextAreaInput
-                        label={'Description'}
+                        label={t('modals.common.description')}
                         value={inputs.value.description.value}
                         error={inputs.value.description.error}
-                        placeholder={'What is this group used for'}
+                        placeholder={t('modals.group.descPlaceholder')}
                         onInput={(value) => {
                             inputs.value.description.value = value;
                         }}

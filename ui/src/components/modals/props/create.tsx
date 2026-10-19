@@ -20,6 +20,19 @@ import { Toggle } from '@bcms/selfhosted-ui/components/inputs/toggle';
 import { MultiSelect } from '@bcms/selfhosted-ui/components/inputs/select/multi';
 import { MultiAdd } from '@bcms/selfhosted-ui/components/inputs/multi-add';
 import { SelectGroupPointer } from '@bcms/selfhosted-ui/components/inputs/select/group-pointer';
+import { useI18n } from 'vue-i18n';
+
+const PROP_TYPE_LABEL_KEYS: Record<string, string> = {
+    STRING: 'props.type.string',
+    RICH_TEXT: 'props.type.richText',
+    NUMBER: 'props.type.number',
+    DATE: 'props.type.date',
+    BOOLEAN: 'props.type.boolean',
+    ENUMERATION: 'props.type.enumeration',
+    MEDIA: 'props.type.media',
+    GROUP_POINTER: 'props.type.groupPointer',
+    ENTRY_POINTER: 'props.type.entryPointer',
+};
 
 interface PropTypeOption {
     name: string;
@@ -39,6 +52,7 @@ export interface ModalPropCreateOutput {
 export const ModalPropCreate = defineComponent({
     props: getModalDefaultProps<ModalPropCreateInput, ModalPropCreateOutput>(),
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
 
         const data = ref<ModalPropCreateInput>({
@@ -141,53 +155,53 @@ export const ModalPropCreate = defineComponent({
         const propTypes = computed(() => {
             const items: PropTypeOption[] = [
                 {
-                    name: 'String',
+                    name: t('props.type.string'),
                     value: 'STRING',
-                    desc: 'Any character array value',
+                    desc: t('modals.props.typeDesc.string'),
                 },
                 {
-                    name: 'Rich Text',
+                    name: t('props.type.richText'),
                     value: 'RICH_TEXT',
-                    desc: 'Text with options for bold, italic, list...',
+                    desc: t('modals.props.typeDesc.richText'),
                 },
                 {
-                    name: 'Number',
+                    name: t('props.type.number'),
                     value: 'NUMBER',
-                    desc: 'Any real number',
+                    desc: t('modals.props.typeDesc.number'),
                 },
                 {
-                    name: 'Date',
+                    name: t('props.type.date'),
                     value: 'DATE',
-                    desc: 'Unix timestamp - date in milliseconds',
+                    desc: t('modals.props.typeDesc.date'),
                 },
                 {
-                    name: 'Boolean',
+                    name: t('props.type.boolean'),
                     value: 'BOOLEAN',
-                    desc: 'Yes or no, true or false, 1 or 0',
+                    desc: t('modals.props.typeDesc.boolean'),
                 },
                 {
-                    name: 'Enumeration',
+                    name: t('props.type.enumeration'),
                     value: 'ENUMERATION',
-                    desc: 'List of choices',
+                    desc: t('modals.props.typeDesc.enumeration'),
                 },
                 {
-                    name: 'Media',
+                    name: t('props.type.media'),
                     value: 'MEDIA',
-                    desc: 'Select a media file using media picker',
+                    desc: t('modals.props.typeDesc.media'),
                 },
             ];
             if (sdk.store.group.items().length > 0) {
                 items.push({
-                    name: 'Group pointer',
+                    name: t('props.type.groupPointer'),
                     value: 'GROUP_POINTER',
-                    desc: 'Extend properties of a group',
+                    desc: t('modals.props.typeDesc.groupPointer'),
                 });
             }
             if (sdk.store.template.items().length > 0) {
                 items.push({
-                    name: 'Entry pointer',
+                    name: t('props.type.entryPointer'),
                     value: 'ENTRY_POINTER',
-                    desc: 'Extend properties of an entry',
+                    desc: t('modals.props.typeDesc.entryPointer'),
                 });
             }
             return items;
@@ -202,14 +216,16 @@ export const ModalPropCreate = defineComponent({
                     value: '',
                     handler(value) {
                         if (!value) {
-                            return 'Label is required';
+                            return t('modals.common.labelRequired');
                         }
                         if (
                             data.value.existingProps.find(
                                 (e) => e.label === value,
                             )
                         ) {
-                            return `Property with name "${value}" already exists`;
+                            return t('modals.common.propertyExists', {
+                                name: value,
+                            });
                         }
                     },
                 }),
@@ -226,7 +242,7 @@ export const ModalPropCreate = defineComponent({
                             inputs.value.type.value === 'ENTRY_POINTER' &&
                             value.length === 0
                         ) {
-                            return 'You must select at least 1 template';
+                            return t('modals.common.mustSelectTemplate');
                         }
                     },
                 }),
@@ -237,7 +253,7 @@ export const ModalPropCreate = defineComponent({
                             inputs.value.type.value === 'GROUP_POINTER' &&
                             !value
                         ) {
-                            return 'You need to select a group';
+                            return t('modals.common.needSelectGroup');
                         }
                     },
                 }),
@@ -248,7 +264,7 @@ export const ModalPropCreate = defineComponent({
                             inputs.value.type.value === 'ENUMERATION' &&
                             value.length === 0
                         ) {
-                            return 'You must add at least 1 option';
+                            return t('modals.common.mustAddOption');
                         }
                     },
                 }),
@@ -271,18 +287,15 @@ export const ModalPropCreate = defineComponent({
                                     ◂
                                 </button>
                                 <div>
-                                    {inputs.value.type.value
-                                        .split('_')
-                                        .map(
-                                            (e) =>
-                                                e.slice(0, 1).toUpperCase() +
-                                                e.slice(1).toLowerCase(),
-                                        )
-                                        .join(' ')}
+                                    {t(
+                                        PROP_TYPE_LABEL_KEYS[
+                                            inputs.value.type.value
+                                        ] || inputs.value.type.value,
+                                    )}
                                 </div>
                             </div>
                         ) : (
-                            'Select a property type'
+                            t('modals.props.selectType')
                         )}
                     </div>
                 )}
@@ -300,7 +313,7 @@ export const ModalPropCreate = defineComponent({
                                         }
                                     }}
                                 >
-                                    Create property
+                                    {t('modals.props.createProperty')}
                                 </Button>
                             </div>
                         ) : (
@@ -312,8 +325,8 @@ export const ModalPropCreate = defineComponent({
                 {inputs.value.type.value ? (
                     <div class={`flex flex-col gap-4`}>
                         <TextInput
-                            label={'Label'}
-                            placeholder="Label"
+                            label={t('modals.common.label')}
+                            placeholder={t('modals.common.label')}
                             value={inputs.value.label.value}
                             error={inputs.value.label.error}
                             onInput={(value) => {
@@ -322,7 +335,7 @@ export const ModalPropCreate = defineComponent({
                         />
                         {inputs.value.type.value === 'ENTRY_POINTER' ? (
                             <MultiSelect
-                                label={'Select templates'}
+                                label={t('modals.common.selectTemplates')}
                                 selected={inputs.value.entryPointer.value}
                                 options={sdk.store.template
                                     .items()
@@ -338,7 +351,9 @@ export const ModalPropCreate = defineComponent({
                                             ? 1
                                             : -1,
                                     )}
-                                placeholder={`Select templates`}
+                                placeholder={t(
+                                    'modals.common.selectTemplates',
+                                )}
                                 error={inputs.value.entryPointer.error}
                                 onInput={(value) => {
                                     inputs.value.entryPointer.value = value;
@@ -353,8 +368,10 @@ export const ModalPropCreate = defineComponent({
                             />
                         ) : inputs.value.type.value === 'ENUMERATION' ? (
                             <MultiAdd
-                                label={'Enumerations'}
-                                placeholder="Type a name and press Enter key"
+                                label={t('modals.props.enumLabel')}
+                                placeholder={t(
+                                    'modals.common.typeNameAndEnter',
+                                )}
                                 value={inputs.value.enumItems.value}
                                 error={inputs.value.enumItems.error}
                                 format={(value) => {
@@ -368,8 +385,8 @@ export const ModalPropCreate = defineComponent({
                             />
                         ) : inputs.value.type.value === 'GROUP_POINTER' ? (
                             <SelectGroupPointer
-                                label={'Select a group'}
-                                placeholder={`Select a group`}
+                                label={t('modals.common.selectGroup')}
+                                placeholder={t('modals.common.selectGroup')}
                                 selected={inputs.value.groupPointer.value}
                                 onChange={(value) => {
                                     inputs.value.groupPointer.value = value._id;
@@ -388,7 +405,7 @@ export const ModalPropCreate = defineComponent({
                                     inputs.value.groupPointer.value,
                                 )) ? (
                                 <Toggle
-                                    label={'Required'}
+                                    label={t('modals.common.required')}
                                     value={inputs.value.required.value}
                                     onInput={(value) => {
                                         inputs.value.required.value = value;
@@ -398,7 +415,7 @@ export const ModalPropCreate = defineComponent({
                                 ''
                             )}
                             <Toggle
-                                label={'Array'}
+                                label={t('modals.common.array')}
                                 value={inputs.value.array.value}
                                 onInput={(value) => {
                                     inputs.value.array.value = value;

@@ -25,6 +25,7 @@ import {
 } from '@bcms/selfhosted-ui/components/inputs/_wrapper';
 import type { EntrySync } from '@bcms/selfhosted-ui/services/entry-sync';
 import { EntryContentSyncProvider } from '@bcms/selfhosted-ui/components/entry/content/sync-provider';
+import { useI18n } from 'vue-i18n';
 
 export const TextAreaInput = defineComponent({
     props: {
@@ -44,6 +45,7 @@ export const TextAreaInput = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const throwable = window.bcms.throwable;
 
         const ydoc = new Doc();
@@ -54,7 +56,8 @@ export const TextAreaInput = defineComponent({
                 Paragraph,
                 Text,
                 Placeholder.configure({
-                    placeholder: props.placeholder || 'Type something',
+                    placeholder:
+                        props.placeholder || t('components.text.placeholder'),
                 }),
                 Collaboration.configure({
                     document: ydoc,

@@ -8,9 +8,11 @@ import {
 import { Languages } from '@bcms/selfhosted-ui/data/language';
 import { Icon } from '@bcms/selfhosted-ui/components/icon';
 import type { Language } from '@bcms/selfhosted-backend/language/models/main';
+import { useI18n } from 'vue-i18n';
 
 export const SettingsView = defineComponent({
     setup() {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const notification = window.bcms.notification;
@@ -55,7 +57,7 @@ export const SettingsView = defineComponent({
             const isoLng = Languages.toArray().find((e) => e.code === code);
             if (!isoLng) {
                 notification.error(
-                    `Failed to find language with code "${code}"`,
+                    t('views.settings.languageNotFound', { code }),
                 );
                 return;
             }
@@ -68,15 +70,17 @@ export const SettingsView = defineComponent({
                     });
                 },
                 async () => {
-                    notification.success('Notification created successfully');
+                    notification.success(
+                        t('views.settings.languageAdded'),
+                    );
                 },
             );
         }
         async function removeLanguage(lngId: string) {
             if (
                 !(await confirm(
-                    'Delete language',
-                    'Are you sure you want to' + ' delete this language?',
+                    t('views.settings.deleteLanguage'),
+                    t('views.settings.deleteLanguageConfirm'),
                 ))
             ) {
                 return;
@@ -88,7 +92,9 @@ export const SettingsView = defineComponent({
                     });
                 },
                 async () => {
-                    notification.success('Language deleted successfully');
+                    notification.success(
+                        t('views.settings.languageDeleted'),
+                    );
                 },
             );
         }
@@ -123,10 +129,14 @@ export const SettingsView = defineComponent({
 
         return () => (
             <div class={`flex flex-col gap-10 max-w-[640px]`}>
-                <h1 class={`font-medium text-xl`}>Settings</h1>
+                <h1 class={`font-medium text-xl`}>
+                    {t('views.settings.title')}
+                </h1>
                 <div class={`flex flex-col gap-2`}>
                     <div class={`flex gap-2`}>
-                        <div class={`text-2xl`}>Languages</div>
+                        <div class={`text-2xl`}>
+                            {t('views.settings.languages')}
+                        </div>
                     </div>
                     <div class={`flex flex-col gap-2`}>
                         <div class={`flex flex-wrap gap-3`}>
@@ -138,7 +148,9 @@ export const SettingsView = defineComponent({
                             <Select
                                 searchable
                                 options={languageOptions.value}
-                                placeholder="Add language"
+                                placeholder={t(
+                                    'views.settings.addLanguage',
+                                )}
                                 onChange={async (option) => {
                                     if (option) {
                                         await addLanguage(option.value);

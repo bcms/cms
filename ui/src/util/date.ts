@@ -1,31 +1,23 @@
 import spacetime from 'spacetime';
-import { base10Padding } from '@bcms/selfhosted-ui/util/string';
+import { i18n } from '@bcms/selfhosted-ui/i18n';
 
-export const MonthNumToStr = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Avg',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-];
 export function millisToDateString(millis: number, includeTime?: boolean) {
-    const date = new Date(millis);
-    return `${MonthNumToStr[date.getMonth()]} ${date.getDate()}/${
-        date.getMonth() + 1
-    }/${date.getFullYear()}${
-        includeTime
-            ? ` ${base10Padding(date.getHours())}:${base10Padding(
-                  date.getMinutes(),
-              )}`
-            : ''
-    }`;
+    const locale = i18n.global.locale.value as string;
+    const options: Intl.DateTimeFormatOptions = includeTime
+        ? {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: false,
+          }
+        : {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+          };
+    return new Intl.DateTimeFormat(locale, options).format(new Date(millis));
 }
 
 export function dateComponentsToMillis(

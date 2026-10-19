@@ -7,10 +7,12 @@ import { Link } from '@bcms/selfhosted-ui/components/link';
 import { MediaPreview } from '@bcms/selfhosted-ui/components/media-preview';
 import { UserList } from '@bcms/selfhosted-ui/components/user-list';
 import { userHasRole } from '@bcms/selfhosted-ui/util/role';
+import { useI18n } from 'vue-i18n';
 
 export const HomeView = defineComponent({
     setup() {
-        window.bcms.meta.set({ title: 'Home' });
+        const { t } = useI18n();
+        window.bcms.meta.set({ titleKey: 'routes.home' });
         const sdk = window.bcms.sdk;
         const modal = window.bcms.modalService;
 
@@ -71,9 +73,11 @@ export const HomeView = defineComponent({
                                 <div
                                     class={`text-5xl leading-tight font-light tracking-[-0.02em] mb-1 dark:text-light`}
                                 >
-                                    Hello {me.value?.username},
+                                    {t('views.home.greeting', {
+                                        username: me.value?.username,
+                                    })}
                                 </div>
-                                <div>Have a nice day at work!</div>
+                                <div>{t('views.home.niceDay')}</div>
                             </div>
                             {/*{userHasRole(['ADMIN'], me.value) && (*/}
                             {/*    <Button*/}
@@ -94,39 +98,39 @@ export const HomeView = defineComponent({
                             <div
                                 class={`text-[28px] leading-tight tracking-[-0.01em] mb-10 dark:text-light`}
                             >
-                                Your stats
+                                {t('views.home.statsTitle')}
                             </div>
                             <div
                                 class={`grid grid-cols-1 gap-5 desktop:grid-cols-[repeat(3,minmax(200px,1fr))] desktop:max-w-max`}
                             >
                                 {getStatBox(
                                     userStats.value?.entryCount || 0,
-                                    'Entries created',
+                                    t('views.home.entriesCreated'),
                                 )}
                                 {getStatBox(
                                     (
                                         (userStats.value?.mediaSize || 0) /
                                         1000000
                                     ).toFixed(0),
-                                    'Megabytes upload',
+                                    t('views.home.megabytesUpload'),
                                 )}
                                 {getStatBox(
                                     sdk.store.user.items().length,
-                                    'Members',
+                                    t('views.home.members'),
                                 )}
                             </div>
                         </div>
                         <div class="max-w-[500px]">
                             <div class="flex items-center justify-between mb-10">
                                 <h2 class="text-[28px] leading-tight tracking-[-0.01em] dark:text-light">
-                                    Recently uploaded
+                                    {t('views.home.recentlyUploaded')}
                                 </h2>
                                 {recentMedia.value.length > 0 && (
                                     <Link
                                         href="/d/media"
                                         class="leading-tight tracking-[-0.01em] text-green hover:underline dark:text-yellow"
                                     >
-                                        See all files
+                                        {t('views.home.seeAllFiles')}
                                     </Link>
                                 )}
                             </div>
@@ -157,11 +161,11 @@ export const HomeView = defineComponent({
                                                 modal.handlers.mediaCreateFile.open();
                                             }}
                                         >
-                                            Upload files
+                                            {t('views.home.uploadFiles')}
                                         </Button>
                                     )}
                                     <div class="leading-tight tracking-[-0.01em] mb-8 dark:text-light">
-                                        Upload first files to see them here.
+                                        {t('views.home.uploadFirst')}
                                     </div>
                                 </div>
                             )}

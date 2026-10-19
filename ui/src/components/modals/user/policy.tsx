@@ -13,6 +13,7 @@ import { Toggle } from '@bcms/selfhosted-ui/components/inputs/toggle';
 import { CheckBox } from '@bcms/selfhosted-ui/components/inputs/check-box';
 import type { Template } from '@bcms/selfhosted-backend/template/models/main';
 import { Button } from '@bcms/selfhosted-ui/components/button';
+import { useI18n } from 'vue-i18n';
 
 interface UserPolicyTemplateExtended extends UserPolicyTemplate {
     template: Template;
@@ -29,6 +30,7 @@ export interface ModalUserPolicyInput {
 export const ModalUserPolicy = defineComponent({
     props: getModalDefaultProps<ModalUserPolicyInput, void>(),
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const notification = window.bcms.notification;
@@ -134,7 +136,7 @@ export const ModalUserPolicy = defineComponent({
                         });
                     },
                     async () => {
-                        notification.success('User added successfully');
+                        notification.success(t('modals.policy.updated'));
                     },
                 );
                 return [true, undefined];
@@ -168,12 +170,12 @@ export const ModalUserPolicy = defineComponent({
                                 crudData.delete = value;
                             }}
                         >
-                            Check all
+                            {t('modals.policy.checkAll')}
                         </Button>
                     </div>
                     <div class={`ml-4 flex flex-col gap-2`}>
                         <CheckBox
-                            text={`Can get resources`}
+                            text={t('modals.policy.canGet')}
                             value={crudData.get}
                             onInput={(value) => {
                                 crudData.get = value;
@@ -185,7 +187,7 @@ export const ModalUserPolicy = defineComponent({
                             }}
                         />
                         <CheckBox
-                            text={`Can add data`}
+                            text={t('modals.policy.canAdd')}
                             value={crudData.post}
                             onInput={(value) => {
                                 crudData.post = value;
@@ -195,7 +197,7 @@ export const ModalUserPolicy = defineComponent({
                             }}
                         />
                         <CheckBox
-                            text={`Can update data`}
+                            text={t('modals.policy.canUpdate')}
                             value={crudData.put}
                             onInput={(value) => {
                                 crudData.put = value;
@@ -205,7 +207,7 @@ export const ModalUserPolicy = defineComponent({
                             }}
                         />
                         <CheckBox
-                            text={`Can delete data`}
+                            text={t('modals.policy.canDelete')}
                             value={crudData.delete}
                             onInput={(value) => {
                                 crudData.delete = value;
@@ -221,15 +223,19 @@ export const ModalUserPolicy = defineComponent({
 
         return () => (
             <ModalWrapper
-                title={'Edit policy'}
+                title={t('modals.policy.editTitle')}
                 handler={props.handler}
-                doneText={'Update'}
+                doneText={t('modals.common.update')}
             >
                 <div class={`flex flex-col gap-4`}>
                     <Toggle
-                        label={'View mode'}
+                        label={t('modals.policy.viewMode')}
                         value={advancedMode.value}
-                        description={advancedMode.value ? 'Advanced' : 'Simple'}
+                        description={
+                            advancedMode.value
+                                ? t('modals.policy.advanced')
+                                : t('modals.policy.simple')
+                        }
                         onInput={(value) => {
                             advancedMode.value = value;
                         }}
@@ -240,7 +246,7 @@ export const ModalUserPolicy = defineComponent({
                                 <div
                                     class={`uppercase text-xs mb-2 border-b border-b-gray py-3`}
                                 >
-                                    Media permissions
+                                    {t('modals.policy.mediaPermissions')}
                                 </div>
                                 {getCrudOptions('Media', policy.value.media)}
                             </div>
@@ -248,7 +254,7 @@ export const ModalUserPolicy = defineComponent({
                                 <div
                                     class={`uppercase text-xs mb-2 border-b border-b-gray py-3`}
                                 >
-                                    Template permissions
+                                    {t('modals.policy.templatePermissions')}
                                 </div>
                                 <div class={`flex flex-col gap-8`}>
                                     {policy.value.templates.map((tPolicy) => {
@@ -267,7 +273,9 @@ export const ModalUserPolicy = defineComponent({
                             >
                                 <CheckBox
                                     class={`px-5 py-3`}
-                                    text={`Can view and edit Media`}
+                                    text={t(
+                                        'modals.policy.canViewEditMedia',
+                                    )}
                                     value={
                                         policy.value.media.get &&
                                         policy.value.media.post &&
@@ -289,7 +297,13 @@ export const ModalUserPolicy = defineComponent({
                                     >
                                         <CheckBox
                                             class={`px-5 py-3`}
-                                            text={`Can view and edit ${tPolicy.template.label}`}
+                                            text={t(
+                                                'modals.policy.canViewEditTemplate',
+                                                {
+                                                    label: tPolicy.template
+                                                        .label,
+                                                },
+                                            )}
                                             value={
                                                 tPolicy.get &&
                                                 tPolicy.put &&

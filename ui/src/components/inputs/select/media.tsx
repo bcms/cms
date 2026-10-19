@@ -18,6 +18,7 @@ import {
 import { MediaPreview } from '@bcms/selfhosted-ui/components/media-preview';
 import { prettyFileSize } from '@bcms/selfhosted-ui/util/file';
 import { Icon } from '@bcms/selfhosted-ui/components/icon';
+import { useI18n } from 'vue-i18n';
 
 export const MediaSelect = defineComponent({
     props: {
@@ -39,6 +40,7 @@ export const MediaSelect = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const modal = window.bcms.modalService;
@@ -138,7 +140,9 @@ export const MediaSelect = defineComponent({
                                     <div
                                         class={`flex flex-col mt-auto text-green dark:text-yellow text-left font-medium`}
                                     >
-                                        <div>Click to select another media</div>
+                                        <div>
+                                            {t('components.select.changeMedia')}
+                                        </div>
                                         <button
                                             class={`text-left`}
                                             onClick={(event) => {
@@ -166,7 +170,7 @@ export const MediaSelect = defineComponent({
                                                 );
                                             }}
                                         >
-                                            Edit media
+                                            {t('components.select.editMedia')}
                                         </button>
                                     </div>
                                 </div>
@@ -219,7 +223,7 @@ export const MediaSelect = defineComponent({
                                     />
                                 </div>
                                 <div class={`font-bold text-brand-700`}>
-                                    Click to select a media file
+                                    {t('components.select.media')}
                                 </div>
                             </div>
                         )}

@@ -21,6 +21,7 @@ import {
     PropInputWrapperArrayItem,
 } from '@bcms/selfhosted-ui/components/prop/_input-wrapper';
 import { Select } from '@bcms/selfhosted-ui/components/inputs/select/main';
+import { useI18n } from 'vue-i18n';
 
 export const PropEnumInput = defineComponent({
     props: {
@@ -61,6 +62,7 @@ export const PropEnumInput = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const errorUnsubs: UnsubscribeFns = [];
         const entrySyncUnsubs: UnsubscribeFns = [];
         const errors = ref<string[]>([]);
@@ -77,7 +79,7 @@ export const PropEnumInput = defineComponent({
                             props.propValidator.register(() => {
                                 if (!valueData[i]) {
                                     errors.value[i] =
-                                        'Property is required, please select a value';
+                                        t('props.requiredValue');
                                     return false;
                                 }
                                 errors.value[i] = '';
@@ -91,7 +93,7 @@ export const PropEnumInput = defineComponent({
                         props.propValidator.register(() => {
                             if (!valueData[0]) {
                                 errors.value[0] =
-                                    'Property is required, please select a value';
+                                    t('props.requiredValue');
                                 return false;
                             }
                             errors.value[0] = '';

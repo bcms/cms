@@ -17,6 +17,7 @@ import {
 } from '@bcms/selfhosted-ui/components/table/cell';
 import { Storage } from '@bcms/selfhosted-ui/storage';
 import { Select } from '@bcms/selfhosted-ui/components/inputs/select/main';
+import { useI18n } from 'vue-i18n';
 
 export interface TableHeaderItemSort {
     type: string;
@@ -96,6 +97,7 @@ export const TableHeader = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const headerDropdown = ref<TableHeaderDropdownInfo[]>(
             props.items.map(() => {
                 return {
@@ -130,9 +132,7 @@ export const TableHeader = defineComponent({
                     const optionIdx = props.items[
                         activeFilter.colIdx
                     ].filter?.options.findIndex(
-                        (e) =>
-                            e.value === activeFilter.option.value &&
-                            e.label === activeFilter.option.label,
+                        (e) => e.value === activeFilter.option.value,
                     );
                     if (typeof optionIdx === 'number' && optionIdx !== -1) {
                         selectFilterOption(
@@ -159,7 +159,7 @@ export const TableHeader = defineComponent({
             if (optionIdx === headerDropdown.value[colIdx].activeOption) {
                 ctx.emit('filter', {
                     option: {
-                        label: 'Clear filter',
+                        label: t('table.clearFilter'),
                         value: '__clear__',
                     },
                     colIdx,
@@ -291,8 +291,8 @@ export const TableHeader = defineComponent({
                 return (
                     <Select
                         class="p-2"
-                        label="Filter by condition"
-                        placeholder="None"
+                        label={t('table.filterByCondition')}
+                        placeholder={t('table.none')}
                         selected={headerDropdown.value[colIdx].pointer}
                         options={headerItem.filter.options.map(
                             (option, optionIdx) => {

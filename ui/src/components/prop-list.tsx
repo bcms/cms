@@ -4,6 +4,19 @@ import type { Prop } from '@bcms/selfhosted-backend/prop/models/main';
 import { Link } from '@bcms/selfhosted-ui/components/link';
 import { Icon } from '@bcms/selfhosted-ui/components/icon';
 import { Tag } from '@bcms/selfhosted-ui/components/tag';
+import { useI18n } from 'vue-i18n';
+
+const PROP_TYPE_LABEL_KEYS: Record<string, string> = {
+    STRING: 'props.type.string',
+    RICH_TEXT: 'props.type.richText',
+    NUMBER: 'props.type.number',
+    DATE: 'props.type.date',
+    BOOLEAN: 'props.type.boolean',
+    ENUMERATION: 'props.type.enumeration',
+    MEDIA: 'props.type.media',
+    GROUP_POINTER: 'props.type.groupPointer',
+    ENTRY_POINTER: 'props.type.entryPointer',
+};
 
 export const PropList = defineComponent({
     props: {
@@ -26,6 +39,7 @@ export const PropList = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const confirm = window.bcms.confirm;
         const notification = window.bcms.notification;
@@ -165,7 +179,7 @@ export const PropList = defineComponent({
                                             prop.id,
                                         );
                                         notification.success(
-                                            'Property ID successfully copied to the clipboard',
+                                            t('props.copyIdSuccess'),
                                         );
                                     }}
                                 >
@@ -179,15 +193,11 @@ export const PropList = defineComponent({
                                 </button>
                             </div>
                             <Tag class={'mt-auto mb-auto'}>
-                                {prop.type
-                                    .split('_')
-                                    .map(
-                                        (e) =>
-                                            e.slice(0, 1) +
-                                            e.slice(1).toLowerCase(),
-                                    )
-                                    .join(' ')}{' '}
-                                {prop.array ? 'Array' : ''}
+                                {t(
+                                    PROP_TYPE_LABEL_KEYS[prop.type] ||
+                                        prop.type,
+                                )}
+                                {prop.array ? ' ' + t('props.array') : ''}
                             </Tag>
                             {prop.type === 'GROUP_POINTER'
                                 ? getGroupPointerLink(
@@ -224,8 +234,10 @@ export const PropList = defineComponent({
                                         onClick={async () => {
                                             if (
                                                 await confirm(
-                                                    'Delete property',
-                                                    `Are you sure that you want to delete "${prop.name}" property?`,
+                                                    t('props.delete'),
+                                                    t('props.deleteConfirm', {
+                                                        name: prop.name,
+                                                    }),
                                                 )
                                             ) {
                                                 ctx.emit('remove', prop);

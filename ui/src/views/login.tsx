@@ -8,9 +8,11 @@ import { PasswordInput } from '@bcms/selfhosted-ui/components/inputs/password';
 import { Button } from '@bcms/selfhosted-ui/components/button';
 import { throwable } from '@bcms/selfhosted-ui/util/throwable';
 import { useRoute, useRouter } from 'vue-router';
+import { useI18n } from 'vue-i18n';
 
 export const LoginView = defineComponent({
     setup() {
+        const { t } = useI18n();
         const router = useRouter();
         const route = useRoute();
 
@@ -19,7 +21,7 @@ export const LoginView = defineComponent({
                 value: '',
                 handler(value) {
                     if (!value) {
-                        return 'Email is required';
+                        return t('auth.emailRequired');
                     }
                 },
             }),
@@ -27,7 +29,7 @@ export const LoginView = defineComponent({
                 value: '',
                 handler(value) {
                     if (!value) {
-                        return 'Email is required';
+                        return t('auth.passwordRequired');
                     }
                 },
             }),
@@ -77,11 +79,11 @@ export const LoginView = defineComponent({
 
         return () => (
             <div class={`flex flex-col`}>
-                <h1 class={`font-normal text-4xl`}>Log in</h1>
+                <h1 class={`font-normal text-4xl`}>{t('auth.login')}</h1>
                 <TextInput
                     class={`mt-10`}
-                    label="Email"
-                    placeholder='Email'
+                    label={t('auth.email')}
+                    placeholder={t('auth.email')}
                     value={inputs.value.email.value}
                     error={inputs.value.email.error}
                     onInput={(value) => {
@@ -91,8 +93,8 @@ export const LoginView = defineComponent({
                 />
                 <PasswordInput
                     class={`mt-4`}
-                    label="Password"
-                    placeholder='Password'
+                    label={t('auth.password')}
+                    placeholder={t('auth.password')}
                     value={inputs.value.password.value}
                     error={inputs.value.password.error}
                     onInput={(value) => {
@@ -101,7 +103,7 @@ export const LoginView = defineComponent({
                     onEnter={login}
                 />
                 <Button class={`mt-10 mr-auto`} onClick={login}>
-                    Log in
+                    {t('auth.login')}
                 </Button>
             </div>
         );

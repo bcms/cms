@@ -22,6 +22,7 @@ import {
     PropInputWrapperArrayItem,
 } from '@bcms/selfhosted-ui/components/prop/_input-wrapper';
 import { DateInput } from '@bcms/selfhosted-ui/components/inputs/date';
+import { useI18n } from 'vue-i18n';
 
 export const PropDateInput = defineComponent({
     props: {
@@ -58,6 +59,7 @@ export const PropDateInput = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const errorUnsubs: UnsubscribeFns = [];
         const entrySyncUnsubs: UnsubscribeFns = [];
         const errors = ref<string[]>([]);
@@ -77,7 +79,7 @@ export const PropDateInput = defineComponent({
                                     valueData[i].timestamp === -1
                                 ) {
                                     errors.value[i] =
-                                        'Property is required, please enter a date';
+                                        t('props.requiredDate');
                                     return false;
                                 }
                                 errors.value[i] = '';
@@ -94,7 +96,7 @@ export const PropDateInput = defineComponent({
                                 valueData[0].timestamp === -1
                             ) {
                                 errors.value[0] =
-                                    'Property is required, please enter a date';
+                                    t('props.requiredDate');
                                 return false;
                             }
                             errors.value[0] = '';

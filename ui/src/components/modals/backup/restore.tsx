@@ -12,10 +12,12 @@ import {
     FileInput,
     type FileInputListItem,
 } from '@bcms/selfhosted-ui/components/inputs/file';
+import { useI18n } from 'vue-i18n';
 
 export const ModalBackupRestore = defineComponent({
     props: getModalDefaultProps<void, void>(),
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const notification = window.bcms.notification;
@@ -30,7 +32,7 @@ export const ModalBackupRestore = defineComponent({
                     value: undefined,
                     handler(value) {
                         if (!value) {
-                            return 'Please select a zip file';
+                            return t('modals.backup.selectZip');
                         }
                     },
                 }),
@@ -48,8 +50,8 @@ export const ModalBackupRestore = defineComponent({
                 }
                 if (
                     !(await confirm(
-                        'Restore CMS',
-                        `Are you sure that you want to continue? This action is irreversible and will override data stored in the CMS`,
+                        t('modals.backup.restoreTitle'),
+                        t('modals.backup.restoreConfirm'),
                         'continue',
                     ))
                 ) {
@@ -75,7 +77,7 @@ export const ModalBackupRestore = defineComponent({
                     },
                     async () => {
                         notification.success(
-                            `Restore successful, refreshing in 2 seconds ...`,
+                            t('modals.backup.restoreSuccessful'),
                         );
                         await delay(2000);
                         window.location.reload();
@@ -83,7 +85,9 @@ export const ModalBackupRestore = defineComponent({
                     },
                     async (err) => {
                         console.error(err);
-                        notification.error('Failed to restore the CMS');
+                        notification.error(
+                            t('modals.backup.restoreFailed'),
+                        );
                         return false;
                     },
                 );
@@ -95,10 +99,13 @@ export const ModalBackupRestore = defineComponent({
         });
 
         return () => (
-            <ModalWrapper title={`Restore`} handler={props.handler}>
+            <ModalWrapper
+                title={t('modals.backup.restoreTitle')}
+                handler={props.handler}
+            >
                 <div class={`flex flex-col gap-8`}>
                     <FileInput
-                        label={`Restore a zip file`}
+                        label={t('modals.backup.restoreFileLabel')}
                         list={
                             inputs.value.file.value
                                 ? [inputs.value.file.value]

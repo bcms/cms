@@ -10,6 +10,7 @@ import { Button } from '@bcms/selfhosted-ui/components/button';
 import type { Backup } from '@bcms/selfhosted-backend/backup/models/main';
 import { downloadBuffer } from '@bcms/selfhosted-ui/util/download';
 import { millisToDateString } from '@bcms/selfhosted-ui/util/date';
+import { useI18n } from 'vue-i18n';
 
 export const BackupListItem = defineComponent({
     props: {
@@ -19,6 +20,7 @@ export const BackupListItem = defineComponent({
         },
     },
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const notification = window.bcms.notification;
         const throwable = window.bcms.throwable;
@@ -39,11 +41,11 @@ export const BackupListItem = defineComponent({
             );
         }
 
-        const dropdownOptions: DropdownItem[] = [
+        const dropdownOptions = computed<DropdownItem[]>(() => [
             {
                 text: dropdownItem(
-                    'Download',
-                    `Download currently selected backup as a .zip file`,
+                    t('backups.download'),
+                    t('backups.downloadDesc'),
                 ),
                 icon: '/edit-03',
                 async onClick() {
@@ -59,8 +61,8 @@ export const BackupListItem = defineComponent({
             },
             {
                 text: dropdownItem(
-                    'Remove',
-                    'Delete file from the server',
+                    t('backups.remove'),
+                    t('backups.removeDesc'),
                     undefined,
                     'text-darkGray',
                 ),
@@ -69,8 +71,8 @@ export const BackupListItem = defineComponent({
                 async onClick() {
                     if (
                         await confirm(
-                            'Remove backup',
-                            'Are you sure that you want to delete the backup? This action is irreversible.',
+                            t('backups.removeTitle'),
+                            t('backups.removeConfirm'),
                         )
                     ) {
                         await throwable(
@@ -78,15 +80,13 @@ export const BackupListItem = defineComponent({
                                 await sdk.backup.deleteById(props.backup._id);
                             },
                             async () => {
-                                notification.success(
-                                    'Backup successfully removed',
-                                );
+                                notification.success(t('backups.removed'));
                             },
                         );
                     }
                 },
             },
-        ];
+        ]);
 
         return () => (
             <li
@@ -99,13 +99,15 @@ export const BackupListItem = defineComponent({
                 <div class={`flex gap-2 items-center xs:ml-auto`}>
                     <Tag>
                         {props.backup.inQueue
-                            ? 'Queue'
+                            ? t('backups.queue')
                             : props.backup.ready
-                            ? 'Ready'
-                            : 'Waiting'}
+                            ? t('backups.ready')
+                            : t('backups.waiting')}
                     </Tag>
                 </div>
-                {props.backup.ready && <Dropdown items={dropdownOptions} />}
+                {props.backup.ready && (
+                    <Dropdown items={dropdownOptions.value} />
+                )}
             </li>
         );
     },
@@ -116,6 +118,7 @@ export const BackupList = defineComponent({
         ...DefaultComponentProps,
     },
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const notification = window.bcms.notification;
@@ -136,7 +139,7 @@ export const BackupList = defineComponent({
             return (
                 <ul class={`flex flex-col gap-3 mt-8`}>
                     {backups.value.length === 0 ? (
-                        <li>There are no backups yet</li>
+                        <li>{t('backups.noBackups')}</li>
                     ) : (
                         <>
                             {backups.value.map((user) => {
@@ -151,7 +154,7 @@ export const BackupList = defineComponent({
         return () => (
             <div id={props.id} style={props.style} class={props.class}>
                 <div class={`flex gap-4 items-center`}>
-                    <div class={`text-3xl`}>Backups</div>
+                    <div class={`text-3xl`}>{t('backups.title')}</div>
                     <div class={`ml-auto flex gap-2 items-center`}>
                         <Button
                             kind={`ghost`}
@@ -159,7 +162,7 @@ export const BackupList = defineComponent({
                                 modal.handlers.backupRestore.open();
                             }}
                         >
-                            Restore
+                            {t('backups.restore')}
                         </Button>
                         <Button
                             onClick={async () => {
@@ -169,13 +172,13 @@ export const BackupList = defineComponent({
                                     },
                                     async () => {
                                         notification.success(
-                                            'Backup creation started',
+                                            t('backups.creationStarted'),
                                         );
                                     },
                                 );
                             }}
                         >
-                            Create new backup
+                            {t('backups.create')}
                         </Button>
                     </div>
                 </div>

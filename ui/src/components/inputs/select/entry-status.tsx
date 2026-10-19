@@ -2,6 +2,7 @@ import { computed, defineComponent, onMounted } from 'vue';
 import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
 import type { EntryStatus } from '@bcms/selfhosted-backend/entry-status/models/main';
 import { Select } from '@bcms/selfhosted-ui/components/inputs/select/main';
+import { useI18n } from 'vue-i18n';
 
 export const EntryStatusSelect = defineComponent({
     props: {
@@ -18,6 +19,7 @@ export const EntryStatusSelect = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const modal = window.bcms.modalService;
@@ -38,7 +40,9 @@ export const EntryStatusSelect = defineComponent({
                     label={props.label}
                     fixed={props.fixed}
                     selected={props.selected}
-                    placeholder={props.placeholder || 'Select entry status'}
+                    placeholder={
+                        props.placeholder || t('components.select.entryStatus')
+                    }
                     disabled={props.disabled}
                     options={[
                         ...statuses.value.map((status) => {
@@ -48,7 +52,7 @@ export const EntryStatusSelect = defineComponent({
                             };
                         }),
                         {
-                            label: 'Edit statuses',
+                            label: t('components.select.editStatuses'),
                             value: '__edit',
                             class: `border-t border-t-100 w-full bg-fluo`,
                             // slot: <div class={``}>Edit statuses</div>,

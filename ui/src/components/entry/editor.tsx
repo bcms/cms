@@ -36,6 +36,7 @@ import { TextInput } from '@bcms/selfhosted-ui/components/inputs/text';
 import { StringUtility } from '@bcms/selfhosted-utils/string-utility';
 import { EntryMetaEditor } from '@bcms/selfhosted-ui/components/entry/meta';
 import { EntryContentEditor } from '@bcms/selfhosted-ui/components/entry/content';
+import { useI18n } from 'vue-i18n';
 
 export async function entryEditorMetaOnAddPropValue(
     props: PropValue[],
@@ -139,6 +140,7 @@ export const EntryEditor = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const template = computed(() =>
             sdk.store.template.findById(props.entry.templateId),
@@ -169,7 +171,7 @@ export const EntryEditor = defineComponent({
                                 .data as string[]
                         )[0]
                     ) {
-                        inputErrors.value.title = 'Title is required';
+                        inputErrors.value.title = t('editor.titleRequired');
                         return false;
                     }
                     inputErrors.value.title = '';
@@ -183,7 +185,7 @@ export const EntryEditor = defineComponent({
                                 .data as string[]
                         )[0]
                     ) {
-                        inputErrors.value.slug = 'Slug is required';
+                        inputErrors.value.slug = t('editor.slugRequired');
                         return false;
                     }
                     inputErrors.value.slug = '';
@@ -214,8 +216,8 @@ export const EntryEditor = defineComponent({
                             <TextAreaInput
                                 id={`entry.meta.${lngIdx.value}.props.0.data.0`}
                                 entrySync={props.entrySync}
-                                label="Title"
-                                placeholder="Title"
+                                label={t('editor.title')}
+                                placeholder={t('editor.title')}
                                 error={inputErrors.value.title}
                                 required
                                 value={
@@ -231,8 +233,8 @@ export const EntryEditor = defineComponent({
                             <TextInput
                                 id={`entry.meta.${lngIdx.value}.props.1.data.0`}
                                 class={`mt-4 mb-4`}
-                                label="Slug"
-                                placeholder="Slug"
+                                label={t('editor.slug')}
+                                placeholder={t('editor.slug')}
                                 required
                                 entrySync={props.entrySync}
                                 error={inputErrors.value.slug}
@@ -298,7 +300,7 @@ export const EntryEditor = defineComponent({
                         <div>
                             <EntryContentEditor
                                 nodes={props.entry.content[lngIdx.value].nodes}
-                                placeholder="Click and start typing, use / for commands"
+                                placeholder={t('editor.contentPlaceholder')}
                                 propPath={`entry.content.${lngIdx.value}.nodes`}
                                 lngIdx={lngIdx.value}
                                 entryId={props.entry._id}
