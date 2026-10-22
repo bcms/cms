@@ -140,6 +140,7 @@ export const en = {
             updated: 'Updated',
             id: 'ID',
             name: 'Name',
+            apiName: 'API name',
             propertiesInTemplate:
                 '{count} property in this template | {count} properties in this template',
             propertiesInGroup:
@@ -299,6 +300,7 @@ export const en = {
         addNewItemTo: 'Add new item to {label}',
         item: 'Item',
         array: 'Array',
+        fieldKey: 'Field key',
         type: {
             string: 'String',
             richText: 'Rich Text',

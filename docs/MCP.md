@@ -46,3 +46,11 @@ required access to the relevant template.
 `template_create` supports `STRING`, `NUMBER`, `BOOLEAN`, `DATE`, `MEDIA`, and
 `RICH_TEXT` fields. Pointer and enumeration fields need references or options
 that are not yet exposed by this MCP tool.
+
+Template and field `label` values may be Chinese. BCMS generates an ASCII
+`name` for API usage when each item is created and keeps it stable when the
+display label changes. The `template_create` result and `templates_list`
+include both `label` and `name`; parsed entry responses use each field's
+`name` as the JSON key. Entry writes continue to use property IDs.
+Chinese labels are romanized to pinyin, with a numeric suffix if the generated
+name already exists.

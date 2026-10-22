@@ -24,6 +24,13 @@ export const TemplateRepo = createMongoDBRepository<
     name: 'Template',
     collection: `${Config.storageScope}_templates`,
     schema: TemplateSchema,
+    indexes: [
+        {
+            key: { name: 1 },
+            name: 'template_name_unique',
+            unique: true,
+        },
+    ],
     methods({ mdb, cache }) {
         const latches: {
             [key: string]: boolean;

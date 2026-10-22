@@ -207,7 +207,7 @@ export const WidgetView = defineComponent({
                                     ),
                                 )}
                                 {infoItem(
-                                    t('views.detail.name'),
+                                    t('views.detail.apiName'),
                                     widget.value.name,
                                 )}
                             </div>

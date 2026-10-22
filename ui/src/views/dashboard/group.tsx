@@ -207,7 +207,7 @@ export const GroupView = defineComponent({
                                     ),
                                 )}
                                 {infoItem(
-                                    t('views.detail.name'),
+                                    t('views.detail.apiName'),
                                     group.value.name,
                                 )}
                             </div>

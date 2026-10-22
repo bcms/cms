@@ -141,6 +141,7 @@ export const zhCN: typeof en = {
             updated: '更新时间',
             id: 'ID',
             name: '名称',
+            apiName: 'API 名称',
             propertiesInTemplate: '此模板中有 {count} 个属性',
             propertiesInGroup: '此分组中有 {count} 个属性',
             propertiesInWidget: '此组件中有 {count} 个属性',
@@ -291,6 +292,7 @@ export const zhCN: typeof en = {
         addNewItemTo: '向 {label} 添加新项',
         item: '项',
         array: '数组',
+        fieldKey: '字段 key',
         type: {
             string: '字符串',
             richText: '富文本',

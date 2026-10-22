@@ -115,7 +115,7 @@ function createServer(fastify: FastifyInstance, authorization: string) {
         'template_create',
         {
             description:
-                'Create a content template and optional fields. Access follows the existing BCMS template-create API rules. Supported fields: STRING, NUMBER, BOOLEAN, DATE, MEDIA, RICH_TEXT.',
+                'Create a content template and optional fields. Labels may be Chinese. The response includes stable API names for the template and its fields; use property IDs when writing entry values. Access follows the existing BCMS template-create API rules. Supported fields: STRING, NUMBER, BOOLEAN, DATE, MEDIA, RICH_TEXT.',
             inputSchema: {
                 label: z.string().min(1),
                 description: z.string().default(''),

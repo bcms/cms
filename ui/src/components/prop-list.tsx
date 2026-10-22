@@ -159,7 +159,7 @@ export const PropList = defineComponent({
                                 />
                             </button>
                             <div class={`flex flex-col gap-2`}>
-                                <div class={`flex gap-2 items-center`}>
+                                <div class={`flex flex-wrap gap-2 items-center`}>
                                     <Icon
                                         class={`w-3 h-3 fill-current text-gray dark:text-gray`}
                                         src={
@@ -169,8 +169,9 @@ export const PropList = defineComponent({
                                     <div class={`font-medium`}>
                                         {prop.label}
                                     </div>
-                                    <div>/</div>
-                                    <div>{prop.name}</div>
+                                    <div class={`min-w-0 break-all text-sm text-darkGray dark:text-gray`}>
+                                        {t('props.fieldKey')}: {prop.name}
+                                    </div>
                                 </div>
                                 <button
                                     class={`flex gap-2 items-center text-darkGray dark:text-gray text-xs`}

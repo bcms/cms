@@ -134,11 +134,7 @@ export const ModalPropCreate = defineComponent({
                         }
                         break;
                 }
-                const prop: Prop = {
-                    id: '',
-                    name: StringUtility.toSlugUnderscore(
-                        inputs.value.label.value,
-                    ),
+                const prop: PropChangeAdd = {
                     type: inputs.value.type.value as PropType,
                     data: propData,
                     label: inputs.value.label.value,

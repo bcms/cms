@@ -94,7 +94,7 @@ export const TemplateView = defineComponent({
             return (
                 <div class={`flex gap-2 justify-between items-center`}>
                     <div class={`text-gray`}>{label}</div>
-                    <div>{value}</div>
+                    <div class={`min-w-0 break-all text-right`}>{value}</div>
                 </div>
             );
         }
@@ -209,7 +209,7 @@ export const TemplateView = defineComponent({
                                     ),
                                 )}
                                 {infoItem(
-                                    t('views.detail.name'),
+                                    t('views.detail.apiName'),
                                     template.value.name,
                                 )}
                             </div>
