@@ -4,6 +4,7 @@ import {
     InputWrapper,
 } from '@bcms/selfhosted-ui/components/inputs/_wrapper';
 import { Icon } from '@bcms/selfhosted-ui/components/icon';
+import { useI18n } from 'vue-i18n';
 
 export const MultiAdd = defineComponent({
     props: {
@@ -27,6 +28,7 @@ export const MultiAdd = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const inputValue = ref('');
 
         return () => (
@@ -62,7 +64,9 @@ export const MultiAdd = defineComponent({
                     })}
                     <input
                         class={`w-full bg-white dark:bg-darkGray rounded py-1 px-2 focus:outline-none`}
-                        placeholder={props.placeholder || `Type something`}
+                        placeholder={
+                            props.placeholder || t('components.text.placeholder')
+                        }
                         value={inputValue.value}
                         onInput={(event) => {
                             const el = event.target as HTMLInputElement;

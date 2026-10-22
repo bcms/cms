@@ -10,6 +10,7 @@ import {
 import { TextInput } from '@bcms/selfhosted-ui/components/inputs/text';
 import { TextAreaInput } from '@bcms/selfhosted-ui/components/inputs/text-area';
 import type { Widget } from '@bcms/selfhosted-backend/widget/models/main';
+import { useI18n } from 'vue-i18n';
 
 export interface ModalWidgetCreateEditInput {
     widgetId?: string;
@@ -18,6 +19,7 @@ export interface ModalWidgetCreateEditInput {
 export const ModalWidgetCreateEdit = defineComponent({
     props: getModalDefaultProps<ModalWidgetCreateEditInput, void>(),
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const notification = window.bcms.notification;
@@ -32,7 +34,7 @@ export const ModalWidgetCreateEdit = defineComponent({
                     value: widget?.label || '',
                     handler(value) {
                         if (!value) {
-                            return 'Label is required';
+                            return t('modals.common.labelRequired');
                         }
                         if (
                             sdk.store.widget
@@ -42,7 +44,9 @@ export const ModalWidgetCreateEdit = defineComponent({
                                 )
                                 .find((e) => e.label === value)
                         ) {
-                            return `Widget with name "${value}" already exists`;
+                            return t('modals.widget.nameExists', {
+                                name: value,
+                            });
                         }
                     },
                 }),
@@ -93,12 +97,12 @@ export const ModalWidgetCreateEdit = defineComponent({
                         }
                     },
                     async () => {
-                        notification.success('Widget created successfully');
+                        notification.success(t('modals.widget.created'));
                         return true;
                     },
                     async (err) => {
                         console.error(err);
-                        notification.error('Failed to create widget');
+                        notification.error(t('modals.widget.createFailed'));
                         return false;
                     },
                 );
@@ -112,26 +116,32 @@ export const ModalWidgetCreateEdit = defineComponent({
         return () => (
             <ModalWrapper
                 title={
-                    widgetToUpdate.value ? 'Update widget' : `Create new widget`
+                    widgetToUpdate.value
+                        ? t('modals.widget.updateTitle')
+                        : t('modals.widget.createTitle')
                 }
                 handler={props.handler}
-                doneText={widgetToUpdate.value ? 'Update' : 'Create'}
+                doneText={
+                    widgetToUpdate.value
+                        ? t('modals.common.update')
+                        : t('modals.common.create')
+                }
             >
                 <div class={`flex flex-col gap-8`}>
                     <TextInput
-                        label={'Label'}
+                        label={t('modals.common.label')}
                         value={inputs.value.label.value}
                         error={inputs.value.label.error}
-                        placeholder={'My new widget'}
+                        placeholder={t('modals.widget.labelPlaceholder')}
                         onInput={(value) => {
                             inputs.value.label.value = value;
                         }}
                     />
                     <TextAreaInput
-                        label={'Description'}
+                        label={t('modals.common.description')}
                         value={inputs.value.description.value}
                         error={inputs.value.description.error}
-                        placeholder={'What is this widget used for'}
+                        placeholder={t('modals.widget.descPlaceholder')}
                         onInput={(value) => {
                             inputs.value.description.value = value;
                         }}

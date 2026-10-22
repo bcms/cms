@@ -4,10 +4,12 @@ import {
     ModalWrapper,
 } from '@bcms/selfhosted-ui/components/modals/_wrapper';
 import { MultiAdd } from '@bcms/selfhosted-ui/components/inputs/multi-add';
+import { useI18n } from 'vue-i18n';
 
 export const ModalEntryStatusCreateEdit = defineComponent({
     props: getModalDefaultProps<void, void>(),
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const notification = window.bcms.notification;
@@ -40,7 +42,7 @@ export const ModalEntryStatusCreateEdit = defineComponent({
                     });
                 },
                 async () => {
-                    notification.success('Status successfully created');
+                    notification.success(t('modals.entryStatus.created'));
                 },
             );
         }
@@ -48,8 +50,8 @@ export const ModalEntryStatusCreateEdit = defineComponent({
         async function remove(id: string) {
             if (
                 !(await confirm(
-                    'Delete status',
-                    `Are you sure you want to delete this status? This action is irreversible and all Entries which are using this status will lose it.`,
+                    t('modals.entryStatus.deleteTitle'),
+                    t('modals.entryStatus.deleteConfirm'),
                 ))
             ) {
                 return;
@@ -61,20 +63,23 @@ export const ModalEntryStatusCreateEdit = defineComponent({
                     });
                 },
                 async () => {
-                    notification.success('Status successfully deleted');
+                    notification.success(t('modals.entryStatus.deleted'));
                 },
             );
         }
 
         return () => (
-            <ModalWrapper title={`Edit statuses`} handler={props.handler}>
+            <ModalWrapper
+                title={t('modals.entryStatus.editTitle')}
+                handler={props.handler}
+            >
                 <div class={`flex flex-col gap-8`}>
                     <MultiAdd
-                        label={'Statuses'}
+                        label={t('modals.entryStatus.statusesLabel')}
                         value={statuses.value.map((status) => {
                             return status.label;
                         })}
-                        placeholder={'Add some groups'}
+                        placeholder={t('modals.entryStatus.addPlaceholder')}
                         onInput={async (values) => {
                             for (let i = 0; i < values.length; i++) {
                                 const value = values[i];

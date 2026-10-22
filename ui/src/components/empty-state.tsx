@@ -1,6 +1,7 @@
 import { defineComponent, type PropType } from 'vue';
 import { Button } from '@bcms/selfhosted-ui/components/button';
 import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
+import { useI18n } from 'vue-i18n';
 
 export const EmptyState = defineComponent({
     props: {
@@ -22,7 +23,6 @@ export const EmptyState = defineComponent({
         alt: {
             type: String,
             required: false,
-            default: 'Empty',
         },
         title: {
             required: false,
@@ -42,6 +42,7 @@ export const EmptyState = defineComponent({
         },
     },
     setup(props) {
+        const { t } = useI18n();
         return () => (
             <div class="mt-7 desktop:mt-0">
                 <div class="flex items-start justify-between">
@@ -72,7 +73,7 @@ export const EmptyState = defineComponent({
                         maxHeight: props.maxHeight,
                     }}
                     src={`${window.bcms.origin}/assets/empty-state-illustrations/${props.src}`}
-                    alt={props.alt}
+                    alt={props.alt || t('common.empty')}
                     draggable={false}
                 />
             </div>

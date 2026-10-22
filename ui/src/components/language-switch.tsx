@@ -2,6 +2,7 @@ import { computed, defineComponent, onMounted } from 'vue';
 import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
 import type { Language } from '@bcms/selfhosted-backend/language/models/main';
 import { Select } from '@bcms/selfhosted-ui/components/inputs/select/main';
+import { useI18n } from 'vue-i18n';
 
 export const LanguageSwitch = defineComponent({
     props: {
@@ -14,6 +15,7 @@ export const LanguageSwitch = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const [lng, setLng] = window.bcms.useLanguage();
@@ -32,7 +34,7 @@ export const LanguageSwitch = defineComponent({
                 style={props.style}
                 class={props.class}
                 fixed={props.fixed}
-                placeholder="Change a language"
+                placeholder={t('language.change')}
                 selected={lng.value}
                 options={lngs.value.map((item) => {
                     return {

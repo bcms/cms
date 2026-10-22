@@ -15,6 +15,7 @@ import {
 import { Icon } from '@bcms/selfhosted-ui/components/icon';
 import { Loader } from '@bcms/selfhosted-ui/components/loader';
 import { bufferToFile } from '@bcms/selfhosted-ui/util/file';
+import { useI18n } from 'vue-i18n';
 
 const loadQueue: {
     [mediaId: string]: Queue<void>;
@@ -34,6 +35,7 @@ export const MediaPreview = defineComponent({
         caption: String,
     },
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const typesWithImage: Array<keyof typeof MediaType> = [
@@ -129,19 +131,27 @@ export const MediaPreview = defineComponent({
                 bcms-media-data={JSON.stringify(props.media)}
                 title={`${props.media.name}${
                     props.media.width !== -1
-                        ? `\nWidth: ${props.media.width}px`
+                        ? `\n${t('components.mediaPreview.width', {
+                              width: props.media.width,
+                          })}`
                         : ''
                 }${
                     props.media.height !== -1
-                        ? `\nHeight: ${props.media.height}px`
+                        ? `\n${t('components.mediaPreview.height', {
+                              height: props.media.height,
+                          })}`
                         : ''
                 }${
                     props.media.altText || props.altText
-                        ? `\nAlt text: ${props.altText || props.media.altText}`
+                        ? `\n${t('components.mediaPreview.altText', {
+                              text: props.altText || props.media.altText,
+                          })}`
                         : ''
                 }${
                     props.caption || props.media.caption
-                        ? `\nCaption: ${props.caption || props.media.caption}`
+                        ? `\n${t('components.mediaPreview.caption', {
+                              text: props.caption || props.media.caption,
+                          })}`
                         : ''
                 }`}
             >

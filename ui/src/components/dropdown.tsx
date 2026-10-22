@@ -118,7 +118,7 @@ export const Dropdown = defineComponent({
                             ref={dropEl}
                             class={`z-1000 ${
                                 props.fixed ? 'fixed' : 'absolute'
-                            } flex flex-col bg-light dark:bg-darkGray rounded-xl w-full overflow-x-hidden z-100 shadow-2xl shadow-black`}
+                            } flex flex-col bg-light dark:bg-darkGray rounded-xl w-full overflow-x-hidden overflow-y-auto z-100 shadow-2xl shadow-black`}
                             style={`max-width: ${maxWidth}px; max-height: ${maxHeight}px; ${
                                 mountTo.value.top
                                     ? `top: ${mountTo.value.top}px;`

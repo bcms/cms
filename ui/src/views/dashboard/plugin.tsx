@@ -24,7 +24,10 @@ export const PluginView = defineComponent({
                     );
                     if (found) {
                         plugin.value = found;
-                        meta.set({ title: found.name + ' | Plugin' });
+                        meta.set({
+                            titleKey: 'routes.pluginNamed',
+                            titleParams: { name: found.name },
+                        });
                     }
                     loading.value = false;
                 },

@@ -12,6 +12,7 @@ import { StringUtility } from '@bcms/selfhosted-utils/string-utility';
 import { Select } from '@bcms/selfhosted-ui/components/inputs/select/main';
 import { SelectEntryPointer } from '@bcms/selfhosted-ui/components/inputs/select/entry-pointer';
 import { MediaSelect } from '@bcms/selfhosted-ui/components/inputs/select/media';
+import { useI18n } from 'vue-i18n';
 
 type LinkType = 'url' | 'entry' | 'media';
 
@@ -31,6 +32,7 @@ export const ModalEntryContentLinkEdit = defineComponent({
         ModalEntryContentLindEditOutput
     >(),
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
 
@@ -154,9 +156,9 @@ export const ModalEntryContentLinkEdit = defineComponent({
                 case 'url': {
                     return (
                         <TextInput
-                            label={`URL`}
+                            label={t('modals.link.urlLabel')}
                             value={inputs.value.url.value}
-                            placeholder={`ex. https://youtube.com`}
+                            placeholder={t('modals.link.urlPlaceholder')}
                             focus
                             onInput={(value) => {
                                 inputs.value.url.value = value;
@@ -190,7 +192,7 @@ export const ModalEntryContentLinkEdit = defineComponent({
                 case 'media': {
                     return (
                         <MediaSelect
-                            label={`Media file`}
+                            label={t('modals.link.mediaFile')}
                             mediaId={inputs.value.mediaId.value}
                             error={inputs.value.mediaId.error}
                             onChange={(event) => {
@@ -206,13 +208,13 @@ export const ModalEntryContentLinkEdit = defineComponent({
 
         return () => (
             <ModalWrapper
-                title={'Edit link'}
+                title={t('modals.link.editTitle')}
                 handler={props.handler}
-                doneText={'Update'}
+                doneText={t('modals.common.update')}
             >
                 <div class={`flex flex-col gap-4`}>
                     <Select
-                        label={`Link type`}
+                        label={t('modals.link.linkType')}
                         selected={inputs.value.type.value}
                         options={[
                             {
@@ -220,11 +222,11 @@ export const ModalEntryContentLinkEdit = defineComponent({
                                 value: 'url',
                             },
                             {
-                                label: 'Entry pointer',
+                                label: t('modals.link.entryPointer'),
                                 value: 'entry',
                             },
                             {
-                                label: 'Media pointer',
+                                label: t('modals.link.mediaPointer'),
                                 value: 'media',
                             },
                         ]}

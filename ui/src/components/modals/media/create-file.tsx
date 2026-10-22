@@ -10,10 +10,12 @@ import {
     type FileInputListItem,
 } from '@bcms/selfhosted-ui/components/inputs/file';
 import { fileToB64 } from '@bcms/selfhosted-ui/util/file';
+import { useI18n } from 'vue-i18n';
 
 export const ModalMediaCreateFile = defineComponent({
     props: getModalDefaultProps<void, void>(),
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const notification = window.bcms.notification;
@@ -56,7 +58,7 @@ export const ModalMediaCreateFile = defineComponent({
                         }
                     },
                     async () => {
-                        notification.success('Files successfully created');
+                        notification.success(t('modals.mediaFiles.created'));
                     },
                 );
                 return [true, undefined];
@@ -68,9 +70,9 @@ export const ModalMediaCreateFile = defineComponent({
 
         return () => (
             <ModalWrapper
-                title={'Upload files'}
+                title={t('modals.mediaFiles.uploadTitle')}
                 handler={props.handler}
-                doneText={'Create'}
+                doneText={t('modals.common.create')}
             >
                 <div>
                     <FileInput

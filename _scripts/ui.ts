@@ -23,6 +23,7 @@ export async function buildUiComponents() {
         'data',
         'directives',
         'hooks',
+        'i18n',
         'layouts',
         'services',
         'styles',

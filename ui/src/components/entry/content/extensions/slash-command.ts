@@ -11,6 +11,7 @@ import {
 } from '@bcms/selfhosted-ui/components/entry/content/extensions/slash-command-list';
 import { propValuesFromSchema } from '@bcms/selfhosted-ui/util/prop';
 import type { Media } from '@bcms/selfhosted-backend/media/models/main';
+import { t as translate } from '@bcms/selfhosted-ui/i18n';
 
 export interface SlashCommandData {
     editor: CommandProps;
@@ -68,7 +69,9 @@ export function createSlashCommandExtension({
                 const headings = new Array(6).fill({}).map((_, index) => {
                     return {
                         id: '' + index,
-                        title: `Heading ${index + 1}`,
+                        title: translate('editor.heading', {
+                            level: index + 1,
+                        }),
                         icon: `/editor/heading/h${index + 1}`,
                         type: 'primary',
                         command: (data: SlashCommandData) => {
@@ -135,7 +138,7 @@ export function createSlashCommandExtension({
                     ...headings,
                     {
                         id: 'p1',
-                        title: 'Paragraph',
+                        title: translate('editor.paragraph'),
                         icon: '/editor/text',
                         type: 'primary',
                         command: (data: SlashCommandData) => {
@@ -149,7 +152,7 @@ export function createSlashCommandExtension({
                     },
                     {
                         id: 'p2',
-                        title: 'Bullet List',
+                        title: translate('editor.bulletList'),
                         icon: '/editor/list-ul',
                         type: 'primary',
                         command: (data: SlashCommandData) => {
@@ -163,7 +166,7 @@ export function createSlashCommandExtension({
                     },
                     {
                         id: 'p3',
-                        title: 'Ordered List',
+                        title: translate('editor.orderedList'),
                         icon: '/editor/list-ol',
                         type: 'primary',
                         command: (data: SlashCommandData) => {
@@ -177,7 +180,7 @@ export function createSlashCommandExtension({
                     },
                     {
                         id: 'p4',
-                        title: 'Code Block',
+                        title: translate('editor.codeBlock'),
                         icon: '/editor/code',
                         type: 'primary',
                         command: (data: SlashCommandData) => {

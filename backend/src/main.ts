@@ -54,6 +54,7 @@ import { createBcmsPlugins } from '@bcms/selfhosted-backend/plugin/main';
 import { PluginController } from '@bcms/selfhosted-backend/plugin/controller';
 import { openApiGetSchema } from '@bcms/selfhosted-backend/open-api/main';
 import { createCustomDependenciesInit } from '@bcms/selfhosted-backend/custom-dependencies-init';
+import { registerMcpEndpoint } from '@bcms/selfhosted-backend/mcp/main';
 
 async function main() {
     await createServer({
@@ -170,6 +171,13 @@ async function main() {
                     init()
                         .then(() => next())
                         .catch((err) => next(err));
+                },
+            },
+            {
+                name: 'MCP endpoint',
+                initialize({ fastify, next }) {
+                    registerMcpEndpoint(fastify);
+                    next();
                 },
             },
             createJwt({

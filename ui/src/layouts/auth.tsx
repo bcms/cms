@@ -1,14 +1,16 @@
 import { defineComponent } from 'vue';
 import { BgAuth } from '@bcms/selfhosted-ui/components/bg-auth';
 import { BCMSLogo } from '@bcms/selfhosted-ui/components/logo';
+import { UiLanguageSwitch } from '@bcms/selfhosted-ui/components/ui-language-switch';
 
 export const AuthLayout = defineComponent({
     setup(_, ctx) {
         return () => (
             <div
-                class={`min-w-screen min-h-screen text-dark flex flex-col items-center`}
+                class={`relative min-w-screen min-h-screen text-dark flex flex-col items-center`}
             >
                 <BgAuth />
+                <UiLanguageSwitch class={`absolute top-6 right-6 z-50`} />
                 <div
                     class={`relative flex flex-col items-center w-full max-w-[500px]`}
                 >

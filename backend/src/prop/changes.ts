@@ -8,7 +8,6 @@ import type { Group } from '@bcms/selfhosted-backend/group/models/main';
 import type { Widget } from '@bcms/selfhosted-backend/widget/models/main';
 import type { Template } from '@bcms/selfhosted-backend/template/models/main';
 import { PropFactory } from '@bcms/selfhosted-backend/prop/factory';
-import { StringUtility } from '@bcms/selfhosted-utils/string-utility';
 import type { PropDateData } from '@bcms/selfhosted-backend/prop/models/date';
 import type { PropEnumData } from '@bcms/selfhosted-backend/prop/models/enum';
 import type { PropMediaData } from '@bcms/selfhosted-backend/prop/models/media';
@@ -19,6 +18,21 @@ import {
     ObjectUtilityError,
 } from '@bcms/selfhosted-utils/object-utility';
 import { PropEntryPointerDataSchema } from '@bcms/selfhosted-backend/prop/models/entry-pointer';
+import { apiNameFromLabel } from '@bcms/selfhosted-backend/util/api-name';
+
+function availablePropName(prop: Prop, props: Prop[]): string {
+    const base = apiNameFromLabel(prop.label, 'field', prop.id);
+    let name = base;
+    let suffix = 2;
+    while (
+        props.some(
+            (existing) => existing.id !== prop.id && existing.name === name,
+        )
+    ) {
+        name = `${base}_${suffix++}`;
+    }
+    return name;
+}
 
 export function propsApplyChanges(
     propsToChange: Prop[],
@@ -53,14 +67,9 @@ export function propsApplyChanges(
                 );
             }
             prop.label = change.add.label;
-            prop.name = StringUtility.toSlugUnderscore(change.add.label);
+            prop.name = availablePropName(prop, props);
             prop.required = change.add.required;
             prop.array = change.add.array;
-            if (props.find((e) => e.name === prop.name)) {
-                return Error(
-                    `[${level}] -> Prop with name "${prop.name}" already exists.`,
-                );
-            }
             if (prop.type === PropType.STRING) {
                 if (change.add.data.propString) {
                     prop.data.propString = change.add.data.propString;
@@ -222,16 +231,10 @@ export function propsApplyChanges(
             ) {
                 const propBuffer = props[propToUpdateIndex];
                 if (propBuffer.label !== update.label) {
-                    const newName = StringUtility.toSlugUnderscore(
-                        update.label,
-                    );
-                    if (props.find((e) => e.name === newName)) {
-                        return Error(
-                            `[${level}] -> Prop with name "${newName}" already exists.`,
-                        );
-                    }
                     propBuffer.label = update.label;
-                    propBuffer.name = newName;
+                }
+                if (!propBuffer.name) {
+                    propBuffer.name = availablePropName(propBuffer, props);
                 }
                 propBuffer.required = update.required;
                 if (update.enumItems && propBuffer.data.propEnum) {

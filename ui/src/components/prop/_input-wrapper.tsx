@@ -12,6 +12,7 @@ import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
 import { findParent } from '@bcms/selfhosted-ui/util/dom';
 import { Icon } from '@bcms/selfhosted-ui/components/icon';
 import { Button } from '@bcms/selfhosted-ui/components/button';
+import { useI18n } from 'vue-i18n';
 
 function findNodeById(el: HTMLElement, id: string) {
     if (el.id === id) {
@@ -66,6 +67,7 @@ export const PropInputWrapper = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const id = uuidv4();
         const inFocus = ref(false);
         const hasFrame = computed(() => props.isGroup || props.array);
@@ -246,7 +248,7 @@ export const PropInputWrapper = defineComponent({
                                 ctx.emit('addArrayItem', event);
                             }}
                         >
-                            Add new item to {getLabel()}
+                            {t('props.addNewItemTo', { label: getLabel() })}
                         </Button>
                     )}
                 </div>
@@ -283,6 +285,7 @@ export const PropInputWrapperArrayItem = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const inFocus = ref(false);
         const itemExtended = ref(props.initialExtended);
 
@@ -345,7 +348,10 @@ export const PropInputWrapperArrayItem = defineComponent({
                         ${inFocus.value ? 'text-green dark:text-yellow' : ''}
                         `}
                         >
-                            {props.label} {props.itemIdx}
+                            {props.label === 'Item'
+                                ? t('props.item')
+                                : props.label}{' '}
+                            {props.itemIdx}
                         </div>
                     </button>
                     <div

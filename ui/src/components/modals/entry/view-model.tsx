@@ -4,6 +4,7 @@ import {
     ModalWrapper,
 } from '@bcms/selfhosted-ui/components/modals/_wrapper';
 import { CodeEditor } from '@bcms/selfhosted-ui/components/inputs/code-editor';
+import { useI18n } from 'vue-i18n';
 
 export interface ModalEntryViewModelInput {
     entryId: string;
@@ -13,6 +14,7 @@ export interface ModalEntryViewModelInput {
 export const ModalEntryViewModel = defineComponent({
     props: getModalDefaultProps<ModalEntryViewModelInput, undefined>(),
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
 
@@ -55,7 +57,7 @@ export const ModalEntryViewModel = defineComponent({
 
         return () => (
             <ModalWrapper
-                title={'View entry model'}
+                title={t('modals.entryViewModel.title')}
                 handler={props.handler}
                 footer={() => <div></div>}
             >

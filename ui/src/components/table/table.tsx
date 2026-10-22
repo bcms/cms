@@ -26,12 +26,14 @@ import { Storage } from '@bcms/selfhosted-ui/storage';
 import { TextInput } from '@bcms/selfhosted-ui/components/inputs/text';
 import { Link } from '@bcms/selfhosted-ui/components/link';
 import { Icon } from '@bcms/selfhosted-ui/components/icon';
+import { useI18n } from 'vue-i18n';
+import { t as translate } from '@bcms/selfhosted-ui/i18n';
 
 export function tableDefaultSort(): TableHeaderSortable {
     return {
         options: [
-            { label: 'Sort A to Z', value: 'az' },
-            { label: 'Sort Z to A', value: 'za' },
+            { label: translate('table.sortAZ'), value: 'az' },
+            { label: translate('table.sortZA'), value: 'za' },
         ],
         onSort(event, a, b) {
             switch (event.type) {
@@ -50,8 +52,8 @@ export function tableDefaultSort(): TableHeaderSortable {
 export function tableDefaultNumberSort(): TableHeaderSortable {
     return {
         options: [
-            { label: 'Ascending', value: 'a' },
-            { label: 'Descending', value: 'd' },
+            { label: translate('table.ascending'), value: 'a' },
+            { label: translate('table.descending'), value: 'd' },
         ],
         onSort(event, a, b) {
             const reg = /[$]|[%]|[,]/g;
@@ -151,6 +153,7 @@ export const Table = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const scrollWrapper = ref<HTMLDivElement | null>(null);
         const isTableExpanded = ref(true);
 
@@ -481,7 +484,7 @@ export const Table = defineComponent({
                         {props.searchable && props.rows.length > 0 && (
                             <div class={props.searchWrapperClass || ''}>
                                 <TextInput
-                                    placeholder="Search"
+                                    placeholder={t('common.search')}
                                     value={activeSearch.value}
                                     onInput={(value) => {
                                         searchHandler(value);
@@ -577,7 +580,7 @@ export const Table = defineComponent({
                     >
                         <Icon src="/sleep" class="w-6 h-6 text-silver mb-3" />
                         <div class="text-sm leading-none tracking-[-0.28px] font-semibold mb-2">
-                            {props.emptyTitle || 'No results to show'}
+                            {props.emptyTitle || t('common.noResults')}
                         </div>
                         {props.emptyDescription && (
                             <p class="text-silver text-xs leading-[1.3] font-medium">

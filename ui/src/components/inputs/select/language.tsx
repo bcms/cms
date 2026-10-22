@@ -5,6 +5,7 @@ import {
     Languages,
 } from '@bcms/selfhosted-ui/data/language';
 import { MultiSelect } from '@bcms/selfhosted-ui/components/inputs/select/multi';
+import { useI18n } from 'vue-i18n';
 
 export const LanguageSelect = defineComponent({
     props: {
@@ -25,6 +26,7 @@ export const LanguageSelect = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
 
@@ -71,7 +73,9 @@ export const LanguageSelect = defineComponent({
                         })}
                     error={props.error}
                     disabled={props.disabled}
-                    placeholder={props.placeholder || `Select a language`}
+                    placeholder={
+                        props.placeholder || t('components.select.language')
+                    }
                     description={props.description}
                     onInput={(values, metadata) => {
                         const items: LanguageISO[] = [];

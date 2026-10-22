@@ -23,6 +23,7 @@ import {
 } from '@bcms/selfhosted-ui/components/prop/_input-wrapper';
 import { InputWrapper } from '@bcms/selfhosted-ui/components/inputs/_wrapper';
 import { EntryContentEditor } from '@bcms/selfhosted-ui/components/entry/content';
+import { useI18n } from 'vue-i18n';
 
 export const PropRichTextInput = defineComponent({
     props: {
@@ -67,6 +68,7 @@ export const PropRichTextInput = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const errorUnsubs: UnsubscribeFns = [];
         const entrySyncUnsubs: UnsubscribeFns = [];
         const errors = ref<string[]>([]);
@@ -75,7 +77,7 @@ export const PropRichTextInput = defineComponent({
             const valueData = props.value.data as PropValueRichTextData[];
             if (!valueData[itemIdx] || valueData[itemIdx].nodes.length === 0) {
                 errors.value[itemIdx] =
-                    'Property is required, please enter some text';
+                    t('props.requiredText');
                 return false;
             }
             errors.value[itemIdx] = '';

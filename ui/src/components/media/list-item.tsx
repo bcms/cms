@@ -3,6 +3,7 @@ import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
 import type { Media } from '@bcms/selfhosted-backend/media/models/main';
 import { Icon } from '@bcms/selfhosted-ui/components/icon';
 import { MediaPreview } from '@bcms/selfhosted-ui/components/media-preview';
+import { useI18n } from 'vue-i18n';
 
 export const MediaListItem = defineComponent({
     props: {
@@ -16,6 +17,7 @@ export const MediaListItem = defineComponent({
         click: (_media: Media, _event?: MouseEvent) => true,
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const confirm = window.bcms.confirm;
@@ -43,8 +45,10 @@ export const MediaListItem = defineComponent({
                                 event.stopPropagation();
                                 if (
                                     await confirm(
-                                        'Delete folder',
-                                        'Are you sure you want to delete this folder? All files inside of it will also be deleted',
+                                        t('mediaLibrary.deleteFolder'),
+                                        t(
+                                            'mediaLibrary.deleteFolderConfirm',
+                                        ),
                                     )
                                 ) {
                                     await throwable(
@@ -55,7 +59,7 @@ export const MediaListItem = defineComponent({
                                         },
                                         async () => {
                                             notification.success(
-                                                'Folder successfully deleted',
+                                                t('mediaLibrary.folderDeleted'),
                                             );
                                         },
                                     );
@@ -97,8 +101,10 @@ export const MediaListItem = defineComponent({
                                     event.stopPropagation();
                                     if (
                                         await confirm(
-                                            'Delete file',
-                                            'Are you sure you want to delete this file?',
+                                            t('mediaLibrary.deleteFile'),
+                                            t(
+                                                'mediaLibrary.deleteFileConfirm',
+                                            ),
                                         )
                                     ) {
                                         await throwable(
@@ -109,7 +115,7 @@ export const MediaListItem = defineComponent({
                                             },
                                             async () => {
                                                 notification.success(
-                                                    'File successfully deleted',
+                                                    t('mediaLibrary.fileDeleted'),
                                                 );
                                             },
                                         );

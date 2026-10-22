@@ -18,6 +18,19 @@ import { Toggle } from '@bcms/selfhosted-ui/components/inputs/toggle';
 import { MultiSelect } from '@bcms/selfhosted-ui/components/inputs/select/multi';
 import { MultiAdd } from '@bcms/selfhosted-ui/components/inputs/multi-add';
 import { SelectGroupPointer } from '@bcms/selfhosted-ui/components/inputs/select/group-pointer';
+import { useI18n } from 'vue-i18n';
+
+const PROP_TYPE_LABEL_KEYS: Record<string, string> = {
+    STRING: 'props.type.string',
+    RICH_TEXT: 'props.type.richText',
+    NUMBER: 'props.type.number',
+    DATE: 'props.type.date',
+    BOOLEAN: 'props.type.boolean',
+    ENUMERATION: 'props.type.enumeration',
+    MEDIA: 'props.type.media',
+    GROUP_POINTER: 'props.type.groupPointer',
+    ENTRY_POINTER: 'props.type.entryPointer',
+};
 
 export interface ModalPropUpdateInput {
     templateId?: string;
@@ -32,6 +45,7 @@ export interface ModalPropUpdateOutput {
 export const ModalPropUpdate = defineComponent({
     props: getModalDefaultProps<ModalPropUpdateInput, ModalPropUpdateOutput>(),
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
 
         const data = ref<ModalPropUpdateInput>({
@@ -97,14 +111,16 @@ export const ModalPropUpdate = defineComponent({
                     value: prop.label,
                     handler(value) {
                         if (!value) {
-                            return 'Label is required';
+                            return t('modals.common.labelRequired');
                         }
                         if (
                             data.value.existingProps
                                 .filter((e) => e.id !== data.value.prop.id)
                                 .find((e) => e.label === value)
                         ) {
-                            return `Property with name "${value}" already exists`;
+                            return t('modals.common.propertyExists', {
+                                name: value,
+                            });
                         }
                     },
                 }),
@@ -123,7 +139,7 @@ export const ModalPropUpdate = defineComponent({
                             inputs.value.type.value === 'ENTRY_POINTER' &&
                             value.length === 0
                         ) {
-                            return 'You must select at least 1 template';
+                            return t('modals.common.mustSelectTemplate');
                         }
                     },
                 }),
@@ -134,7 +150,7 @@ export const ModalPropUpdate = defineComponent({
                             inputs.value.type.value === 'GROUP_POINTER' &&
                             !value
                         ) {
-                            return 'You need to select a group';
+                            return t('modals.common.needSelectGroup');
                         }
                     },
                 }),
@@ -145,7 +161,7 @@ export const ModalPropUpdate = defineComponent({
                             inputs.value.type.value === 'ENUMERATION' &&
                             value.length === 0
                         ) {
-                            return 'You must add at least 1 option';
+                            return t('modals.common.mustAddOption');
                         }
                     },
                 }),
@@ -155,20 +171,16 @@ export const ModalPropUpdate = defineComponent({
         return () => (
             <ModalWrapper
                 handler={props.handler}
-                title={data.value.prop.type
-                    .split('_')
-                    .map(
-                        (e) =>
-                            e.slice(0, 1).toUpperCase() +
-                            e.slice(1).toLowerCase(),
-                    )
-                    .join(' ')}
-                doneText="Update"
+                title={t(
+                    PROP_TYPE_LABEL_KEYS[data.value.prop.type] ||
+                        data.value.prop.type,
+                )}
+                doneText={t('modals.common.update')}
             >
                 <div class={`flex flex-col gap-4`}>
                     <TextInput
-                        label={'Label'}
-                        placeholder="Label"
+                        label={t('modals.common.label')}
+                        placeholder={t('modals.common.label')}
                         value={inputs.value.label.value}
                         error={inputs.value.label.error}
                         onInput={(value) => {
@@ -177,7 +189,7 @@ export const ModalPropUpdate = defineComponent({
                     />
                     {inputs.value.type.value === 'ENTRY_POINTER' ? (
                         <MultiSelect
-                            label={'Select templates'}
+                            label={t('modals.common.selectTemplates')}
                             selected={inputs.value.entryPointer.value}
                             options={sdk.store.template
                                 .items()
@@ -193,7 +205,7 @@ export const ModalPropUpdate = defineComponent({
                                         ? 1
                                         : -1,
                                 )}
-                            placeholder={`Select templates`}
+                            placeholder={t('modals.common.selectTemplates')}
                             error={inputs.value.entryPointer.error}
                             onInput={(value) => {
                                 inputs.value.entryPointer.value = value;
@@ -208,8 +220,8 @@ export const ModalPropUpdate = defineComponent({
                         />
                     ) : inputs.value.type.value === 'ENUMERATION' ? (
                         <MultiAdd
-                            label={'Enumerations'}
-                            placeholder="Type a name and press Enter key"
+                            label={t('modals.props.enumLabel')}
+                            placeholder={t('modals.common.typeNameAndEnter')}
                             value={inputs.value.enumItems.value}
                             error={inputs.value.enumItems.error}
                             format={(value) => {
@@ -223,8 +235,8 @@ export const ModalPropUpdate = defineComponent({
                         />
                     ) : inputs.value.type.value === 'GROUP_POINTER' ? (
                         <SelectGroupPointer
-                            label={'Select a group'}
-                            placeholder={`Select a group`}
+                            label={t('modals.common.selectGroup')}
+                            placeholder={t('modals.common.selectGroup')}
                             selected={inputs.value.groupPointer.value}
                             onChange={(value) => {
                                 inputs.value.groupPointer.value = value._id;
@@ -243,7 +255,7 @@ export const ModalPropUpdate = defineComponent({
                                 inputs.value.groupPointer.value,
                             )) ? (
                             <Toggle
-                                label={'Required'}
+                                label={t('modals.common.required')}
                                 value={inputs.value.required.value}
                                 onInput={(value) => {
                                     inputs.value.required.value = value;
@@ -253,7 +265,7 @@ export const ModalPropUpdate = defineComponent({
                             ''
                         )}
                         <Toggle
-                            label={'Array'}
+                            label={t('modals.common.array')}
                             value={inputs.value.array.value}
                             onInput={(value) => {
                                 inputs.value.array.value = value;

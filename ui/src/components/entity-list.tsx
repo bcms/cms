@@ -4,6 +4,7 @@ import { Link } from '@bcms/selfhosted-ui/components/link';
 import { millisToDateString } from '@bcms/selfhosted-ui/util/date';
 import { Icon } from '@bcms/selfhosted-ui/components/icon';
 import type { JSX } from 'vue/jsx-runtime';
+import { useI18n } from 'vue-i18n';
 
 export const EntityList = defineComponent({
     props: {
@@ -22,6 +23,7 @@ export const EntityList = defineComponent({
         },
     },
     setup(props) {
+        const { t } = useI18n();
         return () => (
             <div
                 id={props.id}
@@ -49,12 +51,14 @@ export const EntityList = defineComponent({
                                 </div>
                                 <div>
                                     <span class={`text-gray-600`}>
-                                        last edited on{' '}
-                                    </span>
-                                    <span class={`text-gray-500`}>
-                                        {millisToDateString(
-                                            item.updatedAt,
-                                            true,
+                                        {t(
+                                            'components.entityList.lastEditedOn',
+                                            {
+                                                date: millisToDateString(
+                                                    item.updatedAt,
+                                                    true,
+                                                ),
+                                            },
                                         )}
                                     </span>
                                 </div>

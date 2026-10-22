@@ -40,6 +40,7 @@ import { createSlashCommandExtension } from '@bcms/selfhosted-ui/components/entr
 import { EntryContentNodeWidgetNodeConfig } from '@bcms/selfhosted-ui/components/entry/content/nodes/widget';
 import { InlineCodeMark } from '@bcms/selfhosted-ui/components/entry/content/marks/inline-code';
 import { EntryContentEditorToolbar } from '@bcms/selfhosted-ui/components/entry/content/toolbar';
+import { useI18n } from 'vue-i18n';
 
 const w = window as any;
 
@@ -87,6 +88,7 @@ export const EntryContentEditor = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const modal = window.bcms.modalService;
@@ -227,7 +229,7 @@ export const EntryContentEditor = defineComponent({
                 `;
                             } else {
                                 linkPopupEl.innerHTML = `
-                <div class="text-error">Missing media file</div>
+                <div class="text-error">{t('editor.missingMedia')}</div>
                 `;
                             }
                         } else {
@@ -293,7 +295,8 @@ export const EntryContentEditor = defineComponent({
                 }),
                 Text,
                 Placeholder.configure({
-                    placeholder: props.placeholder || 'Type something',
+                    placeholder:
+                        props.placeholder || t('editor.typeSomething'),
                 }),
                 Heading.configure({
                     HTMLAttributes: {

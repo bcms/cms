@@ -1,5 +1,6 @@
 import { defineComponent } from 'vue';
 import { DefaultComponentProps } from '@bcms/selfhosted-ui/components/default';
+import { useI18n } from 'vue-i18n';
 
 export const UserAvatar = defineComponent({
     props: {
@@ -8,6 +9,7 @@ export const UserAvatar = defineComponent({
         fullName: String,
     },
     setup(props) {
+        const { t } = useI18n();
         return () => (
             <div
                 id={props.id}
@@ -20,7 +22,7 @@ export const UserAvatar = defineComponent({
                     <img
                         class={`w-full h-full object-cover`}
                         src={props.image}
-                        alt={props.fullName || 'User avatar'}
+                        alt={props.fullName || t('components.userAvatar.alt')}
                     />
                 ) : (
                     <div

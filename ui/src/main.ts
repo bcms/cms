@@ -16,6 +16,7 @@ import { useLanguage } from '@bcms/selfhosted-ui/hooks/language';
 import { confirm } from '@bcms/selfhosted-ui/services/confirm';
 import { useTheme } from '@bcms/selfhosted-ui/hooks/theme';
 import { useScreenSize } from '@bcms/selfhosted-ui/hooks/screen';
+import { i18n } from '@bcms/selfhosted-ui/i18n';
 
 const sdk = createSdk(useStore(), Storage, {
     apiOrigin: window.location.origin,
@@ -42,4 +43,5 @@ const app = createApp(App);
 app.directive('clickOutside', clickOutside);
 app.directive('tooltip', tooltip);
 app.directive('cy', cy);
+app.use(i18n);
 app.use(router).mount('#bcms-app');

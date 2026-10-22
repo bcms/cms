@@ -3,6 +3,7 @@ import {DefaultComponentProps} from "@bcms/selfhosted-ui/components/default";
 import {Icon} from "@bcms/selfhosted-ui/components/icon";
 import {prettyFileSize} from "@bcms/selfhosted-ui/util/file";
 import {Dropdown} from "@bcms/selfhosted-ui/components/dropdown";
+import { useI18n } from 'vue-i18n';
 
 export interface FileInputListItem {
     id: string;
@@ -37,6 +38,7 @@ export const FileInput = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const loading = ref(false);
 
@@ -68,7 +70,7 @@ export const FileInput = defineComponent({
                                             <img
                                                 class="w-full h-full object-cover fill-current rounded-2.5 text-grey"
                                                 src={props.src}
-                                                alt="Logo"
+                                                alt={t('components.file.logo')}
                                             />
                                         </div>
                                     )}
@@ -79,7 +81,7 @@ export const FileInput = defineComponent({
                                                     {props.name} <br />
                                                 </>
                                             )}
-                                            Select another file
+                                            {t('components.file.selectAnother')}
                                         </div>
                                     </div>
                                 </div>
@@ -104,9 +106,13 @@ export const FileInput = defineComponent({
                                                     <span
                                                         class={`font-medium text-brand-600`}
                                                     >
-                                                        Click to upload
+                                                        {t(
+                                                            'components.file.clickToUpload',
+                                                        )}
                                                     </span>{' '}
-                                                    or drag and drop a file
+                                                    {t(
+                                                        'components.file.dragDrop',
+                                                    )}
                                                 </div>
                                             </div>
                                         )}
@@ -178,7 +184,7 @@ export const FileInput = defineComponent({
                                         <Dropdown
                                             items={[
                                                 {
-                                                    text: 'Edit',
+                                                    text: t('common.edit'),
                                                     icon: '/edit-03',
                                                     border: true,
                                                     onClick() {
@@ -206,7 +212,7 @@ export const FileInput = defineComponent({
                                                     },
                                                 },
                                                 {
-                                                    text: 'Remove',
+                                                    text: t('common.remove'),
                                                     icon: '/trash-01',
                                                     danger: true,
                                                     onClick() {

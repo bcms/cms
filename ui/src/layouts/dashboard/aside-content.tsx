@@ -10,12 +10,18 @@ import { UserAvatar } from '@bcms/selfhosted-ui/components/user-avatar';
 import { Dropdown } from '@bcms/selfhosted-ui/components/dropdown';
 import { isUserAdmin } from '@bcms/selfhosted-ui/util/user-role';
 import type { PluginList } from '@bcms/selfhosted-backend/plugin/models/controller';
+import { useI18n } from 'vue-i18n';
+import {
+    getUiLanguage,
+    setUiLanguage,
+} from '@bcms/selfhosted-ui/i18n';
 
 export const DashboardLayoutAsideContent = defineComponent({
     emits: {
         closeNav: () => true,
     },
     setup(_, ctx) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const modal = window.bcms.modalService;
         const theme = window.bcms.useTheme();
@@ -34,7 +40,7 @@ export const DashboardLayoutAsideContent = defineComponent({
             const isAdmin = isUserAdmin(me.value);
             const items: DashboardLayoutNavItemProps[] = [];
             items.push({
-                title: 'Administration',
+                title: t('nav.administration'),
                 activeOnViews: [
                     'HomeView',
                     'TemplatesView',
@@ -50,7 +56,7 @@ export const DashboardLayoutAsideContent = defineComponent({
                 visible: true,
                 children: [
                     {
-                        title: 'Templates',
+                        title: t('nav.templates'),
                         href: `/d/template`,
                         activeOnViews: ['TemplatesView', 'TemplateView'],
                         visible: isAdmin,
@@ -59,12 +65,12 @@ export const DashboardLayoutAsideContent = defineComponent({
                         },
                         titleSlot: () =>
                             navItemSlot(
-                                'Templates',
+                                t('nav.templates'),
                                 '/administration/template',
                             ),
                     },
                     {
-                        title: 'Groups',
+                        title: t('nav.groups'),
                         href: `/d/group`,
                         activeOnViews: ['GroupsView', 'GroupsView'],
                         visible: isAdmin,
@@ -72,10 +78,13 @@ export const DashboardLayoutAsideContent = defineComponent({
                             ctx.emit('closeNav');
                         },
                         titleSlot: () =>
-                            navItemSlot('Groups', '/administration/group'),
+                            navItemSlot(
+                                t('nav.groups'),
+                                '/administration/group',
+                            ),
                     },
                     {
-                        title: 'Widgets',
+                        title: t('nav.widgets'),
                         href: `${baseUri.value}/widget`,
                         activeOnViews: ['WidgetsView'],
                         visible: isAdmin,
@@ -83,10 +92,13 @@ export const DashboardLayoutAsideContent = defineComponent({
                             ctx.emit('closeNav');
                         },
                         titleSlot: () =>
-                            navItemSlot('Widgets', '/administration/widget'),
+                            navItemSlot(
+                                t('nav.widgets'),
+                                '/administration/widget',
+                            ),
                     },
                     {
-                        title: 'Media',
+                        title: t('nav.media'),
                         href: `${baseUri.value}/media`,
                         activeOnViews: ['MediaView'],
                         visible: isAdmin || myPolicy.media.get,
@@ -94,20 +106,24 @@ export const DashboardLayoutAsideContent = defineComponent({
                             ctx.emit('closeNav');
                         },
                         titleSlot: () =>
-                            navItemSlot('Media', '/administration/media'),
+                            navItemSlot(
+                                t('nav.media'),
+                                '/administration/media',
+                            ),
                     },
                     {
-                        title: 'Settings',
+                        title: t('nav.settings'),
                         href: `${baseUri.value}/settings`,
                         activeOnViews: ['SettingsView'],
                         visible: isAdmin,
                         onClick() {
                             ctx.emit('closeNav');
                         },
-                        titleSlot: () => navItemSlot('Settings', '/cog'),
+                        titleSlot: () =>
+                            navItemSlot(t('nav.settings'), '/cog'),
                     },
                     {
-                        title: 'API Keys',
+                        title: t('nav.apiKeys'),
                         href: `${baseUri.value}/api-key`,
                         activeOnViews: ['ApiKeysView', 'ApiKeyView'],
                         visible: isAdmin,
@@ -115,13 +131,16 @@ export const DashboardLayoutAsideContent = defineComponent({
                             ctx.emit('closeNav');
                         },
                         titleSlot: () =>
-                            navItemSlot('Key manager', '/administration/key'),
+                            navItemSlot(
+                                t('nav.keyManager'),
+                                '/administration/key',
+                            ),
                     },
                 ],
             });
             if (plugins.value && plugins.value.list.length > 0) {
                 items.push({
-                    title: 'Plugins',
+                    title: t('nav.plugins'),
                     activeOnViews: ['PluginView'],
                     visible: true,
                     children: plugins.value.list.map((plugin) => {
@@ -143,7 +162,7 @@ export const DashboardLayoutAsideContent = defineComponent({
                 });
             }
             items.push({
-                title: 'Entries',
+                title: t('nav.entries'),
                 activeOnViews: ['EntriesView', 'EntryView'],
                 visible: true,
                 children: templates.value
@@ -240,11 +259,11 @@ export const DashboardLayoutAsideContent = defineComponent({
                         class={`w-3 h-3 text-dark dark:text-white fill-current`}
                         src={'/search'}
                     />
-                    <div>Search</div>
+                    <div>{t('nav.search')}</div>
                     <Tag
                         class={`flex-shrink-0 ml-auto mt-auto mb-auto text-black`}
                     >
-                        Ctrl+K
+                        {t('nav.ctrlK')}
                     </Tag>
                 </button>
                 <div class={`relative h-full flex flex-col overflow-hidden`}>
@@ -295,7 +314,7 @@ export const DashboardLayoutAsideContent = defineComponent({
                         fixed
                         items={[
                             {
-                                text: 'Settings',
+                                text: t('userMenu.settings'),
                                 icon: '/cog',
                                 onClick: async () => {
                                     ctx.emit('closeNav');
@@ -309,8 +328,8 @@ export const DashboardLayoutAsideContent = defineComponent({
                             {
                                 text:
                                     theme.active.value === 'light'
-                                        ? 'Dark mode'
-                                        : 'Light mode',
+                                        ? t('userMenu.darkMode')
+                                        : t('userMenu.lightMode'),
                                 border: true,
                                 onClick: () => {
                                     theme.set(
@@ -321,21 +340,44 @@ export const DashboardLayoutAsideContent = defineComponent({
                                 },
                             },
                             {
-                                text: 'Twitter @thebcms',
+                                text: (
+                                    <div
+                                        class={`flex items-center gap-4 w-full`}
+                                    >
+                                        <span>{t('language.label')}</span>
+                                        <span class={`ml-auto text-gray`}>
+                                            {t(
+                                                getUiLanguage() === 'zh-CN'
+                                                    ? 'language.zhCN'
+                                                    : 'language.en',
+                                            )}
+                                        </span>
+                                    </div>
+                                ),
+                                onClick: () => {
+                                    setUiLanguage(
+                                        getUiLanguage() === 'zh-CN'
+                                            ? 'en'
+                                            : 'zh-CN',
+                                    );
+                                },
+                            },
+                            {
+                                text: t('userMenu.twitter'),
                                 onClick: () => {
                                     window.location.href =
                                         'https://x.com/@thebcms';
                                 },
                             },
                             {
-                                text: 'Terms & privacy',
+                                text: t('userMenu.terms'),
                                 onClick: () => {
                                     window.location.href =
                                         'https://thebcms.com/terms-and-conditions';
                                 },
                             },
                             {
-                                text: 'Support',
+                                text: t('userMenu.support'),
                                 border: true,
                                 onClick: () => {
                                     window.location.href =
@@ -343,7 +385,7 @@ export const DashboardLayoutAsideContent = defineComponent({
                                 },
                             },
                             {
-                                text: 'Log out',
+                                text: t('userMenu.logout'),
                                 icon: '/sign-out',
                                 onClick: async () => {
                                     ctx.emit('closeNav');

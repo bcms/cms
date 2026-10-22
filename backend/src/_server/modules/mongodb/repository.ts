@@ -1,4 +1,4 @@
-import type { Collection, Filter } from 'mongodb';
+import type { Collection, Filter, IndexDescription } from 'mongodb';
 import type { Module } from '@bcms/selfhosted-backend/_server/module';
 import { Logger } from '@bcms/selfhosted-backend/_server/logger';
 import type { MongoDBEntry } from '@bcms/selfhosted-backend/_server/modules/mongodb/entry';
@@ -104,6 +104,10 @@ export interface MongoDBRepositoryConfig<Entry extends MongoDBEntry, Methods> {
      */
     collection: string;
     /**
+     * Indexes to create before the repository is ready.
+     */
+    indexes?: IndexDescription[];
+    /**
      * Custom repository methods.
      */
     methods?(data: {
@@ -172,7 +176,13 @@ export function createMongoDBRepository<
                             cache: self.cache,
                         });
                     }
-                    next();
+                    if (config.indexes?.length) {
+                        intf.createIndexes(config.indexes)
+                            .then(() => next())
+                            .catch((error) => next(error));
+                    } else {
+                        next();
+                    }
                 },
             };
         },

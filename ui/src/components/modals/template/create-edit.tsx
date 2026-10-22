@@ -11,6 +11,7 @@ import { TextInput } from '@bcms/selfhosted-ui/components/inputs/text';
 import type { Template } from '@bcms/selfhosted-backend/template/models/main';
 import { TextAreaInput } from '@bcms/selfhosted-ui/components/inputs/text-area';
 import { Toggle } from '@bcms/selfhosted-ui/components/inputs/toggle';
+import { useI18n } from 'vue-i18n';
 
 export interface ModalTemplateCreateEditInput {
     templateId?: string;
@@ -19,6 +20,7 @@ export interface ModalTemplateCreateEditInput {
 export const ModalTemplateCreateEdit = defineComponent({
     props: getModalDefaultProps<ModalTemplateCreateEditInput, void>(),
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const notification = window.bcms.notification;
@@ -33,7 +35,7 @@ export const ModalTemplateCreateEdit = defineComponent({
                     value: template?.label || '',
                     handler(value) {
                         if (!value) {
-                            return 'Label is required';
+                            return t('modals.common.labelRequired');
                         }
                         if (
                             sdk.store.template
@@ -44,7 +46,9 @@ export const ModalTemplateCreateEdit = defineComponent({
                                 )
                                 .find((e) => e.label === value)
                         ) {
-                            return `Template with name "${value}" already exists`;
+                            return t('modals.template.nameExists', {
+                                name: value,
+                            });
                         }
                     },
                 }),
@@ -100,12 +104,14 @@ export const ModalTemplateCreateEdit = defineComponent({
                         }
                     },
                     async () => {
-                        notification.success('Template created successfully');
+                        notification.success(t('modals.template.created'));
                         return true;
                     },
                     async (err) => {
                         console.error(err);
-                        notification.error('Failed to create template');
+                        notification.error(
+                            t('modals.template.createFailed'),
+                        );
                         return false;
                     },
                 );
@@ -119,33 +125,39 @@ export const ModalTemplateCreateEdit = defineComponent({
         return () => (
             <ModalWrapper
                 title={
-                    templateToUpdate.value ? 'Update template' : `Create new template`
+                    templateToUpdate.value
+                        ? t('modals.template.updateTitle')
+                        : t('modals.template.createTitle')
                 }
                 handler={props.handler}
-                doneText={templateToUpdate.value ? 'Update' : 'Create'}
+                doneText={
+                    templateToUpdate.value
+                        ? t('modals.common.update')
+                        : t('modals.common.create')
+                }
             >
                 <div class={`flex flex-col gap-8`}>
                     <TextInput
-                        label={'Label'}
+                        label={t('modals.common.label')}
                         value={inputs.value.label.value}
                         error={inputs.value.label.error}
-                        placeholder={'My new template'}
+                        placeholder={t('modals.template.labelPlaceholder')}
                         onInput={(value) => {
                             inputs.value.label.value = value;
                         }}
                     />
                     <TextAreaInput
-                        label={'Description'}
+                        label={t('modals.common.description')}
                         value={inputs.value.description.value}
                         error={inputs.value.description.error}
-                        placeholder={'What is this template used for'}
+                        placeholder={t('modals.template.descPlaceholder')}
                         onInput={(value) => {
                             inputs.value.description.value = value;
                         }}
                     />
                     <Toggle
-                        label={'Single entry'}
-                        description={`This template will be able to have only 1 entry.`}
+                        label={t('modals.template.singleEntry')}
+                        description={t('modals.template.singleEntryDesc')}
                         value={inputs.value.singleEntry.value}
                         error={inputs.value.singleEntry.error}
                         onInput={(value) => {

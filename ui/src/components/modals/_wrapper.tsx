@@ -7,6 +7,7 @@ import type {
 } from '@bcms/selfhosted-ui/services/modal';
 import { Icon } from '@bcms/selfhosted-ui/components/icon';
 import { Button } from '@bcms/selfhosted-ui/components/button';
+import { useI18n } from 'vue-i18n';
 
 export interface ModalDefaultPropsType<Input = unknown, Output = unknown>
     extends DefaultComponentPropsType {
@@ -65,6 +66,7 @@ export function getModalDefaultProps<Input = unknown, Output = unknown>(): {
 export const ModalWrapper = defineComponent({
     props: getModalDefaultProps<any, any>(),
     setup(props, ctx) {
+        const { t } = useI18n();
         const show = ref(false);
         let options: ModalHandlerOptions<any> | undefined = undefined;
 
@@ -128,7 +130,7 @@ export const ModalWrapper = defineComponent({
                                     }
                                 }}
                             >
-                                {props.cancelText || 'Cancel'}
+                                {props.cancelText || t('common.cancel')}
                             </Button>
                             <Button
                                 onClick={async () => {
@@ -139,7 +141,7 @@ export const ModalWrapper = defineComponent({
                                     }
                                 }}
                             >
-                                {props.doneText || 'Done'}
+                                {props.doneText || t('common.done')}
                             </Button>
                         </div>
                     )}

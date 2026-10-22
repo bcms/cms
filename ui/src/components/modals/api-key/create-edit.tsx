@@ -10,6 +10,7 @@ import {
 import { TextInput } from '@bcms/selfhosted-ui/components/inputs/text';
 import { TextAreaInput } from '@bcms/selfhosted-ui/components/inputs/text-area';
 import type { ApiKey } from '@bcms/selfhosted-backend/api-key/models/main';
+import { useI18n } from 'vue-i18n';
 
 export interface ModalApiKeyCreateEditInput {
     apiKeyId?: string;
@@ -18,6 +19,7 @@ export interface ModalApiKeyCreateEditInput {
 export const ModalApiKeyCreateEdit = defineComponent({
     props: getModalDefaultProps<ModalApiKeyCreateEditInput, void>(),
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const notification = window.bcms.notification;
@@ -32,7 +34,7 @@ export const ModalApiKeyCreateEdit = defineComponent({
                     value: apiKey?.name || '',
                     handler(value) {
                         if (!value) {
-                            return 'Name is required';
+                            return t('modals.common.nameRequired');
                         }
                         if (
                             sdk.store.apiKey
@@ -42,7 +44,9 @@ export const ModalApiKeyCreateEdit = defineComponent({
                                 )
                                 .find((e) => e.name === value)
                         ) {
-                            return `API Key with name "${value}" already exists`;
+                            return t('modals.apiKey.nameExists', {
+                                name: value,
+                            });
                         }
                     },
                 }),
@@ -90,12 +94,14 @@ export const ModalApiKeyCreateEdit = defineComponent({
                         }
                     },
                     async () => {
-                        notification.success('Template created successfully');
+                        notification.success(t('modals.apiKey.created'));
                         return true;
                     },
                     async (err) => {
                         console.error(err);
-                        notification.error('Failed to create template');
+                        notification.error(
+                            t('modals.apiKey.createFailed'),
+                        );
                         return false;
                     },
                 );
@@ -108,25 +114,33 @@ export const ModalApiKeyCreateEdit = defineComponent({
 
         return () => (
             <ModalWrapper
-                title={`Create new API Key`}
+                title={
+                    apiKeyToUpdate.value
+                        ? t('modals.apiKey.updateTitle')
+                        : t('modals.apiKey.createTitle')
+                }
                 handler={props.handler}
-                doneText={apiKeyToUpdate.value ? 'Update' : 'Create'}
+                doneText={
+                    apiKeyToUpdate.value
+                        ? t('modals.common.update')
+                        : t('modals.common.create')
+                }
             >
                 <div class={`flex flex-col gap-8`}>
                     <TextInput
-                        label={'Name'}
+                        label={t('modals.apiKey.nameLabel')}
                         value={inputs.value.name.value}
                         error={inputs.value.name.error}
-                        placeholder={'My key name'}
+                        placeholder={t('modals.apiKey.namePlaceholder')}
                         onInput={(value) => {
                             inputs.value.name.value = value;
                         }}
                     />
                     <TextAreaInput
-                        label={'Description'}
+                        label={t('modals.apiKey.descLabel')}
                         value={inputs.value.description.value}
                         error={inputs.value.description.error}
-                        placeholder={'What is this template used for'}
+                        placeholder={t('modals.apiKey.descPlaceholder')}
                         onInput={(value) => {
                             inputs.value.description.value = value;
                         }}

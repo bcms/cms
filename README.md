@@ -17,6 +17,7 @@ This repository holds open-source version of BCMS, a modern headless CMS that al
 ## Table of Contents
 
 -   [Run Locally](#run-locally)
+-   [MCP Server](#mcp-server)
 -   [Deploy on Debian-based Server with CLI](#deploy-on-debian-based-server-with-cli)
 -   [Deploy on Debian-based Server Manually](#deploy-on-debian-based-server-manually)
 -   [Contributing](#contributing)
@@ -41,6 +42,13 @@ This repository holds open-source version of BCMS, a modern headless CMS that al
 3. Open the repository in your favorite code editor and install dependencies: `npm i`
 4. Start the local development server: `docker compose up`
 5. When everything is ready, open a browser and navigate to `http://localhost:8080`
+
+## MCP Server
+
+The backend provides an MCP endpoint at `/mcp` for AI agents to inspect
+templates, create and edit entries, and set an entry's publication status. See
+[docs/MCP.md](docs/MCP.md) for connection setup, available tools, and content
+payload formats.
 
 ## Deploy on Debian-based Server with CLI
 

@@ -29,11 +29,44 @@ import type {
 import type { Template } from '@bcms/selfhosted-backend/template/models/main';
 import { TemplateFactory } from '@bcms/selfhosted-backend/template/factory';
 import { PropType } from '@bcms/selfhosted-backend/prop/models/main';
-import { StringUtility } from '@bcms/selfhosted-utils/string-utility';
 import { SocketManager } from '@bcms/selfhosted-backend/socket/manager';
 import { propsApplyChanges } from '@bcms/selfhosted-backend/prop/changes';
 import { removeEntryPointerProps } from '@bcms/selfhosted-backend/prop/delete';
 import { EventManager } from '@bcms/selfhosted-backend/event/manager';
+import { apiNameFromLabel } from '@bcms/selfhosted-backend/util/api-name';
+
+async function availableTemplateName(label: string, id: string) {
+    const base = apiNameFromLabel(label, 'template', id);
+    let name = base;
+    let suffix = 2;
+    while (await Repo.template.methods.findByName(name)) {
+        name = `${base}-${suffix++}`;
+    }
+    return name;
+}
+
+async function addTemplateWithUniqueName(template: Template): Promise<Template> {
+    while (true) {
+        template.name = await availableTemplateName(
+            template.label,
+            template._id,
+        );
+        try {
+            return await Repo.template.add(template);
+        } catch (error) {
+            const mongoError = error as {
+                code?: number;
+                keyPattern?: Record<string, unknown>;
+            };
+            if (
+                mongoError.code !== 11000 ||
+                mongoError.keyPattern?.name !== 1
+            ) {
+                throw error;
+            }
+        }
+    }
+}
 
 export const TemplateController = createController({
     name: 'Template',
@@ -259,7 +292,7 @@ export const TemplateController = createController({
                     TemplateCreateBodySchema,
                     ['ADMIN'],
                 ),
-                async handler({ body, errorHandler, token, apiKey }) {
+                async handler({ body, token, apiKey }) {
                     let template = TemplateFactory.create({
                         label: body.label,
                         desc: body.desc,
@@ -287,7 +320,7 @@ export const TemplateController = createController({
                                 },
                             },
                         ],
-                        name: StringUtility.toSlug(body.label),
+                        name: '',
                         userId: token
                             ? token.payload.userId
                             : apiKey
@@ -295,13 +328,7 @@ export const TemplateController = createController({
                             : '__unknown',
                         singleEntry: body.singleEntry,
                     });
-                    if (await Repo.template.methods.findByName(template.name)) {
-                        throw errorHandler(
-                            HttpStatus.BadRequest,
-                            `Template with name "${template.name}" already exist. Template name must be unique.`,
-                        );
-                    }
-                    template = await Repo.template.add(template);
+                    template = await addTemplateWithUniqueName(template);
                     SocketManager.channelEmit(
                         ['global'],
                         'template',
@@ -372,16 +399,15 @@ export const TemplateController = createController({
                     }
                     let shouldUpdate = false;
                     if (body.label && body.label !== template.label) {
-                        const newName = StringUtility.toSlug(body.label);
-                        if (await Repo.template.methods.findByName(newName)) {
-                            throw errorHandler(
-                                HttpStatus.BadRequest,
-                                `Template with name "${template.name}" already exist. Template name must be unique.`,
-                            );
-                        }
                         shouldUpdate = true;
                         template.label = body.label;
-                        template.name = newName;
+                    }
+                    if (!template.name) {
+                        template.name = await availableTemplateName(
+                            template.label,
+                            template._id,
+                        );
+                        shouldUpdate = true;
                     }
                     if (
                         typeof body.singleEntry === 'boolean' &&

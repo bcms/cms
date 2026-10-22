@@ -9,6 +9,7 @@ import {
 } from '@bcms/selfhosted-ui/util/validation';
 import { TextInput } from '@bcms/selfhosted-ui/components/inputs/text';
 import { TextAreaInput } from '@bcms/selfhosted-ui/components/inputs/text-area';
+import { useI18n } from 'vue-i18n';
 
 export interface ModalMediaEditAltCaptionInput {
     altText?: string;
@@ -26,6 +27,7 @@ export const ModalMediaEditAltCaption = defineComponent({
         ModalMediaEditAltCaptionOutput
     >(),
     setup(props) {
+        const { t } = useI18n();
         const data = ref<ModalMediaEditAltCaptionInput>({});
         const inputs = ref(getInputs());
         const inputsValid = createRefValidator(inputs);
@@ -68,14 +70,14 @@ export const ModalMediaEditAltCaption = defineComponent({
 
         return () => (
             <ModalWrapper
-                title={'Update media'}
+                title={t('modals.mediaEdit.updateTitle')}
                 handler={props.handler}
-                doneText={'Update'}
+                doneText={t('modals.common.update')}
             >
                 <div class={`flex flex-col gap-4`}>
                     <TextInput
-                        label={'Alt text'}
-                        placeholder={'Alt text'}
+                        label={t('modals.mediaEdit.altText')}
+                        placeholder={t('modals.mediaEdit.altText')}
                         value={inputs.value.altText.value}
                         error={inputs.value.altText.error}
                         onInput={(value) => {
@@ -83,8 +85,8 @@ export const ModalMediaEditAltCaption = defineComponent({
                         }}
                     />
                     <TextAreaInput
-                        label={'Caption'}
-                        placeholder={'Caption'}
+                        label={t('modals.mediaEdit.caption')}
+                        placeholder={t('modals.mediaEdit.caption')}
                         value={inputs.value.caption.value}
                         error={inputs.value.caption.error}
                         onInput={(value) => {

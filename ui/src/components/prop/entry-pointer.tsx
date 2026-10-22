@@ -22,6 +22,7 @@ import {
     PropInputWrapperArrayItem,
 } from '@bcms/selfhosted-ui/components/prop/_input-wrapper';
 import { SelectEntryPointer } from '@bcms/selfhosted-ui/components/inputs/select/entry-pointer';
+import { useI18n } from 'vue-i18n';
 
 export const PropEntryPointerInput = defineComponent({
     props: {
@@ -58,6 +59,7 @@ export const PropEntryPointerInput = defineComponent({
         },
     },
     setup(props, ctx) {
+        const { t } = useI18n();
         const errorUnsubs: UnsubscribeFns = [];
         const entrySyncUnsubs: UnsubscribeFns = [];
         const errors = ref<string[]>([]);
@@ -74,7 +76,7 @@ export const PropEntryPointerInput = defineComponent({
                             props.propValidator.register(() => {
                                 if (!valueData[i]) {
                                     errors.value[i] =
-                                        'Property is required, please select an entry';
+                                        t('props.requiredEntry');
                                     return false;
                                 }
                                 errors.value[i] = '';
@@ -87,7 +89,7 @@ export const PropEntryPointerInput = defineComponent({
                     errorUnsubs.push(
                         props.propValidator.register(() => {
                             if (!valueData[0]) {
-                                errors.value[0] = `Property is required, please select an entry`;
+                                errors.value[0] = t('props.requiredEntry');
                                 return false;
                             }
                             errors.value[0] = '';

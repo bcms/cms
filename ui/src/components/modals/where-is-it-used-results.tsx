@@ -9,6 +9,7 @@ import {
     Table,
     tableDefaultFilter,
 } from '@bcms/selfhosted-ui/components/table/table';
+import { useI18n } from 'vue-i18n';
 
 export interface ModalWhereIsItUsedResultsInput {
     entryIds?: string[];
@@ -20,6 +21,7 @@ export interface ModalWhereIsItUsedResultsInput {
 export const ModalWhereIsItUsedResults = defineComponent({
     props: getModalDefaultProps<ModalWhereIsItUsedResultsInput, void>(),
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const router = useRouter();
 
@@ -41,7 +43,7 @@ export const ModalWhereIsItUsedResults = defineComponent({
                         },
                         cells: [
                             {
-                                text: 'Template',
+                                text: t('modals.whereUsed.template'),
                             },
                             {
                                 text: template.label,
@@ -65,7 +67,7 @@ export const ModalWhereIsItUsedResults = defineComponent({
                         },
                         cells: [
                             {
-                                text: 'Group',
+                                text: t('modals.whereUsed.group'),
                             },
                             {
                                 text: group.label,
@@ -89,7 +91,7 @@ export const ModalWhereIsItUsedResults = defineComponent({
                         },
                         cells: [
                             {
-                                text: 'Widget',
+                                text: t('modals.whereUsed.widget'),
                             },
                             {
                                 text: widget.label,
@@ -117,7 +119,10 @@ export const ModalWhereIsItUsedResults = defineComponent({
         });
 
         return () => (
-            <ModalWrapper title={'Where is it used'} handler={props.handler}>
+            <ModalWrapper
+                title={t('modals.whereUsed.title')}
+                handler={props.handler}
+            >
                 {tableRows.value.length > 0 ? (
                     <Table
                         class={`w-full`}
@@ -126,36 +131,36 @@ export const ModalWhereIsItUsedResults = defineComponent({
                         searchable
                         header={[
                             {
-                                text: 'Type',
+                                text: t('modals.whereUsed.type'),
                                 width: 100,
                                 filter: tableDefaultFilter([
                                     {
-                                        label: 'Template',
+                                        label: t('modals.whereUsed.template'),
                                         value: 'Template',
                                     },
                                     {
-                                        label: 'Group',
+                                        label: t('modals.whereUsed.group'),
                                         value: 'Group',
                                     },
                                     {
-                                        label: 'Widget',
+                                        label: t('modals.whereUsed.widget'),
                                         value: 'Widget',
                                     },
                                     {
-                                        label: 'Entry',
+                                        label: t('routes.entry'),
                                         value: 'Entry',
                                     },
                                 ]),
                             },
                             {
-                                text: 'Label',
+                                text: t('modals.whereUsed.label'),
                                 width: 300,
                             },
                         ]}
                         rows={tableRows.value}
                     />
                 ) : (
-                    <div>No results</div>
+                    <div>{t('modals.whereUsed.noResults')}</div>
                 )}
             </ModalWrapper>
         );

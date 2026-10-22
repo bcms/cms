@@ -13,6 +13,7 @@ import { MediaPreview } from '@bcms/selfhosted-ui/components/media-preview';
 import { prettyFileSize } from '@bcms/selfhosted-ui/util/file';
 import { Button } from '@bcms/selfhosted-ui/components/button';
 import { Icon } from '@bcms/selfhosted-ui/components/icon';
+import { useI18n } from 'vue-i18n';
 
 export interface ModalMediaSelectInput {
     mediaId?: string;
@@ -32,6 +33,7 @@ export const ModalMediaSelect = defineComponent({
         ModalMediaSelectOutput
     >(),
     setup(props) {
+        const { t } = useI18n();
         const sdk = window.bcms.sdk;
         const throwable = window.bcms.throwable;
         const notification = window.bcms.notification;
@@ -54,7 +56,7 @@ export const ModalMediaSelect = defineComponent({
                 files: [],
                 breadcrumb: [
                     {
-                        text: 'Home',
+                        text: t('modals.mediaPicker.home'),
                         icon: '/home',
                         onClick() {
                             dirId.value = '';
@@ -137,13 +139,13 @@ export const ModalMediaSelect = defineComponent({
             };
             handler._onDone = async () => {
                 if (!data.value.mediaId) {
-                    notification.error('Please select a media file');
+                    notification.error(t('modals.mediaPicker.selectFile'));
                     return [false, null as never];
                 }
                 const media = sdk.store.media.findById(data.value.mediaId);
                 if (!media) {
                     notification.error(
-                        'Internal error: failed to find selected media',
+                        t('modals.mediaPicker.internalError'),
                     );
                     return [false, null as never];
                 }
@@ -163,14 +165,14 @@ export const ModalMediaSelect = defineComponent({
 
         return () => (
             <ModalWrapper
-                title={`Media picker`}
+                title={t('modals.mediaPicker.title')}
                 handler={props.handler}
-                doneText={'Done'}
+                doneText={t('modals.common.done')}
             >
                 <div class={`flex flex-col gap-4`}>
                     <TextInput
                         id={'media-search'}
-                        placeholder="Search"
+                        placeholder={t('common.search')}
                         class="mt-4"
                         focus
                         value={searchTerm.value}
@@ -189,7 +191,7 @@ export const ModalMediaSelect = defineComponent({
                                 modal.handlers.mediaCreateFile.open();
                             }}
                         >
-                            Upload file
+                            {t('modals.mediaPicker.uploadFile')}
                         </Button>
                         <Button
                             kind={`secondary`}
@@ -197,7 +199,7 @@ export const ModalMediaSelect = defineComponent({
                                 modal.handlers.mediaCreateDir.open();
                             }}
                         >
-                            Create a new folder
+                            {t('modals.mediaPicker.createFolder')}
                         </Button>
                     </div>
                     {mediaData.value.breadcrumb.length > 0 && (

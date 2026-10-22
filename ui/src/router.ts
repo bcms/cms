@@ -15,6 +15,8 @@ interface RouteRecordRawExtended
     children?: Array<RouteRecordRawExtended>;
     meta?: {
         title?: string;
+        titleKey?: string;
+        titleParams?: Record<string, unknown>;
         layout?: LayoutNames;
         class?: string;
         boxClass?: string;
@@ -43,7 +45,7 @@ const routes: Array<RouteRecordRawExtended> = [
         path: '/',
         name: 'LoginView',
         meta: {
-            title: 'Login',
+            titleKey: 'routes.login',
             layout: 'AuthLayout',
         },
         component: LoginView,
@@ -52,7 +54,7 @@ const routes: Array<RouteRecordRawExtended> = [
         path: '/signup-admin',
         name: 'SignupAdminView',
         meta: {
-            title: 'Admin sign up',
+            titleKey: 'routes.signupAdmin',
             layout: 'AuthLayout',
         },
         component: () =>
@@ -62,7 +64,7 @@ const routes: Array<RouteRecordRawExtended> = [
         path: '/d',
         name: 'HomeView',
         meta: {
-            title: 'Home',
+            titleKey: 'routes.home',
             layout: 'DashboardLayout',
         },
         component: () =>
@@ -72,7 +74,7 @@ const routes: Array<RouteRecordRawExtended> = [
         path: '/d/template',
         name: 'TemplatesView',
         meta: {
-            title: 'Templates',
+            titleKey: 'routes.templates',
             layout: 'DashboardLayout',
         },
         component: () =>
@@ -84,7 +86,7 @@ const routes: Array<RouteRecordRawExtended> = [
         path: '/d/template/:templateId',
         name: 'TemplateView',
         meta: {
-            title: 'Template',
+            titleKey: 'routes.template',
             layout: 'DashboardLayout',
         },
         component: () =>
@@ -96,7 +98,7 @@ const routes: Array<RouteRecordRawExtended> = [
         path: '/d/group',
         name: 'GroupsView',
         meta: {
-            title: 'Groups',
+            titleKey: 'routes.groups',
             layout: 'DashboardLayout',
         },
         component: () =>
@@ -106,7 +108,7 @@ const routes: Array<RouteRecordRawExtended> = [
         path: '/d/group/:groupId',
         name: 'GroupView',
         meta: {
-            title: 'Group',
+            titleKey: 'routes.group',
             layout: 'DashboardLayout',
         },
         component: () =>
@@ -116,7 +118,7 @@ const routes: Array<RouteRecordRawExtended> = [
         path: '/d/widget',
         name: 'WidgetsView',
         meta: {
-            title: 'Widgets',
+            titleKey: 'routes.widgets',
             layout: 'DashboardLayout',
         },
         component: () =>
@@ -128,17 +130,19 @@ const routes: Array<RouteRecordRawExtended> = [
         path: '/d/widget/:widgetId',
         name: 'WidgetView',
         meta: {
-            title: 'Widget',
+            titleKey: 'routes.widget',
             layout: 'DashboardLayout',
         },
         component: () =>
-            import(/* webpackChunkName: "widget" */ './views/dashboard/widget'),
+            import(
+                /* webpackChunkName: "widget" */ './views/dashboard/widget'
+            ),
     },
     {
         path: '/d/media',
         name: 'MediaView',
         meta: {
-            title: 'Media manager',
+            titleKey: 'routes.media',
             layout: 'DashboardLayout',
         },
         component: () =>
@@ -148,7 +152,7 @@ const routes: Array<RouteRecordRawExtended> = [
         path: '/d/settings',
         name: 'SettingsView',
         meta: {
-            title: 'Settings',
+            titleKey: 'routes.settings',
             layout: 'DashboardLayout',
         },
         component: () =>
@@ -160,7 +164,7 @@ const routes: Array<RouteRecordRawExtended> = [
         path: '/d/api-key',
         name: 'ApiKeysView',
         meta: {
-            title: 'API Keys',
+            titleKey: 'routes.apiKeys',
             layout: 'DashboardLayout',
         },
         component: () =>
@@ -172,7 +176,7 @@ const routes: Array<RouteRecordRawExtended> = [
         path: '/d/api-key/:apiKeyId',
         name: 'ApiKeyView',
         meta: {
-            title: 'API Key',
+            titleKey: 'routes.apiKey',
             layout: 'DashboardLayout',
         },
         component: () =>
@@ -184,7 +188,7 @@ const routes: Array<RouteRecordRawExtended> = [
         path: '/d/template/:templateId/entry',
         name: 'EntriesView',
         meta: {
-            title: 'Entries',
+            titleKey: 'routes.entries',
             layout: 'DashboardLayout',
         },
         component: () =>
@@ -194,7 +198,7 @@ const routes: Array<RouteRecordRawExtended> = [
         path: '/d/template/:templateId/entry/:entryId',
         name: 'EntryView',
         meta: {
-            title: 'Entry',
+            titleKey: 'routes.entry',
             layout: 'DashboardLayout',
         },
         component: () =>
@@ -204,7 +208,7 @@ const routes: Array<RouteRecordRawExtended> = [
         path: '/d/plugin/:pluginId',
         name: 'PluginView',
         meta: {
-            title: 'Plugin',
+            titleKey: 'routes.plugin',
             layout: 'DashboardLayout',
         },
         component: () =>
@@ -214,7 +218,7 @@ const routes: Array<RouteRecordRawExtended> = [
         path: '/:pathMatch(.*)*',
         name: 'P404View',
         meta: {
-            title: 'Oops! Page not found',
+            titleKey: 'routes.notFound',
             layout: 'NoneLayout',
         },
         component: () => import(/* webpackChunkName: "p404" */ './views/404'),

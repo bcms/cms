@@ -9,6 +9,7 @@ import {
     createValidationItem,
 } from '@bcms/selfhosted-ui/util/validation';
 import { TextInput } from '@bcms/selfhosted-ui/components/inputs/text';
+import { useI18n } from 'vue-i18n';
 
 export interface ModalConfirmInput {
     title: string;
@@ -19,6 +20,7 @@ export interface ModalConfirmInput {
 export const ModalConfirm = defineComponent({
     props: getModalDefaultProps<ModalConfirmInput, void>(),
     setup(props) {
+        const { t } = useI18n();
         const data = ref<ModalConfirmInput>({
             title: '',
             content: '',
@@ -28,7 +30,7 @@ export const ModalConfirm = defineComponent({
                 value: '',
                 handler(value) {
                     if (data.value.prompt && data.value.prompt !== value) {
-                        return 'Prompt value is not correct';
+                        return t('validation.promptIncorrect');
                     }
                 },
             }),
@@ -55,7 +57,7 @@ export const ModalConfirm = defineComponent({
             <ModalWrapper
                 title={data.value.title}
                 handler={props.handler}
-                doneText={'Confirm'}
+                doneText={t('common.confirm')}
             >
                 <div>
                     <div>{data.value.content}</div>
@@ -67,9 +69,9 @@ export const ModalConfirm = defineComponent({
                             placeholder={data.value.prompt}
                             description={() => (
                                 <p>
-                                    Please type{' '}
-                                    <strong>{data.value.prompt}</strong> to
-                                    confirm
+                                    {t('confirm.promptPrefix')}
+                                    <strong>{data.value.prompt}</strong>
+                                    {t('confirm.promptSuffix')}
                                 </p>
                             )}
                             onInput={(value) => {
